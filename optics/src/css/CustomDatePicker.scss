@@ -1,0 +1,18 @@
+// CustomDatePicker.scss
+.custom-date-picker {
+    margin-bottom: 20px;
+    
+    label {
+      margin-left: 10px;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+  }
+  

@@ -1,0 +1,66 @@
+/* consumptionHighlights.css */
+.consumption-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 20px;
+}
+
+.consumption-header {
+  margin-bottom: 10px;
+}
+
+.consumption-line {
+  width: 100%;
+  opacity: 0.3;
+}
+
+.tiles-wrapper {
+  display: flex;
+}
+
+.tiles-container {
+  padding: 20px;
+}
+
+.tile {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.tile-heading {
+  font-weight: bold;
+}
+
+.tile-low-opacity {
+  opacity: 0.5;
+}
+
+.chart-container {
+  flex: 1;
+  margin-left: 20px; /* Add some gap between tiles and chart */
+}
+
+.chart-title {
+  font-size: 16px; /* Adjust font size as needed */
+  text-align: center; /* Center-align the text */
+}
+
+@media (max-width: 768px) {
+  .consumption-wrapper {
+    flex-direction: column;
+  }
+  
+  .tiles-wrapper {
+    flex-direction: column;
+  }
+  
+  .tiles-container {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+}

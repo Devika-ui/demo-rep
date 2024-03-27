@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  title: Customer Azure Subscription API
+  version: 1.0.0
+  description: API for managing Azure subscriptions for customers
+servers:
+  - url: http://localhost:3000/api/v1  # Replace with your actual server URL
+paths:
+  /subscription:
+    get:
+      summary: Retrieve all subscriptions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+  /subscription/{customerId}:
+    get:
+      summary: Retrieve subscriptions for a specific customer ID
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: integer
+          description: ID of the customer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+  /subscription/agreements/{agreement}:
+    get:
+      summary: Retrieve subscriptions by agreement
+      parameters:
+        - in: path
+          name: agreement
+          required: true
+          schema:
+            type: integer
+          description: ID of the agreement
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+  /subscription/domainnames/{domainName}:
+    get:
+      summary: Retrieve subscriptions by domain name
+      parameters:
+        - in: path
+          name: domainName
+          required: true
+          schema:
+            type: string
+          description: Domain name associated with the subscription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+
+components:
+  schemas:
+    Subscription:
+      type: object
+      properties:
+        customerId:
+          type: integer
+        id:
+          type: string
+        tenantId:
+          type: string
+        subscriptionId:
+          type: string
+        displayName:
+          type: string
+        state:
+          type: string
+        spendingLimit:
+          type: string
+        domainName:
+          type: string  
+        clientId:
+          type: string  
+        tenantId:
+          type: string 
+        agreement:
+          type: string  

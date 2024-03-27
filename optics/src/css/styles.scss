@@ -1,0 +1,88 @@
+body {
+  font-family: Helvetica;
+  margin: 0;
+  padding-top: 70px;
+  background-color: #edebeb;
+}
+
+a {
+  text-decoration: none;
+  color: darkslategray;
+}
+
+.site-header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background-color: #fff; /* Set your desired background color */
+  z-index: 1000; /* Set a high z-index to ensure it stays on top of other elements */
+}
+
+.site-header::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.site-identity {
+  float: left;
+  margin-left: 14px;
+}
+
+.site-identity h1 {
+  font-size: 1em;
+  margin: 1em 0;
+  display: inline-block;
+  margin-left: 2em;
+  margin-top: 32px;
+  margin-bottom: 0px;
+}
+
+.site-identity img {
+  max-width: 100%;
+  height: auto;
+  float: left;
+  margin-right: 12px;
+  width: 100px;
+  height: 60px;
+}
+
+.site-navigation {
+  float: right;
+}
+
+.site-navigation ul,
+.site-navigation li {
+  margin: 0;
+  padding: 0;
+}
+
+.site-navigation li {
+  display: block;
+  // margin: 1em 0;
+  text-align: center;
+}
+
+/* Media query for screens 600 pixels and below (small screens) */
+@media only screen and (max-width: 600px) {
+  .site-header {
+    padding: 0.5em;
+  }
+
+  .site-identity h1 {
+    font-size: 1.2em;
+  }
+
+  .site-navigation {
+    float: none;
+    text-align: center;
+  }
+}
+
+/* Media query for screens 601 pixels and above (large screens) */
+@media only screen and (min-width: 601px) {
+  .site-navigation li {
+    display: inline-block;
+    // margin: 1.4em 1em 1em 1em;
+  }
+}

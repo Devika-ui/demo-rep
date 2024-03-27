@@ -1,0 +1,39 @@
+.kpi-container {
+    width: 630px;
+    height: 265px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kpi-title {
+    color: #5f249f;
+    font-size: 20px;
+    margin: 0;
+}
+
+.kpi-dropdown {
+    padding: 5px;
+}
+
+.kpi-line {
+    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.kpi-bottom-container {
+    display: flex;
+}
+
+.kpi-graph {
+    width: 50%;
+    padding: 10px;
+}

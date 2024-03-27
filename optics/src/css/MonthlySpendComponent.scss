@@ -1,0 +1,84 @@
+.monthly-spend-container {
+  width: 321px;
+  height: 110px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  font-family: sans-serif;
+  display: inline-block;
+  padding: 0;
+  margin-right: 15px;
+  margin-left: 35px;
+  margin-bottom: 10px;
+  margin-top: 15px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); // Enhanced box shadow
+
+  .top-part {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 23%;
+    border-bottom: 2px solid #98989893; // Updated border color
+    padding: 8px;
+    color: #5f249f;
+
+    .left {
+      width: 100%;
+      font-weight: bold; // Make the text bold for emphasis
+    }
+
+    .right {
+      width: 80%;
+      text-align: right;
+      position: relative;
+
+      .info-box {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 5px;
+        display: none;
+      }
+
+      .icon {
+        display: inline-block;
+        margin-right: 5px;
+        height: 1.5em;
+      }
+
+      &:hover .info-box {
+        display: block;
+      }
+    }
+  }
+
+  .bottom-part {
+    display: flex;
+    justify-content: space-between;
+    height: 77%;
+    padding: 14px;
+
+    .left {
+      width: 50%;
+      color: darkorange;
+    }
+
+    .right {
+      width: 50%;
+      text-align: right;
+    }
+
+    .icon {
+      display: inline-block;
+      height: 1.5em;
+    }
+  }
+
+  &:hover {
+    transform: translateY(-3px); // Add a subtle lift effect on hover
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); // Enhanced box shadow on hover
+  }
+}

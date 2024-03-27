@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: Billing API
+  version: 1.0.0
+  description: API for fetching Billing details for customer.
+servers:
+  - url: http://localhost:3000/api/v1  # Replace with your actual server URL
+paths:
+   /billing:
+    get:
+      summary: Retrieve billing details
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Billing'
+   /billing/{id_customer}:
+    get:
+      summary: Retrieve billing details for a specific customer ID
+      parameters:
+        - in: path
+          name: id_customer
+          required: true
+          schema:
+            type: integer
+          description: ID of the customer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Billing'
+   /billing/{subscriptionName}:
+    get:
+      summary: Retrieve billing details based on subscriptionName
+      parameters:
+        - in: path
+          name: subscriptionName
+          required: true
+          schema:
+            type: string
+          description: name of subscription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Billing'
+    /billing/{subscriptionGuid}:
+    get:
+      summary: Retrieve billing details for a specific Subscription ID
+      parameters:
+        - in: path
+          name: subscriptionGuid
+          required: true
+          schema:
+            type: integer
+          description: subscriptionId of the customer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Billing'
+components:
+  schemas:
+    Billing:
+      type: object
+      properties:
+        id_customer:
+          type: integer
+        subscriptionName:
+          type: string
+        subscriptionGuid:
+          type: integer
+        serviceFamily:
+          type: string
+        resourceGroup:
+          type: string
+        tags_BU:
+          type: string
+        tags_ProjectName:
+          type: string
+        tags_Environment:
+          type: string
+        tags_AppName:
+          type: string
+        tags_Owner:
+          type: string
+        
+
+
+
+ 

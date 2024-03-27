@@ -1,0 +1,50 @@
+.total-subscriptions-container {
+  width: 435px;
+  height: 110px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  font-family: sans-serif;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  margin-top: 15px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); // Enhanced box shadow
+
+  .top-part {
+    padding: 8px;
+    color: #5f249f;
+    border-bottom: 2px solid #98989893; // Updated border color
+  }
+
+  .bottom-part {
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .subscription {
+      display: flex;
+      flex-direction: column;
+
+      .icon {
+        display: inline-block;
+        margin-right: 5px;
+        height: 1.5em;
+      }
+
+      .number {
+        font-size: 1.5em;
+        line-height: 1.1em;
+        margin-right: 5px;
+        vertical-align: super;
+      }
+    }
+  }
+
+  &:hover {
+    transform: translateY(-3px); // Add a subtle lift effect on hover
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); // Enhanced box shadow on hover
+  }
+}
