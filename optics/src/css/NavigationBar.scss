@@ -1,56 +1,55 @@
 // NavigationBar.scss
 .navigation-bar {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 70px;
-    background-color: #007bff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    z-index: 2;
-    transition: left 0.3s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 70px;
+  background-color: #007bff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 2;
+  transition: left 0.3s ease-in-out;
+}
+
+.navigation-bar.open {
+  left: 0;
+}
+
+.nav-toggle {
+  display: none;
+  cursor: pointer;
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+.menu-items {
+  display: flex;
+  gap: 20px;
+}
+
+@media only screen and (max-width: 1024px) {
+  .navigation-bar {
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 20px;
   }
-  
+
+  .nav-toggle {
+    display: block;
+  }
+
   .navigation-bar.open {
     left: 0;
   }
-  
-  .nav-toggle {
-    display: none;
-    cursor: pointer;
-  }
-  
-  .bar {
-    width: 25px;
-    height: 3px;
-    background-color: #fff;
-    margin: 6px 0;
-    transition: 0.4s;
-  }
-  
-  .menu-items {
-    display: flex;
-    gap: 20px;
-  }
-  
-  @media only screen and (max-width: 1024px) {
-    .navigation-bar {
-      height: 100%;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding-top: 20px;
-    }
-  
-    .nav-toggle {
-      display: block;
-    }
-  
-    .navigation-bar.open {
-      left: 0;
-    }
-  }
-  
+}

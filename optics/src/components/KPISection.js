@@ -1,19 +1,19 @@
+// KPISection.js
 import React, { useState } from "react";
 import CustomProgressBar from "./CustomProgressBar";
 import "../css/kpiSection.scss";
 import { Select, MenuItem, FormControl, Typography } from '@mui/material';
 
 const KPISection = () => {
- // const [selectedOption, setSelectedOption] = useState("");
   const [selectedOption, setSelectedOption] = useState("Select an option");
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
 
   return (
-    <div className="kpi-container">
+    <div className="kpi-container" style={{ width: '520px', height: '365px', marginBottom: '20px' }}>
       <div className="kpi-header">
-        <h2 className="kpi-title">Commitment based Discounts KPI</h2>
+        <h3 className="kpi-title">Commitment based Discounts KPI</h3>
         <div className="kpi-dropdown">
           <FormControl>
             <Select

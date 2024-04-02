@@ -1,3 +1,4 @@
+// OverallTotalRealizedSavings.js
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import iIcon from '../images/Iicon.png';
@@ -70,38 +71,14 @@ const OverallTotalRealizedSavings = () => {
   };
 
   return (
-    <div
-      style={{
-        width: "550px", // Increased width
-        height: "375px", // Decreased height
-        border: "1px solid #ccc",
-        overflow: "hidden",
-        fontFamily: "sans-serif",
-        display: "inline-block",
-        backgroundColor: "white",
-        borderRadius: "5px",
-        boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-        transition: "transform 0.3s, box-shadow 0.3s",
-        position: "relative", // Added position relative
-      }}
-    >
-      <div
-        style={{
-          height: "40px", // Increased height for heading section
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between", // Added to align icon and heading
-          paddingLeft: "20px", // Adjusted padding
-          paddingRight: "10px", // Adjusted padding
-          borderBottom: "1px solid #ccc", // Add separating line
-        }}
-      >
+    <div style={{ width: "555px", height: "460px", borderRadius: "5px", overflow: "hidden", backgroundColor: "white", boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)", transition: "transform 0.3s, box-shadow 0.3s", position: "relative" }}>
+      <div style={{ height: "50px", display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: "20px", paddingRight: "10px", borderBottom: "1px solid #ccc" }}>
         <h3 style={{ margin: "0", lineHeight: "1" }}>Overall Total Realized Savings</h3>
-        <div style={{ position: "absolute", top: "10px", right: "10px" }}> {/* Position icon */}
+        <div style={{ position: "absolute", top: "10px", right: "10px" }}>
           <img style={{ height: '20px', width: '20px' }} src={iIcon} alt="I-icon" />
         </div>
       </div>
-      <div style={{ height: "calc(100% - 41px)", overflow: "hidden" }}> {/* Adjusted height */}
+      <div style={{ height: "calc(100% - 51px)", overflow: "hidden" }}>
         <Bar data={combinedData} options={options} />
       </div>
     </div>

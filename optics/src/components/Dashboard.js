@@ -91,15 +91,18 @@ const Dashboard = () => {
           <StackBars />
         </div>
         <RecommendationsComponent />
-        <div style={{ display: 'flex', marginBottom: '20px', gap: '150px' }}>
-          <MapContainer style={{ marginRight: '20px' }} />
+        <div style={{ display: 'flex', gap: '10px', width: '100%', justifyContent: 'center', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
+          <MapContainer />
           <OverallTotalRealizedSavings />
         </div>
-
-        <div style={{additionalDivStyleKpi}}>
+        {/* <MapContainer />
+          <OverallTotalRealizedSavings /> */}
+          <div style={{ display: 'flex', gap: '10px', width: '100%', justifyContent: 'center', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
+        <div style={{ additionalDivStyleKpi }}>
           <KPISection />
         </div>
-        <ConsumptionHighlights/>
+        <ConsumptionHighlights />
+        </div>
 
         {/* <div>
           <h2>Total Subscriptions/Accounts</h2>

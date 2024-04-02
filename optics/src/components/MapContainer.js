@@ -1,43 +1,59 @@
-import React, { useEffect } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+// MapContainer.js
+import React from 'react';
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 
 const MapContainer = () => {
-  useEffect(() => {
-    // Initialize the map
-    const map = L.map('map', {
-      center: [0, 0],
-      zoom: 2,
-      maxBounds: [[-90, -180], [90, 180]], // Prevent panning beyond the world bounds
-      minZoom: 2 // Set the minimum zoom level to prevent repeating tiles
-    });
-
-    // Add the base tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Add a marker for New Delhi
-    L.marker([28.6139, 77.209]).addTo(map)
-      .bindPopup('New Delhi');
-
-    // Clean up when component unmounts
-    return () => {
-      map.remove();
-    };
-  }, []); // Empty dependency array ensures this effect runs only once
+  const worldMap = "https://unpkg.com/world-atlas@1/world/110m.json";
 
   return (
-    <div style={{ width: '450px', height: '450px', position: 'relative' }}>
-      <div style={{ position: 'absolute', top: '10px', left: '10px' }}>Resource Location</div>
-      <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
-        <select>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
-        </select>
+    <div style={{ width: '575px', height: '460px', position: 'relative', borderRadius: '5px', overflow: 'hidden', border: '1px solid #ccc', backgroundColor: 'white' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', borderBottom: '1px solid #ccc' }}>
+        <div>Resource Location</div>
+        <div>
+          <select>
+            <option value="AWS">AWS</option>
+            <option value="Azure">Azure</option>
+          </select>
+        </div>
       </div>
-      <div id="map" style={{ width: '100%', height: '100%', position: 'absolute' }}></div>
+      <div style={{ width: '100%', height: 'calc(100% - 40px)', position: 'relative' }}>
+        <ComposableMap
+          projection="geoMercator"
+          projectionConfig={{
+            scale: 100,
+          }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
+        >
+          <Geographies geography={worldMap}>
+            {({ geographies }) =>
+              geographies.map((geo) => (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  fill="#EAEAEC"
+                  stroke="#D6D6DA"
+                />
+              ))
+            }
+          </Geographies>
+          <Marker coordinates={[77.209, 28.6139]}>
+            <circle r={6} fill="#F00" />
+            <text
+              textAnchor="middle"
+              y={-10}
+              style={{ fontFamily: 'system-ui', fill: '#5D5A6D' }}
+            >
+              New Delhi
+            </text>
+          </Marker>
+        </ComposableMap>
+      </div>
     </div>
   );
 };

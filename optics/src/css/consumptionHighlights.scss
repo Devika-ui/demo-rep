@@ -4,11 +4,11 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: white;
-  padding: 20px;
+  // padding: 20px;
 }
 
 .consumption-header {
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
 }
 
 .consumption-line {
@@ -18,19 +18,47 @@
 
 .tiles-wrapper {
   display: flex;
+  justify-content: space-between; /* Distribute space between tiles and chart */
 }
 
 .tiles-container {
-  padding: 20px;
+  width: calc(56% - 20px); /* Adjust the width as needed */
+  padding-right: 20px; /* Add padding to the right to create space between tiles and chart */
 }
 
+.chart-container {
+  width: calc(44% - 20px); /* Adjust the width as needed */
+  padding-left: 20px; /* Add padding to the left to create space between tiles and chart */
+}
+
+
+
 .tile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 100%;
 }
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.price {
+  color: orange;
+  font-weight: bold;
+}
+
+// .tile {
+//   margin-bottom: 10px;
+//   padding: 10px;
+//   border: 1px solid #ccc;
+//   border-radius: 5px;
+//   width: 100%;
+// }
 
 .tile-heading {
   font-weight: bold;
@@ -40,10 +68,10 @@
   opacity: 0.5;
 }
 
-.chart-container {
-  flex: 1;
-  margin-left: 20px; /* Add some gap between tiles and chart */
-}
+// .chart-container {
+//   flex: 1;
+//   margin-left: 20px; /* Add some gap between tiles and chart */
+// }
 
 .chart-title {
   font-size: 16px; /* Adjust font size as needed */

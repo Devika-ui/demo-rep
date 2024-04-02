@@ -53,7 +53,7 @@ const ConsumptionHighlights = () => {
             fontSize: '14px'
           },
           value: {
-            formatter: function(val) {
+            formatter: function (val) {
               return parseInt(val);
             },
             color: '#111',
@@ -83,13 +83,39 @@ const ConsumptionHighlights = () => {
   const series = [39, 38, 27, 22];
 
   return (
-    <div className="consumption-wrapper">
-      <div className="consumption-header">
-        <h2>Overall Consumption Highlights</h2>
+    <div className="consumption-wrapper" style={{ width: '520px', height: '365px' }}>
+      <div className="consumption-header" style={{ paddingTop: '0px' }}>
+        <h4>Overall Consumption Highlights</h4>
       </div>
       <hr className="consumption-line" />
-      <div className="tiles-wrapper">
+      <div className="tiles-wrapper" style={{ padding: '8px', paddingTop: '14px' }}>
         <div className="tiles-container">
+          
+           <div className="tile">
+        <div>
+          <div>Top 3 Subscriptions/ Accounts </div>
+        </div>
+        <div className="content">
+          <div className="price">$500.25</div>
+        </div>
+      </div>
+      <div className="tile">
+        <div>
+          <div>Top 3 Services</div>
+        </div>
+        <div className="content">
+          <div className="price">$500.25</div>
+        </div>
+      </div>
+      <div className="tile">
+        <div>
+          <div>Top 3 Applications</div>
+        </div>
+        <div className="content">
+          <div className="price">$500.25</div>
+        </div>
+      </div>
+          {/*
           <div className="tile">
             <div className="tile-heading">Top 3 Subscriptions</div>
             <div className="tile-content">$500.25</div>
@@ -105,10 +131,11 @@ const ConsumptionHighlights = () => {
             <div className="tile-content">$500.25</div>
             <div className="tile-low-opacity">Total Cost</div>
           </div>
+          */}
         </div>
         <div className="chart-container">
-          <h3 className="chart-title">% Tag Compliance</h3>
-          <Chart options={options} series={series} type="radialBar" height="320" />
+          <h4 style={{marginTop: '2px'}}>% Tag Compliance</h4>
+          <Chart options={options} series={series} type="radialBar" height="200" />
         </div>
       </div>
     </div>
