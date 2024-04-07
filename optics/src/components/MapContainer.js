@@ -6,9 +6,9 @@ const MapContainer = () => {
   const worldMap = "https://unpkg.com/world-atlas@1/world/110m.json";
 
   return (
-    <div style={{ width: '575px', height: '460px', position: 'relative', borderRadius: '5px', overflow: 'hidden', border: '1px solid #ccc', backgroundColor: 'white' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', borderBottom: '1px solid #ccc' }}>
-        <div>Resource Location</div>
+    <div style={{ width: '550px', height: '450px', position: 'relative', borderRadius: '5px', overflow: 'hidden', border: '1px solid #ccc', backgroundColor: 'white' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', borderBottom: '1px solid #ccc' }}>
+        <div style={{ color: '#5f249f', fontWeight:700, fontSize: '16px' , fontFamily : 'sans-serif'}}> Resource Location</div>
         <div>
           <select>
             <option value="AWS">AWS</option>
@@ -16,7 +16,7 @@ const MapContainer = () => {
           </select>
         </div>
       </div>
-      <div style={{ width: '100%', height: 'calc(100% - 40px)', position: 'relative' }}>
+      <div style={{ width: '98%', height: 'calc(100% - 40px)', position: 'relative' }}>
         <ComposableMap
           projection="geoMercator"
           projectionConfig={{

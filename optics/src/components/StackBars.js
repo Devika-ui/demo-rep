@@ -45,7 +45,7 @@ const StackBars = () => {
             position: 'top',
             align: 'start',
             font: {
-              size: 16,
+              size: 14,
               weight: 'bold'
             }
           },
@@ -86,7 +86,7 @@ const StackBars = () => {
       <div style={{ position: 'absolute', top: 0, right: '10px' }}>
         <Typography variant="subtitle1">Show Spend by Tags:</Typography>
         <FormControl>
-          <Select value={selectedOption} onChange={handleOptionChange}  style={{ height:'28px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)' }} >
+          <Select value={selectedOption} onChange={handleOptionChange}  style={{ height:'28px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', fontSize: '14px' }} >
             <MenuItem value="Select an option">Select an option</MenuItem>
             <MenuItem value="AWS">AWS</MenuItem>
             <MenuItem value="Azure">Azure</MenuItem>

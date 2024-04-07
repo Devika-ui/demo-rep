@@ -35,7 +35,7 @@ const CustomProgressBar = ({ title, percentage, gradientColor }) => {
               pathTransitionDuration: 0.5,
               pathColor: gradientColor,
               textColor: "black",
-              trailColor: "transparent",
+              trailColor: "rgba(0, 0, 0, 0.1)",
               backgroundColor: "#3e98c7",
               trail: { strokeLinecap: "butt" },
               path: { strokeLinecap: "butt" },

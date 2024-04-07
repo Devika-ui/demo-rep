@@ -16,7 +16,7 @@
 
 .kpi-title {
     color: #5f249f;
-    font-size: 20px;
+    font-size: 16px;
     margin: 0;
 }
 
@@ -31,6 +31,8 @@
 
 .kpi-bottom-container {
     display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .kpi-graph {

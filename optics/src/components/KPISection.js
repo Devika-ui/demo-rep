@@ -1,8 +1,9 @@
 // KPISection.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
 import CustomProgressBar from "./CustomProgressBar";
 import "../css/kpiSection.scss";
 import { Select, MenuItem, FormControl, Typography } from '@mui/material';
+import api from '../api.js';
 
 const KPISection = () => {
   const [selectedOption, setSelectedOption] = useState("Select an option");
@@ -10,10 +11,29 @@ const KPISection = () => {
     setSelectedOption(event.target.value);
   };
 
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [percentCoverage, setpercentCoverage] = useState([]); 
+  const [percentUsage, setpercentUsage] = useState([]); 
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const subscriptionsData = await api.getDiscountKPI();
+        setSubscriptions(subscriptionsData);
+        setpercentCoverage(subscriptionsData[0].Coverage);
+        setpercentUsage(subscriptionsData[1].Coverage);
+      } catch (error) {
+        // Handle error
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
-    <div className="kpi-container" style={{ width: '520px', height: '365px', marginBottom: '20px' }}>
-      <div className="kpi-header">
-        <h3 className="kpi-title">Commitment based Discounts KPI</h3>
+    <div className="kpi-container" style={{ width: '530px', height: '270px', marginBottom: '20px' }}>
+    <div className="kpi-header">
+      <h4 className="kpi-title">Commitment based Discounts KPI</h4>
         <div className="kpi-dropdown">
           <FormControl>
             <Select
@@ -33,10 +53,10 @@ const KPISection = () => {
 
       <div className="kpi-bottom-container">
         <div className="kpi-graph">
-          <CustomProgressBar title="% Coverage" percentage={72} gradientColor="conic-gradient(from 0deg, rgba(62, 152, 199, 0.8) 0%, rgba(62, 152, 199, 0.8) 72%, rgba(255, 0, 0, 0.8) 72%, rgba(255, 0, 0, 0.8) 100%)" />
+          <CustomProgressBar title="% Coverage" percentage={percentCoverage} gradientColor="conic-gradient(from 0deg, rgba(62, 152, 199, 0.8) 0%, rgba(62, 152, 199, 0.8) 72%, rgba(255, 0, 0, 0.8) 72%, rgba(255, 0, 0, 0.8) 100%)" />
         </div>
         <div className="kpi-graph">
-          <CustomProgressBar title="% Usage" percentage={72} gradientColor="conic-gradient(from 0deg, rgba(62, 152, 199, 0.8) 0%, rgba(62, 152, 199, 0.8) 72%, rgba(255, 0, 0, 0.8) 72%, rgba(255, 0, 0, 0.8) 100%)" />
+          <CustomProgressBar title="% Usage" percentage={percentUsage} gradientColor="conic-gradient(from 0deg, rgba(62, 152, 199, 0.8) 0%, rgba(62, 152, 199, 0.8) 72%, rgba(255, 0, 0, 0.8) 72%, rgba(255, 0, 0, 0.8) 100%)" />
         </div>
       </div>
     </div>

@@ -5,7 +5,6 @@ import userpool from '../userpool';
 import { logout } from '../services/authenticate';
 import api from '../api.js';
 import Header from './Header.js';
-import OpenStreetMap from './OpenStreetMap';
 import StackBars from './StackBars';
 import MonthlySpendComponent from './MonthlySpendComponent.js';
 import MonthlyForecastComponent from './MonthlyForecastComponent.js';
@@ -45,17 +44,17 @@ const Dashboard = () => {
   };
 
   const Navigate = useNavigate();
-  const [subscriptions, setSubscriptions] = useState([]);
+  // const [subscriptions, setSubscriptions] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const subscriptionsData = await api.getSubscriptions();
-        setSubscriptions(subscriptionsData);
-      } catch (error) {
-        // Handle error
-      }
-    };
+     const fetchData = async () => {
+    //   try {
+    //     const subscriptionsData = await api.getSubscriptions();
+    //     setSubscriptions(subscriptionsData);
+    //   } catch (error) {
+    //     // Handle error
+    //   }
+     };
 
     fetchData();
     let user = userpool.getCurrentUser();
@@ -87,18 +86,18 @@ const Dashboard = () => {
         <MonthlySpendComponent />
         <MonthlyForecastComponent />
         <TotalSubscriptionsComponent style={{ flex: '1' }} />
-        <div style={{ ...additionalDivStyle, marginRight: '20px' }}>
+        <div style={{ ...additionalDivStyle, marginRight: '15px' }}>
           <StackBars />
         </div>
         <RecommendationsComponent />
-        <div style={{ display: 'flex', gap: '10px', width: '100%', justifyContent: 'center', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
+        <div style={{ marginLeft : '33px', display: 'flex', gap: '10px', width: '100%', justifyContent: 'left', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
           <MapContainer />
           <OverallTotalRealizedSavings />
         </div>
         {/* <MapContainer />
           <OverallTotalRealizedSavings /> */}
-          <div style={{ display: 'flex', gap: '10px', width: '100%', justifyContent: 'center', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
-        <div style={{ additionalDivStyleKpi }}>
+          <div style={{ display: 'flex', gap: '9px', width: '100%', justifyContent: 'left', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
+          <div style={{ additionalDivStyleKpi, marginLeft:'32px' }}>
           <KPISection />
         </div>
         <ConsumptionHighlights />

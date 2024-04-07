@@ -61,7 +61,7 @@ const HeaderButtons = () => {
           onClick={() => handleButtonClick('Azure')}
           disabled={buttonStates.cut}
           className="logo-button"
-          style={{ width: '30px', height: '30px' }} // Decrease button size
+          style={{ width: '40px', height: '40px' }} // Decrease button size
         >
           <img src={Azurelogo} alt="Azure Logo" />
         </button>
@@ -81,7 +81,7 @@ const HeaderButtons = () => {
           onClick={() => handleButtonClick('AWS')}
           disabled={buttonStates.paste}
           className="logo-button"
-          style={{ width: '30px', height: '30px' }} // Decrease button size
+          style={{ width: '40px', height: '40px' }} // Decrease button size
         >
           <img src={AWSlogo} alt="AWS Logo" />
         </button>

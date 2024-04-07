@@ -13,6 +13,7 @@
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); // Enhanced box shadow
+  font-size: 14px;
 
   .top-part {
     display: flex;
@@ -80,5 +81,20 @@
   &:hover {
     transform: translateY(-3px); // Add a subtle lift effect on hover
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); // Enhanced box shadow on hover
+  }
+
+  .info-box {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    z-index: 999; // Ensure it appears above other elements
+    display: none;
+  }
+  
+  .right:hover .info-box {
+    display: block;
   }
 }
