@@ -15,6 +15,8 @@
 
   .top-part {
     padding: 8px;
+    padding-bottom: 12px;
+    padding-top: 14px;
     color: #5f249f;
     border-bottom: 2px solid #98989893; // Updated border color
   }
@@ -24,6 +26,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    padding-top: 2px;
 
     .subscription {
       display: flex;

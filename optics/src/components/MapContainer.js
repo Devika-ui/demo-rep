@@ -1,19 +1,36 @@
 // MapContainer.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
+import { Select, MenuItem, FormControl, Typography } from '@mui/material';
 
 const MapContainer = () => {
   const worldMap = "https://unpkg.com/world-atlas@1/world/110m.json";
 
+  const [selectedOption, setSelectedOption] = useState("Select an option");
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
   return (
     <div style={{ width: '550px', height: '450px', position: 'relative', borderRadius: '5px', overflow: 'hidden', border: '1px solid #ccc', backgroundColor: 'white' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', borderBottom: '1px solid #ccc' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', borderBottom: '2px  solid #98989893' }}>
         <div style={{ color: '#5f249f', fontWeight:700, fontSize: '16px' , fontFamily : 'sans-serif'}}> Resource Location</div>
         <div>
-          <select>
+        <FormControl>
+          <Select 
+            value={selectedOption} 
+            onChange={handleOptionChange}
+            style={{ height:'24px', minWidth: '140px', backgroundColor: 'rgb(95, 36, 159,0.9)', fontSize: '14px', color: 'white' }} 
+          >
+            <MenuItem value="Select an option">Select an option</MenuItem>
+            <MenuItem value="AWS">AWS</MenuItem>
+            <MenuItem value="Azure">Azure</MenuItem>
+          </Select>
+        </FormControl>
+          {/* <select style={{ height:'25px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', fontSize: '14px', color: 'white' }} >
             <option value="AWS">AWS</option>
             <option value="Azure">Azure</option>
-          </select>
+          </select> */}
         </div>
       </div>
       <div style={{ width: '98%', height: 'calc(100% - 40px)', position: 'relative' }}>

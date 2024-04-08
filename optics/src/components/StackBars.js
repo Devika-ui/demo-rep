@@ -41,11 +41,11 @@ const StackBars = () => {
         plugins: {
           title: {
             display: true,
-            text: 'Total Bill Cost by Providers',
+            text: '',
             position: 'top',
             align: 'start',
             font: {
-              size: 14,
+              size: 16,
               weight: 'bold'
             }
           },
@@ -53,8 +53,12 @@ const StackBars = () => {
             position: 'top',
             align: 'start',
             labels: {
-              padding: 5 // Add padding between legend and chart
-            }
+              padding: 5, // Add padding between legend and chart
+              font: {
+                size: 12 // Adjust legend label font size
+              }
+            },
+            onClick: () => {} // Override onClick to prevent default behavior
           },
           layout: {
             padding: {
@@ -83,10 +87,33 @@ const StackBars = () => {
 
   return (
     <div style={{ position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0 }}>
+        <Typography variant="subtitle1" style={{ color: 'black', fontWeight: 'bold', fontSize: '16px' }}>Total Bill Cost by Providers:</Typography>
+        {selectedOption !== "Select an option" && (
+          <FormControl>
+            <Select value={subOption} onChange={handleSubOptionChange} style={{ height: '28px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)' }} >
+              <MenuItem value="Select an option">Select an option</MenuItem>
+              {selectedOption === "AWS" ? (
+                <>
+                  <MenuItem value="AWS choice 1">AWS choice 1</MenuItem>
+                  <MenuItem value="AWS choice 2">AWS choice 2</MenuItem>
+                  <MenuItem value="AWS choice 3">AWS choice 3</MenuItem>
+                </>
+              ) : selectedOption === "Azure" ? (
+                <>
+                  <MenuItem value="Azure choice 1">Azure choice 1</MenuItem>
+                  <MenuItem value="Azure choice 2">Azure choice 2</MenuItem>
+                  <MenuItem value="Azure choice 3">Azure choice 3</MenuItem>
+                </>
+              ) : null}
+            </Select>
+          </FormControl>
+        )}
+      </div>
       <div style={{ position: 'absolute', top: 0, right: '10px' }}>
-        <Typography variant="subtitle1">Show Spend by Tags:</Typography>
+        <Typography variant="subtitle1" style={{ color: 'gray', fontWeight: 'bold', fontSize: '12px', paddingTop: '6px', textAlignLast: 'right' }}>Show Spend by Tags:</Typography>
         <FormControl>
-          <Select value={selectedOption} onChange={handleOptionChange}  style={{ height:'28px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', fontSize: '14px' }} >
+          <Select value={selectedOption} onChange={handleOptionChange} style={{ height: '28px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', fontSize: '12px', color: 'black' }} >
             <MenuItem value="Select an option">Select an option</MenuItem>
             <MenuItem value="AWS">AWS</MenuItem>
             <MenuItem value="Azure">Azure</MenuItem>
@@ -94,7 +121,7 @@ const StackBars = () => {
         </FormControl>
         {selectedOption !== "Select an option" && (
           <FormControl>
-            <Select value={subOption} onChange={handleSubOptionChange}  style={{ height:'28px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)' }} >
+            <Select value={subOption} onChange={handleSubOptionChange} style={{ height: '28px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)' }} >
               <MenuItem value="Select an option">Select an option</MenuItem>
               {selectedOption === "AWS" ? (
                 <>

@@ -98,7 +98,7 @@ const OverallTotalRealizedSavings = () => {
 
   return (
     <div style={{ width: "554px", height: "449px", borderRadius: "5px", overflow: "hidden", backgroundColor: "white", boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)", transition: "transform 0.3s, box-shadow 0.3s", position: "relative" }}>
-    <div style={{ height: "50px", display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: "20px", paddingRight: "10px", borderBottom: "1px solid #ccc" }}>
+    <div style={{ height: "50px", display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: "20px", paddingRight: "10px", borderBottom: "2px  solid #98989893" }}>
       <h4 style={{ margin: "0", lineHeight: "1" , color: '#5f249f'}}>Overall Total Realized Savings</h4>
       <div style={{ position: "absolute", top: "10px", right: "10px" }}>
         <img style={{ height: '20px', width: '20px' }} src={iIcon} alt="I-icon" />

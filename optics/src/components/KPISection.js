@@ -39,7 +39,7 @@ const KPISection = () => {
             <Select
               value={selectedOption}
               onChange={handleOptionChange}
-              style={{ height: '25px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)' }}
+              style={{ height: '25px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', color:'white' }}
             >
               <MenuItem value="Select an option">Select an option</MenuItem>
               <MenuItem value="AWS">AWS</MenuItem>

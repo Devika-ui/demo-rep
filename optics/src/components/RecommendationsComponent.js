@@ -51,11 +51,11 @@ const RecommendationsComponent = () => {
           <option value="option2">Option 2</option>
           <option value="option3">Option 3</option>
         </select> */}
-        <FormControl>
+        <FormControl style={{paddingTop: '5px'}}>
           <Select 
             value={selectedOption} 
             onChange={handleOptionChange}
-            style={{ height:'25px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', fontSize: '14px' }} 
+            style={{ height:'25px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', fontSize: '14px', color: 'white' }} 
           >
             <MenuItem value="Select an option">Select an option</MenuItem>
             <MenuItem value="AWS">AWS</MenuItem>

@@ -18,7 +18,7 @@ const ConsumptionHighlights = () => {
       },
     },
     labels: ['Application', 'Owner', 'Project', 'Business Unit'],
-    series: [39, 38, 27, 22],
+    series: [85, 38, 27, 32],
   };
   //   chart: {
   //     type: 'radialBar',

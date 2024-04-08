@@ -14,10 +14,10 @@ const MonthlyForecastComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const subscriptionsData = await api.getMonthlyActualSpend();
+        const subscriptionsData = await api.getMonthlyForecastSpend();
         setSubscriptions(subscriptionsData);
         if (subscriptionsData.length > 0) {
-          setMonthlyForecast(subscriptionsData[0].Monthly_Actual_Spend);
+          setMonthlyForecast(subscriptionsData[0].Monthly_Forecast_Spend);
           setPreviousMonthlyForecast(subscriptionsData[0].Previous_Month_Forecast_Spend);
           if (subscriptionsData[0].Previous_Month_Forecast_Spend !== 0) {
             setPercentChange(((subscriptionsData[0].Monthly_Forecast_Spend - subscriptionsData[0].Previous_Month_Forecast_Spend) / subscriptionsData[0].Previous_Month_Forecast_Spend) * 100);

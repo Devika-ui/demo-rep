@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import '../css/HeaderButtons.scss';
 import Azurelogo from '../images/Azure-Logo-PNG-Images.png';
-import AWSlogo from '../images/Amazon_Web_Services-Logo.png';
+import AWSlogo from '../images/aws_logo_smile_1200x630.png';
+// import AWSlogo from '../images/Amazon_Web_Services-Logo.png';
+//import NewAWSlogo from '../images/icons8-amazon-web-services-32.png';
+ import NewAWSlogo from '../images/azure-logo-svg.svg';
+
 
 const HeaderButtons = () => {
   const [buttonStates, setButtonStates] = useState({
@@ -61,12 +65,13 @@ const HeaderButtons = () => {
           onClick={() => handleButtonClick('Azure')}
           disabled={buttonStates.cut}
           className="logo-button"
-          style={{ width: '40px', height: '40px' }} // Decrease button size
+          style={{ width: '36px', height: '36px' }} // Decrease button size
         >
-          <img src={Azurelogo} alt="Azure Logo" />
+          {/* <img src={Azurelogo} alt="Azure Logo" /> */}
+          <img src={NewAWSlogo} alt="Azure Logo" />
         </button>
-        <div className="separator"></div> {/* Add the separator */}
-        <button
+        {/* <div className="separator"></div> {/* Add the separator */}
+        {/* <button
           id="copy-btn"
           onClick={() => handleButtonClick('CommonView')}
           disabled={buttonStates.copy}
@@ -74,14 +79,14 @@ const HeaderButtons = () => {
           style={{ width: '30px', height: '30px' }} // Decrease button size
         >
           <i className="fas fa-copy"></i>
-        </button>
+        </button> */} 
         <div className="separator"></div> {/* Add the separator */}
         <button
           id="paste-btn"
           onClick={() => handleButtonClick('AWS')}
           disabled={buttonStates.paste}
           className="logo-button"
-          style={{ width: '40px', height: '40px' }} // Decrease button size
+          style={{ width: '36px', height: '36px' }} // Decrease button size
         >
           <img src={AWSlogo} alt="AWS Logo" />
         </button>
