@@ -29,9 +29,9 @@ const TotalSubscriptionsComponent = () => {
   return (
     <div className="total-subscriptions-container">
       {/* Top Part */}
-      <div className="top-part">
+      <div className="top-part" style={{paddingBottom:'9px'}}>
         <div>
-          <strong >Total Subscriptions/Accounts</strong>
+          <strong>Total Subscriptions/Accounts</strong>
         </div>
       </div>
 

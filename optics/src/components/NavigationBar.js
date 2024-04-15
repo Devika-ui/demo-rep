@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import AzureBoxLogo from '../images/AWS box.png'; 
 import LogoutLogo from '../images/logout.png';
 import SettingsLogo from '../images/settings.png';
-import FaqLogo from '../images/quest.jpg';
+import FaqLogo from '../images/quest.png';
 import ContactLogo from '../images/contact.svg';
 import MonitoringLogo from '../images/monitoring.png';
 import RecommendationsLogo from '../images/Recommendations.png';
@@ -44,7 +44,7 @@ const NavigationBar = () => {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: isNavOpen ? 'flex-start' : 'center',
+        alignItems: isNavOpen ? 'flex-start' : 'start',
         width: isNavOpen ? '175px' : '35px',
         transition: 'width 0.3s ease-in-out, background-color 0.3s ease',
         zIndex: 9999,

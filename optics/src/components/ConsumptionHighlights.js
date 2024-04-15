@@ -104,7 +104,7 @@ const ConsumptionHighlights = () => {
       </div>
       <hr className="consumption-line" />
       <div className="tiles-wrapper" style={{ padding: '8px', paddingTop: '14px' }}>
-        <div className="tiles-container" style={{paddingTop: '10px'}}>
+        <div className="tiles-container" style={{paddingTop: '20px'}}>
           
            <div className="tile">
         <div>
@@ -149,7 +149,7 @@ const ConsumptionHighlights = () => {
           */}
         </div>
         <div className="chart-container">
-        <h4 style={{ marginTop: '-10px', marginBottom :'0px'}} className="chart-title">% Tag Compliance</h4>
+        <h4 style={{ marginTop: '-15px', marginBottom :'0px'}} className="chart-title">% Tag Compliance</h4>
         <div style={{marginTop:'-10px'}}>
         <Chart options={options} series={options.series} type="radialBar" height="220" />
         </div>

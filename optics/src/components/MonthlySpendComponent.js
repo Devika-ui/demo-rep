@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Tooltip } from '@material-ui/core';
+import { Tooltip } from '@mui/material';
 import '../css/MonthlySpendComponent.scss';
 import iIcon from '../images/Iicon.png';
 import upArrow from '../images/Up Arrow.png';

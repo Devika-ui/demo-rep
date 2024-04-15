@@ -2,8 +2,13 @@ import React, { useEffect, useState } from 'react';
 import '../css/RecommendationsComponent.scss';
 import { Select, MenuItem, FormControl, Typography } from '@mui/material';
 import api from '../api.js';
+// import { withStyles } from '@mui/styles';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
 
 const RecommendationsComponent = () => {
+
+  
   const [recommendation1, setRecommendation1] = useState([]);
   const [recommendation2, setRecommendation2] = useState([]);
   const [recommendation3, setRecommendation3] = useState([]);
@@ -56,6 +61,7 @@ const RecommendationsComponent = () => {
             value={selectedOption} 
             onChange={handleOptionChange}
             style={{ height:'25px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', fontSize: '14px', color: 'white' }} 
+            IconComponent= {ArrowDropDownIcon}
           >
             <MenuItem value="Select an option">Select an option</MenuItem>
             <MenuItem value="AWS">AWS</MenuItem>

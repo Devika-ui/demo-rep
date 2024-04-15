@@ -19,7 +19,10 @@
 
 .consumption-line {
   width: 100%;
-  opacity: 0.3;
+  opacity: 2;
+  height: 1.8px;
+  background-color: rgba(152, 152, 152, 0.5764705882);
+  margin-top: -8px;
 }
 
 .tiles-wrapper {
@@ -40,6 +43,7 @@
 
 
 .tile {
+  font-size: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -85,7 +89,7 @@
 // }
 
 .chart-title {
-  font-size: 16px; /* Adjust font size as needed */
+  font-size: 14px; /* Adjust font size as needed */
   text-align: center; /* Center-align the text */
 }
 

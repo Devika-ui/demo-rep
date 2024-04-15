@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../css/HeaderButtons.scss';
 import Azurelogo from '../images/Azure-Logo-PNG-Images.png';
-import AWSlogo from '../images/aws_logo_smile_1200x630.png';
+import AWSlogo from '../images/aws-logo.png';
 // import AWSlogo from '../images/Amazon_Web_Services-Logo.png';
 //import NewAWSlogo from '../images/icons8-amazon-web-services-32.png';
  import NewAWSlogo from '../images/azure-logo-svg.svg';

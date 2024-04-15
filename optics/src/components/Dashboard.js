@@ -90,18 +90,50 @@ const Dashboard = () => {
           <StackBars />
         </div>
         <RecommendationsComponent />
-        <div style={{ marginLeft : '33px', display: 'flex', gap: '10px', width: '100%', justifyContent: 'left', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '9px',
+            width: '100%',
+            justifyContent: 'left',
+            alignItems: 'center',
+            paddingTop: '10px',
+            paddingBottom: '10px',
+          }}
+        >
+          <div
+            style={{
+              additionalDivStyleKpi,
+              marginLeft: '32px',
+            }}
+          >
+            <KPISection />
+          </div>
+          <ConsumptionHighlights />
+        </div>
+        <div
+          style={{
+            marginLeft: '33px',
+            marginTop: '-20px',
+            display: 'flex',
+            gap: '10px',
+            width: '100%',
+            justifyContent: 'left',
+            alignItems: 'center',
+            paddingBottom: '10px',
+          }}
+        >
           <MapContainer />
           <OverallTotalRealizedSavings />
         </div>
         {/* <MapContainer />
           <OverallTotalRealizedSavings /> */}
-          <div style={{ display: 'flex', gap: '9px', width: '100%', justifyContent: 'left', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
+        {/* <div style={{ display: 'flex', gap: '9px', width: '100%', justifyContent: 'left', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
           <div style={{ additionalDivStyleKpi, marginLeft:'32px' }}>
           <KPISection />
         </div>
         <ConsumptionHighlights />
-        </div>
+        </div> */}
 
         {/* <div>
           <h2>Total Subscriptions/Accounts</h2>
@@ -113,7 +145,7 @@ const Dashboard = () => {
         </div> */}
 
         {/* <Button
-          style={{ margin: "10px" }}
+          style={{ margin: '10px' }}
           variant='contained'
           onClick={handleLogoout}
         >
@@ -121,7 +153,7 @@ const Dashboard = () => {
         </Button> */}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Dashboard;
