@@ -1,5 +1,5 @@
 const apiUrl = 'http://localhost:3001/api/v1';
-
+ 
 const api = {
   getMonthlyActualSpend: async () => {
     try {
@@ -24,8 +24,8 @@ const api = {
       throw error;
     }
   },
-
-
+ 
+ 
   getMonthlyForecastSpend: async () => {
     try {
       const response = await fetch(`${apiUrl}/monthlyforecast`, {
@@ -49,8 +49,8 @@ const api = {
       throw error;
     }
   },
-
-
+ 
+ 
   getTotalSubscription: async () => {
     try {
       const response = await fetch(`${apiUrl}/suboracccountcount`, {
@@ -72,8 +72,8 @@ const api = {
       throw error;
     }
   },
-
-
+ 
+ 
   getRecommendations: async () => {
     try {
       const response = await fetch(`${apiUrl}/recommendations`, {
@@ -97,7 +97,7 @@ const api = {
       throw error;
     }
   },
-
+ 
   getDiscountKPI: async () => {
     try {
       const response = await fetch(`${apiUrl}/discountKPI`, {
@@ -121,8 +121,8 @@ const api = {
       throw error;
     }
   },
-
-
+ 
+ 
   getOverallSavings: async () => {
     try {
       const response = await fetch(`${apiUrl}/overall-savings`, {
@@ -146,8 +146,8 @@ const api = {
       throw error;
     }
   },
-
-
+ 
+ 
   getSubscriptionsByCustomerId: async (customerId) => {
     try {
       const response = await fetch(`${apiUrl}/subscription/${customerId}`);
@@ -156,10 +156,49 @@ const api = {
       }
       return await response.json();
     } catch (error) {
-      console.error(`Error fetching subscriptions for customer ${customerId}:`, error);
+      console.error('Error fetching subscriptions for customer ${customerId}:', error);
       throw error;
     }
-  }
+  },
+ 
+ 
+ 
+ 
+  getMenuItemsByCustomerId: async (customerId) => {
+    try {
+      const response = await fetch(`${apiUrl}/menuitems/${customerId}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch menuitems for customer ${customerId}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching menuitems for customer ${customerId}:`, error);
+      throw error;
+    }
+  },
+ 
+  getClientData: async (customerId) => {
+    try {
+      const response = await fetch(`${apiUrl}/client`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ customerId })
+      });
+ 
+      if (!response.ok) {
+        throw new Error('Failed to fetch client data');
+      }
+ 
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching client data:', error);
+      throw error;
+    }
+  },
+ 
+ 
 };
-
-export default api;
+ 
+export default api

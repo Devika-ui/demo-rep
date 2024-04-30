@@ -110,7 +110,6 @@ const StackBars = () => {
   const handleSubOptionChange = (event) => {
     setSubOption(event.target.value);
   };
-
   return (
     <div style={{ position: "relative" }}>
       <div style={{ position: "absolute", top: 0, left: 0 }}>
@@ -120,36 +119,6 @@ const StackBars = () => {
         >
           Total Bill Cost by Providers:
         </Typography>
-        {selectedOption !== "Select an option" && (
-          <FormControl>
-            <Select
-              value={subOption}
-              onChange={handleSubOptionChange}
-              style={{
-                height: "25px",
-                minWidth: "150px",
-                backgroundColor: "rgb(95, 36, 159,0.9)",
-                fontSize: '14px',
-                color: "white",
-              }}
-            >
-              <MenuItem value="Select an option">Select an option</MenuItem>
-              {selectedOption === "AWS" ? (
-                <>
-                  <MenuItem value="AWS choice 1">AWS choice 1</MenuItem>
-                  <MenuItem value="AWS choice 2">AWS choice 2</MenuItem>
-                  <MenuItem value="AWS choice 3">AWS choice 3</MenuItem>
-                </>
-              ) : selectedOption === "Azure" ? (
-                <>
-                  <MenuItem value="Azure choice 1">Azure choice 1</MenuItem>
-                  <MenuItem value="Azure choice 2">Azure choice 2</MenuItem>
-                  <MenuItem value="Azure choice 3">Azure choice 3</MenuItem>
-                </>
-              ) : null}
-            </Select>
-          </FormControl>
-        )}
       </div>
       <div style={{ position: "absolute", top: 0, right: "10px" }}>
         <Typography
@@ -195,15 +164,19 @@ const StackBars = () => {
               <MenuItem value="Select an option">Select an option</MenuItem>
               {selectedOption === "AWS" ? (
                 <>
-                  <MenuItem value="AWS choice 1">AWS choice 1</MenuItem>
-                  <MenuItem value="AWS choice 2">AWS choice 2</MenuItem>
-                  <MenuItem value="AWS choice 3">AWS choice 3</MenuItem>
+                  <MenuItem value="AWS choice 1">AppID_AppName</MenuItem>
+                  <MenuItem value="AWS choice 2">BU_Company</MenuItem>
+                  <MenuItem value="AWS choice 3">Environment</MenuItem>
+                  <MenuItem value="AWS choice 4">Owner</MenuItem>
+                  <MenuItem value="AWS choice 5">ProjectName</MenuItem>
                 </>
               ) : selectedOption === "Azure" ? (
                 <>
-                  <MenuItem value="Azure choice 1">Azure choice 1</MenuItem>
-                  <MenuItem value="Azure choice 2">Azure choice 2</MenuItem>
-                  <MenuItem value="Azure choice 3">Azure choice 3</MenuItem>
+                  <MenuItem value="Azure choice 1">AppID_AppName</MenuItem>
+                  <MenuItem value="Azure choice 2">BU_Company</MenuItem>
+                  <MenuItem value="Azure choice 3">Environment</MenuItem>
+                  <MenuItem value="Azure choice 4">Owner</MenuItem>
+                  <MenuItem value="Azure choice 5">ProjectName</MenuItem>
                 </>
               ) : null}
             </Select>
@@ -214,5 +187,5 @@ const StackBars = () => {
     </div>
   );
 };
-
+ 
 export default StackBars;
