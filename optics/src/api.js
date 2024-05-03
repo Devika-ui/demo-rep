@@ -1,5 +1,5 @@
 const apiUrl = 'http://localhost:3001/api/v1';
- 
+
 const api = {
   getMonthlyActualSpend: async () => {
     try {
@@ -24,8 +24,8 @@ const api = {
       throw error;
     }
   },
- 
- 
+
+
   getMonthlyForecastSpend: async () => {
     try {
       const response = await fetch(`${apiUrl}/monthlyforecast`, {
@@ -49,8 +49,8 @@ const api = {
       throw error;
     }
   },
- 
- 
+
+
   getTotalSubscription: async () => {
     try {
       const response = await fetch(`${apiUrl}/suboracccountcount`, {
@@ -72,8 +72,8 @@ const api = {
       throw error;
     }
   },
- 
- 
+
+
   getRecommendations: async () => {
     try {
       const response = await fetch(`${apiUrl}/recommendations`, {
@@ -97,7 +97,7 @@ const api = {
       throw error;
     }
   },
- 
+
   getDiscountKPI: async () => {
     try {
       const response = await fetch(`${apiUrl}/discountKPI`, {
@@ -121,8 +121,8 @@ const api = {
       throw error;
     }
   },
- 
- 
+
+
   getOverallSavings: async () => {
     try {
       const response = await fetch(`${apiUrl}/overall-savings`, {
@@ -146,8 +146,8 @@ const api = {
       throw error;
     }
   },
- 
- 
+
+
   getSubscriptionsByCustomerId: async (customerId) => {
     try {
       const response = await fetch(`${apiUrl}/subscription/${customerId}`);
@@ -156,13 +156,10 @@ const api = {
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching subscriptions for customer ${customerId}:', error);
+      console.error(`Error fetching subscriptions for customer ${customerId}:`, error);
       throw error;
     }
   },
- 
- 
- 
  
   getMenuItemsByCustomerId: async (customerId) => {
     try {
@@ -176,7 +173,7 @@ const api = {
       throw error;
     }
   },
- 
+  
   getClientData: async (customerId) => {
     try {
       const response = await fetch(`${apiUrl}/client`, {
@@ -197,8 +194,30 @@ const api = {
       throw error;
     }
   },
- 
- 
+
+  getBillingCostEachDay: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/Billingcosteachday`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id_customer: '1200',
+          startdate: '2024-01-01',
+          enddate: '2024-02-29'
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching subscriptions:', error);
+      throw error;
+    }
+  },
+
 };
- 
-export default api
+
+export default api;

@@ -1,45 +1,73 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Select, MenuItem, FormControl, Typography } from '@mui/material';
 import Chart from 'chart.js/auto';
+import api from '../api.js';
 
 const StackBars = () => {
   const [selectedOption, setSelectedOption] = useState("Select an option");
   const [subOption, setSubOption] = useState("Select an option");
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
+  const [subscriptions, setSubscriptions] = useState([]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const subscriptionsData = await api.getBillingCostEachDay();
+        setSubscriptions(subscriptionsData);
+      } catch (error) {
+        // Handle error
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (subscriptions.length === 0) return; // Wait until data is fetched
+
     if (chartInstance.current !== null) {
       chartInstance.current.destroy();
     }
+
     const ctx = chartContainer.current.getContext("2d");
+    const awsData = {};
+    const azureData = {};
+
+    subscriptions.forEach(({ date, provider }) => {
+      const month = date.split('-')[1];
+      const day = date.split('-')[2];
+
+      if (!awsData[day]) {
+        awsData[day] = 0;
+      }
+      if (!azureData[day]) {
+        azureData[day] = 0;
+      }
+
+      if (provider.AWS) {
+        awsData[day] += provider.AWS;
+      }
+      if (provider.Azure) {
+        azureData[day] += provider.Azure;
+      }
+    });
+
     chartInstance.current = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "June",
-          "July",
-          "Aug",
-          "Sept",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
+        labels: Object.keys(awsData),
         datasets: [
           {
             label: "AWS",
-            data: [8, 4, 2, 6, 9, 5, 7, 3, 10, 1, 8, 5],
-            backgroundColor: "rgba(255, 153, 10, 0.7)", // Lighter AWS color
+            data: Object.values(awsData),
+            backgroundColor: "rgba(255, 153, 10, 0.7)",
+            stack: "01"
           },
           {
             label: "Azure",
-            data: [6, 3, 7, 8, 1, 10, 4, 2, 9, 5, 7, 3],
-            backgroundColor: "rgba(10, 163, 225, 0.7)", // Lighter Azure color
+            data: Object.values(azureData),
+            backgroundColor: "rgba(10, 163, 225, 0.7)",
+            stack: "01"
           },
         ],
       },
@@ -48,19 +76,19 @@ const StackBars = () => {
           x: {
             stacked: true,
             grid: {
-              display: false, // Hide x-axis grid lines
+              display: false,
             },
             ticks: {
-              color: "rgba(0, 0, 0, 0.5)", // Set color for x-axis ticks
+              color: "rgba(0, 0, 0, 0.5)",
             },
           },
           y: {
             stacked: true,
             grid: {
-              display: false, // Hide y-axis grid lines
+              display: false,
             },
             ticks: {
-              color: "rgba(0, 0, 0, 0.5)", // Set color for y-axis ticks
+              color: "rgba(0, 0, 0, 0.5)",
             },
           },
         },
@@ -79,16 +107,16 @@ const StackBars = () => {
             position: 'top',
             align: 'start',
             labels: {
-              padding: 5, // Add padding between legend and chart
+              padding: 5,
               font: {
-                size: 12, // Adjust legend label font size
+                size: 12,
               },
             },
-            onClick: () => {}, // Override onClick to prevent default behavior
+            onClick: () => {},
           },
           layout: {
             padding: {
-              top: 10, // Add padding between top of canvas and legend
+              top: 10,
             },
           },
         },
@@ -100,11 +128,11 @@ const StackBars = () => {
         chartInstance.current.destroy();
       }
     };
-  }, [selectedOption]);
+  }, [subscriptions]);
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
-    setSubOption("Select an option"); // Reset subOption when main option changes
+    setSubOption("Select an option");
   };
 
   const handleSubOptionChange = (event) => {

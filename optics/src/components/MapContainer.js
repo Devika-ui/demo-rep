@@ -1,121 +1,78 @@
-// MapContainer.js
-import React, { useEffect, useState } from "react";
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  Marker,
-} from "react-simple-maps";
-import { Select, MenuItem, FormControl, Typography } from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import fallbackMarkerIcon from "../images/location.png";
 
 const MapContainer = () => {
-  const worldMap = "https://unpkg.com/world-atlas@1/world/110m.json";
+  const mapRef = useRef(null);
 
-  const [selectedOption, setSelectedOption] = useState("Select an option");
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const map = L.map(mapRef.current, {
+      center: [28.6139, 77.209], // Delhi coordinates
+      zoom: 11, // Decreased initial zoom level
+      layers: [
+        L.tileLayer(
+          "https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=h45ALe3FWSTc6f08j9daEyl98fINF4L8",
+          {
+            attribution:
+              '&copy; <a href="https://www.tomtom.com/">TomTom</a> contributors',
+          }
+        ),
+      ],
+    });
+
+    // Add marker for Delhi using fallback marker icon
+    L.marker([28.6139, 77.209], {
+      icon: L.icon({
+        iconUrl: fallbackMarkerIcon,
+        iconSize: [32, 32], // Size of the icon
+        iconAnchor: [16, 32], // Point of the icon which will correspond to marker's location
+      })
+    }).addTo(map).bindPopup("Delhi");
+
+    return () => {
+      map.remove();
+    };
+  }, []);
 
   return (
-    <div
-      style={{
-        width: "550px",
-        height: "450px",
-        position: "relative",
-        borderRadius: "5px",
-        overflow: "hidden",
-        border: "1px solid #ccc",
-        backgroundColor: "white",
-      }}
-    >
-      <div
+    <div>
+      <h2
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "15px",
-          borderBottom: "2px  solid #98989893",
+          textAlign: "left",
+          backgroundColor: "white",
+          color: "rgb(95, 36, 159)",
+          fontFamily: "sans-serif",
+          fontSize: "16px",
+          borderBottom: "2px solid rgba(152, 152, 152, 0.576)",
+          margin: "0",
+          padding: "10px 0",
+          paddingLeft: "20px", // Added padding-left
+          height: "32px", // Set height to 50px
+          display: "flex", // Display as flex
+          alignItems: "center", // Center vertically
+          width: "535px", // Set width to match map container
+          borderRadius: "5px"
         }}
       >
-        <div
-          style={{
-            color: "#5f249f",
-            fontWeight: 700,
-            fontSize: "16px",
-            fontFamily: "sans-serif",
-          }}
-        >
-          {" "}
-          Resource Location
-        </div>
-        <div>
-          <FormControl>
-            <Select
-              value={selectedOption}
-              onChange={handleOptionChange}
-              style={{
-                height: "24px",
-                minWidth: "140px",
-                backgroundColor: "rgb(95, 36, 159,0.9)",
-                fontSize: "14px",
-                color: "white",
-              }}
-            >
-              <MenuItem value="Select an option">Select an option</MenuItem>
-              <MenuItem value="AWS">AWS</MenuItem>
-              <MenuItem value="Azure">Azure</MenuItem>
-            </Select>
-          </FormControl>
-          {/* <select style={{ height:'25px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', fontSize: '14px', color: 'white' }} >
-            <option value="AWS">AWS</option>
-            <option value="Azure">Azure</option>
-          </select> */}
-        </div>
-      </div>
+        Resource Location
+      </h2>
       <div
+        id="map-container"
         style={{
-          width: "98%",
-          height: "calc(100% - 40px)",
+          width: "554px", // Adjusted width
+          height: "399px", // Adjusted height to fit with heading
           position: "relative",
+          borderRadius: "5px",
+          overflow: "hidden",
+          border: "1px solid #ccc",
+          margin: "0 auto", // Center the map container
+          marginBottom: "-1px", // Remove extra space below the map container
         }}
-      >
-        <ComposableMap
-          projection="geoMercator"
-          projectionConfig={{
-            scale: 100,
-          }}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        >
-          <Geographies geography={worldMap}>
-            {({ geographies }) =>
-              geographies.map((geo) => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill="#EAEAEC"
-                  stroke="#D6D6DA"
-                />
-              ))
-            }
-          </Geographies>
-          <Marker coordinates={[77.209, 28.6139]}>
-            <circle r={6} fill="#F00" />
-            <text
-              textAnchor="middle"
-              y={-10}
-              style={{ fontFamily: "system-ui", fill: "#5D5A6D" }}
-            >
-              New Delhi
-            </text>
-          </Marker>
-        </ComposableMap>
-      </div>
+        ref={mapRef}
+      ></div>
     </div>
   );
 };

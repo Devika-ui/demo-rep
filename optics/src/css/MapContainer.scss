@@ -1,0 +1,32 @@
+.map-container {
+    width: 550px;
+    height: 450px;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: white;
+  }
+  
+  .map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 2px solid #98989893;
+  }
+  
+  .map-header-title {
+    color: #5f249f;
+    font-weight: 700;
+    font-size: 16px;
+    font-family: sans-serif;
+  }
+  
+  .map-select {
+    height: 24px;
+    min-width: 140px;
+    background-color: rgba(95, 36, 159, 0.9);
+    font-size: 14px;
+    color: white;
+  }  
