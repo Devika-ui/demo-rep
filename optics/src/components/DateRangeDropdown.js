@@ -1,25 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { Select,MenuItem } from '@mui/material';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Menu, MenuItem, Button } from '@material-ui/core';
+import { DateRange } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { enUS } from 'date-fns/locale'; // import English locale
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    textTransform: 'none',
+  },
+}));
 
 const DateRangeDropdown = () => {
-  const [selectedRange, setSelectedRange] = useState('last7days'); // Set initial state to 'last7days'
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection'
+    }
+  ]);
 
-  const handleRangeChange = (event) => {
-    setSelectedRange(event.target.value);
+  const handleOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSelect = (ranges) => {
+    setDateRange([ranges.selection]);
   };
 
   return (
-    <Select
-      value={selectedRange}
-      onChange={handleRangeChange}
-      style={{ marginRight: '10px', width: '88px', height: '28px', fontSize: '12px' }}
-      // style={{ borderRadius: '15px', border: '1px solid lightblue', marginRight: '10px', width: '88px', height: '28px', fontSize: '12px' }}
-    >
-      <MenuItem value="last7days">Last 7 days</MenuItem>
-      <MenuItem value="lastMonth">Last Month</MenuItem>
-      <MenuItem value="lastYear">Last Year</MenuItem>
-      <MenuItem value="customDateRange">Custom Date Range</MenuItem>
-    </Select>
+    <div>
+      <Button
+        className={classes.button}
+        aria-controls="date-range-menu"
+        aria-haspopup="true"
+        onClick={handleOpen}
+      >
+        {dateRange[0].startDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        })} - {dateRange[0].endDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        })}
+      </Button>
+      <Menu
+        id="date-range-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={(event) => event.stopPropagation()}>
+          <DateRange
+            ranges={dateRange}
+            onChange={handleSelect}
+            locale={enUS}
+            months={2}
+            showSelectionPreview={true}
+          />
+        </MenuItem>
+      </Menu>
+    </div>
   );
 };
 
