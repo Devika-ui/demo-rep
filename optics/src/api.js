@@ -217,6 +217,29 @@ const api = {
       throw error;
     }
   },
+  getOverallConsumption: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/overall-consumtion`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id_customer: '1900',
+          provider: '0',
+          startdate: '2024-01-01',
+          enddate: '2024-01-31'
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch overall consumption data');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching overall consumption data:', error)
+      throw error;
+    }
+  }
 
 };
 
