@@ -1,0 +1,36 @@
+.Subheader-Container {
+    width: 1110px;
+    margin: '0 auto';
+    height: 50px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    font-family: sans-serif;
+  //   display: inline-block;
+    padding: 0;
+    margin-right: 0px;
+    margin-top : -7px;
+    margin-left: 85px;
+    margin-bottom: -2px;
+    background-color: white;
+    border-radius: 5px;
+  //   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); // Enhanced box shadow
+    font-size: 14px;
+  }
+  
+  .AWSBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 7px;
+  }
+  
+  .AzureBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 7px;
+  }

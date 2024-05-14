@@ -5,6 +5,7 @@ import userpool from '../userpool';
 import { logout } from '../services/authenticate';
 import api from '../api.js';
 import Header from './Header.js';
+import Subheader from './SubHeader.js'
 import StackBars from './StackBars';
 import MonthlySpendComponent from './MonthlySpendComponent.js';
 import MonthlyForecastComponent from './MonthlyForecastComponent.js';
@@ -71,6 +72,7 @@ const Dashboard = () => {
   return (
     <div>
       <Header />
+      <Subheader />
       <NavigationBar />
       <div
         className='Dashboard'

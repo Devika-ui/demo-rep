@@ -1,0 +1,25 @@
+.filter-options-container {
+    display: flex;
+    justify-content: space-between;
+  }
+ 
+  .filter-option {
+    flex: 1;
+    margin-right: 10px;
+    margin-bottom: 20px;
+  }
+ 
+  .filter-option:last-child {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .search-input {
+    margin-top: 5px; 
+  }
+  .filter-option label {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  
