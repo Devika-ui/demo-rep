@@ -1,17 +1,29 @@
-import React, { useEffect, useRef } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import fallbackMarkerIcon from "../images/location.png";
+import api from "../api.js";
 
 const MapContainer = () => {
   const mapRef = useRef(null);
+  const [mapData, setMapData] = useState([]);
 
   useEffect(() => {
-    if (!mapRef.current) return;
+    const fetchMapLocations = async () => {
+      const data = await api.getMapData();
+      setMapData(data);
+    };
+
+    fetchMapLocations();
+  }, []);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapData.length) return;
 
     const map = L.map(mapRef.current, {
-      center: [28.6139, 77.209], // Delhi coordinates
-      zoom: 11, // Decreased initial zoom level
+      center: [28.6139, 77.209], // Default center if no data available
+      zoom: 11,
       layers: [
         L.tileLayer(
           "https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=h45ALe3FWSTc6f08j9daEyl98fINF4L8",
@@ -23,19 +35,24 @@ const MapContainer = () => {
       ],
     });
 
-    // Add marker for Delhi using fallback marker icon
-    L.marker([28.6139, 77.209], {
-      icon: L.icon({
-        iconUrl: fallbackMarkerIcon,
-        iconSize: [32, 32], // Size of the icon
-        iconAnchor: [16, 32], // Point of the icon which will correspond to marker's location
-      })
-    }).addTo(map).bindPopup("Delhi");
+    mapData.forEach(location => {
+      if (location.LT && location.LN) {
+        L.marker([parseFloat(location.LT), parseFloat(location.LN)], {
+          icon: L.icon({
+            iconUrl: fallbackMarkerIcon,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+          }),
+        })
+          .addTo(map)
+          .bindPopup(location.locations);
+      }
+    });
 
     return () => {
       map.remove();
     };
-  }, []);
+  }, [mapData]);
 
   return (
     <div>
@@ -49,12 +66,12 @@ const MapContainer = () => {
           borderBottom: "2px solid rgba(152, 152, 152, 0.576)",
           margin: "0",
           padding: "10px 0",
-          paddingLeft: "20px", // Added padding-left
-          height: "32px", // Set height to 50px
-          display: "flex", // Display as flex
-          alignItems: "center", // Center vertically
-          width: "535px", // Set width to match map container
-          borderRadius: "5px"
+          paddingLeft: "20px",
+          height: "32px",
+          display: "flex",
+          alignItems: "center",
+          width: "535px",
+          borderRadius: "5px",
         }}
       >
         Resource Location
@@ -62,14 +79,14 @@ const MapContainer = () => {
       <div
         id="map-container"
         style={{
-          width: "554px", // Adjusted width
-          height: "399px", // Adjusted height to fit with heading
+          width: "554px",
+          height: "399px",
           position: "relative",
           borderRadius: "5px",
           overflow: "hidden",
           border: "1px solid #ccc",
-          margin: "0 auto", // Center the map container
-          marginBottom: "-1px", // Remove extra space below the map container
+          margin: "0 auto",
+          marginBottom: "-1px",
         }}
         ref={mapRef}
       ></div>

@@ -173,6 +173,19 @@ const api = {
       throw error;
     }
   },
+
+  getMapData: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/locations/`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch menuitems for customer`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching menuitems for customer :`, error);
+      throw error;
+    }
+  },
   
   getClientData: async (customerId) => {
     try {
