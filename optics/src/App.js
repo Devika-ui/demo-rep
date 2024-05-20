@@ -5,6 +5,7 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import BillOverview from './components/BillOverview';
+import BusinessCostSplit from './components/BusinessCostSplit';
 
 
 import './App.css';
@@ -26,6 +27,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/billOverview' element={<BillOverview/>} />
+        <Route path='/businessCostSplit' element={<BusinessCostSplit/>}/>
       </Routes>
     </BrowserRouter>
   );
