@@ -4,9 +4,9 @@ import OpticLogo from '../images/OpticsFinopslogo.png';
 import DXCLogo from '../images/DXCLogo.jpg'; // Import the hardcoded logo image
 import HeaderButtons from './HeaderButtons';
 import DateRangeDropdown from './DateRangeDropdown';
-// import api from '../api.js'; // Import the API function
-
-const Header = () => {
+import api from '../api.js'; // Import the API 
+ 
+const Header = ({ onButtonClick }) => {
   const [isNavOpen, setNavOpen] = useState(false);
   // const [clientData1200, setClientData1200] = useState(null); // State to store client data for customerId 1200
   // const [clientData1700, setClientData1700] = useState(null); // State to store client data for customerId 1700
@@ -97,7 +97,7 @@ const Header = () => {
                 </div>
               </li>
               <li style={lineStyle}></li>
-            <li style={headerButtonsStyle}><HeaderButtons /></li>
+            <li style={headerButtonsStyle}><HeaderButtons onButtonClick={onButtonClick}/></li>
             <li style={DateRangeDropdownStyle}><DateRangeDropdown /></li>
           </ul>
           )}

@@ -22,8 +22,8 @@ const MapContainer = () => {
     if (!mapRef.current || !mapData.length) return;
 
     const map = L.map(mapRef.current, {
-      center: [28.6139, 77.209], // Default center if no data available
-      zoom: 11,
+      center: [28.6139, 77.209],
+      zoom: 11, 
       layers: [
         L.tileLayer(
           "https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=h45ALe3FWSTc6f08j9daEyl98fINF4L8",

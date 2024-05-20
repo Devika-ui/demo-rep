@@ -7,7 +7,11 @@ import AWSlogo from '../images/aws-logo.png';
  import NewAWSlogo from '../images/azure-logo-svg.svg';
 
 
-const HeaderButtons = () => {
+const HeaderButtons = ({ onButtonClick }) => {
+  const handleClick = (value) => {
+    onButtonClick(value);
+  };
+
   const [buttonStates, setButtonStates] = useState({
     cut: false,
     copy: false,
@@ -62,7 +66,7 @@ const HeaderButtons = () => {
       <div className="button-box">
         <button
           id="cut-btn"
-          onClick={() => handleButtonClick('Azure')}
+          onClick={() => handleClick('Azure')}
           disabled={buttonStates.cut}
           className="logo-button"
           style={{ width: '36px', height: '36px' }} // Decrease button size
@@ -83,7 +87,7 @@ const HeaderButtons = () => {
         <div className="separator"></div> {/* Add the separator */}
         <button
           id="paste-btn"
-          onClick={() => handleButtonClick('AWS')}
+          onClick={() => handleClick('AWS')}
           disabled={buttonStates.paste}
           className="logo-button"
           style={{ width: '36px', height: '36px' }} // Decrease button size

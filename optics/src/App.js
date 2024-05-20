@@ -4,6 +4,7 @@ import Home from './components/Home';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import BillOverview from './components/BillOverview';
 
 
 import './App.css';
@@ -24,6 +25,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path='/billOverview' element={<BillOverview/>} />
       </Routes>
     </BrowserRouter>
   );

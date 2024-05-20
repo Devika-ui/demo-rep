@@ -16,8 +16,32 @@ import MapContainer from './MapContainer.js';
 import OverallTotalRealizedSavings from './OverallTotalRealizedSavings.js';
 import KPISection from './KPISection.js';
 import ConsumptionHighlights from './ConsumptionHighlights.js';
+import CustomFilter from './CustomFilter.js';
+import AzureBars from './AzureBars.js';
+import TotalAzureSubscriptions from './TotalAzureSubscriptions.js';
 
 const Dashboard = () => {
+
+  const [showStackBars, setShowStackBars] = useState(true);
+
+
+  // Callback function to receive value from HeaderButton
+  const handleButtonClick = (value) => {
+    if (value === "Azure") {
+      setShowStackBars(false); // Hide StackBars and show AzureBars
+    } else {
+      setShowStackBars(true); // Show StackBars
+    }
+  };
+
+
+  // const [filterValue, setFilterValue] = useState('');
+
+  // const handleFilterChange = (value) => {
+  //   // Update the filter value
+  //   setFilterValue(value);
+  // };
+
   const location = {
     latitude: 37.7749, // Example latitude
     longitude: -122.4194, // Example longitude
@@ -48,14 +72,14 @@ const Dashboard = () => {
   // const [subscriptions, setSubscriptions] = useState([]);
 
   useEffect(() => {
-     const fetchData = async () => {
-    //   try {
-    //     const subscriptionsData = await api.getSubscriptions();
-    //     setSubscriptions(subscriptionsData);
-    //   } catch (error) {
-    //     // Handle error
-    //   }
-     };
+    const fetchData = async () => {
+      //   try {
+      //     const subscriptionsData = await api.getSubscriptions();
+      //     setSubscriptions(subscriptionsData);
+      //   } catch (error) {
+      //     // Handle error
+      //   }
+    };
 
     fetchData();
     let user = userpool.getCurrentUser();
@@ -71,7 +95,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Header />
+      <Header onButtonClick={handleButtonClick} />
       <Subheader />
       <NavigationBar />
       <div
@@ -84,12 +108,25 @@ const Dashboard = () => {
           flexWrap: 'wrap', // Allow wrapping of elements
         }}
       >
+        {/* <CustomFilter/> */}
         {/* <OpenStreetMap location={location} containerStyle={mapContainerStyle} />  */}
-        <MonthlySpendComponent />
+        {showStackBars ? (
+          <>
+            <MonthlySpendComponent />
+            <MonthlyForecastComponent />
+            <TotalSubscriptionsComponent style={{ flex: '1' }} />
+          </>) :(
+          <>
+            <MonthlySpendComponent />
+            <MonthlyForecastComponent />
+            <TotalAzureSubscriptions style={{ flex: '1' }} />
+          </>)}
+        {/* <MonthlySpendComponent />
         <MonthlyForecastComponent />
-        <TotalSubscriptionsComponent style={{ flex: '1' }} />
+        <TotalSubscriptionsComponent style={{ flex: '1' }} /> */}
         <div style={{ ...additionalDivStyle, marginRight: '15px' }}>
-          <StackBars />
+          {showStackBars ? <StackBars /> : <AzureBars />}
+          {/* <StackBars /> */}
         </div>
         <RecommendationsComponent />
         <div

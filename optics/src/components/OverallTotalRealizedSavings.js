@@ -146,9 +146,9 @@ const OverallTotalRealizedSavings = () => {
         <h4 style={{ margin: "0", lineHeight: "1", color: "#5f249f" }}>
           Overall Total Realized Savings
         </h4>
-        <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <img
-            style={{ height: "20px", width: "20px" }}
+            style={{ height: "17px", width: "18px" }}
             src={iIcon}
             alt="I-icon"
           />

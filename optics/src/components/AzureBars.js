@@ -1,20 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Select, MenuItem, FormControl, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import Chart from 'chart.js/auto';
 import api from '../api.js';
 
-const StackBars = () => {
-  const [selectedOption, setSelectedOption] = useState("Select an option");
-  const [subOption, setSubOption] = useState("Select an option");
+const AzureBars = () => {
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
-  const [subscriptions, setSubscriptions] = useState([]);
+  const [azureData, setAzureData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const subscriptionsData = await api.getBillingCostEachDay();
-        setSubscriptions(subscriptionsData);
+        const azureData = {};
+
+        subscriptionsData.forEach(({ date, provider }) => {
+          const day = date.split('-')[2];
+
+          if (!azureData[day]) {
+            azureData[day] = 0;
+          }
+
+          if (provider.Azure) {
+            azureData[day] += provider.Azure;
+          }
+        });
+
+        setAzureData(azureData);
       } catch (error) {
         // Handle error
       }
@@ -23,58 +35,29 @@ const StackBars = () => {
   }, []);
 
   useEffect(() => {
-    if (subscriptions.length === 0) return; // Wait until data is fetched
+    if (Object.keys(azureData).length === 0) return; // Wait until data is fetched
 
     if (chartInstance.current !== null) {
       chartInstance.current.destroy();
     }
 
     const ctx = chartContainer.current.getContext("2d");
-    const awsData = {};
-    const azureData = {};
-
-    subscriptions.forEach(({ date, provider }) => {
-      const month = date.split('-')[1];
-      const day = date.split('-')[2];
-
-      if (!awsData[day]) {
-        awsData[day] = 0;
-      }
-      if (!azureData[day]) {
-        azureData[day] = 0;
-      }
-
-      if (provider.AWS) {
-        awsData[day] += provider.AWS;
-      }
-      if (provider.Azure) {
-        azureData[day] += provider.Azure;
-      }
-    });
 
     chartInstance.current = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: Object.keys(awsData),
+        labels: Object.keys(azureData),
         datasets: [
-          {
-            label: "AWS",
-            data: Object.values(awsData),
-            backgroundColor: "rgba(255, 153, 10, 0.7)",
-            stack: "01"
-          },
           {
             label: "Azure",
             data: Object.values(azureData),
             backgroundColor: "rgba(10, 163, 225, 0.7)",
-            stack: "01"
           },
         ],
       },
       options: {
         scales: {
           x: {
-            stacked: true,
             grid: {
               display: false,
             },
@@ -83,7 +66,6 @@ const StackBars = () => {
             },
           },
           y: {
-            stacked: true,
             grid: {
               display: false,
             },
@@ -93,21 +75,24 @@ const StackBars = () => {
           },
         },
         plugins: {
-          title: {
-            display: true,
-            text: '',
-            position: 'top',
-            align: 'start',
-            font: {
-              size: 16,
-              weight: 'bold'
-            }
-          },
+        //   title: {
+        //     display: true,
+        //     text: 'Total Bill Cost by Azure Provider',
+        //     position: 'top',
+        //     align: 'start',
+        //     font: {
+        //       size: '16px',
+        //       weight: 'bold'
+        //     },
+        //     color: 'black', // Set title color to black
+        //   },
           legend: {
+            display: true,
             position: 'top',
             align: 'start',
             labels: {
-              padding: 5,
+              usePointStyle: true,
+              padding: 35,
               font: {
                 size: 12,
               },
@@ -128,19 +113,11 @@ const StackBars = () => {
         chartInstance.current.destroy();
       }
     };
-  }, [subscriptions]);
+  }, [azureData]);
 
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
-    setSubOption("Select an option");
-  };
-
-  const handleSubOptionChange = (event) => {
-    setSubOption(event.target.value);
-  };
   return (
     <div style={{ position: "relative" }}>
-      <div style={{ position: "absolute", top: 0, left: 0 }}>
+         <div style={{ position: "absolute", top: 0, left: 0 }}>
         <Typography
           variant="subtitle1"
           style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}
@@ -152,5 +129,5 @@ const StackBars = () => {
     </div>
   );
 };
- 
-export default StackBars;
+
+export default AzureBars;
