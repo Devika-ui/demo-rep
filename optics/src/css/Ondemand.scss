@@ -1,0 +1,27 @@
+.ondemand-container {
+  width: 520px;
+  height: 347px;
+  margin: 0 auto;
+  top: 20px;
+  background-color: white;
+  position: relative;
+}
+ 
+.ondemand-title {
+  position: absolute;
+  top: 20px;
+  left: 35%; /* Centering horizontally */
+  transform: translateX(-50%);
+  margin: 0; /* Remove margin */
+}
+
+ 
+.chart {
+  position: absolute;
+  top: 60px; /* Adjust as needed */
+  left: 45%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 550px;
+}
+ 

@@ -174,15 +174,17 @@ const api = {
     }
   },
 
-  getMapData: async () => {
+  getMapData : async () => {
+    const customerId = 1900; // Default customerId or get it from another source dynamically
+    
     try {
-      const response = await fetch(`${apiUrl}/locations/`);
+      const response = await fetch(`${apiUrl}/locations/${customerId}`);
       if (!response.ok) {
-        throw new Error(`Failed to fetch menuitems for customer`);
+        throw new Error(`Failed to fetch menu items for customer ${customerId}`);
       }
       return await response.json();
     } catch (error) {
-      console.error(`Error fetching menuitems for customer :`, error);
+      console.error(`Error fetching menu items for customer ${customerId}:`, error);
       throw error;
     }
   },
