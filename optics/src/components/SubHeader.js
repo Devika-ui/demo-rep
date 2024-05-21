@@ -12,7 +12,7 @@ const SubHeader = () => {
       <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'white' }}>
         {/* Overview with LIcon */}
         <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', marginTop: '5px' }}>
-          <div style={{ paddingLeft: '20px', fontSize: '24px', color: '#63666A', fontWeight: 'bold' }}>
+          <div style={{ paddingLeft: '20px', fontSize: '20px', color: '#63666A', fontWeight: 'bold' }}>
             Overview
           </div>
           <img src={LIcon} alt="LIcon" style={{ width: '20px', height: '20px', marginLeft: '5px' }} />

@@ -53,14 +53,14 @@ const Filter = () => {
 
   return (
     <div className='Filter-Container'>
-      <button onClick={toggleFiltersVisibility}>Filters</button>
+      <span onClick={toggleFiltersVisibility} className='Filter-Text'>Filters</span>
       <Modal
         isOpen={isFiltersVisible}
         onRequestClose={toggleFiltersVisibility}
         style={customStyles}
         contentLabel='Filter Dialog'
       >
-       
+        
         <div className="filter-options-container">
           {/* Account dropdown */}
           <div className="filter-option">
@@ -109,7 +109,7 @@ const Filter = () => {
         <div className="filter-option" style={{width:'265px'}}>
           <label>Application(s)</label>
           <MultiSelect
-            name="Appplications"
+            name="Applications"
             options={[
               { value: 'Application 1', label: 'Application 1' },
               { value: 'Application 2', label: 'Application 2' },

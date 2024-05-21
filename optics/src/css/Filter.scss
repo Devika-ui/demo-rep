@@ -1,25 +1,37 @@
-.filter-options-container {
-    display: flex;
-    justify-content: space-between;
+.Filter-Text {
+  cursor: pointer;
+  color: #63666A;;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 5px;
+  margin-top: 5px;
+  
+  &:hover {
+    text-decoration: underline;
   }
- 
-  .filter-option {
-    flex: 1;
-    margin-right: 10px;
-    margin-bottom: 20px;
-  }
- 
-  .filter-option:last-child {
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
+}
 
-  .search-input {
-    margin-top: 5px; 
-  }
-  .filter-option label {
-    display: inline-block;
-    margin-right: 10px;
-  }
-  
-  
+.filter-options-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter-option {
+  flex: 1;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-option:last-child {
+  margin-right: 0;
+  margin-bottom: 10px;
+}
+
+.search-input {
+  margin-top: 5px; 
+}
+.filter-option label {
+  display: inline-block;
+  margin-right: 10px;
+}
+
