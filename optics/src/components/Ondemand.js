@@ -130,7 +130,7 @@ const Ondemand = () => {
         Anomalies Detection for On-Demand Cost
       </Typography>
 
-      <div className="chart" style={{ width: "500px", height: "300px" }}>
+      <div className="chart" style={{ width: "500px", height: "320px", marginBottom : "10px", marginTop: "-20px" }}>
         <canvas ref={chartContainer} />
       </div>
     </div>
