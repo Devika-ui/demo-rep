@@ -11,6 +11,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
+    flex: '1 1 auto', // Adjusts the box to be responsive
     // height: '20px',
     // width: '274px',
   },
