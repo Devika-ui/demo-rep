@@ -5,19 +5,22 @@ import FilterIcon from '../images/filter.png'; // Check the path to ensure it's 
 import LIcon from '../images/Iicon.png'; // Check the path to ensure it's correct
 import '../css/Subheader.scss';
 import Filter from './Filter.js';
+import { Tooltip } from '@mui/material'; // Import Tooltip from Material-UI
 
 const SubHeader = ({ title }) => {
   return (
     <div className='Subheader-Container'>
       <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'white' }}>
-        {/* Overview with LIcon */}
+        {/* Overview with LIcon wrapped in Tooltip */}
         <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', marginTop: '5px' }}>
           <div style={{ paddingLeft: '20px', fontSize: '20px', color: '#63666A', fontWeight: 'bold' }}>
           { title }
           </div>
-          <img src={LIcon} alt="LIcon" style={{ width: '20px', height: '20px', marginLeft: '5px' }} />
+          <Tooltip title={title}>
+            <img src={LIcon} alt="LIcon" style={{ width: '20px', height: '20px', marginLeft: '5px', cursor: 'pointer' }} />
+          </Tooltip>
         </div>
-     
+        
         {/* AWS Box */}
         <div className='AWSBox' style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
           <img src={AWSBox} alt="AWS" style={{ width: '30px', height: '34px', marginRight: '5px' }} />
