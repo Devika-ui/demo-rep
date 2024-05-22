@@ -1,0 +1,35 @@
+[
+    {
+      "name": "Group A",
+      "Marketplace Cost": 400,
+      "Pay as you go": 300,
+      "Reservations": 300,
+      "Savings Plan": 200,
+      "Saas": 100
+    },
+    {
+      "name": "Group B",
+      "Marketplace Cost": 300,
+      "Pay as you go": 400,
+      "Reservations": 200,
+      "Savings Plan": 300,
+      "Saas": 200
+    },
+    {
+      "name": "Group C",
+      "Marketplace Cost": 200,
+      "Pay as you go": 300,
+      "Reservations": 400,
+      "Savings Plan": 100,
+      "Saas": 300
+    },
+    {
+      "name": "Group D",
+      "Marketplace Cost": 278,
+      "Pay as you go": 390,
+      "Reservations": 200,
+      "Savings Plan": 100,
+      "Saas": 278
+    }
+  ]
+  
