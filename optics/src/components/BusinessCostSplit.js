@@ -20,7 +20,7 @@ const BusinessCostSplit = () => {
     return (
         <div >
             <Header onButtonClick={handleButtonClick} /> 
-            <Subheader />
+            <Subheader  title ="BusinessCostSplit"/>
             <NavigationBar />
             {/* ContainerBox */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>

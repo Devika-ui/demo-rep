@@ -96,7 +96,7 @@ const Dashboard = () => {
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
-      <Subheader />
+      <Subheader title="Overview"/>
       <NavigationBar />
       <div
         className='Dashboard'

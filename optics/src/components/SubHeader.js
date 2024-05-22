@@ -6,14 +6,14 @@ import LIcon from '../images/Iicon.png'; // Check the path to ensure it's correc
 import '../css/Subheader.scss';
 import Filter from './Filter.js';
 
-const SubHeader = () => {
+const SubHeader = ({ title }) => {
   return (
     <div className='Subheader-Container'>
       <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'white' }}>
         {/* Overview with LIcon */}
         <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', marginTop: '5px' }}>
           <div style={{ paddingLeft: '20px', fontSize: '20px', color: '#63666A', fontWeight: 'bold' }}>
-            Overview
+          { title }
           </div>
           <img src={LIcon} alt="LIcon" style={{ width: '20px', height: '20px', marginLeft: '5px' }} />
         </div>

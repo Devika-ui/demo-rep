@@ -2,22 +2,22 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
 const data1 = [
-  { name: 'App 1', value: Math.floor(Math.random() * 100) },
-  { name: 'App 2', value: Math.floor(Math.random() * 100) },
-  { name: 'App 3', value: Math.floor(Math.random() * 100) },
-  { name: 'App 4', value: Math.floor(Math.random() * 100) },
-  { name: 'App 5', value: Math.floor(Math.random() * 100) },
+  { name: 'App 1', value: Math.floor(Math.random() * 100), color: '#0099C6'  },
+  { name: 'App 2', value: Math.floor(Math.random() * 100), color:'#BA741A' },
+  { name: 'App 3', value: Math.floor(Math.random() * 100),color:'#FFCD00' },
+  { name: 'App 4', value: Math.floor(Math.random() * 100),color:'#00968F' },
+  { name: 'App 5', value: Math.floor(Math.random() * 100),color:'#5F249F' },
 ];
 
 const data2 = [
-  { name: 'Service 1', value: Math.floor(Math.random() * 100) },
-  { name: 'Service 2', value: Math.floor(Math.random() * 100) },
-  { name: 'Service 3', value: Math.floor(Math.random() * 100) },
-  { name: 'Service 4', value: Math.floor(Math.random() * 100) },
-  { name: 'Service 5', value: Math.floor(Math.random() * 100) },
+  { name: 'Service 1', value: Math.floor(Math.random() * 100),color: '#0099C6' },
+  { name: 'Service 2', value: Math.floor(Math.random() * 100), color:'#BA741A' },
+  { name: 'Service 3', value: Math.floor(Math.random() * 100),color:'#FFCD00' },
+  { name: 'Service 4', value: Math.floor(Math.random() * 100),color:'#00968F' },
+  { name: 'Service 5', value: Math.floor(Math.random() * 100),color:'#5F249F' },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -52,10 +52,14 @@ const PieChartContainer = () => {
         <Typography variant="h6" gutterBottom>
           Top 5 Applications
         </Typography>
-        <div className={classes.chart}>
+        <div className={classes.chart} style={{ height: 400 }}>
           <ResponsiveContainer width="100%" height={339}>
             <PieChart>
-              <Pie data={data1} dataKey="value" nameKey="name" fill="#8884d8" />
+              <Pie data={data1} dataKey="value" nameKey="name">
+                {data1.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
               <Tooltip />
               <Legend align="right" verticalAlign="middle" layout="vertical" wrapperStyle={{ right: 0 }} />
             </PieChart>
@@ -69,7 +73,11 @@ const PieChartContainer = () => {
         <div className={classes.chart}>
           <ResponsiveContainer width="100%" height={339}>
             <PieChart>
-              <Pie data={data2} dataKey="value" nameKey="name" fill="#82ca9d" />
+              <Pie data={data2} dataKey="value" nameKey="name">
+                {data2.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
               <Tooltip />
               <Legend align="right" verticalAlign="middle" layout="vertical" wrapperStyle={{ right: 0 }} />
             </PieChart>
