@@ -13,27 +13,30 @@ const data1 = [
 ];
 
 const data2 = [
-  { name: 'Service 1', value: Math.floor(Math.random() * 100),color: '#0099C6' },
-  { name: 'Service 2', value: Math.floor(Math.random() * 100), color:'#BA741A' },
-  { name: 'Service 3', value: Math.floor(Math.random() * 100),color:'#FFCD00' },
-  { name: 'Service 4', value: Math.floor(Math.random() * 100),color:'#00968F' },
-  { name: 'Service 5', value: Math.floor(Math.random() * 100),color:'#5F249F' },
+  { name: 'Virtual Machines', value: Math.floor(Math.random() * 100),color: '#0099C6' },
+  { name: 'Storage', value: Math.floor(Math.random() * 100), color:'#BA741A' },
+  { name: 'Azure NetApp Files', value: Math.floor(Math.random() * 100),color:'#FFCD00' },
+  { name: 'Bandwidth', value: Math.floor(Math.random() * 100),color:'#00968F' },
+  { name: 'Files', value: Math.floor(Math.random() * 100),color:'#5F249F' },
 ];
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'space-between',
-    width: '100%',
-    maxWidth: 656,
+    width: '1300px',
+    maxWidth: 550, // Adjust the maxWidth to your desired value
     margin: theme.spacing(2, 'auto'),
+    marginBottom : '30px',   
   },
   chartContainer: {
-    width: '48%', // Adjust as needed
+    width: '50%', // Adjust as needed
   },
   chart: {
     width: '100%',
+    height: 200, // Adjust the height of the pie charts
     position: 'relative',
+   
   },
   legend: {
     position: 'absolute',
@@ -49,11 +52,11 @@ const PieChartContainer = () => {
   return (
     <Paper className={classes.container}>
       <div className={classes.chartContainer}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="subtitle1" gutterBottom>
           Top 5 Applications
         </Typography>
-        <div className={classes.chart} style={{ height: 400 }}>
-          <ResponsiveContainer width="100%" height={339}>
+        <div className={classes.chart}>
+          <ResponsiveContainer width="90%" height={300}>
             <PieChart>
               <Pie data={data1} dataKey="value" nameKey="name">
                 {data1.map((entry, index) => (
@@ -67,11 +70,11 @@ const PieChartContainer = () => {
         </div>
       </div>
       <div className={classes.chartContainer}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="subtitle1" gutterBottom>
           Top 5 Services
         </Typography>
         <div className={classes.chart}>
-          <ResponsiveContainer width="100%" height={339}>
+          <ResponsiveContainer width="101%" height={300}>
             <PieChart>
               <Pie data={data2} dataKey="value" nameKey="name">
                 {data2.map((entry, index) => (

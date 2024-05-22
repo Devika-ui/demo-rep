@@ -37,18 +37,18 @@ const BillOverview = () => {
                 {/* Chart and Table Container */}
                 <div style={{ display: 'flex', marginBottom: 20, paddingLeft:'42px'}}>
                     <BarChartContainer />
-                    <div style={{ marginLeft: 20 }}>
-                        <div style={{ border: '1px solid #ccc',marginTop :'15px' }}>
+                    <div style={{ marginLeft: 10,marginTop:'10px'}}>
+                        <div style={{ marginTop :'20px' }}>
                             <InvoiceTableView />
                         </div>
                     </div>
                 </div>
 
                 {/* Pie Chart Container */}
-                <div style={{ display: 'flex', marginBottom: 20, marginLeft:'-90px'}}> 
+                <div style={{ display:'flex', marginBottom: 0, marginLeft:'45px', marginTop:'-40px'}}> 
                     <PieChartContainer />
-                    <div style={{ flex: 1, marginLeft: 20, marginTop:'16px' }}>
-                        <div style={{ border: '1px solid #ccc'}}>
+                    <div style={{ flex: 1, marginLeft: '4px' }}>
+                        <div style={{ paddingLeft:'0px'}}>
                             <TotalBillView/>
                         </div>
                     </div>

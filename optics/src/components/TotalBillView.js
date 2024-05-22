@@ -14,12 +14,14 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   container: {
-    width: '100%',
-    maxWidth: 870,
+    width: '93%',
+    maxWidth: 800,
+    height: 'auto',
     backgroundColor: 'white',
-    padding: 20,
+    padding: 16,
     border: '1px solid #ddd',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    margin: '20px auto',
   },
   header: {
     display: 'flex',
@@ -28,19 +30,47 @@ const useStyles = makeStyles({
     marginBottom: 10,
   },
   title: {
-    fontSize: '1.5rem',
+    fontSize: '1.2rem',
+    color: '#63666A',
   },
   buttons: {
     display: 'flex',
-    gap: 10,
-    alignItems: 'center',
+    gap: 8,
+    marginTop: 10,
   },
   button: {
-    fontSize: '0.8rem',
-    padding: '6px 12px',
+    fontSize: '0.7rem',
+    padding: '4px 10px',
+    color: '#63666A',
   },
   select: {
-    minWidth: 180,
+    fontSize: '0.8rem',
+    padding: '8px',
+    color: '#63666A',
+  },
+  tableCell: {
+    color: '#63666A',
+    fontSize: '0.8rem',
+    padding: '8px 16px', // Adjusted padding for better spacing
+    borderBottom: '1px solid black', // Horizontal border only
+    borderTop: '1px solid black', // Horizontal border only
+    verticalAlign: 'top', // Align text to the top of the cell
+    borderLeft : '1px solid black',
+    borderRight : '1px solid Black',
+   
+  },
+  tableHeadCell: {
+    backgroundColor: '#f0f0f0',
+    textAlign: 'center',
+    borderTop: '1px solid black', // Horizontal border only
+    borderBottom: '1px solid black', // Horizontal border only
+    borderLeft : '1px solid black',
+    borderRight : '1px solid Black',
+    padding: '8px 16px', // Adjusted padding for better spacing
+  },
+  tableRow: {
+    '&:last-child td': { // Remove bottom border for the last row
+    },
   },
 });
 
@@ -75,37 +105,36 @@ const TotalBillView = () => {
             <MenuItem value="app3">Application 3</MenuItem>
             {/* Add more MenuItem components as needed */}
           </Select>
-          <IconButton color="primary" className={classes.button}>
+          <IconButton color="#f0f0f0" className={classes.button}>
             <ShareIcon />
           </IconButton>
-          <Button variant="contained" color="primary" className={classes.button}>Customize Report</Button>
+          <Button variant="contained" color="#f0f0f0" className={classes.button}>Customize Report</Button>
         </div>
       </div>
       <TableContainer>
         <Table>
           <TableHead>
+          <TableCell className={classes.tableHeadCell} colSpan={6}>
+                April - 24
+              </TableCell>
             <TableRow>
-              <TableCell>Application Name</TableCell>
-              <TableCell colSpan={5} align="center">April - 24</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell />
-              <TableCell>Owner Name</TableCell>
-              <TableCell>On Demand Cost</TableCell>
-              <TableCell>Reserved Instances Cost</TableCell>
-              <TableCell>Savings</TableCell>
-              <TableCell>Total Bill</TableCell>
+              <TableCell className={classes.tableHeadCell}>Subscription Name</TableCell>
+              <TableCell className={classes.tableHeadCell}>On Demand Cost</TableCell>
+              <TableCell className={classes.tableHeadCell}>Reserved Instances Cost</TableCell>
+              <TableCell className={classes.tableHeadCell}>Simulated PAYGO</TableCell>
+              <TableCell className={classes.tableHeadCell}>Savings</TableCell>
+              <TableCell className={classes.tableHeadCell}>Total Bill</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {dummyData.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.onDemandCost}</TableCell>
-                <TableCell>{row.reservedInstancesCost}</TableCell>
-                <TableCell>{row.simulatedPAYGO}</TableCell>
-                <TableCell>{row.savings}</TableCell>
-                <TableCell>{row.totalBill}</TableCell>
+              <TableRow key={index} className={classes.tableRow}>
+                <TableCell className={classes.tableCell}>{row.name}</TableCell>
+                <TableCell className={classes.tableCell}>{row.onDemandCost}</TableCell>
+                <TableCell className={classes.tableCell}>{row.reservedInstancesCost}</TableCell>
+                <TableCell className={classes.tableCell}>{row.simulatedPAYGO}</TableCell>
+                <TableCell className={classes.tableCell}>{row.savings}</TableCell>
+                <TableCell className={classes.tableCell}>{row.totalBill}</TableCell>
               </TableRow>
             ))}
           </TableBody>
