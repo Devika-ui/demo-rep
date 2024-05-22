@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "20px",
     alignItems: 'center',
     justifyContent: 'center',
-    width: '1100px', // Adjust the width as needed
-    height: '30px', // Adjust the height as needed
+    width: '1130px', // Adjust the width as needed
+    height: '75px', // Adjust the height as needed
   },
 }));
 
