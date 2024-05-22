@@ -11,11 +11,12 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles({
   container: {
-    width: 550, // Fixed width
-    height: 684, // Fixed height
+    width: 580, // Fixed width
+    height: 695, // Fixed height
     backgroundColor: 'white',
     padding: 10, // Adjusted padding
     border: '1px solid #ddd',
@@ -24,31 +25,61 @@ const useStyles = makeStyles({
   },
   header: {
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
+    flexDirection: 'column', // Use column direction to stack title and buttons
+    marginBottom: 10, // Add margin between header and table
   },
   title: {
-    fontSize: '1.5rem',
+    fontFamily: 'Inter, sans-serif', // Font family
+    fontSize: '16px', // Font size
+    fontWeight: 700, // Font weight
+    lineHeight: '19.36px', // Line height
+    textAlign: 'left', // Text align
+    color: '#63666A', // Text color
+    marginBottom: 8, // Add some space between title and buttons
   },
   buttons: {
     display: 'flex',
+    justifyContent: 'flex-end', // Move buttons to the right
     gap: 10,
   },
   button: {
-    fontSize: '0.8rem',
-    padding: '4px 8px', // Adjusted padding
+    fontSize: '0.7rem', // Reduce font size
+    padding: '4px 8px', // Reduce padding
+    color: '#63666A', // Button text color
+    borderColor: '#63666A', // Button border color
+  },
+  tableContainer: {
+    border: '1px solid #ddd', // Border around the table
+    borderRadius: '0', // Rounded corners
+    overflow: 'hidden', // Prevent overflow
+  },
+  tableHeader: {
+    padding: '4px 8px', // Padding inside the box
+    textAlign: 'center',
+    color: '#63666A', // Text color
+  },
+  table: {
+    tableLayout: 'fixed', // Fixed table layout
   },
   nestedRow: {
     backgroundColor: '#f9f9f9',
   },
-  tableCell: {
-    padding: '4px 8px', // Reduced padding
-    fontSize: '0.8rem', // Reduced font size
+  cell: {
+    padding: '4px 8px', // Reduce padding
+    overflow: 'hidden',
+    textAlign: 'center', // Center-align text
+    color: '#63666A', // Text color
+  },
+  columnHeader: {
+    textAlign: 'center',
+    padding: '4px 8px', // Reduce padding
+    color: '#63666A', // Text color
+    borderBottom: '2px solid #63666A', // Thicker bottom border
   },
   indentedCell: {
     fontSize: '0.8rem', // Adjusted font size
   },
+  
 });
 
 const dummyData = [
@@ -309,10 +340,10 @@ const TableRowComponent = ({ data, level, toggleRow, expandedRows, rowKey, inden
               ) : null}
               {item.name}
             </TableCell>
-            <TableCell className={classes.tableCell}>{item.totalBill}</TableCell>
-            <TableCell className={classes.tableCell}>{item.onDemandCost}</TableCell>
-            <TableCell className={classes.tableCell}>{item.commitmentsCost}</TableCell>
-            <TableCell className={classes.tableCell}>{item.savings}</TableCell>
+            <TableCell className={classes.cell}>{item.totalBill}</TableCell>
+            <TableCell className={classes.cell}>{item.onDemandCost}</TableCell>
+            <TableCell className={classes.cell}>{item.commitmentsCost}</TableCell>
+            <TableCell className={classes.cell}>{item.savings}</TableCell>
           </TableRow>
           {expandedRows[rowKey]?.[index] && (
             <TableRowComponent
@@ -349,25 +380,26 @@ const ServiceCategory = () => {
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <h2 className={classes.title}>ServiceCategory</h2>
+        <h2 className={classes.title}>Service Category Cost Allocation</h2>
         <div className={classes.buttons}>
-          <IconButton color="primary" className={classes.button}>
+          
+          <Button variant="contained" className={classes.button}>Customize Report</Button>
+          <IconButton className={classes.button}>
             <ShareIcon />
           </IconButton>
-          <Button variant="contained" color="primary" className={classes.button}>
-            Customize Report
-          </Button>
         </div>
       </div>
+      <Box className={classes.tableContainer}>
+      <div className={classes.tableHeader}>April - 24</div>
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCell}>Service Category</TableCell>
-              <TableCell className={classes.tableCell}>Total Bill</TableCell>
-              <TableCell className={classes.tableCell}>On Demand Cost</TableCell>
-              <TableCell className={classes.tableCell}>Commitments Cost</TableCell>
-              <TableCell className={classes.tableCell}>Savings</TableCell>
+              <TableCell className={classes.columnHeader}>Service Category</TableCell>
+              <TableCell className={classes.columnHeader}>Total Bill</TableCell>
+              <TableCell className={classes.columnHeader}>On Demand Cost</TableCell>
+              <TableCell className={classes.columnHeader}>Commitments Cost</TableCell>
+              <TableCell className={classes.columnHeader}>Savings</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -382,6 +414,7 @@ const ServiceCategory = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      </Box>
     </div>
   );
 };

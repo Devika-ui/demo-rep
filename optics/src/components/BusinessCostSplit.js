@@ -26,13 +26,13 @@ const BusinessCostSplit = () => {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <ContainerBox />
             </div>
-            <div style={{ marginBottom: '30px', textAlign: 'left', width: '100%', marginLeft: '-260px', marginTop: '-20px' }}> {/* Align Ondemand component to the left */}
+            <div style={{ marginBottom: '30px', textAlign: 'left', width: '100%', marginLeft: '-271px', marginTop: '-20px' }}> {/* Align Ondemand component to the left */}
                 <Ondemand />
             </div>
             <div style={{ display: 'flex', justifyContent: 'left', marginLeft: '90px' }}> {/* Center align InvoiceTableView component */}
                 <BillAllocation/>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', marginLeft: '600px', marginTop: '-715px',marginBottom: '30px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginLeft: '630px', marginTop: '-715px',marginBottom: '30px' }}>
                 <ServiceCategory />
             </div>
         </div>

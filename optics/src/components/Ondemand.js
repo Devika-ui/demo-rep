@@ -96,17 +96,6 @@ const Ondemand = () => {
               ctx.setLineDash([5, 5]);
               ctx.stroke();
               ctx.restore();
-
-              // Draw horizontal line
-              ctx.save();
-              ctx.beginPath();
-              ctx.moveTo(xScale.left, y);
-              ctx.lineTo(xScale.right, y);
-              ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-              ctx.lineWidth = 1;
-              ctx.setLineDash([5, 5]);
-              ctx.stroke();
-              ctx.restore();
             }
           }
         }]
