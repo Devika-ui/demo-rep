@@ -25,7 +25,14 @@ const BillOverview = () => {
     return (
         <div>
             <Header onButtonClick={handleButtonClick} />
-            <Subheader  title ="BillOverview" />
+            <Subheader
+                title={
+                    <div>
+                        <span style={{ fontSize: '18px' }}>Cost & Usage/</span>
+                        <span style={{ color: '#0070C0', fontSize: '18px' }}>Bill Overview</span>
+                    </div>
+                }
+            />
             <NavigationBar /> 
             {/* Boxes */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>

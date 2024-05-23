@@ -61,10 +61,11 @@ const useStyles = makeStyles({
     tableLayout: 'fixed', // Fixed table layout
   },
   cell: {
-    padding: '4px 8px', // Reduce padding
+    padding: '4px 8px',
     overflow: 'hidden',
-    textAlign: 'center', // Center-align text
-    color: '#63666A', // Text color
+    textAlign: 'center',
+    color: '#63666A',
+    borderRight: '1px solid #ddd', // Add right border for vertical lines
   },
   columnHeader: {
     textAlign: 'center',

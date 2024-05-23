@@ -17,7 +17,7 @@ const SubHeader = ({ title }) => {
           { title }
           </div>
           <Tooltip title={title}>
-            <img src={LIcon} alt="LIcon" style={{ width: '20px', height: '20px', marginLeft: '5px', cursor: 'pointer' }} />
+            <img src={LIcon} alt="LIcon" style={{ width: '20px', height: '17px', marginLeft: '5px', cursor: 'pointer', marginTop: '2px' }} />
           </Tooltip>
         </div>
         
