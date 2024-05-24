@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   container: {
-    width: '93%',
+    width: '90%',
     maxWidth: 800,
     height: 'auto',
     backgroundColor: 'white',
@@ -53,7 +53,7 @@ const useStyles = makeStyles({
     fontSize: '0.8rem',
     padding: '8px 16px', // Adjusted padding for better spacing
     borderBottom: '1px solid black', // Horizontal border only
-    borderTop: '1px solid black', // Horizontal border only
+    borderTop: '1px solid black', 
     verticalAlign: 'top', // Align text to the top of the cell
     borderLeft : '1px solid black',
     borderRight : '1px solid Black',

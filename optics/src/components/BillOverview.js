@@ -25,6 +25,7 @@ const BillOverview = () => {
     return (
         <div>
             <Header onButtonClick={handleButtonClick} />
+            <div style={{marginLeft : '-12px', width :'200%'}}>
             <Subheader
                 title={
                     <div>
@@ -33,6 +34,8 @@ const BillOverview = () => {
                     </div>
                 }
             />
+            </div>
+           
             <NavigationBar /> 
             {/* Boxes */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -42,20 +45,20 @@ const BillOverview = () => {
             {/* Chart and Table Containers */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingLeft:'30px'}}>
                 {/* Chart and Table Container */}
-                <div style={{ display: 'flex', marginBottom: 20, paddingLeft:'42px'}}>
+                <div style={{ display: 'flex', marginBottom: 20, paddingLeft:'45px', marginRight:'10px'}}>
                     <BarChartContainer />
-                    <div style={{ marginLeft: 10,marginTop:'10px'}}>
-                        <div style={{ marginTop :'20px' }}>
+                    <div style={{ marginTop:'10px'}}>
+                        <div style={{ marginTop :'20px',paddingRight:'18px' }}>
                             <InvoiceTableView />
                         </div>
                     </div>
                 </div>
 
                 {/* Pie Chart Container */}
-                <div style={{ display:'flex', marginBottom: 0, marginLeft:'45px', marginTop:'-40px'}}> 
+                <div style={{ display:'flex', marginBottom: 0, marginLeft:'42px', marginTop:'-40px'}}> 
                     <PieChartContainer />
-                    <div style={{ flex: 1, marginLeft: '4px' }}>
-                        <div style={{ paddingLeft:'0px'}}>
+                    <div style={{ flex: 1, marginLeft: '2px', marginTop:'-5px' }}>
+                        <div style={{ paddingLeft:'0px', paddingRight:'10px'}}>
                             <TotalBillView/>
                         </div>
                     </div>

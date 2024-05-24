@@ -8,12 +8,13 @@ import trendData from './trendData.json';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    width: '60%',
+    width: '63%',
     maxWidth: 700,
     height: 350,
     margin: theme.spacing(4, 'auto'),
     padding: theme.spacing(3),
     backgroundColor: '#f9f9f9',
+    marginRight : '15px',
     paddingRight : 0,
     paddingLeft : 10,
     paddingTop : 4,

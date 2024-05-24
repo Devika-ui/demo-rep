@@ -12,9 +12,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexWrap: 'nowrap', // Do not allow wrapping
-    width: '100%',
+    width: '89%',
     overflow: 'hidden', // Prevent horizontal scroll
-    marginLeft:'50px',
+    marginLeft: '50px',
   },
   box: {
     flex: '1 1 0', // Allow boxes to shrink and grow as needed
@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '200px', // Maximum width to maintain a reasonable size
     margin: theme.spacing(1),
     textAlign: 'center',
+    fontSize: '1px',
   },
 }));
 

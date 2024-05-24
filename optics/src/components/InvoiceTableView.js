@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   container: {
-    width: '95%',
+    width: '94%',
     maxWidth: 800,
     height: 'auto',
     backgroundColor: 'white',
@@ -44,7 +44,7 @@ const useStyles = makeStyles({
   tableCell: {
     color: '#63666A',
     fontSize: '0.8rem',
-    padding: '8px 16px', // Adjusted padding for better spacing
+    padding: '13px 16px', // Adjusted padding for better spacing
     borderBottom: 'none', // Remove bottom border for cleaner look
     verticalAlign: 'top', // Align text to the top of the cell
     borderBottom : '1px solid black',
@@ -67,6 +67,8 @@ const useStyles = makeStyles({
 const dummyData = [
   { name: 'Subscription 1', onDemandCost: '$100', reservedInstancesCost: '$200', simulatedPAYGO: '$150', savings: '$50', totalBill: '$400' },
   { name: 'Subscription 2', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
+  { name: 'Subscription 3', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
+  //{ name: 'Subscription 4', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
   // Add more dummy data as needed
 ];
 
@@ -120,3 +122,4 @@ const InvoiceTableView = () => {
 };
 
 export default InvoiceTableView;
+
