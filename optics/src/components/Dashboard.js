@@ -19,6 +19,8 @@ import ConsumptionHighlights from './ConsumptionHighlights.js';
 import CustomFilter from './CustomFilter.js';
 import AzureBars from './AzureBars.js';
 import TotalAzureSubscriptions from './TotalAzureSubscriptions.js';
+import MonthlySpendAWSComponent from './MonthlySpendAWS.js';
+import MonthlyForecastAWSComponent from './MonthlyForecastAWS.js';
 
 const Dashboard = () => {
 
@@ -117,8 +119,8 @@ const Dashboard = () => {
             <TotalSubscriptionsComponent style={{ flex: '1' }} />
           </>) :(
           <>
-            <MonthlySpendComponent />
-            <MonthlyForecastComponent />
+            <MonthlySpendAWSComponent/>
+            <MonthlyForecastAWSComponent/>
             <TotalAzureSubscriptions style={{ flex: '1' }} />
           </>)}
         {/* <MonthlySpendComponent />
