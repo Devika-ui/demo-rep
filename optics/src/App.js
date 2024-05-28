@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import BillOverview from './components/BillOverview';
 import BusinessCostSplit from './components/BusinessCostSplit';
+import InventoryCostSplit from './components/InventoryCostSplit';
 
 
 import './App.css';
@@ -28,6 +29,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/billOverview' element={<BillOverview/>} />
         <Route path='/businessCostSplit' element={<BusinessCostSplit/>}/>
+        <Route path='/inventoryCostSplit' element={<InventoryCostSplit/>}/>
       </Routes>
     </BrowserRouter>
   );
