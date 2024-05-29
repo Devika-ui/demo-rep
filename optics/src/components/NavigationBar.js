@@ -34,8 +34,8 @@ const NavigationBar = () => {
       //   ];
       case 'Cost and Usage':
         return [
-          { label: 'Bill Overview', path: '/cost-and-usage/subitem1' },
-          { label: 'Business Cost Split View', path: '/cost-and-usage/subitem2' },
+          { label: 'Bill Overview', path: '/billOverview' },
+          { label: 'Business Cost Split View', path: '/businessCostSplit' },
           { label: 'Inventory Cost Split View', path: '/cost-and-usage/subitem3' },
           { label: 'Infra Consumption Cost Study', path: '/cost-and-usage/subitem4' },
           { label: 'Infra Changes Audit', path: '/cost-and-usage/subitem1' },

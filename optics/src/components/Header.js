@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../css/styles.scss';
 import OpticLogo from '../images/OpticsFinopslogo.png';
-import DXCLogo from '../images/DXCLogo.jpg'; // Import the hardcoded logo image
+import DXCLogo from '../images/DXCLogo.jpg';
 import HeaderButtons from './HeaderButtons';
 import DateRangeDropdown from './DateRangeDropdown';
-import api from '../api.js'; // Import the API
+import api from '../api.js';
+import { Link } from 'react-router-dom';
 
 const Header = ({ onButtonClick }) => {
   const [isNavOpen, setNavOpen] = useState(false);
@@ -18,14 +19,14 @@ const Header = ({ onButtonClick }) => {
   const clientLogoStyle = {
     width: '120px',
     height: '35px',
-    marginTop:'18px',
+    marginTop: '18px',
   };
 
   const lineStyle = {
     height: '24px',
     borderRight: '1px solid lightgray',
     marginRight: '10px',
-    marginTop:'20px',
+    marginTop: '20px',
   };
 
   const headerButtonsStyle = {
@@ -34,7 +35,7 @@ const Header = ({ onButtonClick }) => {
 
   const DateRangeDropdownStyle = {
     marginTop: '8.2px',
-    marginLeft:'6px',
+    marginLeft: '6px',
   };
 
   const logoImageStyle = {
@@ -77,12 +78,13 @@ const Header = ({ onButtonClick }) => {
   return (
     <header className="site-header">
       <div className="site-identity">
-        <a href="#"><img src={OpticLogo} alt="Site Name" /></a>
-        {/*<h1><a href="#">Overview</a></h1>*/}
+        <Link to="/dashboard">
+          <img src={OpticLogo} alt="Site Name" />
+        </Link>
       </div>
 
       <div>
-   {/* 
+        {/* 
         <nav className={`site-navigation ${isNavOpen ? 'open' : ''}`}>
           {(clientData1200 && clientData1700) && (
             <ul className="nav" style={{ display: 'flex', alignItems: 'center' }}>
@@ -107,11 +109,13 @@ const Header = ({ onButtonClick }) => {
           <ul className="nav" style={{ display: 'flex', alignItems: 'center' }}>
             <li>
               <div className="site-identity" style={siteIdentityStyle}>
-              <a href="#"><img src={DXCLogo} alt="DXC Logo" style={{...clientLogoStyle, ...logoImageStyle}} /></a> {/* Use hardcoded logo */}
+                <Link to="/dashboard">
+                  <img src={DXCLogo} alt="DXC Logo" style={{ ...clientLogoStyle, ...logoImageStyle }} />
+                </Link>
               </div>
             </li>
             <li style={lineStyle}></li>
-            <li style={headerButtonsStyle}><HeaderButtons  onButtonClick={onButtonClick}/></li>
+            <li style={headerButtonsStyle}><HeaderButtons onButtonClick={onButtonClick} /></li>
             <li style={DateRangeDropdownStyle}><DateRangeDropdown /></li>
           </ul>
         </nav>
