@@ -145,6 +145,11 @@ const useStyles = makeStyles({
   },
   dialogPaper: {
     backgroundColor: '#D9D9D9',
+    maxWidth: '280px',  // Set a maximum width
+    top: '140px',
+    left: '280px',
+    marginBottom: '200px',
+    padding: '20px',  // Add padding if needed
   },
 });
 
@@ -474,7 +479,7 @@ const CostInventory = () => {
             </Button>
         </DialogActions>
       </Dialog>
-    </div>
+      </div>
   );
 };
 
