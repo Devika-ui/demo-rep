@@ -34,15 +34,30 @@ const useStyles = makeStyles((theme) => ({
     top: "50%",
     transform: "translateY(-50%)",
   },
+  title: {
+    fontFamily: "Inter, sans-serif",
+    fontSize: "15px",
+    fontWeight: 700,
+    color: "#63666A",
+    marginBottom: theme.spacing(2),
+    marginLeft: "15px",
+  },
 }));
 
-const PieChartContainer = ({ title1, data1, title2, data2 }) => {
+const PieChartContainer = ({
+  title1,
+  data1,
+  title2,
+  data2,
+  containerStyle,
+  chartStyle,
+}) => {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.container}>
-      <div className={classes.chartContainer}>
-        <Typography variant="subtitle1" gutterBottom>
+    <Paper className={classes.container} style={containerStyle}>
+      <div className={classes.chartContainer} style={chartStyle}>
+        <Typography variant="subtitle1" gutterBottom className={classes.title}>
           {title1}
         </Typography>
         <div className={classes.chart}>
@@ -64,8 +79,8 @@ const PieChartContainer = ({ title1, data1, title2, data2 }) => {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className={classes.chartContainer}>
-        <Typography variant="subtitle1" gutterBottom>
+      <div className={classes.chartContainer} style={chartStyle}>
+        <Typography variant="subtitle1" gutterBottom className={classes.title}>
           {title2}
         </Typography>
         <div className={classes.chart}>
