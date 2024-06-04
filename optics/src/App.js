@@ -7,7 +7,7 @@ import Dashboard from './components/Dashboard';
 import BillOverview from './components/BillOverview';
 import BusinessCostSplit from './components/BusinessCostSplit';
 import InventoryCostSplit from './components/InventoryCostSplit';
-
+import OrphanedSnapshots from "./components/OrphanedSnapshots";
 
 import './App.css';
 import userpool from './userpool';
@@ -30,6 +30,7 @@ function App() {
         <Route path='/billOverview' element={<BillOverview/>} />
         <Route path='/businessCostSplit' element={<BusinessCostSplit/>}/>
         <Route path='/inventoryCostSplit' element={<InventoryCostSplit/>}/>
+        <Route path="/orphanedSnapshots" element={<OrphanedSnapshots />} />
       </Routes>
     </BrowserRouter>
   );
