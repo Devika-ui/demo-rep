@@ -15,15 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import InputBase from '@material-ui/core/InputBase';
 import { MultiSelect } from 'react-multi-select-component';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import CostsAmortized from './CostsAmortized'; // Import the new component
 
 const useStyles = makeStyles({
   container: {
@@ -145,6 +137,11 @@ const useStyles = makeStyles({
   },
   dialogPaper: {
     backgroundColor: '#D9D9D9',
+    maxWidth: '280px',  // Set a maximum width
+    top: '140px',
+    left: '280px',
+    marginBottom: '200px',
+    padding: '20px',  // Add padding if needed
   },
 });
 
@@ -277,7 +274,6 @@ const dummyData = [
 const TableRowComponent = ({ data, level, toggleRow, expandedRows, rowKey, indentIncrement }) => {
   const classes = useStyles();
   const indentLevel = level * indentIncrement;
-  
 
   return (
     <>
@@ -320,8 +316,6 @@ const CostInventory = () => {
   const [expandedRows, setExpandedRows] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [groupBy, setGroupBy] = useState([]); // State for Group By dropdown
-  const [open, setOpen] = useState(false); // State for modal open/close
-  const [selectedOption, setSelectedOption] = useState('');
 
   const groupByOptions = [
     { label: "On Demand", value: "onDemand" },
@@ -343,19 +337,6 @@ const CostInventory = () => {
         [index]: !prev[rowKey]?.[index],
       },
     }));
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleSave = () => {
-    console.log('Selected Option:', selectedOption);
-    setOpen(false);
   };
 
   const indentIncrement = 30; // You can change this value to adjust the indentation
@@ -399,9 +380,9 @@ const CostInventory = () => {
             />
           </div>
           <div className={classes.buttons}>
-          <Button variant="contained" className={classes.button} onClick={handleClickOpen}>Costs Amortized</Button>
+            <CostsAmortized dialogPaperClass={classes.dialogPaper} />
             <Button variant="contained" className={classes.button}>Customize Report</Button>
-            
+
             <IconButton className={classes.button}>
               <ShareIcon />
             </IconButton>
@@ -443,37 +424,6 @@ const CostInventory = () => {
           </Table>
         </TableContainer>
       </Box>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="xs" fullWidth={true}  classes={{ paper: classes.dialogPaper }}>
-        <DialogTitle id="form-dialog-title">Costs Amortization</DialogTitle>
-        <DialogContent>
-          <FormControl component="fieldset">
-            <RadioGroup
-            aria-label="options"
-            name="options"
-            value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
-            >
-              <FormControlLabel value="option1" control={<Radio />} label="Actual Costs" />
-              <DialogContentText>One-time & upfront costs shown at the time of purchase</DialogContentText>
-              <FormControlLabel value="option2" control={<Radio />} label="Costs Amortized" />
-              <DialogContentText>One-time & upfront costs are spread evenly over the term of the item purchased</DialogContentText>
-              <DialogContentText>Costs Blending (AWS only)</DialogContentText>
-              <FormControlLabel value="option3" control={<Radio />} label="Costs Unblended" />
-              <DialogContentText>Savings from reserved instances are applied first to matching instances in the account where its purchased</DialogContentText>
-              <FormControlLabel value="option4" control={<Radio />} label="Costs Blended" />
-              <DialogContentText>Savings from reserved instances are shared equally by all matching instances in all accounts</DialogContentText>
-              </RadioGroup>
-            </FormControl>
-          </DialogContent>
-        <DialogActions>
-            <Button onClick={handleSave}  style={{ backgroundColor: '#5F249F', color: '#fff'}}>
-             Save
-            </Button>
-             <Button onClick={handleClose}  style={{ backgroundColor: 'white', color: 'black'}}>
-             Cancel
-            </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 };

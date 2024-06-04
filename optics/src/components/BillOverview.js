@@ -7,7 +7,9 @@ import Header from "./Header";
 import Subheader from "./SubHeader";
 import TotalBillView from "./TotalBillView";
 import NavigationBar from "./NavigationBar";
-import BillOverviewBox from "./BillOverviewBox";
+//import BillOverviewBox from "./BillOverviewBox";
+import ContainerBox from './ContainerBox';
+
 
 const BillOverview = () => {
   const [showStackBars, setShowStackBars] = useState(true);
@@ -52,6 +54,17 @@ const BillOverview = () => {
     },
     { name: "Files", value: Math.floor(Math.random() * 100), color: "#5F249F" },
   ];
+  const dataSet1 = [
+    { number: "$1.40M", text: "Total Bill" },
+    { number: "$2.00M", text: "Simulated Bill" },
+    { number: "$570K", text: "Total Savings" },
+    { number: "52.3%", text: "%Savings over Bill" },
+    { number: "61.3%", text: "%Savings over Pay-as-you-go" },
+    { number: "10.2%", text: "Normalized Variation" },
+    { number: "13.7%", text: "%Raw Variation" },
+  ];
+
+
 
   return (
     <div>
@@ -72,7 +85,7 @@ const BillOverview = () => {
       <NavigationBar />
       {/* Boxes */}
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <BillOverviewBox />
+      <ContainerBox data={dataSet1} />
       </div>
 
       {/* Chart and Table Containers */}

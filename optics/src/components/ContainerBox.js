@@ -1,4 +1,3 @@
-// ContainerBox.js
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'row',
-    marginLeft:"87px",
+    marginLeft: "87px",
     marginRight: "20px",
     alignItems: 'center',
     justifyContent: 'center',
@@ -19,15 +18,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ContainerBox = () => {
+const ContainerBox = ({ data }) => {
   const classes = useStyles();
 
   return (
     <Paper className={classes.container}>
-      <Box number={55} text="Applications with Tags" />
-      <Box number={47} text="Applications without Tags" />
-      <Box number={2} text="Project with Tags" />
-      <Box number="NA" text="Project without Tags" />
+      {data.map((item, index) => (
+        <Box key={index} number={item.number} text={item.text} />
+      ))}
     </Paper>
   );
 };

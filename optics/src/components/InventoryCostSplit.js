@@ -3,7 +3,7 @@ import Header from './Header';
 import Subheader from './SubHeader';
 import NavigationBar from './NavigationBar';
 import CostInventory from './CostInventory';
-import ContainerBoxForInventory from './ContainerBoxForInventory'; 
+import ContainerBox from './ContainerBox';
 
 const InventoryCostSplit = () => {
     const [showStackBars, setShowStackBars] = useState(true);
@@ -14,6 +14,12 @@ const InventoryCostSplit = () => {
             setShowStackBars(true); // Show StackBars
         }
     };
+
+    const dataSet1 = [
+        {number:"$545.4K",text :"Previous Month Total Bill"},
+        {number:"-3.4%",text:"Increase Rate"},
+        {number:"2000" ,text:"Total Resources"},
+    ];
 
     return (
         <div >
@@ -29,7 +35,7 @@ const InventoryCostSplit = () => {
             <NavigationBar />
             {/* ContainerBoxForInventory */}
             <div style={{ display: 'flex', justifyContent: 'center', marginRight: "14px" }}>
-                <ContainerBoxForInventory />
+            <ContainerBox data={dataSet1} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', marginRight: "14px", marginLeft: "60px", marginBottom: "10px" }}> 
                 <CostInventory />

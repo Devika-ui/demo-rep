@@ -16,6 +16,12 @@ const BusinessCostSplit = () => {
             setShowStackBars(true); // Show StackBars
         }
     };
+    const dataSet = [
+        { number: 55, text: "Applications with Tags" },
+        { number: 47, text: "Applications without Tags" },
+        { number: 2, text: "Project with Tags" },
+        { number: "NA", text: "Project without Tags" },
+      ];
 
     return (
         <div>
@@ -31,7 +37,7 @@ const BusinessCostSplit = () => {
             <NavigationBar />
             {/* ContainerBox */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <ContainerBox />
+            <ContainerBox data={dataSet} />
             </div>
             <div style={{ marginBottom: '30px', textAlign: 'left', width: '100%', marginLeft: '-271px', marginTop: '-20px' }}> {/* Align Ondemand component to the left */}
                 <Ondemand />
