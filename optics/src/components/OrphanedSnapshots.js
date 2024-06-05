@@ -11,12 +11,38 @@ import HorizontalBarGraph from "./HorizontalBarGraph.js";
 import { Select, MenuItem } from "@mui/material";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
+import CostsAmortized from "./CostsAmortized.js";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
     color: "#63666A",
     fontSize: "14px",
     marginBottom: theme.spacing(2),
+  },
+  buttonContainer: {
+    position: "absolute",
+    top: 235,
+    left: 880,
+    zIndex: 1000,
+    margin: "20px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  },
+  button: {
+    fontSize: "0.7rem",
+    padding: "4px 8px",
+    color: "#63666A",
+    borderColor: "#63666A",
+  },
+  dialogPaper: {
+    backgroundColor: "#D9D9D9",
+    maxWidth: "280px", // Set a maximum width
+    top: "140px",
+    left: "280px",
+    marginBottom: "200px",
+    padding: "20px", // Add padding if needed
   },
   select: {
     fontSize: "0.7rem",
@@ -211,14 +237,30 @@ const OrphanedSnapshots = () => {
       </div>
 
       {/* Include PieChartContainer */}
-      <PieChartContainer
-        title1="Snapshot Type Vs Consumed Meter"
-        data1={data1}
-        title2="Snapshot Type Vs Cost"
-        data2={data2}
-        containerStyle={pieChartContainerStyle}
-        chartStyle={pieChartStyle}
-      />
+      <div>
+        {/* Separate container for buttons */}
+        <div className={classes.buttonContainer}>
+          <CostsAmortized dialogPaperClass={classes.dialogPaper} />
+          <Button variant="contained" className={classes.button}>
+            Customize Report
+          </Button>
+          <IconButton className={classes.button}>
+            <ShareIcon />
+          </IconButton>
+        </div>
+        {/* Container for the PieChartContainer */}
+        <div>
+          <PieChartContainer
+            title1="Snapshot Type Vs Consumed Meter"
+            data1={data1}
+            title2="Snapshot Type Vs Cost"
+            data2={data2}
+            containerStyle={pieChartContainerStyle}
+            chartStyle={pieChartStyle}
+          />
+        </div>
+      </div>
+
       <div
         style={{
           display: "flex",
