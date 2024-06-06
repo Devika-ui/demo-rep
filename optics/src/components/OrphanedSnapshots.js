@@ -5,7 +5,6 @@ import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
 import PieChartContainer from "./PieChartContainer.js";
 import GenericBarChart from "./GenericBarChart.js";
-import TableforOrphaned from "./TableforOrphaned.js";
 import HorizontalBarGraph from "./HorizontalBarGraph.js";
 import { Select, MenuItem } from "@mui/material";
 import IconButton from "@material-ui/core/IconButton";
@@ -13,6 +12,7 @@ import ShareIcon from "@material-ui/icons/Share";
 import CostsAmortized from "./CostsAmortized.js";
 import Button from "@material-ui/core/Button";
 import ContainerBox from "./ContainerBox.js";
+import ServiceCategory from "./ServiceCategory.js";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -58,6 +58,145 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const tableData = [
+  {
+    tableTitle: "On-Demand Cost Allocation for Orphaned Snapshots",
+    columnHead1: "Application/Project Name",
+    columnHead2: "Owner Name ",
+    columnHead3: "Total Cost",
+    columnHead4: "Count of Disks",
+    columnHead5: "Environment",
+  },
+];
+
+const dummyData = [
+  {
+    name: "Subscription 1",
+    ownerName: "A",
+    totalCost: "$1000",
+    countOfDisks: 50,
+    environment: "Production",
+    children: [
+      {
+        name: "Storage",
+        ownerName: "B",
+        totalCost: "$500",
+        countOfDisks: 30,
+        environment: "Production",
+        children: [
+          {
+            name: "Premium LRS",
+            ownerName: "C",
+            totalCost: "$300",
+            countOfDisks: 20,
+            environment: "Production",
+            children: [
+              {
+                name: "Resource Group 1",
+                ownerName: "D",
+                totalCost: "$200",
+                countOfDisks: 10,
+                environment: "Production",
+                children: [
+                  {
+                    name: "Resource 1",
+                    ownerName: "E",
+                    totalCost: "$100",
+                    countOfDisks: 5,
+                    environment: "Production",
+                  },
+                  {
+                    name: "Resource 2",
+                    totalCost: "$100",
+                    ownerName: "F",
+
+                    countOfDisks: 5,
+                    environment: "Production",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  // Add more data here as needed
+  {
+    name: "Subscription 2",
+    ownerName: "A1",
+    totalCost: "$1500",
+    countOfDisks: 70,
+    environment: "Development",
+    children: [
+      {
+        name: "Storage",
+        ownerName: "A2",
+        totalCost: "$800",
+        countOfDisks: 40,
+        environment: "Development",
+        children: [
+          {
+            name: "Standard LRS",
+            ownerName: "A3",
+            totalCost: "$400",
+            countOfDisks: 25,
+            environment: "Development",
+            children: [
+              {
+                name: "Resource Group 2",
+                ownerName: "A4",
+                totalCost: "$250",
+                countOfDisks: 15,
+                environment: "Development",
+                children: [
+                  {
+                    name: "Resource 3",
+                    ownerName: "A5",
+                    totalCost: "$150",
+                    countOfDisks: 8,
+                    environment: "Development",
+                  },
+                  {
+                    name: "Resource 4",
+                    ownerName: "A6",
+                    totalCost: "$100",
+                    countOfDisks: 7,
+                    environment: "Development",
+                  },
+                ],
+              },
+              {
+                name: "Resource Group 3",
+                ownerName: "A7",
+                totalCost: "$150",
+                countOfDisks: 10,
+                environment: "Development",
+                children: [
+                  {
+                    name: "Resource 5",
+                    ownerName: "B1",
+                    totalCost: "$80",
+                    countOfDisks: 5,
+                    environment: "Development",
+                  },
+                  {
+                    name: "Resource 6",
+                    ownerName: "B2",
+                    totalCost: "$70",
+                    countOfDisks: 5,
+                    environment: "Development",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
 
 const dataSet1 = [
   { number: "$75.4K", text: "Total On Demand Cost" },
@@ -170,6 +309,19 @@ const OrphanedSnapshots = () => {
     },
   ];
 
+  const formatData = (data) => {
+    return data.map((item) => ({
+      name: item.name,
+      ownerName: item.ownerName,
+      totalCost: item.totalCost,
+      countOfDisks: item.countOfDisks,
+      environment: item.environment,
+      services: item.children ? formatData(item.children) : null,
+    }));
+  };
+
+  const formattedData = formatData(dummyData);
+
   // Define styles for the PieChartContainer
   const pieChartContainerStyle = {
     display: "flex",
@@ -182,6 +334,14 @@ const OrphanedSnapshots = () => {
     paddingTop: "45px",
     marginBottom: "110px", // Adjust individual chart width
   };
+
+  const horizontaldata = [
+    { name: "North Europe", count: 100 },
+    { name: "East US 2", count: 150 },
+    { name: "South East Asia", count: 200 },
+    { name: "West Europe", count: 75 },
+    { name: "West US 2", count: 125 },
+  ];
 
   return (
     <div>
@@ -269,15 +429,29 @@ const OrphanedSnapshots = () => {
 
       <div
         style={{
+          marginLeft: -510,
+          marginTop: 12,
+          padding: 10,
           display: "flex",
           justifyContent: "center",
           paddingLeft: "-10px",
           paddingTop: "270px",
         }}
       >
-        <TableforOrphaned />
+        <ServiceCategory
+          dummyData={formattedData}
+          height="400px"
+          width="560px"
+          tableData={tableData}
+        />
       </div>
-      <HorizontalBarGraph />
+
+      <HorizontalBarGraph
+        data={horizontaldata}
+        title="Orphaned Snapshots across locations"
+        width="60%"
+        height={373}
+      />
     </div>
   );
 };
