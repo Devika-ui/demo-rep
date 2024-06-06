@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import {
@@ -15,11 +16,9 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    width: "50%",
     maxWidth: 500,
-    marginTop: -420,
+    marginTop: -430,
     marginRight: 30,
-    height: 373,
     margin: theme.spacing(4, "auto"),
     padding: theme.spacing(3),
     backgroundColor: "#f9f9f9",
@@ -49,15 +48,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Dummy data
-const data = [
-  { name: "North Europe", count: 100 },
-  { name: "East US 2", count: 150 },
-  { name: "South East Asia", count: 200 },
-  { name: "West Europe", count: 75 },
-  { name: "West US 2", count: 125 },
-];
-
 // Custom Legend Component
 const CustomLegend = (props) => {
   const { payload } = props;
@@ -78,15 +68,16 @@ const CustomLegend = (props) => {
   );
 };
 
-const HorizontalBarGraph = () => {
+const HorizontalBarGraph = ({ data, title, width, height }) => {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.container}>
-      <Typography className={classes.heading}>
-        Orphaned Snapshots across locations
-      </Typography>
-      <ResponsiveContainer width="100%" height={350}>
+    <Paper
+      className={classes.container}
+      style={{ width: width, height: height }}
+    >
+      <Typography className={classes.heading}>{title}</Typography>
+      <ResponsiveContainer width="100%" height={height - 50}>
         <BarChart
           layout="vertical"
           data={data}
@@ -97,7 +88,7 @@ const HorizontalBarGraph = () => {
           <XAxis
             type="number"
             tick={{ fontSize: 12 }}
-            domain={[0, 200]}
+            domain={[0, Math.max(...data.map((item) => item.count))]}
             ticks={[0, 50, 100, 150, 200]}
             label={{
               value: "Count of Snapshots",
@@ -131,6 +122,24 @@ const HorizontalBarGraph = () => {
       </ResponsiveContainer>
     </Paper>
   );
+};
+
+HorizontalBarGraph.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      count: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  title: PropTypes.string,
+  width: PropTypes.string,
+  height: PropTypes.number,
+};
+
+HorizontalBarGraph.defaultProps = {
+  title: "Orphaned Snapshots across locations",
+  width: "50%",
+  height: 373,
 };
 
 export default HorizontalBarGraph;
