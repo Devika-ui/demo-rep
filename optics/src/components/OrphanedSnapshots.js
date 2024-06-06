@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
-import OrphanedSnapshotsContainer from "./OrphanedSnapshotsContainer.js";
 import PieChartContainer from "./PieChartContainer.js";
 import GenericBarChart from "./GenericBarChart.js";
 import TableforOrphaned from "./TableforOrphaned.js";
@@ -13,6 +12,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
 import CostsAmortized from "./CostsAmortized.js";
 import Button from "@material-ui/core/Button";
+import ContainerBox from "./ContainerBox.js";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -58,6 +58,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const dataSet1 = [
+  { number: "$75.4K", text: "Total On Demand Cost" },
+  { number: "12", text: "Count Of Snapshots" },
+  { number: "10", text: "Impacted Applications" },
+];
 
 const data = [
   { name: "Subscription 1", "On Demand Cost": 400000, "Consumed Meter": 50000 },
@@ -194,7 +200,7 @@ const OrphanedSnapshots = () => {
       </div>
 
       <NavigationBar />
-      {/* ContainerBoxForOrphaned */}
+      {/* ContainerBoxForInventory */}
       <div
         style={{
           display: "flex",
@@ -202,7 +208,7 @@ const OrphanedSnapshots = () => {
           marginRight: "14px",
         }}
       >
-        <OrphanedSnapshotsContainer />
+        <ContainerBox data={dataSet1} />
       </div>
       <div
         style={{
