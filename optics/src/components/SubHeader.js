@@ -22,17 +22,17 @@ const SubHeader = ({ title }) => {
         </div>
         
         {/* AWS Box */}
-        <div className='AWSBox' style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
-          <img src={AWSBox} alt="AWS" style={{ width: '30px', height: '34px', marginRight: '5px' }} />
-          <div style={{ fontWeight: 'bold', fontSize: '18px', paddingRight: '5px', marginTop: '5px' }}>AWS</div>
+        <div className='AzureBox' style={{ display: 'flex', alignItems: 'center', marginLeft: '20px',marginRight:'-150px' }}>
+        <img src={AzureBox} alt="Azure" style={{ width: '30px', height: '34px', marginRight: '5px' }} />
+          <div style={{ fontWeight: 'bold', fontSize: '18px', paddingRight: '5px', marginTop: '5px' }}>Azure</div>
           <img src={FilterIcon} alt="Filter" style={{ width: '20px', height: '20px', marginRight: '5px', marginTop: '5px' }} />
           <Filter />
         </div>
      
         {/* Azure Box */}
-        <div className='AzureBox' style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
-          <img src={AzureBox} alt="Azure" style={{ width: '30px', height: '34px', marginRight: '5px' }} />
-          <div style={{ fontWeight: 'bold', fontSize: '18px', paddingRight: '5px', marginTop: '5px' }}>Azure</div>
+        <div className='AWSBox' style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
+          <img src={AWSBox} alt="AWS" style={{ width: '30px', height: '34px', marginRight: '5px' }} />
+          <div style={{ fontWeight: 'bold', fontSize: '18px', paddingRight: '5px', marginTop: '5px' }}>AWS</div>
           <img src={FilterIcon} alt="Filter" style={{ width: '20px', height: '20px', marginRight: '5px', marginTop: '5px' }} />
           <Filter />
         </div>

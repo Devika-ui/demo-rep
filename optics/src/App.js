@@ -9,6 +9,9 @@ import BusinessCostSplit from './components/BusinessCostSplit';
 import InventoryCostSplit from './components/InventoryCostSplit';
 import OrphanedSnapshots from "./components/OrphanedSnapshots";
 import UnattachedManagedDisks from "./components/UnattachedManagedDisks";
+import HyperScalarAdvisor from './components/HyperScalarAdvisor';
+import SqlVmLicenses from './components/SqlVmLicenses';
+import OrphanedRSVBackups from './components/OrphanedRSVBackups';
 
 import './App.css';
 import userpool from './userpool';
@@ -32,8 +35,10 @@ function App() {
         <Route path='/businessCostSplit' element={<BusinessCostSplit/>}/>
         <Route path='/inventoryCostSplit' element={<InventoryCostSplit/>}/>
         <Route path="/orphanedSnapshots" element={<OrphanedSnapshots />} />
-        <Route path="/unattachedManagedDisks" element={<UnattachedManagedDisks />}
-        />
+        <Route path="/unattachedManagedDisks" element={<UnattachedManagedDisks />}/>
+        <Route path='/hyperScalarAdvisor' element={<HyperScalarAdvisor/>}/>
+        <Route path='/sqlVmLicenses' element={<SqlVmLicenses/>}/>
+        <Route path='/orphanedrsvbackups' element={<OrphanedRSVBackups/>}/>
       </Routes>
     </BrowserRouter>
   );
