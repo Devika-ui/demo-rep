@@ -61,7 +61,7 @@ const PieChartContainer = ({
           {title1}
         </Typography>
         <div className={classes.chart}>
-          <ResponsiveContainer width="90%" height={200}>
+          <ResponsiveContainer width="101%" height={200}>
             <PieChart>
               <Pie data={data1} dataKey="value" nameKey="name">
                 {data1.map((entry, index) => (

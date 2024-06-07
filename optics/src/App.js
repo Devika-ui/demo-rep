@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './components/Home';
-import Signup from './components/Signup';
-import Login from './components/Login';
-import Dashboard from './components/Dashboard';
-import BillOverview from './components/BillOverview';
-import BusinessCostSplit from './components/BusinessCostSplit';
-import InventoryCostSplit from './components/InventoryCostSplit';
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Home from "./components/Home";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
+import BillOverview from "./components/BillOverview";
+import BusinessCostSplit from "./components/BusinessCostSplit";
+import InventoryCostSplit from "./components/InventoryCostSplit";
 import OrphanedSnapshots from "./components/OrphanedSnapshots";
 import UnattachedManagedDisks from "./components/UnattachedManagedDisks";
-import HyperScalarAdvisor from './components/HyperScalarAdvisor';
-import SqlVmLicenses from './components/SqlVmLicenses';
-import OrphanedRSVBackups from './components/OrphanedRSVBackups';
+import HyperScalarAdvisor from "./components/HyperScalarAdvisor";
+import SqlVmLicenses from "./components/SqlVmLicenses";
+import OrphanedRSVBackups from "./components/OrphanedRSVBackups";
 
-import './App.css';
-import userpool from './userpool';
+import "./App.css";
+import userpool from "./userpool";
 
 function App() {
   useEffect(() => {
@@ -27,18 +27,21 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/login' element={<Login />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path='/billOverview' element={<BillOverview/>} />
-        <Route path='/businessCostSplit' element={<BusinessCostSplit/>}/>
-        <Route path='/inventoryCostSplit' element={<InventoryCostSplit/>}/>
+        <Route path="/billOverview" element={<BillOverview />} />
+        <Route path="/businessCostSplit" element={<BusinessCostSplit />} />
+        <Route path="/inventoryCostSplit" element={<InventoryCostSplit />} />
         <Route path="/orphanedSnapshots" element={<OrphanedSnapshots />} />
-        <Route path="/unattachedManagedDisks" element={<UnattachedManagedDisks />}/>
-        <Route path='/hyperScalarAdvisor' element={<HyperScalarAdvisor/>}/>
-        <Route path='/sqlVmLicenses' element={<SqlVmLicenses/>}/>
-        <Route path='/orphanedrsvbackups' element={<OrphanedRSVBackups/>}/>
+        <Route
+          path="/unattachedManagedDisks"
+          element={<UnattachedManagedDisks />}
+        />
+        <Route path="/hyperScalarAdvisor" element={<HyperScalarAdvisor />} />
+        <Route path="/sqlVmLicenses" element={<SqlVmLicenses />} />
+        <Route path="/orphanedrsvbackups" element={<OrphanedRSVBackups />} />
       </Routes>
     </BrowserRouter>
   );

@@ -5,12 +5,64 @@ import NavigationBar from "./NavigationBar";
 import PieChartContainer from "./PieChartContainer";
 import ContainerBox from "./ContainerBox";
 import GenericBarChart from "./GenericBarChart";
-//import Sqlbar from "./Sqlbar";
 import ServiceCategory from "./ServiceCategory";
- 
+import { makeStyles } from "@material-ui/core/styles";
+import { Select, MenuItem } from "@mui/material";
+import IconButton from "@material-ui/core/IconButton";
+import ShareIcon from "@material-ui/icons/Share";
+import CostsAmortized from "./CostsAmortized.js";
+import Button from "@material-ui/core/Button";
+
+const useStyles = makeStyles((theme) => ({
+  heading: {
+    color: "#63666A",
+    fontSize: "14px",
+    marginBottom: theme.spacing(2),
+  },
+  buttonContainer: {
+    position: "absolute",
+    top: 235,
+    left: 880,
+    zIndex: 1000,
+    margin: "20px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  },
+  button: {
+    fontSize: "0.7rem",
+    padding: "4px 8px",
+    color: "#63666A",
+    borderColor: "#63666A",
+  },
+  dialogPaper: {
+    backgroundColor: "#D9D9D9",
+    maxWidth: "280px", // Set a maximum width
+    top: "140px",
+    left: "280px",
+    marginBottom: "200px",
+    padding: "20px", // Add padding if needed
+  },
+  select: {
+    fontSize: "0.7rem",
+    padding: "2px 4px",
+    color: "#63666A",
+    borderColor: "#63666A",
+    minWidth: "auto",
+    "& .MuiSelect-select": {
+      padding: "2px 4px", // Ensuring the inner padding is reduced
+    },
+    "& .MuiOutlinedInput-input": {
+      padding: "2px 4px", // Adjusting input padding
+    },
+  },
+}));
+
 const SqlVmLicenses = () => {
+  const classes = useStyles();
   const [showStackBars, setShowStackBars] = useState(true);
- 
+  const [groupBy, setGroupBy] = useState("");
+
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
     if (value === "Azure") {
@@ -51,44 +103,56 @@ const SqlVmLicenses = () => {
       "Consumed Meter": 75000,
     },
   ];
- 
+
   const data1 = [
-    { name: "App 1", value: Math.floor(Math.random() * 100), color: "#0099C6" },
-    { name: "App 2", value: Math.floor(Math.random() * 100), color: "#BA741A" },
-    { name: "App 3", value: Math.floor(Math.random() * 100), color: "#FFCD00" },
-    { name: "App 4", value: Math.floor(Math.random() * 100), color: "#00968F" },
-    { name: "App 5", value: Math.floor(Math.random() * 100), color: "#5F249F" },
+    { name: "AHUB", value: Math.floor(Math.random() * 100), color: "#0099C6" },
+    { name: "DR", value: Math.floor(Math.random() * 100), color: "#BA741A" },
+    { name: "PAYGO", value: Math.floor(Math.random() * 100), color: "#FFCD00" },
+    {
+      name: "Windows_Server",
+      value: Math.floor(Math.random() * 100),
+      color: "#00968F",
+    },
+    {
+      name: "SLES_BYOS",
+      value: Math.floor(Math.random() * 100),
+      color: "#5F249F",
+    },
   ];
- 
+
   const data2 = [
     {
-      name: "Virtual Machines",
+      name: "AHUB",
       value: Math.floor(Math.random() * 100),
       color: "#0099C6",
     },
     {
-      name: "Storage",
+      name: "DR",
       value: Math.floor(Math.random() * 100),
       color: "#BA741A",
     },
     {
-      name: "Azure NetApp Files",
+      name: "PAYGO",
       value: Math.floor(Math.random() * 100),
       color: "#FFCD00",
     },
     {
-      name: "Bandwidth",
+      name: "Windows_Server",
       value: Math.floor(Math.random() * 100),
       color: "#00968F",
     },
-    { name: "Files", value: Math.floor(Math.random() * 100), color: "#5F249F" },
+    {
+      name: "SLES_BYOS",
+      value: Math.floor(Math.random() * 100),
+      color: "#5F249F",
+    },
   ];
- 
+
   const dataSet1 = [
     { number: "20", text: "Total Count Of AHUB License" },
     { number: "10", text: "Total count Of PAYGO License" },
   ];
- 
+
   const dummyData = [
     {
       name: "Virtual Machine",
@@ -359,7 +423,7 @@ const SqlVmLicenses = () => {
       ],
     },
   ];
- 
+
   const tableData = [
     {
       tableTitle: "On Demand Cost Allocation for licenses",
@@ -371,75 +435,122 @@ const SqlVmLicenses = () => {
       columnHead6: "Environment",
     },
   ];
- 
+  const handleGroupByChange = (event) => {
+    setGroupBy(event.target.value);
+  };
+
+  const pieChartContainerStyle = {
+    display: "flex",
+    justifyContent: "space-around",
+    margin: "-308px 680px -260px",
+  };
+
+  const pieChartStyle = {
+    width: "55%",
+    paddingTop: "45px",
+    marginBottom: "110px", // Adjust individual chart width
+  };
+
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
       <Subheader
         title={
           <div>
-            <span style={{ fontSize: "18px" }}>Recommendations/</span>
-            <span style={{ color: "#0070C0", fontSize: "18px" }}>
-              SQLVMLicenses
+            <span style={{ fontSize: "15px" }}>Recommendations/</span>
+            <span style={{ color: "#0070C0", fontSize: "15px" }}>
+              SQL VML Licenses
             </span>
           </div>
         }
       />
       <NavigationBar />
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <ContainerBox data={dataSet1} />
-      </div>
- 
-      {/* Pie Chart Container */}
+      {/* ContainerBoxForInventory */}
       <div
         style={{
           display: "flex",
-          marginBottom: "5px",
-          transform: "translate(90px,-10px,)",
-          height: "auto",
-          position: "relative",
-          width: "100%", // Ensure the container takes full width of the page
-          justifyContent: "center", // Center align the content horizontally
-          alignItems: "center",
+          justifyContent: "center",
+          marginRight: "14px",
         }}
       >
-        <div style={{ width: "70%", paddingLeft: "50px" }}>
-          <GenericBarChart
-            title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
-            data={data}
-            //yAxisLabel="1000 metric tons (MT)"
-          />
+        <ContainerBox data={dataSet1} />
+      </div>
+      <div
+        style={{
+          display: "flex",
+          marginBottom: 20,
+          paddingLeft: "68px",
+          height: "300px", // Adjust the height as desired
+          width: "100%",
+        }}
+      >
+        <div style={{ marginTop: "-20px", width: "50%" }}>
+          <div style={{ marginTop: "20px", paddingRight: "18px" }}>
+            <GenericBarChart
+              title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
+              data={data}
+              yAxisLabel="Cost (in thousands)"
+            >
+              <Select
+                value={groupBy}
+                onChange={handleGroupByChange}
+                displayEmpty
+                className={classes.select}
+              >
+                <MenuItem value="">Choose an option</MenuItem>
+                <MenuItem value="sqlvmlicenses">SQL VM Licenses</MenuItem>
+                <MenuItem value="vmlicenses">VM Licenses</MenuItem>
+              </Select>
+            </GenericBarChart>
+          </div>
         </div>
-        <div style={{ width: "50%", paddingRight: "20px" }}>
+      </div>
+
+      {/* Include PieChartContainer */}
+      <div>
+        {/* Separate container for buttons */}
+        <div className={classes.buttonContainer}>
+          <CostsAmortized dialogPaperClass={classes.dialogPaper} />
+          <Button variant="contained" className={classes.button}>
+            Customize Report
+          </Button>
+          <IconButton className={classes.button}>
+            <ShareIcon />
+          </IconButton>
+        </div>
+        {/* Container for the PieChartContainer */}
+        <div>
           <PieChartContainer
-            title1="Top 5 Applications"
+            title1="License type Vs Consumed Meter"
             data1={data1}
-            title2="Top 5 Services"
+            title2="License type Vs Cost"
             data2={data2}
+            containerStyle={pieChartContainerStyle}
+            chartStyle={pieChartStyle}
           />
         </div>
       </div>
- 
+
       <div
         style={{
-          width: "300%",
-          maxWidth: 1200, // Ensure parent container takes full width
+          marginLeft: -70,
+          marginTop: 12,
+          padding: 10,
           display: "flex",
-          marginLeft: "100px",
-          marginBottom: "-380px",
-          paddingBottom: "100px",
-          // Center the child component if needed
+          justifyContent: "center",
+          paddingLeft: "125px",
+          paddingTop: "270px",
         }}
       >
         <ServiceCategory
           dummyData={dummyData}
-          height="350px"
-          width="1130px"
+          height="400px"
+          width="1125px"
           tableData={tableData}
         />
       </div>
     </div>
   );
 };
- 
+
 export default SqlVmLicenses;
