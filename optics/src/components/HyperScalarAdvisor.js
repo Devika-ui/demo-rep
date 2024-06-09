@@ -8,12 +8,40 @@ import PieChartContainer from './PieChartContainer';
 import ServiceCategory from './ServiceCategory';
 import HyperScalarBarChart from './HyperScalarBarChart';
 import { Select, MenuItem } from "@mui/material";
+import IconButton from "@material-ui/core/IconButton";
+import ShareIcon from "@material-ui/icons/Share";
+import CostsAmortized from "./CostsAmortized.js";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
     color: "#63666A",
     fontSize: "14px",
     marginBottom: theme.spacing(2),
+  },
+  buttonContainer: {
+    position: "absolute",
+    top: 235,
+    left: 880,
+    zIndex: 1000,
+    margin: "20px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  },
+  button: {
+    fontSize: "0.7rem",
+    padding: "4px 8px",
+    color: "#63666A",
+    borderColor: "#63666A",
+  },
+  dialogPaper: {
+    backgroundColor: "#D9D9D9",
+    maxWidth: "280px", // Set a maximum width
+    top: "140px",
+    left: "280px",
+    marginBottom: "200px",
+    padding: "20px", // Add padding if needed
   },
   select: {
     fontSize: "0.7rem",
@@ -22,26 +50,36 @@ const useStyles = makeStyles((theme) => ({
     borderColor: "#63666A",
     minWidth: "auto",
     "& .MuiSelect-select": {
-      padding: "2px 4px",
+      padding: "2px 4px", // Ensuring the inner padding is reduced
     },
     "& .MuiOutlinedInput-input": {
-      padding: "2px 4px",
+      padding: "2px 4px", // Adjusting input padding
     },
   },
-  container: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
-    padding: theme.spacing(2),
+  chartContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    paddingLeft: "65px",
+    width: "100%",
+    height: "auto", // Adjust the height as desired
   },
-  chart: {
-    width: '50%',
-    padding: theme.spacing(1),
+  barChartContainer: {
+    flex: 1,
+    marginRight: "-50px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
-  pieChart: {
-    width: '48%',
-    padding: theme.spacing(5),
-    marginLeft :'-60px',
+  pieChartContainer: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginRight:"60px",
+    paddingLeft:"30px",
+    marginTop: "50px", // Add this to increase top margin
+    marginBottom: "50px", // Add this to increase bottom margin
   },
 }));
 
@@ -374,61 +412,116 @@ const HyperScalarAdvisor = () => {
       columnHead6: "Environment",
     },
   ];
+  const pieChartContainerStyle = {
+    display: "flex",
+    justifyContent: "space-around",
+    margin: "-308px 680px -260px",
+  };
+
+  const pieChartStyle = {
+    width: "55%",
+    paddingTop: "45px",
+    marginBottom: "85px", // Adjust individual chart width
+  };
 
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
-      <div style={{ marginLeft: "-12px", width: "200%" }}>
-        <Subheader
-          title={
-            <div>
-              <span style={{ fontSize: '18px' }}>Recommendations/</span>
-              <span style={{ color: '#0070C0', fontSize: '18px' }}>Hyper-ScalarAdvisor</span>
-            </div>
-          }
-        />
-      </div>
+      <Subheader
+        title={
+          <div>
+            <span style={{ fontSize: "15px" }}>Recommendations/</span>
+            <span style={{ color: "#0070C0", fontSize: "15px" }}>
+              Hyper-ScalarAdvisor
+            </span>
+          </div>
+        }
+      />
       <NavigationBar />
-      <div style={{ display: 'flex', justifyContent: 'center',marginLeft:'-20px' }}>
+      {/* ContainerBoxForInventory */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginRight: "14px",
+        }}
+      >
         <ContainerBox data={dataSet1} />
       </div>
-      <div className={classes.container} style={{display:'flex',width:"100%",justifyContent: "center",paddingLeft:'43px'}}>
-        <div className={classes.chart}>
-          <HyperScalarBarChart
+      <div
+        style={{
+          display: "flex",
+          marginBottom: 20,
+          paddingLeft: "68px",
+          height: "300px", // Adjust the height as desired
+          width: "100%",
+        }}
+      >
+        <div style={{ marginTop: "-20px", width: "50%" }}>
+          <div style={{ marginTop: "20px", paddingRight: "18px" }}>
+           <HyperScalarBarChart
             title="Comparison of Subscriptions Vs Impact"
             data={data}
           >
-            <Select
-              value={groupBy}
-              onChange={handleGroupByChange}
-              displayEmpty
-              className={classes.select}
-            >
-              <MenuItem value="">Choose Recommendation Category</MenuItem>
+              <Select
+                value={groupBy}
+                onChange={handleGroupByChange}
+                displayEmpty
+                className={classes.select}
+              >
+                <MenuItem value="">Choose Recommendation Category</MenuItem>
               <MenuItem value="auto-scale">Auto-Scale</MenuItem>
               <MenuItem value="rightsize">Right size</MenuItem>
-            </Select>
-          </HyperScalarBarChart>
+              </Select>
+            </HyperScalarBarChart>
+          </div>
         </div>
-        <div className={classes.pieChart}>
-          <PieChartContainer
+      </div>
+
+      {/* Include PieChartContainer */}
+      <div>
+        {/* Separate container for buttons */}
+        <div className={classes.buttonContainer}>
+          <CostsAmortized dialogPaperClass={classes.dialogPaper} />
+          <Button variant="contained" className={classes.button}>
+            Customize Report
+          </Button>
+          <IconButton className={classes.button}>
+            <ShareIcon />
+          </IconButton>
+        </div>
+        {/* Container for the PieChartContainer */}
+        <div>
+         <PieChartContainer
             title1="Applications with High Impact Recommendations"
             data1={data1}
             title2="Service Category with High Impact Recommendations"
             data2={data2}
+            containerStyle={pieChartContainerStyle}
+            chartStyle={pieChartStyle}
           />
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "center", paddingBottom: "100px" }}>
+
+      <div
+        style={{
+          marginLeft: -70,
+          marginTop: 12,
+          padding: 10,
+          display: "flex",
+          justifyContent: "center",
+          paddingLeft: "125px",
+          paddingTop: "270px",
+        }}
+      >
         <ServiceCategory
           dummyData={dummyData}
-          height="350px"
-          width="1100px"
+          height="400px"
+          width="1125px"
           tableData={tableData}
         />
       </div>
     </div>
   );
 };
-
 export default HyperScalarAdvisor;
