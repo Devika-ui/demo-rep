@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -9,10 +10,12 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles'; // Import ThemeProvider and createTheme
 
-const useStyles = makeStyles({
+
+const useStyles = makeStyles((theme) => ({
   container: {
-    width: '94%',
+    width: '100%',
     maxWidth: 800,
     height: 'auto',
     backgroundColor: 'white',
@@ -30,16 +33,28 @@ const useStyles = makeStyles({
   title: {
     fontSize: '1.2rem',
     color: '#63666A',
+    whiteSpace: 'pre-wrap',
+    paddingRight:"10px",
+
   },
   buttons: {
     display: 'flex',
     gap: 8,
     marginTop: 10,
+    alignItems: 'center', // Align buttons vertically in the center
   },
   button: {
     fontSize: '0.7rem',
-    padding: '4px 10px',
+    //padding: '4px 10px',
     color: '#63666A',
+  },
+  dropdown: {
+    marginLeft: '-20px', // Adjust this value to move the dropdown left or right
+    '& select': {
+      height: 0,
+      width: 50,
+      fontSize: '0.9rem',
+    },
   },
   tableCell: {
     color: '#63666A',
@@ -47,39 +62,45 @@ const useStyles = makeStyles({
     padding: '13px 16px', // Adjusted padding for better spacing
     borderBottom: 'none', // Remove bottom border for cleaner look
     verticalAlign: 'top', // Align text to the top of the cell
-    borderBottom : '1px solid black',
-    borderTop : '1px solid Black',
-    borderBlockEnd : '1px solid Black',
+    borderBottom: '1px solid black',
+    borderTop: '1px solid Black',
+    borderBlockEnd: '1px solid Black',
   },
   tableHeadCell: {
     backgroundColor: '#f0f0f0',
     textAlign: 'center',
     borderBottom: '1px solid black',
-    borderLeft : '1px solid black',
-    borderTop : '1px solid Black',
-    borderRight : '1px solid Black',
+    borderLeft: '1px solid black',
+    borderTop: '1px solid Black',
+    borderRight: '1px solid Black',
     padding: '8px 16px', // Adjusted padding for better spacing
   },
-  tableRow: {
+  tableRow: {},
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 10,
     },
-});
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
-const dummyData = [
-  { name: 'Subscription 1', onDemandCost: '$100', reservedInstancesCost: '$200', simulatedPAYGO: '$150', savings: '$50', totalBill: '$400' },
-  { name: 'Subscription 2', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
-  { name: 'Subscription 3', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
-  //{ name: 'Subscription 4', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
-  // Add more dummy data as needed
-];
-
-const InvoiceTableView = () => {
+const InvoiceTableView = ({
+  title,
+  dropdown,
+  tableData,
+  tableHeight,
+  tableWidth,
+  columns
+}) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} style={{ width: tableWidth, height: tableHeight }}>
       <div className={classes.header}>
-        <h2 className={classes.title}>Invoice View</h2>
-        <div className={classes.buttons}>
+        <h2 className={classes.title}>{title}</h2>
+        <div>
+          {dropdown}
           <IconButton className={classes.button}>
             <ShareIcon />
           </IconButton>
@@ -90,28 +111,22 @@ const InvoiceTableView = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableHeadCell} colSpan={6}>
+              <TableCell className={classes.tableHeadCell} colSpan={columns.length}>
                 April - 24
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className={classes.tableCell}>Subscription/Account Name</TableCell>
-              <TableCell className={classes.tableCell}>On Demand Cost</TableCell>
-              <TableCell className={classes.tableCell}>Reserved Instances Cost</TableCell>
-              <TableCell className={classes.tableCell}>Simulated PAYGO</TableCell>
-              <TableCell className={classes.tableCell}>Savings</TableCell>
-              <TableCell className={classes.tableCell}>Total Bill</TableCell>
+              {columns.map((column, index) => (
+                <TableCell key={index} className={classes.tableHeadCell}>{column.label}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {dummyData.map((row, index) => (
+            {tableData.map((row, index) => (
               <TableRow key={index} className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>{row.name}</TableCell>
-                <TableCell className={classes.tableCell}>{row.onDemandCost}</TableCell>
-                <TableCell className={classes.tableCell}>{row.reservedInstancesCost}</TableCell>
-                <TableCell className={classes.tableCell}>{row.simulatedPAYGO}</TableCell>
-                <TableCell className={classes.tableCell}>{row.savings}</TableCell>
-                <TableCell className={classes.tableCell}>{row.totalBill}</TableCell>
+                {columns.map((column, colIndex) => (
+                  <TableCell key={colIndex} className={classes.tableCell}>{row[column.key]}</TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>
@@ -121,5 +136,21 @@ const InvoiceTableView = () => {
   );
 };
 
-export default InvoiceTableView;
+InvoiceTableView.propTypes = {
+  title: PropTypes.string.isRequired,
+  dropdown: PropTypes.element,
+  tableData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tableHeight: PropTypes.string,
+  tableWidth: PropTypes.string,
+  columns: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  })).isRequired,
+};
 
+InvoiceTableView.defaultProps = {
+  tableHeight: 'auto',
+  tableWidth: '94%',
+};
+
+export default InvoiceTableView;

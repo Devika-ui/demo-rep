@@ -7,12 +7,14 @@ import Header from "./Header";
 import Subheader from "./SubHeader";
 import TotalBillView from "./TotalBillView";
 import NavigationBar from "./NavigationBar";
-//import BillOverviewBox from "./BillOverviewBox";
 import ContainerBox from './ContainerBox';
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 
 const BillOverview = () => {
   const [showStackBars, setShowStackBars] = useState(true);
+  const [reportType, setReportType] = useState('');
+
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
@@ -21,6 +23,9 @@ const BillOverview = () => {
     } else {
       setShowStackBars(true); // Show StackBars
     }
+  };
+  const handleReportTypeChange = (event) => {
+    setReportType(event.target.value);
   };
 
   const data1 = [
@@ -54,6 +59,7 @@ const BillOverview = () => {
     },
     { name: "Files", value: Math.floor(Math.random() * 100), color: "#5F249F" },
   ];
+
   const dataSet1 = [
     { number: "$1.40M", text: "Total Bill" },
     { number: "$2.00M", text: "Simulated Bill" },
@@ -64,7 +70,49 @@ const BillOverview = () => {
     { number: "13.7%", text: "%Raw Variation" },
   ];
 
+  const dummyData = [
+    { name: 'Subscription 1', onDemandCost: '$100', reservedInstancesCost: '$200', simulatedPAYGO: '$150', savings: '$50', totalBill: '$400' },
+    { name: 'Subscription 2', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
+    { name: 'Subscription 3', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
+    // Add more dummy data as needed
+  ];
 
+  const columns = [
+    { key: 'name', label: 'Subscription/Account Name' },
+    { key: 'onDemandCost', label: 'On Demand Cost' },
+    { key: 'reservedInstancesCost', label: 'Reserved Instances Cost' },
+    { key: 'simulatedPAYGO', label: 'Simulated PAYGO' },
+    { key: 'savings', label: 'Savings' },
+    { key: 'totalBill', label: 'Total Bill' },
+  ];
+
+  const columns1 = [
+    { key: 'name', label: 'Application Name' },
+    { key: 'ownerName', label:'Owner Name'},
+    { key: 'onDemandCost', label: 'On Demand Cost' },
+    { key: 'reservedInstancesCost', label: 'Reserved Instances Cost' },
+    { key: 'savings', label: 'Savings' },
+    { key: 'totalBill', label: 'Total Bill' },
+  ];
+
+  const dummyData1 = [
+    { name: 'Subscription 1',ownerName:'Mark', onDemandCost: '$100', reservedInstancesCost: '$200', savings: '$50', totalBill: '$400' },
+    { name: 'Subscription 2',ownerName:'Jack', onDemandCost: '$120', reservedInstancesCost: '$180',  savings: '$60', totalBill: '$490' },
+    { name: 'Subscription 3',ownerName:'John', onDemandCost: '$100', reservedInstancesCost: '$180',  savings: '$60', totalBill: '$490' },
+    // Add more dummy data as needed
+  ];
+
+  const pieChartContainerStyle = {
+    display: "flex",
+    justifyContent: "space-around",
+    margin: "20px 0", // Adjusted margin to create space between components
+  };
+
+  const pieChartStyle = {
+    width: "55%",
+    paddingTop: "45px",
+    marginBottom: "110px", // Adjust individual chart width
+  };
 
   return (
     <div>
@@ -83,9 +131,10 @@ const BillOverview = () => {
       </div>
 
       <NavigationBar />
+
       {/* Boxes */}
-      <div style={{ display: "flex", justifyContent: "center" }}>
-      <ContainerBox data={dataSet1} />
+      <div style={{ display: "flex", justifyContent: "center",marginLeft:"-20px" }}>
+        <ContainerBox data={dataSet1} />
       </div>
 
       {/* Chart and Table Containers */}
@@ -101,16 +150,26 @@ const BillOverview = () => {
         <div
           style={{
             display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
             marginBottom: 20,
-            paddingLeft: "45px",
-            marginRight: "10px",
+            paddingLeft: "10px",
+            paddingRight: "10px",
+            width: "128%", // Ensures the container takes full width
+            marginLeft:"-125px",
           }}
         >
-          <BarChartContainer />
-          <div style={{ marginTop: "10px" }}>
-            <div style={{ marginTop: "20px", paddingRight: "18px" }}>
-              <InvoiceTableView />
-            </div>
+          <div style={{ flex: 1, marginLeft:"-10px" }}>
+            <BarChartContainer />
+          </div>
+          <div style={{ flex: 1, marginLeft:"-115px", marginTop:"10px" }}>
+            <InvoiceTableView
+              title="Invoice View"
+              tableData={dummyData}
+              tableHeight="auto"
+              tableWidth="595px"
+              columns={columns}
+            />
           </div>
         </div>
 
@@ -118,25 +177,53 @@ const BillOverview = () => {
         <div
           style={{
             display: "flex",
-            marginBottom: 0,
-            marginLeft: "42px",
-            marginTop: "-40px",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "70%", // Ensures the container takes full width
+            marginBottom: "20px", // Added space between pie chart and next section
+            marginLeft : "-280px",
+            marginTop:"-50px",
           }}
         >
-          <PieChartContainer
-            title1="Top 5 Applications"
-            data1={data1}
-            title2="Top 5 Services"
-            data2={data2}
-          />
-          <div style={{ flex: 1, marginLeft: "2px", marginTop: "-5px" }}>
-            <div style={{ paddingLeft: "0px", paddingRight: "10px" }}>
-              <TotalBillView />
-            </div>
+          <div style={{ flex: 1, marginRight: "20px" }}>
+            <PieChartContainer
+              title1="Top 5 Applications"
+              data1={data1}
+              title2="Top 5 Services"
+              data2={data2}
+              containerStyle={pieChartContainerStyle}
+              chartStyle={pieChartStyle}
+            />
           </div>
+          <div style={{ flex: 1,marginLeft:"-7px" }}>
+          <InvoiceTableView
+              title="Total Bill Allocation across Application/Project"
+              dropdown={
+                <FormControl variant="outlined" style={{ minWidth: 110, marginLeft:"180px",marginRight:"-10px"}}>
+                  <InputLabel id="report-type-label">Group by</InputLabel>
+                  <Select
+                    labelId="report-type-label"
+                    id="report-type"
+                    value={reportType}
+                    onChange={handleReportTypeChange}
+                    label="Group by Application"
+                  >
+                    <MenuItem value="">Group by Application</MenuItem>
+                    <MenuItem value="app1">Application 1</MenuItem>
+                    <MenuItem value="app2">Application 2</MenuItem>
+                    <MenuItem value="app3">Application 3</MenuItem>
+                  </Select>
+                </FormControl>
+              }
+              tableData={dummyData1}
+              tableHeight="auto"
+              tableWidth="600px"
+              columns={columns1}
+            />
         </div>
       </div>
     </div>
+  </div>
   );
 };
 
