@@ -160,6 +160,38 @@ const api = {
       throw error;
     }
   },
+  getInvoiceView: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/billoverview/Invoiceview`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
+              Subscription: ["Subscription1", "Subscription2"],
+              Location: ["EastUS"],
+              BusinessUnit: ["Finance","IT Services"],
+              Application: ["Demo"],
+              Project: ["InfrastructureUpgrade","CloudOptimization"],
+              Environment: ["Prod"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
  
   getMenuItemsByCustomerId: async (customerId) => {
     try {
