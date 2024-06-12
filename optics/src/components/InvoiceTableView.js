@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -9,7 +9,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles';
-import api from '../api.js'; // Adjust the path as needed
 
 const useStyles = makeStyles({
   container: {
@@ -45,9 +44,9 @@ const useStyles = makeStyles({
   tableCell: {
     color: '#63666A',
     fontSize: '0.8rem',
-    padding: '13px 16px',
-    borderBottom: 'none',
-    verticalAlign: 'top',
+    padding: '13px 16px', // Adjusted padding for better spacing
+    borderBottom: 'none', // Remove bottom border for cleaner look
+    verticalAlign: 'top', // Align text to the top of the cell
     borderBottom : '1px solid black',
     borderTop : '1px solid Black',
     borderBlockEnd : '1px solid Black',
@@ -59,34 +58,22 @@ const useStyles = makeStyles({
     borderLeft : '1px solid black',
     borderTop : '1px solid Black',
     borderRight : '1px solid Black',
-    padding: '8px 16px',
+    padding: '8px 16px', // Adjusted padding for better spacing
   },
-  tableRow: {},
+  tableRow: {
+    },
 });
+
+const dummyData = [
+  { name: 'Subscription 1', onDemandCost: '$100', reservedInstancesCost: '$200', simulatedPAYGO: '$150', savings: '$50', totalBill: '$400' },
+  { name: 'Subscription 2', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
+  { name: 'Subscription 3', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
+  //{ name: 'Subscription 4', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
+  // Add more dummy data as needed
+];
 
 const InvoiceTableView = () => {
   const classes = useStyles();
-  const [invoiceData, setInvoiceData] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchInvoiceData = async () => {
-      try {
-        const data = await api.getInvoiceView();
-        console.log('Fetched invoice data:', data);
-        setInvoiceData(data);
-      } catch (error) {
-        console.error('Error in useEffect:', error);
-        setError(error);
-      }
-    };
-
-    fetchInvoiceData();
-  }, []);
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
     <div className={classes.container}>
@@ -117,14 +104,14 @@ const InvoiceTableView = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {invoiceData.map((row, index) => (
+            {dummyData.map((row, index) => (
               <TableRow key={index} className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>{row.Subscription}</TableCell>
-                <TableCell className={classes.tableCell}>${row.OnDemandCost}</TableCell>
-                <TableCell className={classes.tableCell}>${row.ReservedInstancesCost}</TableCell>
-                <TableCell className={classes.tableCell}>${row.SimulatedPAYGO}</TableCell>
-                <TableCell className={classes.tableCell}>${row.Savings}</TableCell>
-                <TableCell className={classes.tableCell}>${row.TotalBill}</TableCell>
+                <TableCell className={classes.tableCell}>{row.name}</TableCell>
+                <TableCell className={classes.tableCell}>{row.onDemandCost}</TableCell>
+                <TableCell className={classes.tableCell}>{row.reservedInstancesCost}</TableCell>
+                <TableCell className={classes.tableCell}>{row.simulatedPAYGO}</TableCell>
+                <TableCell className={classes.tableCell}>{row.savings}</TableCell>
+                <TableCell className={classes.tableCell}>{row.totalBill}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -135,3 +122,4 @@ const InvoiceTableView = () => {
 };
 
 export default InvoiceTableView;
+
