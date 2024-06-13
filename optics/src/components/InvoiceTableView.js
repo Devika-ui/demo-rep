@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   dropdown: {
     marginLeft: '-10px', // Adjust this value to move the dropdown left or right
     '& select': {
-      height: 0,
+      height: 10,
       width: 50,
       fontSize: '0.9rem',
     },
