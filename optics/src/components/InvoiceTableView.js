@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#63666A',
   },
   dropdown: {
-    marginLeft: '-20px', // Adjust this value to move the dropdown left or right
+    marginLeft: '-10px', // Adjust this value to move the dropdown left or right
     '& select': {
       height: 0,
       width: 50,

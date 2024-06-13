@@ -9,12 +9,12 @@ import TotalBillView from "./TotalBillView";
 import NavigationBar from "./NavigationBar";
 import ContainerBox from './ContainerBox';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-
+import chartData from './chartData.json'; // Import your chart data
+import trendData from './trendData.json'; // Import your trend data
 
 const BillOverview = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [reportType, setReportType] = useState('');
-
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
@@ -160,7 +160,7 @@ const BillOverview = () => {
           }}
         >
           <div style={{ flex: 1, marginLeft:"-10px" }}>
-            <BarChartContainer />
+            <BarChartContainer chartData={chartData} trendData={trendData} />
           </div>
           <div style={{ flex: 1, marginLeft:"-115px", marginTop:"10px" }}>
             <InvoiceTableView
@@ -197,9 +197,15 @@ const BillOverview = () => {
           </div>
           <div style={{ flex: 1,marginLeft:"-7px" }}>
           <InvoiceTableView
-              title="Total Bill Allocation across Application/Project"
+               title={
+                <>
+                  Total Bill Allocation across
+                  <br />
+                  Application/Project
+                </>
+              }
               dropdown={
-                <FormControl variant="outlined" style={{ minWidth: 110, marginLeft:"180px",marginRight:"-10px"}}>
+                <FormControl variant="outlined" style={{ minWidth: 110, marginLeft:"-140px",marginRight:"-10px"}}>
                   <InputLabel id="report-type-label">Group by</InputLabel>
                   <Select
                     labelId="report-type-label"

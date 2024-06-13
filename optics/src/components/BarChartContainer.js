@@ -3,8 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line } from 'recharts';
 import Typography from '@material-ui/core/Typography';
-import chartData from './chartData.json';
-import trendData from './trendData.json';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -14,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(4, 'auto'),
     padding: theme.spacing(3),
     backgroundColor: '#f9f9f9',
-    marginRight : '15px',
-    paddingRight : 0,
-    paddingLeft : 10,
-    paddingTop : 4,
+    marginRight: '15px',
+    paddingRight: 0,
+    paddingLeft: 10,
+    paddingTop: 4,
   },
   heading: {
     color: '#63666A',
@@ -26,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BarChartContainer = () => {
+const BarChartContainer = ({ chartData, trendData }) => {
   const classes = useStyles();
   const [data, setData] = useState([]);
 
@@ -36,7 +34,7 @@ const BarChartContainer = () => {
       return { ...item, ...trendItem };
     });
     setData(combinedData);
-  }, []);
+  }, [chartData, trendData]);
 
   return (
     <Paper className={classes.container}>
