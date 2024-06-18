@@ -5,7 +5,7 @@ import PieChartContainer from "./PieChartContainer";
 import InvoiceTableView from "./InvoiceTableView";
 import Header from "./Header";
 import Subheader from "./SubHeader";
-import TotalBillView from "./TotalBillView";
+//import TotalBillView from "./TotalBillView";
 import NavigationBar from "./NavigationBar";
 import ContainerBox from './ContainerBox';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
@@ -16,6 +16,55 @@ const BillOverview = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [reportType, setReportType] = useState('');
 
+
+  const additionalFilters = [
+    {
+      label: 'Service Category(s)',
+      name: 'Select Service Category',
+      options: [
+        { value: 'Service Category 1', label: 'Service Category 1' },
+        { value: 'Service Category 2', label: 'Service Category 2' },
+        { value: 'Service Category 3', label: 'Service Category 3' }
+      ]
+    },
+    {
+      label: 'Owner(s)',
+      name: 'Select Owner',
+      options: [
+        { value: 'Owner 1', label: 'Owner 1' },
+        { value: 'Owner 2', label: 'Owner 2' },
+        { value: 'Owner 3', label: 'Owner 3' }
+      ]
+    },
+    {
+      label: 'Select Cost',
+      name: 'Select Cost',
+      options: [
+        { value: 'Actual Cost', label: 'Actual Cost' },
+        { value: 'Amortized Cost', label: 'Amortized Cost' },
+        { value: 'Cost Unblended', label: 'Cost Unblended' },
+	      {value:'Cost Blended',label:'Cost Blended'},
+      ]
+    },
+    {
+      label: 'Environment(s)',
+      name: 'environments',
+      options: [
+        { value: 'Production', label: 'Production' },
+        { value: 'Staging', label: 'Staging' },
+        { value: 'Development', label: 'Development' }
+      ]
+    },
+    {
+      label:'Cost Center(s)',
+      name:'Select Cost Center',
+      options: [
+            { value: 'Cost Center1', label: 'Cost Center1' },
+            { value: 'Cost Center2', label: 'Cost Center2' },
+            { value: 'Cost Center3', label: 'Cost Center3' },
+          ]
+    },
+  ];
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
     if (value === "Azure") {
@@ -113,6 +162,7 @@ const BillOverview = () => {
     paddingTop: "45px",
     marginBottom: "110px", // Adjust individual chart width
   };
+  
 
   return (
     <div>
@@ -127,6 +177,7 @@ const BillOverview = () => {
               </span>
             </div>
           }
+          additionalFilters={additionalFilters}
         />
       </div>
 
@@ -197,13 +248,7 @@ const BillOverview = () => {
           </div>
           <div style={{ flex: 1,marginLeft:"-7px" }}>
           <InvoiceTableView
-               title={
-                <>
-                  Total Bill Allocation across
-                  <br />
-                  Application/Project
-                </>
-              }
+                title={"Total Bill Allocation across\nApplication/Project"} 
               dropdown={
                 <FormControl variant="outlined" style={{ minWidth: 110, marginLeft:"-140px",marginRight:"-10px"}}>
                   <InputLabel id="report-type-label">Group by</InputLabel>

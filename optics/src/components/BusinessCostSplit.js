@@ -23,6 +23,55 @@ const BusinessCostSplit = () => {
     const handleReportTypeChange = (event) => {
         setReportType(event.target.value);
     };
+    
+  const additionalFilters = [
+    {
+      label: 'Service Category(s)',
+      name: 'Select Service Category',
+      options: [
+        { value: 'Service Category 1', label: 'Service Category 1' },
+        { value: 'Service Category 2', label: 'Service Category 2' },
+        { value: 'Service Category 3', label: 'Service Category 3' }
+      ]
+    },
+    {
+      label: 'Owner(s)',
+      name: 'Select Owner',
+      options: [
+        { value: 'Owner 1', label: 'Owner 1' },
+        { value: 'Owner 2', label: 'Owner 2' },
+        { value: 'Owner 3', label: 'Owner 3' }
+      ]
+    },
+    {
+      label: 'Select Cost',
+      name: 'Select Cost',
+      options: [
+        { value: 'Actual Cost', label: 'Actual Cost' },
+        { value: 'Amortized Cost', label: 'Amortized Cost' },
+        { value: 'Cost Unblended', label: 'Cost Unblended' },
+	      {value:'Cost Blended',label:'Cost Blended'},
+      ]
+    },
+    {
+      label: 'Environment(s)',
+      name: 'environments',
+      options: [
+        { value: 'Production', label: 'Production' },
+        { value: 'Staging', label: 'Staging' },
+        { value: 'Development', label: 'Development' }
+      ]
+    },
+    {
+      label:'Cost Center(s)',
+      name:'Select Cost Center',
+      options: [
+            { value: 'Cost Center1', label: 'Cost Center1' },
+            { value: 'Cost Center2', label: 'Cost Center2' },
+            { value: 'Cost Center3', label: 'Cost Center3' },
+          ]
+    },
+  ];
 
     const dataSet = [
         { number: 55, text: "Applications with Tags" },
@@ -311,6 +360,7 @@ const BusinessCostSplit = () => {
                         <span style={{ color: '#0070C0', fontSize: '18px' }}>Business Cost Split</span>
                     </div>
                 }
+                additionalFilters={additionalFilters}
             />
             </div>
             <NavigationBar />

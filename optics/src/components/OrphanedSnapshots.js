@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: 235,
     left: 880,
-    zIndex: 1000,
+    zIndex: 100,
     margin: "20px",
     display: "flex",
     alignItems: "center",
@@ -58,6 +58,45 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const additionalFilters = [
+  {
+    label: 'Service Category(s)',
+    name: 'Select Service Category',
+    options: [
+      { value: 'Service Category 1', label: 'Service Category 1' },
+      { value: 'Service Category 2', label: 'Service Category 2' },
+      { value: 'Service Category 3', label: 'Service Category 3' }
+    ]
+  },
+  {
+    label: 'Owner(s)',
+    name: 'Select Owner',
+    options: [
+      { value: 'Owner 1', label: 'Owner 1' },
+      { value: 'Owner 2', label: 'Owner 2' },
+      { value: 'Owner 3', label: 'Owner 3' }
+    ]
+  },
+  {
+    label: 'Environment(s)',
+    name: 'environments',
+    options: [
+      { value: 'Production', label: 'Production' },
+      { value: 'Staging', label: 'Staging' },
+      { value: 'Development', label: 'Development' }
+    ]
+  },
+  {
+    label:'Cost Center(s)',
+    name:'Select Cost Center',
+    options: [
+          { value: 'Cost Center1', label: 'Cost Center1' },
+          { value: 'Cost Center2', label: 'Cost Center2' },
+          { value: 'Cost Center3', label: 'Cost Center3' },
+        ]
+  },
+];
 
 const tableData = [
   {
@@ -356,6 +395,7 @@ const OrphanedSnapshots = () => {
               </span>
             </div>
           }
+          additionalFilters={additionalFilters}
         />
       </div>
 
