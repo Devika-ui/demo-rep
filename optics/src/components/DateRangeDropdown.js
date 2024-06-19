@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Menu, MenuItem, Button } from '@material-ui/core';
-import { DateRange } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale'; // import English locale
 
 const useStyles = makeStyles((theme) => ({
@@ -15,13 +13,7 @@ const useStyles = makeStyles((theme) => ({
 const DateRangeDropdown = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection'
-    }
-  ]);
+  const [selectedMonths, setSelectedMonths] = useState([]);
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -30,9 +22,24 @@ const DateRangeDropdown = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const handleSelect = (ranges) => {
-    setDateRange([ranges.selection]);
+ 
+  const toggleMonth = (month) => {
+    const isSelected = selectedMonths.some(
+      (selectedMonth) =>
+        selectedMonth.getFullYear() === month.getFullYear() &&
+        selectedMonth.getMonth() === month.getMonth()
+    );
+    if (isSelected) {
+      setSelectedMonths(
+        selectedMonths.filter(
+          (selectedMonth) =>
+            selectedMonth.getFullYear() !== month.getFullYear() ||
+            selectedMonth.getMonth() !== month.getMonth()
+        )
+      );
+    } else {
+      setSelectedMonths([...selectedMonths, month]);
+    }
   };
 
   return (
@@ -43,15 +50,11 @@ const DateRangeDropdown = () => {
         aria-haspopup="true"
         onClick={handleOpen}
       >
-        {dateRange[0].startDate.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        })} - {dateRange[0].endDate.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        })}
+        {selectedMonths.length === 0
+          ? 'Select Months'
+          : selectedMonths
+              .map((month) => format(month, 'MMMM yyyy', { locale: enUS }))
+              .join(', ')}
       </Button>
       <Menu
         id="date-range-menu"
@@ -60,15 +63,23 @@ const DateRangeDropdown = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={(event) => event.stopPropagation()}>
-          <DateRange
-            ranges={dateRange}
-            onChange={handleSelect}
-            locale={enUS}
-            months={2}
-            showSelectionPreview={true}
-          />
-        </MenuItem>
+        {Array.from({ length: 12 }, (_, i) => {
+          const month = new Date(new Date().getFullYear(), i, 1);
+          const isSelected = selectedMonths.some(
+            (selectedMonth) =>
+              selectedMonth.getFullYear() === month.getFullYear() &&
+              selectedMonth.getMonth() === month.getMonth()
+          );
+          return (
+            <MenuItem
+              key={i}
+              selected={isSelected}
+              onClick={() => toggleMonth(month)}
+            >
+              {format(month, 'MMMM yyyy', { locale: enUS })}
+            </MenuItem>
+          );
+        })}
       </Menu>
     </div>
   );
