@@ -1,133 +1,148 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Typography } from '@mui/material';
-import Chart from 'chart.js/auto';
-import api from '../api.js';
+import React from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  PointElement,
+} from "chart.js";
 
-const AzureBars = () => {
-  const chartContainer = useRef(null);
-  const chartInstance = useRef(null);
-  const [azureData, setAzureData] = useState({});
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  PointElement
+);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const subscriptionsData = await api.getBillingCostEachDay();
-        const azureData = {};
-
-        subscriptionsData.forEach(({ date, provider }) => {
-          const day = date.split('-')[2];
-
-          if (!azureData[day]) {
-            azureData[day] = 0;
-          }
-
-          if (provider.Azure) {
-            azureData[day] += provider.Azure;
-          }
-        });
-
-        setAzureData(azureData);
-      } catch (error) {
-        // Handle error
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (Object.keys(azureData).length === 0) return; // Wait until data is fetched
-
-    if (chartInstance.current !== null) {
-      chartInstance.current.destroy();
-    }
-
-    const ctx = chartContainer.current.getContext("2d");
-
-    chartInstance.current = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: Object.keys(azureData),
-        datasets: [
-          {
-            label: "Azure",
-            data: Object.values(azureData),
-            backgroundColor: "rgba(10, 163, 225, 0.7)",
-          },
-        ],
-      },
-      options: {
-        scales: {
-          x: {
-            grid: {
-              display: false,
-            },
-            ticks: {
-              color: "rgba(0, 0, 0, 0.5)",
-            },
-          },
-          y: {
-            grid: {
-              display: false,
-            },
-            ticks: {
-              color: "rgba(0, 0, 0, 0.5)",
-            },
-          },
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: true,
+      labels: {
+        color: "#000", // Adjust color as needed
+        font: {
+          family: "Roboto",
+          size: 12, // Adjust size as needed
         },
-        plugins: {
-        //   title: {
-        //     display: true,
-        //     text: 'Total Bill Cost by Azure Provider',
-        //     position: 'top',
-        //     align: 'start',
-        //     font: {
-        //       size: '16px',
-        //       weight: 'bold'
-        //     },
-        //     color: 'black', // Set title color to black
-        //   },
-          legend: {
-            display: true,
-            position: 'top',
-            align: 'start',
-            labels: {
-              usePointStyle: true,
-              padding: 35,
-              font: {
-                size: 12,
-              },
-            },
-            onClick: () => {},
-          },
-          layout: {
-            padding: {
-              top: 10,
-            },
-          },
+        filter: function (legendItem, chartData) {
+          // Filter out duplicate legend items and remove the label for the line dataset
+          if (legendItem.text === "Total") {
+            return false;
+          }
+          const index = chartData.datasets.findIndex(
+            (dataset) => dataset.label === legendItem.text
+          );
+          return index === legendItem.datasetIndex;
         },
       },
-    });
-
-    return () => {
-      if (chartInstance.current !== null) {
-        chartInstance.current.destroy();
-      }
-    };
-  }, [azureData]);
-
-  return (
-    <div style={{ position: "relative" }}>
-         <div style={{ position: "absolute", top: 0, left: 0 }}>
-        <Typography
-          variant="subtitle1"
-          style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}
-        >
-          Total Bill Cost by Providers:
-        </Typography>
-      </div>
-      <canvas ref={chartContainer}></canvas>
-    </div>
-  );
+    },
+    title: {
+      display: true,
+      text: "Azure Total Bill Cost",
+      align: "start", // Move title to the left
+      font: {
+        family: "Roboto",
+        size: 25, // Adjust size as needed
+        weight: "bold",
+      },
+      color: "#000", // Adjust color as needed
+    },
+    tooltip: {
+      enabled: false,
+    },
+  },
+  scales: {
+    x: {
+      stacked: true,
+    },
+    y: {
+      stacked: true,
+      beginAtZero: true,
+      ticks: {
+        stepSize: 50,
+        max: 150,
+      },
+    },
+  },
 };
 
-export default AzureBars;
+const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+
+const payAsYouGoData = [20, 30, 40, 50, 60, 70, 80];
+const reservationsData = [10, 20, 30, 40, 50, 60, 70];
+
+const additionalPayAsYouGoData = [
+  [15, 25, 35, 45, 55, 65, 75],
+  [18, 28, 38, 48, 58, 68, 78],
+  [22, 32, 42, 52, 62, 72, 82],
+  [12, 22, 32, 42, 52, 62, 72],
+  [25, 35, 45, 55, 65, 75, 85],
+  [30, 40, 50, 60, 70, 80, 90],
+  [28, 38, 48, 58, 68, 78, 88],
+];
+
+const additionalReservationsData = [
+  [5, 15, 25, 35, 45, 55, 65],
+  [8, 18, 28, 38, 48, 58, 68],
+  [12, 22, 32, 42, 52, 62, 72],
+  [2, 12, 22, 32, 42, 52, 62],
+  [15, 25, 35, 45, 55, 65, 75],
+  [20, 30, 40, 50, 60, 70, 80],
+  [18, 28, 38, 48, 58, 68, 78],
+];
+
+const lineData = [160, 40, 60, 80, 100, 120, 140];
+
+// Create dataset arrays
+const payAsYouGoDatasets = labels.map((label, i) => ({
+  type: "bar",
+  label: "Pay-as-you-go",
+  backgroundColor: "#00A3E1",
+  data: [payAsYouGoData[i], ...additionalPayAsYouGoData[i]],
+  stack: `Stack ${i + 1}`,
+}));
+
+const reservationsDatasets = labels.map((label, i) => ({
+  type: "bar",
+  label: "Reservations",
+  backgroundColor: "#ED9B33",
+  data: [reservationsData[i], ...additionalReservationsData[i]],
+  stack: `Stack ${i + 1}`,
+}));
+
+const datasets = [
+  ...payAsYouGoDatasets,
+  ...reservationsDatasets,
+  {
+    type: "line",
+    label: "Total",
+    borderColor: "#5F249F",
+    borderWidth: 1,
+    fill: false,
+    data: lineData,
+    pointRadius: 0,
+    pointHitRadius: 0,
+    tension: 0.4,
+  },
+];
+
+const data = {
+  labels,
+  datasets,
+};
+
+const GroupedStackedBarLineChart = () => {
+  return <Bar options={options} data={data} />;
+};
+
+export default GroupedStackedBarLineChart;

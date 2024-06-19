@@ -56,7 +56,7 @@ const RecommendationsComponent = () => {
           <option value="option2">Option 2</option>
           <option value="option3">Option 3</option>
         </select> */}
-        <FormControl style={{paddingTop: '5px'}}>
+        {/* <FormControl style={{paddingTop: '5px'}}>
           <Select 
             value={selectedOption} 
             onChange={handleOptionChange}
@@ -67,7 +67,7 @@ const RecommendationsComponent = () => {
             <MenuItem value="AWS">AWS</MenuItem>
             <MenuItem value="Azure">Azure</MenuItem>
           </Select>
-        </FormControl>
+        </FormControl> */}
       </div>
 
       <div className="tile">

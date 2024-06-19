@@ -34,7 +34,7 @@ const KPISection = () => {
     <div className="kpi-container" style={{ width: '530px', height: '270px', marginBottom: '20px' }}>
     <div className="kpi-header">
       <h4 className="kpi-title">Commitment based Discounts KPI</h4>
-        <div className="kpi-dropdown">
+        {/* <div className="kpi-dropdown">
           <FormControl>
             <Select
               value={selectedOption}
@@ -46,7 +46,7 @@ const KPISection = () => {
               <MenuItem value="Azure">Azure</MenuItem>
             </Select>
           </FormControl>
-        </div>
+        </div> */}
       </div>
 
       <hr className="kpi-line" />
