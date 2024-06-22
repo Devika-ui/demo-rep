@@ -112,16 +112,16 @@ const Dashboard = () => {
       >
         {/* <CustomFilter/> */}
         {/* <OpenStreetMap location={location} containerStyle={mapContainerStyle} />  */}
-        {showStackBars ? (
+        {!showStackBars ? (
           <>
             <MonthlySpendComponent />
             <MonthlyForecastComponent />
             <TotalSubscriptionsComponent style={{ flex: '1' }} />
           </>) :(
           <>
-            <MonthlySpendAWSComponent/>
-            <MonthlyForecastAWSComponent/>
-            <TotalAzureSubscriptions style={{ flex: '1' }} />
+            <MonthlySpendComponent />
+            <MonthlyForecastComponent />
+            <TotalSubscriptionsComponent style={{ flex: '1' }} />
           </>)}
         {/* <MonthlySpendComponent />
         <MonthlyForecastComponent />

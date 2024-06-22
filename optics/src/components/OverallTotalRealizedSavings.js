@@ -1,74 +1,59 @@
-// OverallTotalRealizedSavings.js
+
 import React, { useEffect, useState } from 'react';
 import { Bar } from "react-chartjs-2";
 import iIcon from '../images/Iicon.png';
 import api from '../api.js';
 
 const OverallTotalRealizedSavings = () => {
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [recommendations, setRecommendations] = useState([]);
   const [reservations, setReservations] = useState([]);
-  const [savings, setSavings] = useState([]);
+  const [simulatedSavings, setSimulatedSavings] = useState([]);
+  const [labels, setLabels] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchReservationsData = async () => {
       try {
-        const subscriptionsData = await api.getOverallSavings();
-        setSubscriptions(subscriptionsData);
-        const repeatedRecommendations = [
-          subscriptionsData[0].Recommendations_percentage,
-          subscriptionsData[1].Recommendations_percentage,
-          subscriptionsData[2].Recommendations_percentage,
-        ];
-        setRecommendations(repeatedRecommendations);
-        const repeatedReservations = [
-          subscriptionsData[0].Reservations_percentage,
-          subscriptionsData[1].Reservations_percentage,
-          subscriptionsData[2].Reservations_percentage,
-        ];
-        setReservations(repeatedReservations);
-        const repeatedSavingsPlan = [
-          subscriptionsData[0].SavingsPlan_percentage,
-          subscriptionsData[1].SavingsPlan_percentage,
-          subscriptionsData[2].SavingsPlan_percentage,
-        ];
-        setSavings(repeatedSavingsPlan);
+        const reservationsData = await api.getOverallSavingsRI();
+        setReservations(reservationsData.map(entry => entry.savings));
+        setLabels(reservationsData.map(entry => new Date(entry.modifieddate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })));
       } catch (error) {
         // Handle error
       }
     };
-    fetchData();
+    fetchReservationsData();
+  }, []);
+
+  useEffect(() => {
+    const fetchSimulatedSavingsData = async () => {
+      try {
+        const simulatedSavingsData = await api.getOverallSavingsStimulated();
+        setSimulatedSavings(simulatedSavingsData.map(entry => entry.simulated));
+        setLabels(simulatedSavingsData.map(entry => new Date(entry.Date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })));
+      } catch (error) {
+        // Handle error
+      }
+    };
+    fetchSimulatedSavingsData();
   }, []);
 
   // Data for the chart
   const data = {
-    labels: ["June", "Jul", "Aug"],
+    labels,
     datasets: [
-      {
-        label: "Recommendations",
-        backgroundColor: "rgba(0, 128, 0, 0.7)",
-        data: recommendations,
-      },
       {
         label: "Reservations",
         backgroundColor: "rgba(255, 140, 0, 0.7)",
-        data: reservations,
-      },
-      {
-        label: "Savings Plan",
-        backgroundColor: "rgba(205, 205, 0, 0.7)",
-        data: savings,
+        data: reservations.map(entry => parseFloat(entry.toFixed(2))),
       },
     ],
   };
 
   // Trend line data
   const trendlineData = {
-    labels: ["June Start", "June End", "Mid July", "Aug Start", "Aug End"],
+    labels,
     datasets: [
       {
         borderColor: "#0079B9",
-        data: [55, 90, 65, 95, 100],
+        data: simulatedSavings.map(entry => parseFloat(entry.toFixed(2))), // Using simulatedSavings data for the trendline
         fill: false,
         type: "line",
         pointRadius: 0, // Hide points
@@ -81,7 +66,7 @@ const OverallTotalRealizedSavings = () => {
 
   // Combined data
   const combinedData = {
-    labels: data.labels,
+    labels,
     datasets: [...data.datasets, ...trendlineData.datasets],
   };
 
@@ -139,7 +124,7 @@ const OverallTotalRealizedSavings = () => {
           justifyContent: "space-between",
           paddingLeft: "20px",
           paddingRight: "10px",
-          borderBottom: "2px  solid #98989893",
+          borderBottom: "2px solid #98989893",
           paddingBottom: "2px",
         }}
       >

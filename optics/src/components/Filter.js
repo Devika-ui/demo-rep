@@ -1,45 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { MultiSelect } from 'react-multi-select-component';
 import Modal from 'react-modal';
+import api from '../api';
 import '../css/Filter.scss';
 
 const Filter = ({ additionalFilters = [] }) => {
-  console.log('Additional Filters:', additionalFilters); // Ensure this logs correctly
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
     accounts: [],
     businessUnits: [],
     locations: [],
-    applications: []
+    applications: [],
+    projects: [],
+    environments: [],
   });
+
+  const [filterOptions, setFilterOptions] = useState({
+    accounts: [],
+    businessUnits: [],
+    locations: [],
+    applications: [],
+    projects: [],
+    environments: [],
+  });
+
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+        const data = await api.getAllFilters();
+        setFilterOptions({
+          accounts: transformToOptions(data.subscriptionName),
+          businessUnits: transformToOptions(data.tags_BU_company),
+          locations: transformToOptions(data.resourceLocation),
+          applications: transformToOptions(data.tags_AppID_AppName),
+          projects: transformToOptions(data.tags_ProjectName),
+          environments: transformToOptions(data.tags_Environment),
+        });
+      } catch (error) {
+        console.error('Error fetching filters:', error);
+      }
+    };
+
+    fetchFilters();
+  }, []);
+
+  const transformToOptions = (data) => {
+    return data
+      .filter(item => item !== null) // Exclude null values
+      .map(item => ({ value: item, label: item }));
+  };
 
   const toggleFiltersVisibility = () => {
     setIsFiltersVisible(!isFiltersVisible);
+  };
+
+  const handleFilterChange = async (filterType, values) => {
+    setSelectedFilters({ ...selectedFilters, [filterType]: values });
+
+    if (filterType === 'accounts' && values.length > 0) {
+      try {
+        const updatedData = await api.getFilterBasedOnSelection(values[0].value);
+        setFilterOptions({
+          accounts: transformToOptions(updatedData.subscriptionName), // Still need this as per your requirements
+          businessUnits: transformToOptions(updatedData.tags_BU_company),
+          locations: transformToOptions(updatedData.resourceLocation),
+          applications: transformToOptions(updatedData.tags_AppID_AppName),
+          projects: transformToOptions(updatedData.tags_ProjectName),
+          environments: transformToOptions(updatedData.tags_Environment),
+        });
+      } catch (error) {
+        console.error('Error fetching filters based on selection:', error);
+      }
+    }
   };
 
   const customStyles = {
     content: {
       top: '70px',
       left: '50%',
-      transform: 'translate(-50%, 0)', // Center horizontally
+      transform: 'translate(-50%, 0)',
       width: '100%',
       maxWidth: '800px',
       maxHeight: 'calc(100% - 150px)',
       overflow: 'auto',
       padding: '20px',
       margin: '0',
-      zIndex: '1050' // Increased z-index to ensure it is above other elements
+      zIndex: '1050',
     },
     overlay: {
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      zIndex: '1040' // Increased z-index to ensure it is above other elements
+      zIndex: '1040',
     },
   };
-
-  const handleFilterChange = (filterType, values) => {
-    setSelectedFilters({ ...selectedFilters, [filterType]: values });
-  };
+ 
 
   const handleApplyFilters = () => {
     console.log('Selected filters:', selectedFilters);
@@ -52,7 +106,9 @@ const Filter = ({ additionalFilters = [] }) => {
       accounts: [],
       businessUnits: [],
       locations: [],
-      applications: []
+      applications: [],
+      projects: [],
+      environments: [],
     });
   };
 
@@ -66,29 +122,20 @@ const Filter = ({ additionalFilters = [] }) => {
         contentLabel='Filter Dialog'
       >
         <div className="filter-options-container">
-          {/* Account dropdown */}
+          {/* Accounts Unit dropdown */}
           <div className="filter-option">
-            <label>Account(s)</label>
+            <label>Accounts(s)</label>
             <MultiSelect
-              options={[
-                { value: 'Account 1', label: 'Account 1' },
-                { value: 'Account 2', label: 'Account 2' },
-                { value: 'Account 3', label: 'Account 3' }
-              ]}
+              options={filterOptions.accounts}
               onChange={(values) => handleFilterChange('accounts', values)}
               value={selectedFilters.accounts}
             />
           </div>
-
           {/* Business Unit dropdown */}
           <div className="filter-option">
             <label>Business Unit(s)</label>
             <MultiSelect
-              options={[
-                { value: 'BusinessUnit 1', label: 'BusinessUnit 1' },
-                { value: 'BusinessUnit 2', label: 'BusinessUnit 2' },
-                { value: 'BusinessUnit 3', label: 'BusinessUnit 3' }
-              ]}
+              options={filterOptions.businessUnits}
               onChange={(values) => handleFilterChange('businessUnits', values)}
               value={selectedFilters.businessUnits}
             />
@@ -98,27 +145,39 @@ const Filter = ({ additionalFilters = [] }) => {
           <div className="filter-option">
             <label>Location(s)</label>
             <MultiSelect
-              options={[
-                { value: 'Location 1', label: 'Location 1' },
-                { value: 'Location 2', label: 'Location 2' },
-                { value: 'Location 3', label: 'Location 3' }
-              ]}
+              options={filterOptions.locations}
               onChange={(values) => handleFilterChange('locations', values)}
               value={selectedFilters.locations}
             />
           </div>
 
-          {/* Application Dropdown (on a new line after Location dropdown) */}
+          {/* Application dropdown */}
           <div className="filter-option">
             <label>Application(s)</label>
             <MultiSelect
-              options={[
-                { value: 'Application 1', label: 'Application 1' },
-                { value: 'Application 2', label: 'Application 2' },
-                { value: 'Application 3', label: 'Application 3' }
-              ]}
+              options={filterOptions.applications}
               onChange={(values) => handleFilterChange('applications', values)}
               value={selectedFilters.applications}
+            />
+          </div>
+
+          {/* Project dropdown */}
+          <div className="filter-option">
+            <label>Project(s)</label>
+            <MultiSelect
+              options={filterOptions.projects}
+              onChange={(values) => handleFilterChange('projects', values)}
+              value={selectedFilters.projects}
+            />
+          </div>
+
+          {/* Environment dropdown */}
+          <div className="filter-option">
+            <label>Environment(s)</label>
+            <MultiSelect
+              options={filterOptions.environments}
+              onChange={(values) => handleFilterChange('environments', values)}
+              value={selectedFilters.environments}
             />
           </div>
 
@@ -157,7 +216,7 @@ Filter.propTypes = {
 };
 
 Filter.defaultProps = {
-  additionalFilters: [], // Provide a default empty array
+  additionalFilters: [],
 };
 
 export default Filter;

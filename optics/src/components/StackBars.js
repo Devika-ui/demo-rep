@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Select, MenuItem, FormControl, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import Chart from 'chart.js/auto';
 import api from '../api.js';
 
 const StackBars = () => {
-  const [selectedOption, setSelectedOption] = useState("Select an option");
-  const [subOption, setSubOption] = useState("Select an option");
+  const [subscriptions, setSubscriptions] = useState([]);
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
-  const [subscriptions, setSubscriptions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +14,7 @@ const StackBars = () => {
         const subscriptionsData = await api.getBillingCostEachDay();
         setSubscriptions(subscriptionsData);
       } catch (error) {
-        // Handle error
+        console.error("Failed to fetch data", error);
       }
     };
     fetchData();
@@ -33,39 +31,36 @@ const StackBars = () => {
     const awsData = {};
     const azureData = {};
 
-    subscriptions.forEach(({ date, provider }) => {
-      const month = date.split('-')[1];
-      const day = date.split('-')[2];
+    subscriptions.forEach(({ dailydate, totalcost, RIDTYPE }) => {
+      const date = new Date(dailydate).toISOString().split('T')[0];
 
-      if (!awsData[day]) {
-        awsData[day] = 0;
+      if (!awsData[date]) {
+        awsData[date] = Math.random() * 10000; // Random data for AWS
       }
-      if (!azureData[day]) {
-        azureData[day] = 0;
+      if (!azureData[date]) {
+        azureData[date] = 0;
       }
 
-      if (provider.AWS) {
-        awsData[day] += provider.AWS;
-      }
-      if (provider.Azure) {
-        azureData[day] += provider.Azure;
-      }
+      azureData[date] += totalcost; // Sum up the total cost for Azure for both PAY GO and RI
     });
+
+    // Sorting dates in ascending order
+    const sortedDates = Object.keys(azureData).sort();
 
     chartInstance.current = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: Object.keys(awsData),
+        labels: sortedDates,
         datasets: [
           {
             label: "AWS",
-            data: Object.values(awsData),
+            data: sortedDates.map(date => awsData[date].toFixed(2)), // Fixed to 2 decimal places
             backgroundColor: "rgba(255, 153, 10, 0.7)",
             stack: "01"
           },
           {
             label: "Azure",
-            data: Object.values(azureData),
+            data: sortedDates.map(date => azureData[date].toFixed(2)), // Fixed to 2 decimal places
             backgroundColor: "rgba(10, 163, 225, 0.7)",
             stack: "01"
           },
@@ -79,17 +74,31 @@ const StackBars = () => {
               display: false,
             },
             ticks: {
+              autoSkip: false,
+              maxRotation: 0,
+              minRotation: 0,
+              callback: function (value, index, values) {
+                const date = new Date(this.getLabelForValue(value));
+                const midMonthDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() / 2;
+                // Display month label in the middle of the month
+                if (date.getDate() === Math.ceil(midMonthDay)) {
+                  return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                }
+                return '';
+              },
               color: "rgba(0, 0, 0, 0.5)",
             },
           },
           y: {
             stacked: true,
             grid: {
-              display: false,
+              display: true,
             },
             ticks: {
+              stepSize: 4000,
+              max: 6000, // Adjust max to fit the data
               color: "rgba(0, 0, 0, 0.5)",
-            },
+          },
           },
         },
         plugins: {
@@ -130,14 +139,6 @@ const StackBars = () => {
     };
   }, [subscriptions]);
 
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
-    setSubOption("Select an option");
-  };
-
-  const handleSubOptionChange = (event) => {
-    setSubOption(event.target.value);
-  };
   return (
     <div style={{ position: "relative" }}>
       <div style={{ position: "absolute", top: 0, left: 0 }}>
@@ -152,5 +153,5 @@ const StackBars = () => {
     </div>
   );
 };
- 
+
 export default StackBars;

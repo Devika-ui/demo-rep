@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Tooltip } from '@mui/material';
-import '../css/MonthlyForecastComponent.scss';
+import '../css/MonthlySpendComponent.scss';
 import iIcon from '../images/Iicon.png';
 import upArrow from '../images/Up Arrow.png';
 import api from '../api.js';
 
 const MonthlyForecastComponent = () => {
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [monthlyForecast, setMonthlyForecast] = useState(null);
-  const [previousMonthlyForecast, setPreviousMonthlyForecast] = useState(null);
-  const [percentChange, setPercentChange] = useState(null);
+  const [lastMonthCost, setLastMonthCost] = useState(null);
+  const [futureCost, setFutureCost] = useState(null);
+  const [percentageIncrease, setPercentageIncrease] = useState(null);
+  const [totalCost, setTotalCost] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const subscriptionsData = await api.getMonthlyForecastSpend();
-        setSubscriptions(subscriptionsData);
-        if (subscriptionsData.length > 0) {
-          setMonthlyForecast(subscriptionsData[0].Monthly_Forecast_Spend);
-          setPreviousMonthlyForecast(subscriptionsData[0].Previous_Month_Forecast_Spend);
-          if (subscriptionsData[0].Previous_Month_Forecast_Spend !== 0) {
-            setPercentChange(((subscriptionsData[0].Monthly_Forecast_Spend - subscriptionsData[0].Previous_Month_Forecast_Spend) / subscriptionsData[0].Previous_Month_Forecast_Spend) * 100);
-          } else {
-            setPercentChange(null);
-          }
+        const forecastData = await api.getMonthlyForecastSpend();
+        if (forecastData.length > 0) {
+          const lastMonth = forecastData[0].lastMonthCost;
+          const future = forecastData[0].futureCost;
+          setLastMonthCost(lastMonth);
+          setFutureCost(future);
+          setPercentageIncrease(forecastData[0].percentageIncrease);
+          setTotalCost(lastMonth + future);
         }
       } catch (error) {
         // Handle error
@@ -49,8 +47,8 @@ const MonthlyForecastComponent = () => {
       {/* Bottom Part */}
       <div className="bottom-part">
         <div className="left">
-          {monthlyForecast !== null ? (
-            <strong>${monthlyForecast}</strong>
+          {totalCost !== null ? (
+            <strong>${totalCost.toFixed(2)}</strong>
           ) : (
             <strong>Loading...</strong>
           )}
@@ -58,8 +56,8 @@ const MonthlyForecastComponent = () => {
         <div className="right">
           <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
             <span className="icon"><img src={upArrow} alt="AzureLogo" /></span>
-            {percentChange !== null ? (
-              <strong>{percentChange.toFixed(2)}%</strong>
+            {percentageIncrease !== null ? (
+              <strong>{percentageIncrease.toFixed(2)}%</strong>
             ) : (
               <strong>N/A</strong>
             )}

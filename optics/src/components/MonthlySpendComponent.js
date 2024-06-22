@@ -4,26 +4,18 @@ import '../css/MonthlySpendComponent.scss';
 import iIcon from '../images/Iicon.png';
 import upArrow from '../images/Up Arrow.png';
 import api from '../api.js';
-
+ 
 const MonthlySpendComponent = () => {
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [monthlyActualChange, setMonthlyActualChange] = useState(null);
-  const [previousMonthlyActualChange, setPreviousMonthlyActualChange]  = useState(null);
-  const [percentChange, setPercentChange] = useState(null);
-
+  const [totalCost, setTotalCost] = useState(null);
+  const [growthPercentage, setGrowthPercentage] = useState(null);
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const subscriptionsData = await api.getMonthlyActualSpend();
-        setSubscriptions(subscriptionsData);
         if (subscriptionsData.length > 0) {
-          setMonthlyActualChange(subscriptionsData[0].Monthly_Actual_Spend);
-          setPreviousMonthlyActualChange(subscriptionsData[0].Previous_Month_Actual_Spend);
-          if (subscriptionsData[0].Previous_Month_Actual_Spend !== 0) {
-            setPercentChange(((subscriptionsData[0].Monthly_Actual_Spend - subscriptionsData[0].Previous_Month_Actual_Spend) / subscriptionsData[0].Previous_Month_Actual_Spend) * 100);
-          } else {
-            setPercentChange(null);
-          }
+          setTotalCost(subscriptionsData[0].totalCost);
+          setGrowthPercentage(subscriptionsData[0].growthPercentage);
         }
       } catch (error) {
         // Handle error
@@ -31,7 +23,7 @@ const MonthlySpendComponent = () => {
     };
     fetchData();
   }, []);
-
+ 
   return (
     <div className="monthly-spend-container">
       {/* Top Part */}
@@ -45,12 +37,12 @@ const MonthlySpendComponent = () => {
           </Tooltip>
         </div>
       </div>
-
+ 
       {/* Bottom Part */}
       <div className="bottom-part">
         <div className="left">
-          {monthlyActualChange !== null ? (
-            <strong>${monthlyActualChange}</strong>
+          {totalCost !== null ? (
+            <strong>${totalCost.toFixed(2)}</strong>
           ) : (
             <strong>Loading...</strong>
           )}
@@ -58,8 +50,8 @@ const MonthlySpendComponent = () => {
         <div className="right">
           <div style={{display: 'flex', flexDirection: 'row-reverse'}}>
             <span className="icon"><img src={upArrow} alt="AzureLogo" /></span>
-            {percentChange !== null ? (
-              <strong>{percentChange.toFixed(2)}%</strong>
+            {growthPercentage !== null ? (
+              <strong>{growthPercentage.toFixed(2)}%</strong>
             ) : (
               <strong>N/A</strong>
             )}
@@ -70,5 +62,5 @@ const MonthlySpendComponent = () => {
     </div>
   );
 };
-
+ 
 export default MonthlySpendComponent;

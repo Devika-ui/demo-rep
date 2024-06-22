@@ -1,17 +1,28 @@
-// ConsumptionHighlights.js
 import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import '../css/consumptionHighlights.scss';
 import api from '../api.js'; // Import API function
  
 const ConsumptionHighlights = () => {
-  const [consumptionData, setConsumptionData] = useState(null);
+  const [topSubscriptions, setTopSubscriptions] = useState(null);
+  const [topApplications, setTopApplications] = useState(null);
+  const [topServices, setTopServices] = useState(null);
+  const [tagCompliance, setTagCompliance] = useState(null);
  
   useEffect(() => {
     const fetchConsumptionData = async () => {
       try {
-        const data = await api.getOverallConsumption();
-        setConsumptionData(data);
+        const subscriptionsData = await api.getOverallConsumptionForSubscription();
+        setTopSubscriptions(subscriptionsData.topsubscriptions);
+ 
+        const applicationsData = await api.getOverallConsumptionForApplication();
+        setTopApplications(applicationsData.topApplications);
+ 
+        const servicesData = await api.getOverallConsumptionForServies();
+        setTopServices(servicesData.topServices);
+ 
+        const tagComplianceData = await api.getOverallConsumptionForTagCompliance();
+        setTagCompliance(tagComplianceData);
       } catch (error) {
         console.error('Error fetching overall consumption data:', error);
       }
@@ -19,8 +30,8 @@ const ConsumptionHighlights = () => {
  
     fetchConsumptionData();
   }, []);
-
-  if (consumptionData === null) {
+ 
+  if (!topSubscriptions || !topApplications || !topServices || !tagCompliance) {
     return <div>Loading...</div>; // Render loading indicator while data is being fetched
   }
  
@@ -38,12 +49,7 @@ const ConsumptionHighlights = () => {
       },
     },
     labels: ['Application', 'Owner', 'Project', 'Business Unit'],
-    series: [
-      consumptionData[0].Application,
-      consumptionData[0].Owner,
-      consumptionData[0].Project,
-      consumptionData[0].BuisnessUnit,
-    ],
+    series: tagCompliance.map(tag => (isNaN(parseFloat(tag.compliance)) ? 0 : parseFloat(tag.compliance) * 100)),
   };
  
   return (
@@ -56,26 +62,26 @@ const ConsumptionHighlights = () => {
         <div className="tiles-container" style={{ paddingTop: '20px' }}>
           <div className="tile">
             <div>
-              <div>Top 3 Subscriptions/ Accounts</div>
+              <div>Top Subscription</div>
             </div>
             <div className="content">
-              <div className="price">${consumptionData[0].Top3_Subscriptions}</div>
+              <div className="price">${topSubscriptions[0].totalcost.toFixed(2)}</div>
             </div>
           </div>
           <div className="tile">
             <div>
-              <div>Top 3 Services</div>
+              <div>Top Service</div>
             </div>
             <div className="content">
-              <div className="price">${consumptionData[0].Top3_Services}</div>
+              <div className="price">${topServices[0].totalcost.toFixed(2)}</div>
             </div>
           </div>
           <div className="tile">
             <div>
-              <div>Top 3 Applications</div>
+              <div>Top Application</div>
             </div>
             <div className="content">
-              <div className="price">${consumptionData[0].Top3_Applications}</div>
+              <div className="price">${topApplications[0].totalcost.toFixed(2)}</div>
             </div>
           </div>
         </div>

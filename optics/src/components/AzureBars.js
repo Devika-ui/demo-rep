@@ -1,148 +1,167 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  PointElement,
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
 } from "chart.js";
+import { Typography } from '@mui/material';
+import api from '../api.js';
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  PointElement
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
 );
 
 const options = {
   responsive: true,
   plugins: {
-    legend: {
-      display: true,
-      labels: {
-        color: "#000", // Adjust color as needed
-        font: {
-          family: "Roboto",
-          size: 12, // Adjust size as needed
-        },
-        filter: function (legendItem, chartData) {
-          // Filter out duplicate legend items and remove the label for the line dataset
-          if (legendItem.text === "Total") {
-            return false;
+      legend: {
+          display: true,
+          labels: {
+              color: "#000",
+              font: {
+                  family: "Roboto",
+                  size: 16, // Increased font size for legend labels
+                  weight: 'bold', // Added bold weight for better visibility
+              },
+          },
+      },
+      tooltip: {
+          enabled: true,
+          callbacks: {
+              label: function (context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                      label += ': ';
+                  }
+                  label += context.raw.toFixed(2); // Ensure two decimal places
+                  return label;
+              }
           }
-          const index = chartData.datasets.findIndex(
-            (dataset) => dataset.label === legendItem.text
-          );
-          return index === legendItem.datasetIndex;
-        },
       },
-    },
-    title: {
-      display: true,
-      text: "Azure Total Bill Cost",
-      align: "start", // Move title to the left
-      font: {
-        family: "Roboto",
-        size: 25, // Adjust size as needed
-        weight: "bold",
-      },
-      color: "#000", // Adjust color as needed
-    },
-    tooltip: {
-      enabled: false,
-    },
   },
   scales: {
-    x: {
-      stacked: true,
-    },
-    y: {
-      stacked: true,
-      beginAtZero: true,
-      ticks: {
-        stepSize: 50,
-        max: 150,
+      x: {
+          stacked: true,
+          grid: {
+              display: false,
+          },
+          ticks: {
+              autoSkip: false,
+              maxRotation: 0,
+              minRotation: 0,
+              callback: function (value, index, values) {
+                  const date = new Date(this.getLabelForValue(value));
+                  const midMonthDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() / 2;
+  
+                  // Display month label in the middle of the month
+                  if (date.getDate() === Math.ceil(midMonthDay)) {
+                      return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                  }
+                  return '';
+              },
+          },
       },
-    },
+      y: {
+          stacked: true,
+          beginAtZero: true,
+          grid: {
+              display: true,
+          },
+          ticks: {
+              stepSize: 4000,
+              max: 6000, // Adjust max to fit the data
+          },
+      },
+  },
+  layout: {
+      padding: {
+          top: 0, // Add padding to the top to give more space for the title
+      },
   },
 };
 
-const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+const AzureBars = () => {
+  const [data, setData] = useState({
+      labels: [],
+      datasets: [],
+  });
 
-const payAsYouGoData = [20, 30, 40, 50, 60, 70, 80];
-const reservationsData = [10, 20, 30, 40, 50, 60, 70];
+  useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const response = await api.getBillingCostEachDay();
+              const labelsSet = new Set();
+              const payAsYouGoData = {};
+              const reservationsData = {};
 
-const additionalPayAsYouGoData = [
-  [15, 25, 35, 45, 55, 65, 75],
-  [18, 28, 38, 48, 58, 68, 78],
-  [22, 32, 42, 52, 62, 72, 82],
-  [12, 22, 32, 42, 52, 62, 72],
-  [25, 35, 45, 55, 65, 75, 85],
-  [30, 40, 50, 60, 70, 80, 90],
-  [28, 38, 48, 58, 68, 78, 88],
-];
+              response.forEach(({ dailydate, totalcost, RIDTYPE }) => {
+                  const date = new Date(dailydate);
+                  const dateString = date.toISOString().split('T')[0];
+                  labelsSet.add(dateString);
 
-const additionalReservationsData = [
-  [5, 15, 25, 35, 45, 55, 65],
-  [8, 18, 28, 38, 48, 58, 68],
-  [12, 22, 32, 42, 52, 62, 72],
-  [2, 12, 22, 32, 42, 52, 62],
-  [15, 25, 35, 45, 55, 65, 75],
-  [20, 30, 40, 50, 60, 70, 80],
-  [18, 28, 38, 48, 58, 68, 78],
-];
+                  if (RIDTYPE === "PAY GO") {
+                      if (!payAsYouGoData[dateString]) {
+                          payAsYouGoData[dateString] = 0;
+                      }
+                      payAsYouGoData[dateString] += totalcost;
+                  } else if (RIDTYPE === "RI") {
+                      if (!reservationsData[dateString]) {
+                          reservationsData[dateString] = 0;
+                      }
+                      reservationsData[dateString] += totalcost;
+                  }
+              });
 
-const lineData = [160, 40, 60, 80, 100, 120, 140];
+              const labels = Array.from(labelsSet).sort();
+              const payAsYouGo = labels.map(date => payAsYouGoData[date] || 0);
+              const reservations = labels.map(date => reservationsData[date] || 0);
 
-// Create dataset arrays
-const payAsYouGoDatasets = labels.map((label, i) => ({
-  type: "bar",
-  label: "Pay-as-you-go",
-  backgroundColor: "#00A3E1",
-  data: [payAsYouGoData[i], ...additionalPayAsYouGoData[i]],
-  stack: `Stack ${i + 1}`,
-}));
+              const datasets = [
+                  {
+                      type: "bar",
+                      label: "Pay-as-you-go",
+                      backgroundColor: "#00A3E1",
+                      data: payAsYouGo,
+                      stack: "total",
+                  },
+                  {
+                      type: "bar",
+                      label: "Reservations",
+                      backgroundColor: "#ED9B33",
+                      data: reservations,
+                      stack: "total",
+                  },
+              ];
 
-const reservationsDatasets = labels.map((label, i) => ({
-  type: "bar",
-  label: "Reservations",
-  backgroundColor: "#ED9B33",
-  data: [reservationsData[i], ...additionalReservationsData[i]],
-  stack: `Stack ${i + 1}`,
-}));
+              setData({ labels, datasets });
+          } catch (error) {
+              console.error("Failed to fetch data", error);
+          }
+      };
+      fetchData();
+  }, []);
 
-const datasets = [
-  ...payAsYouGoDatasets,
-  ...reservationsDatasets,
-  {
-    type: "line",
-    label: "Total",
-    borderColor: "#5F249F",
-    borderWidth: 1,
-    fill: false,
-    data: lineData,
-    pointRadius: 0,
-    pointHitRadius: 0,
-    tension: 0.4,
-  },
-];
-
-const data = {
-  labels,
-  datasets,
+  return (
+    <div style={{ position: "relative" }}>
+      <Typography
+        variant="h4"
+        style={{ color: "black", fontWeight: "bold", fontSize: "20px", marginTop: "10px" }}
+      >
+        Azure Total Bill Cost
+      </Typography>
+      <Bar options={options} data={data} />
+    </div>
+  );
 };
 
-const GroupedStackedBarLineChart = () => {
-  return <Bar options={options} data={data} />;
-};
-
-export default GroupedStackedBarLineChart;
+export default AzureBars;

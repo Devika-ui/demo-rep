@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Menu, MenuItem, Button } from '@material-ui/core';
 import { format } from 'date-fns';
-import { enUS } from 'date-fns/locale'; // import English locale
+import { enUS } from 'date-fns/locale';
+import api from '../api.js'; // Adjust the path to your API module
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -14,6 +15,24 @@ const DateRangeDropdown = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState([]);
+  const [months, setMonths] = useState([]);
+
+  useEffect(() => {
+    const fetchDates = async () => {
+      try {
+        const data = await api.getAllFilters();
+        const modifiedDates = data.modifieddate.map(date => new Date(date));
+        const uniqueMonths = Array.from(
+          new Set(modifiedDates.map(date => format(date, 'MMMM yyyy', { locale: enUS })))
+        );
+        setMonths(uniqueMonths);
+      } catch (error) {
+        console.error('Error fetching dates:', error);
+      }
+    };
+
+    fetchDates();
+  }, []);
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,21 +41,11 @@ const DateRangeDropdown = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
- 
+
   const toggleMonth = (month) => {
-    const isSelected = selectedMonths.some(
-      (selectedMonth) =>
-        selectedMonth.getFullYear() === month.getFullYear() &&
-        selectedMonth.getMonth() === month.getMonth()
-    );
+    const isSelected = selectedMonths.includes(month);
     if (isSelected) {
-      setSelectedMonths(
-        selectedMonths.filter(
-          (selectedMonth) =>
-            selectedMonth.getFullYear() !== month.getFullYear() ||
-            selectedMonth.getMonth() !== month.getMonth()
-        )
-      );
+      setSelectedMonths(selectedMonths.filter(selectedMonth => selectedMonth !== month));
     } else {
       setSelectedMonths([...selectedMonths, month]);
     }
@@ -52,9 +61,7 @@ const DateRangeDropdown = () => {
       >
         {selectedMonths.length === 0
           ? 'Select Months'
-          : selectedMonths
-              .map((month) => format(month, 'MMMM yyyy', { locale: enUS }))
-              .join(', ')}
+          : selectedMonths.join(', ')}
       </Button>
       <Menu
         id="date-range-menu"
@@ -63,23 +70,15 @@ const DateRangeDropdown = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {Array.from({ length: 12 }, (_, i) => {
-          const month = new Date(new Date().getFullYear(), i, 1);
-          const isSelected = selectedMonths.some(
-            (selectedMonth) =>
-              selectedMonth.getFullYear() === month.getFullYear() &&
-              selectedMonth.getMonth() === month.getMonth()
-          );
-          return (
-            <MenuItem
-              key={i}
-              selected={isSelected}
-              onClick={() => toggleMonth(month)}
-            >
-              {format(month, 'MMMM yyyy', { locale: enUS })}
-            </MenuItem>
-          );
-        })}
+        {months.map((month, index) => (
+          <MenuItem
+            key={index}
+            selected={selectedMonths.includes(month)}
+            onClick={() => toggleMonth(month)}
+          >
+            {month}
+          </MenuItem>
+        ))}
       </Menu>
     </div>
   );

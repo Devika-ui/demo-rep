@@ -1,38 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api.js'; // Update the path as needed
- 
+
 const NavigationBar = () => {
   const [isNavOpen, setNavOpen] = useState(false);
   const [menuItems, setMenuItems] = useState([]);
   const [openSubmenuIndex, setOpenSubmenuIndex] = useState(null); // Track the index of the open submenu
- 
+
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const items = await api.getMenuItemsByCustomerId();
-        const menuData = Object.entries(items).map(([label, icon]) => ({ label, icon }));
+        const items = await api.getMenuItems();
+        const menuData = Object.entries(items).map(([key, value]) => ({
+          label: value.displayName,
+          icon: value.logo_img,
+        }));
         setMenuItems(menuData);
       } catch (error) {
         console.error('Error fetching menu items:', error);
       }
     };
- 
+
     fetchMenuItems();
   }, []);
- 
+
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
   };
- 
+
   const defineSubItems = (label) => {
     switch (label) {
-      // case 'Favourites':
-      //   return [
-      //     { label: 'Favourite Reports', path: '/favourites/subitem1' },
-      //     // { label: 'SubItem2', path: '/favourites/subitem2' },
-      //   ];
-      case 'Cost and Usage':
+      case 'Cost & Usage':
         return [
           { label: 'Bill Overview', path: '/billOverview' },
           { label: 'Business Cost Split View', path: '/businessCostSplit' },
@@ -40,9 +38,8 @@ const NavigationBar = () => {
           { label: 'Infra Consumption Cost Study', path: '/cost-and-usage/subitem4' },
           { label: 'Infra Changes Audit', path: '/cost-and-usage/subitem1' },
           { label: 'Favourite Reports', path: '/cost-and-usage/subitem1' }
-
         ];
-      case 'Committments':
+      case 'Commitments':
         return [
           { label: 'Coverage Analysis', path: '/committments/subitem1' },
           { label: 'Usage Analysis', path: '/committments/subitem2' },
@@ -68,11 +65,11 @@ const NavigationBar = () => {
         return []; // No submenu items for other menu items
     }
   };
- 
+
   const handleToggleSubmenu = (index) => {
     setOpenSubmenuIndex((prevIndex) => (prevIndex === index ? null : index)); // Toggle the submenu only if it's not already open
   };
- 
+
   return (
     <nav
       style={{
@@ -115,10 +112,10 @@ const NavigationBar = () => {
                 to={`/${item.label.toLowerCase().replace(/\s+/g, '-')}`} // Generate path based on label
                 style={{ color: '#fff', textDecoration: 'none', margin: '10px 0', display: 'flex', alignItems: 'center' }}
               >
-                <img src={`data:image/png;base64,${item.icon}`} alt={item.label} style={{ width: '20px', marginRight: '10px' }} />
+                <img src={item.icon} alt={item.label} style={{ width: '20px', marginRight: '10px' }} />
                 {isNavOpen && item.label}
               </Link>
-              {!['Overview', 'Favourites','FAQs', 'Contact Us', 'Settings', 'Logout'].includes(item.label) && (
+              {!['Overview', 'Favorites','FAQs', 'Contact Us', 'Settings', 'Logout'].includes(item.label) && (
                 <span style={{ marginLeft: 'auto' }}>{openSubmenuIndex === index ? '▼' : '  ▶'}</span>
               )}
             </div>
@@ -145,12 +142,12 @@ const NavigationBar = () => {
             to={`/${item.label.toLowerCase().replace(/\s+/g, '-')}`} // Generate path based on label
             style={{ color: '#fff', textDecoration: 'none', margin: '10px 0', display: 'flex', alignItems: 'center' }}
           >
-            <img src={`data:image/png;base64,${item.icon}`} alt={item.label} style={{ width: '20px', marginRight: '10px' }} />
+            <img src={item.icon} alt={item.label} style={{ width: '20px', marginRight: '10px' }} />
           </Link>
         ))}
       </div>
     </nav>
   );
 };
- 
+
 export default NavigationBar;
