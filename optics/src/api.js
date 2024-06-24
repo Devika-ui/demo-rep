@@ -391,7 +391,7 @@ getAllFilters: async () => {
     throw error;
   }
 },
-getFilterBasedOnSelection: async () => {
+getFilterBasedOnSelection: async (selectedSubscriptions) => {
   try {
     const response = await fetch(`${apiUrl}/filters`, {
       method: 'POST',
@@ -402,7 +402,7 @@ getFilterBasedOnSelection: async () => {
         CloudServiceProvider: "1",
         filters: {
           BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
-          Subscription: ["Subscription2"],
+          Subscription: selectedSubscriptions,
         },
       }),
     });

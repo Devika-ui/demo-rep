@@ -57,10 +57,11 @@ const Filter = ({ additionalFilters = [] }) => {
 
   const handleFilterChange = async (filterType, values) => {
     setSelectedFilters({ ...selectedFilters, [filterType]: values });
-
+  
     if (filterType === 'subscriptions' && values.length > 0) {
+      const selectedSubscriptions = values.map(sub => sub.value);
       try {
-        const updatedData = await api.getFilterBasedOnSelection(values[0].value);
+        const updatedData = await api.getFilterBasedOnSelection(selectedSubscriptions);
         setFilterOptions({
           subscriptions: transformToOptions(updatedData.subscriptionName), // Still need this as per your requirements
           businessUnits: transformToOptions(updatedData.tags_BU_company),
