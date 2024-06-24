@@ -10,8 +10,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles';
-import { ThemeProvider, createTheme } from '@mui/material/styles'; // Import ThemeProvider and createTheme
-
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -34,22 +33,20 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.2rem',
     color: '#63666A',
     whiteSpace: 'pre-wrap',
-    paddingRight:"10px",
-
+    paddingRight: "10px",
   },
   buttons: {
     display: 'flex',
     gap: 8,
     marginTop: 10,
-    alignItems: 'center', // Align buttons vertically in the center
+    alignItems: 'center',
   },
   button: {
     fontSize: '0.7rem',
-    //padding: '4px 10px',
     color: '#63666A',
   },
   dropdown: {
-    marginLeft: '-10px', // Adjust this value to move the dropdown left or right
+    marginLeft: '-10px',
     '& select': {
       height: 10,
       width: 50,
@@ -59,29 +56,29 @@ const useStyles = makeStyles((theme) => ({
   tableCell: {
     color: '#63666A',
     fontSize: '0.8rem',
-    padding: '13px 16px', // Adjusted padding for better spacing
-    borderBottom: 'none', // Remove bottom border for cleaner look
-    verticalAlign: 'top', // Align text to the top of the cell
+    padding: '13px 16px',
+    verticalAlign: 'top',
     borderBottom: '1px solid black',
-    borderTop: '1px solid Black',
-    borderBlockEnd: '1px solid Black',
+    borderTop: '1px solid black',
   },
   tableHeadCell: {
     backgroundColor: '#f0f0f0',
     textAlign: 'center',
     borderBottom: '1px solid black',
     borderLeft: '1px solid black',
-    borderTop: '1px solid Black',
-    borderRight: '1px solid Black',
-    padding: '8px 16px', // Adjusted padding for better spacing
+    borderTop: '1px solid black',
+    borderRight: '1px solid black',
+    padding: '8px 16px',
   },
-  tableRow: {},
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 10,
-    },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
+  tableContainer: {
+    maxHeight: 300,
+    overflowY: 'auto',
+  },
+  stickyHeader: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 1,
+    backgroundColor: '#f0f0f0',
   },
 }));
 
@@ -107,17 +104,17 @@ const InvoiceTableView = ({
           <Button variant="contained" className={classes.button}>Customize Report</Button>
         </div>
       </div>
-      <TableContainer>
-        <Table>
+      <TableContainer className={classes.tableContainer}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableHeadCell} colSpan={columns.length}>
+              <TableCell className={`${classes.tableHeadCell} ${classes.stickyHeader}`} colSpan={columns.length}>
                 April - 24
               </TableCell>
             </TableRow>
             <TableRow>
               {columns.map((column, index) => (
-                <TableCell key={index} className={classes.tableHeadCell}>{column.label}</TableCell>
+                <TableCell key={index} className={`${classes.tableHeadCell} ${classes.stickyHeader}`}>{column.label}</TableCell>
               ))}
             </TableRow>
           </TableHead>
