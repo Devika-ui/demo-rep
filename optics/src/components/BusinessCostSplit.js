@@ -276,6 +276,10 @@ const BusinessCostSplit = () => {
       columnHead5: "Savings",
     },
   ];
+  // Remove duplicates for the dropdown options
+  const uniqueBillAllocationData = Array.from(
+    new Set(billAllocationData.map((item) => item.name))
+  ).map((name) => billAllocationData.find((item) => item.name === name));
 
   return (
     <div>
@@ -355,9 +359,9 @@ const BusinessCostSplit = () => {
                 }}
               >
                 <MenuItem value="">All Applications</MenuItem>
-                {billAllocationData.map((item) => (
+                {uniqueBillAllocationData.map((item) => (
                   <MenuItem key={item.name} value={item.name}>
-                    {item.name}
+                    {item.name === "null" ? "null" : item.name}
                   </MenuItem>
                 ))}
               </Select>
