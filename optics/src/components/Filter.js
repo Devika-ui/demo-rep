@@ -8,7 +8,7 @@ import '../css/Filter.scss';
 const Filter = ({ additionalFilters = [] }) => {
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
-    accounts: [],
+    subscriptions: [],
     businessUnits: [],
     locations: [],
     applications: [],
@@ -17,7 +17,7 @@ const Filter = ({ additionalFilters = [] }) => {
   });
 
   const [filterOptions, setFilterOptions] = useState({
-    accounts: [],
+    subscriptions: [],
     businessUnits: [],
     locations: [],
     applications: [],
@@ -30,7 +30,7 @@ const Filter = ({ additionalFilters = [] }) => {
       try {
         const data = await api.getAllFilters();
         setFilterOptions({
-          accounts: transformToOptions(data.subscriptionName),
+          subscriptions: transformToOptions(data.subscriptionName),
           businessUnits: transformToOptions(data.tags_BU_company),
           locations: transformToOptions(data.resourceLocation),
           applications: transformToOptions(data.tags_AppID_AppName),
@@ -58,11 +58,11 @@ const Filter = ({ additionalFilters = [] }) => {
   const handleFilterChange = async (filterType, values) => {
     setSelectedFilters({ ...selectedFilters, [filterType]: values });
 
-    if (filterType === 'accounts' && values.length > 0) {
+    if (filterType === 'subscriptions' && values.length > 0) {
       try {
         const updatedData = await api.getFilterBasedOnSelection(values[0].value);
         setFilterOptions({
-          accounts: transformToOptions(updatedData.subscriptionName), // Still need this as per your requirements
+          subscriptions: transformToOptions(updatedData.subscriptionName), // Still need this as per your requirements
           businessUnits: transformToOptions(updatedData.tags_BU_company),
           locations: transformToOptions(updatedData.resourceLocation),
           applications: transformToOptions(updatedData.tags_AppID_AppName),
@@ -103,7 +103,7 @@ const Filter = ({ additionalFilters = [] }) => {
 
   const handleResetFilters = () => {
     setSelectedFilters({
-      accounts: [],
+      subscriptions: [],
       businessUnits: [],
       locations: [],
       applications: [],
@@ -122,13 +122,13 @@ const Filter = ({ additionalFilters = [] }) => {
         contentLabel='Filter Dialog'
       >
         <div className="filter-options-container">
-          {/* Accounts Unit dropdown */}
+          {/* Subscriptions Unit dropdown */}
           <div className="filter-option">
-            <label>Accounts(s)</label>
+            <label>Subscriptions(s)</label>
             <MultiSelect
-              options={filterOptions.accounts}
-              onChange={(values) => handleFilterChange('accounts', values)}
-              value={selectedFilters.accounts}
+              options={filterOptions.subscriptions}
+              onChange={(values) => handleFilterChange('subscriptions', values)}
+              value={selectedFilters.subscriptions}
             />
           </div>
           {/* Business Unit dropdown */}
