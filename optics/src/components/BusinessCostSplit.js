@@ -15,9 +15,7 @@ const BusinessCostSplit = () => {
   const [boxData, setBoxData] = useState([]);
   const [billAllocationData, setBillAllocationData] = useState([]);
   const [serviceCategoryData, setServiceCategoryData] = useState([]);
-  const [filteredBillAllocationData, setFilteredBillAllocationData] = useState(
-    []
-  );
+  const [filteredBillAllocationData, setFilteredBillAllocationData] = useState([]);
 
   const additionalFilters = [
     {
@@ -76,21 +74,25 @@ const BusinessCostSplit = () => {
   ];
 
   useEffect(() => {
-    const fetchBoxData = async () => {
+    const fetchData = async () => {
       try {
         const [
           applicationsWithTags,
           applicationsWithoutTags,
           projectsWithTags,
           projectsWithoutTags,
+          serviceCategoryCost,
+          billAllocation
         ] = await Promise.all([
           api.getApplicationWithTags(),
           api.getApplicationWithoutTags(),
           api.getProjectWithTags(),
           api.getProjectWithoutTags(),
+          api.getServiceCategoryCost(),
+          api.getBillAllocation(),
         ]);
 
-        const formattedData = [
+        const formattedBoxData = [
           {
             number: applicationsWithTags.Applicationswithtags[0],
             text: "Applications with Tags",
@@ -109,56 +111,32 @@ const BusinessCostSplit = () => {
           },
         ];
 
-        setBoxData(formattedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    const fetchServiceCategoryData = async () => {
-      try {
-        const data = await api.getServiceCategoryCost();
-        const formattedServiceCategoryData = Object.keys(data).map(
+        const formattedServiceCategoryData = Object.keys(serviceCategoryCost).map(
           (serviceCategory) => ({
             name: serviceCategory,
-            totalBill: data[serviceCategory].TotalBill,
-            onDemandCost: data[serviceCategory].OnDemandCost,
-            commitmentsCost: data[serviceCategory].CommitmentsCost,
-            savings: data[serviceCategory].Savings,
-            services: Object.keys(data[serviceCategory]).map((service) => ({
+            totalBill: serviceCategoryCost[serviceCategory].TotalBill,
+            onDemandCost: serviceCategoryCost[serviceCategory].OnDemandCost,
+            commitmentsCost: serviceCategoryCost[serviceCategory].CommitmentsCost,
+            savings: serviceCategoryCost[serviceCategory].Savings,
+            services: Object.keys(serviceCategoryCost[serviceCategory]).map((service) => ({
               name: service,
-              totalBill: data[serviceCategory][service].TotalBill,
-              onDemandCost: data[serviceCategory][service].OnDemandCost,
-              commitmentsCost: data[serviceCategory][service].CommitmentsCost,
-              savings: data[serviceCategory][service].Savings,
-              resourceGroups: Object.keys(data[serviceCategory][service]).map(
+              totalBill: serviceCategoryCost[serviceCategory][service].TotalBill,
+              onDemandCost: serviceCategoryCost[serviceCategory][service].OnDemandCost,
+              commitmentsCost: serviceCategoryCost[serviceCategory][service].CommitmentsCost,
+              savings: serviceCategoryCost[serviceCategory][service].Savings,
+              resourceGroups: Object.keys(serviceCategoryCost[serviceCategory][service]).map(
                 (resourceGroup) => ({
                   name: resourceGroup,
-                  totalBill:
-                    data[serviceCategory][service][resourceGroup].TotalBill,
-                  onDemandCost:
-                    data[serviceCategory][service][resourceGroup].OnDemandCost,
-                  commitmentsCost:
-                    data[serviceCategory][service][resourceGroup]
-                      .CommitmentsCost,
-                  savings:
-                    data[serviceCategory][service][resourceGroup].Savings,
-                  resources: Object.keys(
-                    data[serviceCategory][service][resourceGroup]
-                  ).map((resource) => ({
+                  totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup].TotalBill,
+                  onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup].OnDemandCost,
+                  commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup].CommitmentsCost,
+                  savings: serviceCategoryCost[serviceCategory][service][resourceGroup].Savings,
+                  resources: Object.keys(serviceCategoryCost[serviceCategory][service][resourceGroup]).map((resource) => ({
                     name: resource,
-                    totalBill:
-                      data[serviceCategory][service][resourceGroup][resource]
-                        .TotalBill,
-                    onDemandCost:
-                      data[serviceCategory][service][resourceGroup][resource]
-                        .OnDemandCost,
-                    commitmentsCost:
-                      data[serviceCategory][service][resourceGroup][resource]
-                        .CommitmentsCost,
-                    savings:
-                      data[serviceCategory][service][resourceGroup][resource]
-                        .Savings,
+                    totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill,
+                    onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost,
+                    commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost,
+                    savings: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings,
                   })),
                 })
               ),
@@ -166,45 +144,30 @@ const BusinessCostSplit = () => {
           })
         );
 
-        setServiceCategoryData(formattedServiceCategoryData);
-      } catch (error) {
-        console.error("Error fetching service category data:", error);
-      }
-    };
-
-    fetchBoxData();
-    fetchServiceCategoryData();
-  }, []);
-
-  useEffect(() => {
-    const fetchBillAllocation = async () => {
-      try {
-        const billAllocation = await api.getBillAllocation();
         const formattedBillAllocationData = billAllocation.billAllocation.map(
           (item) => ({
             name: item.ApplicationName || "null",
             ownerName: item.OwnerName || "null",
-            totalBill: item.totalBill
-              ? `$${item.totalBill.toFixed(2)}`
-              : "$0.00",
-            normalizedVariation:
-              item.Normalized_Variation_MoM !== null
-                ? `${item.Normalized_Variation_MoM}%`
-                : "N/A",
-            rawVariation:
-              item.rawVariation !== null ? `${item.rawVariation}%` : "null",
+            totalBill: item.totalBill ? `$${item.totalBill.toFixed(2)}` : "$0.00",
+            normalizedVariation: item.Normalized_Variation_MoM !== null
+              ? `${item.Normalized_Variation_MoM}%`
+              : "null",
+            rawVariation: item.rawVariation !== null ? `${item.rawVariation}%` : "null",
             savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
           })
         );
 
+        setBoxData(formattedBoxData);
+        setServiceCategoryData(formattedServiceCategoryData);
         setBillAllocationData(formattedBillAllocationData);
         setFilteredBillAllocationData(formattedBillAllocationData); // Initialize filtered data
+
       } catch (error) {
-        console.error("Error fetching bill allocation:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchBillAllocation();
+    fetchData();
   }, []);
 
   const handleButtonClick = (value) => {
@@ -276,6 +239,7 @@ const BusinessCostSplit = () => {
       columnHead5: "Savings",
     },
   ];
+
   // Remove duplicates for the dropdown options
   const uniqueBillAllocationData = Array.from(
     new Set(billAllocationData.map((item) => item.name))
@@ -328,15 +292,7 @@ const BusinessCostSplit = () => {
         }}
       >
         <InvoiceTableView
-          title={
-            <>
-              Total Bill Allocation
-              <br />
-              across
-              <br />
-              Application/Project
-            </>
-          }
+          title={"Total Bill Allocation\nacross Application"}
           dropdown={
             <FormControl
               variant="outlined"
