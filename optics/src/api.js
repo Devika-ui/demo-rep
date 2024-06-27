@@ -1,12 +1,12 @@
-const apiUrl = 'http://localhost:3001/api/v1';
+const apiUrl = "http://localhost:3001/api/v1";
 
 const api = {
   getMonthlyActualSpend: async () => {
     try {
       const response = await fetch(`${apiUrl}/overview/monthly/spend/actual`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -17,22 +17,21 @@ const api = {
         }),
       });
       if (!response.ok) {
-        throw new Error('Failed to fetch actual spend data');
+        throw new Error("Failed to fetch actual spend data");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching actual spend data:', error);
+      console.error("Error fetching actual spend data:", error);
       throw error;
     }
   },
 
-
   getMonthlyForecastSpend: async () => {
     try {
       const response = await fetch(`${apiUrl}/overview/monthly/forecast`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -43,16 +42,14 @@ const api = {
         }),
       });
       if (!response.ok) {
-        throw new Error('Failed to fetch actual spend data');
+        throw new Error("Failed to fetch actual spend data");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching actual spend data:', error);
+      console.error("Error fetching actual spend data:", error);
       throw error;
     }
   },
-
-
 
   getTotalSubscription: async () => {
     try {
@@ -71,127 +68,141 @@ const api = {
     try {
       const response = await fetch(`${apiUrl}/recommendations/top3`);
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching subscriptions:', error);
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
 
   getDiscountKPICoverage: async () => {
     try {
-      const response = await fetch(`${apiUrl}/overview/KPI/discounts/comittmentbased/coverage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
-            Subscription: ["Subscription2"],
+      const response = await fetch(
+        `${apiUrl}/overview/KPI/discounts/comittmentbased/coverage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching subscriptions:', error);
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
 
   getDiscountKPIUsage: async () => {
     try {
-      const response = await fetch(`${apiUrl}/overview/KPI/discounts/comittmentbased/usage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            Startdate: '2024-03-01',
-            Enddate: '2024-05-31'
+      const response = await fetch(
+        `${apiUrl}/overview/KPI/discounts/comittmentbased/usage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              Startdate: "2024-03-01",
+              Enddate: "2024-05-31",
+            },
+          }),
+        }
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching subscriptions:', error);
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
 
-
   getOverallSavingsRI: async () => {
     try {
-      const response = await fetch(`${apiUrl}/overview/monthly/realized/savings`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
-            Subscription: ["Subscription2"],
+      const response = await fetch(
+        `${apiUrl}/overview/monthly/realized/savings`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching subscriptions:', error);
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
 
   getOverallSavingsStimulated: async () => {
     try {
-      const response = await fetch(`${apiUrl}/overview/monthly/realized/simulatedri`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
-            Subscription: ["Subscription2"],
+      const response = await fetch(
+        `${apiUrl}/overview/monthly/realized/simulatedri`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching subscriptions:', error);
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
-
-
 
   getSubscriptionsByCustomerId: async (customerId) => {
     try {
       const response = await fetch(`${apiUrl}/subscription/${customerId}`);
       if (!response.ok) {
-        throw new Error(`Failed to fetch subscriptions for customer ${customerId}`);
+        throw new Error(
+          `Failed to fetch subscriptions for customer ${customerId}`
+        );
       }
       return await response.json();
     } catch (error) {
-      console.error(`Error fetching subscriptions for customer ${customerId}:`, error);
+      console.error(
+        `Error fetching subscriptions for customer ${customerId}:`,
+        error
+      );
       throw error;
     }
   },
@@ -211,23 +222,19 @@ const api = {
 
   getMapData: async () => {
     try {
-      const response = await fetch(
-        `${apiUrl}/overview/locations/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+      const response = await fetch(`${apiUrl}/overview/locations/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: ["2024-05-01"],
+            Location: [],
           },
-          body: JSON.stringify({
-            CloudServiceProvider: "1",
-            filters: {
-              BillingMonthStartDate: ["2024-05-01"],
-              Location: [],
-              
-            },
-          }),
-        }
-      );
+        }),
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
@@ -237,24 +244,24 @@ const api = {
       throw error;
     }
   },
-  
+
   getClientData: async (customerId) => {
     try {
       const response = await fetch(`${apiUrl}/client`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ customerId })
+        body: JSON.stringify({ customerId }),
       });
- 
+
       if (!response.ok) {
-        throw new Error('Failed to fetch client data');
+        throw new Error("Failed to fetch client data");
       }
- 
+
       return await response.json();
     } catch (error) {
-      console.error('Error fetching client data:', error);
+      console.error("Error fetching client data:", error);
       throw error;
     }
   },
@@ -262,9 +269,9 @@ const api = {
   getBillingCostEachDay: async () => {
     try {
       const response = await fetch(`${apiUrl}/overview/billcost/total`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -275,23 +282,21 @@ const api = {
         }),
       });
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching subscriptions:', error);
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
 
-
-  
   getOverallConsumptionForSubscription: async () => {
     try {
       const response = await fetch(`${apiUrl}/overview/subscriptions/top/2`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -301,20 +306,25 @@ const api = {
         }),
       });
       if (!response.ok) {
-        throw new Error('Failed to fetch overall  consumption subscription data');
+        throw new Error(
+          "Failed to fetch overall  consumption subscription data"
+        );
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching overall consumption subscription data:', error)
+      console.error(
+        "Error fetching overall consumption subscription data:",
+        error
+      );
       throw error;
     }
   },
   getOverallConsumptionForApplication: async () => {
     try {
       const response = await fetch(`${apiUrl}/common/topapplications/2`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -324,354 +334,426 @@ const api = {
         }),
       });
       if (!response.ok) {
-        throw new Error('Failed to fetch overall consumption application data');
+        throw new Error("Failed to fetch overall consumption application data");
       }
       return await response.json();
     } catch (error) {
-      console.error('Error fetching overall consumption application data:', error)
+      console.error(
+        "Error fetching overall consumption application data:",
+        error
+      );
       throw error;
     }
-  }
-,
-getOverallConsumptionForServies: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/common/topservices/2`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          Subscription: ["Subscription2"],
+  },
+  getOverallConsumptionForServies: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/common/topservices/2`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error('Failed to fetch overall consumption services data');
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            Subscription: ["Subscription2"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch overall consumption services data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching overall consumption services data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching overall consumption services data:', error)
-    throw error;
-  }
-},
-getOverallConsumptionForTagCompliance: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/overview/compliance/tag`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          Subscription: ["Subscription2"],
+  },
+  getOverallConsumptionForTagCompliance: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/overview/compliance/tag`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error('Failed to fetch overall consumption tag compliance data');
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            Subscription: ["Subscription2"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(
+          "Failed to fetch overall consumption tag compliance data"
+        );
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(
+        "Error fetching overall consumption tag compliance data:",
+        error
+      );
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching overall consumption tag compliance data:', error)
-    throw error;
-  }
-},
-getAllFilters: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/filters`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch filters `);
+  },
+  getAllFilters: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/filters`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch filters `);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching filters :`, error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error(`Error fetching filters :`, error);
-    throw error;
-  }
-},
-getFilterBasedOnSelection: async (selectedSubscriptions) => {
-  try {
-    const response = await fetch(`${apiUrl}/filters`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
-          Subscription: selectedSubscriptions,
+  },
+  getFilterBasedOnSelection: async (selectedSubscriptions) => {
+    try {
+      const response = await fetch(`${apiUrl}/filters`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error('Failed to fetch filter');
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+            Subscription: selectedSubscriptions,
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch filter");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching filter:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching filter:', error);
-    throw error;
-  }
-},
+  },
 
+  /* with bill overview page  */
 
-/* with business cost split page  */
-
-getApplicationWithTags: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/buisnesscostspliy/header/applicationwithtags`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-          Subscription: ["Subscription2"],
+  getSavings: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/billoverview/header/savings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to savings data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching savings data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
+  },
 
-getApplicationWithoutTags: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/buisnesscostspliy/header/applicationwithouttags`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-          Subscription: ["Subscription2"],
+  getNormalizedVariation: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/normalized-variation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to normalized-variation data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching normalized-variation data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
+  },
+  
 
-getProjectWithTags: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/buisnesscostspliy/header/projectwithtags`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-          Subscription: ["Subscription2"],
+  
+  getInvoiceView: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/billoverview/invoice_view`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
+  },
 
-getProjectWithoutTags: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/buisnesscostspliy/header/projectwithouttags`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-          Subscription: ["Subscription2"],
+  getTotalBillVsSimulatedPaygo: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/billoverview/total_bill_vs_simulated_paygo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getTopServies: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/common/topservices/5`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            Subscription: ["Subscription2"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch  services data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching services data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
-
-/* with business cost split page  */
-
-getApplicationWithTags: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/buisnesscostspliy/header/applicationwithtags`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-          Subscription: ["Subscription2"],
+  },
+  getTopApplications: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/common/topapplications/5`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            Subscription: ["Subscription2"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch  application data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(
+        "Error fetching  application data:",
+        error
+      );
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
+  },
 
-getApplicationWithoutTags: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/buisnesscostspliy/header/applicationwithouttags`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-          Subscription: ["Subscription2"],
-        },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+  /* with business cost split page  */
+
+  getApplicationWithTags: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/buisnesscostspliy/header/applicationwithtags`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
+  },
 
-getProjectWithTags: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/buisnesscostspliy/header/projectwithtags`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-          Subscription: ["Subscription2"],
-        },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+  getApplicationWithoutTags: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/buisnesscostspliy/header/applicationwithouttags`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
+  },
 
-getProjectWithoutTags: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/buisnesscostspliy/header/projectwithouttags`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-          Subscription: ["Subscription2"],
-        },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+  getProjectWithTags: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/buisnesscostspliy/header/projectwithtags`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
+  },
 
-getBillAllocation: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/billoverview/billallocationapplication`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-          Subscription: ["Subscription2"],
-        },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+  getProjectWithoutTags: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/buisnesscostspliy/header/projectwithouttags`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
+  },
 
-
-getServiceCategoryCost: async () => {
-  try {
-    const response = await fetch(`${apiUrl}/buisnesscostspliy/servicecategorycost`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        CloudServiceProvider: "1",
-        filters: {
-          BillingMonthStartDate: ["2024-05-01"],
-          Subscription: ["Subscription2"],
-        },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to data");
+  getBillAllocation: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/billoverview/billallocationapplication`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-},
+  },
 
+  getServiceCategoryCost: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/buisnesscostspliy/servicecategorycost`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-05-01"],
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
 };
 
 export default api;

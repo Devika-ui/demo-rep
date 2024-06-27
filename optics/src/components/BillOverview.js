@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "./Box";
 import BarChartContainer from "./BarChartContainer";
 import PieChartContainer from "./PieChartContainer";
@@ -7,64 +7,198 @@ import Header from "./Header";
 import Subheader from "./SubHeader";
 //import TotalBillView from "./TotalBillView";
 import NavigationBar from "./NavigationBar";
-import ContainerBox from './ContainerBox';
-import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import chartData from './chartData.json'; // Import your chart data
-import trendData from './trendData.json'; // Import your trend data
+import ContainerBox from "./ContainerBox";
+import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import api from "../api";
 
 const BillOverview = () => {
   const [showStackBars, setShowStackBars] = useState(true);
-  const [reportType, setReportType] = useState('');
+  const [reportType, setReportType] = useState("");
+  const [billAllocationData, setBillAllocationData] = useState([]);
+  const [filteredBillAllocationData, setFilteredBillAllocationData] = useState(
+    []
+  );
+  const [invoiceData, setInvoiceData] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [trendData, setTrendData] = useState([]);
+  const [topServices, setTopServices] = useState([]);
+  const [topApplications, setTopApplications] = useState([]);
+  const [boxData, setBoxData] = useState([]);
 
+  const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
 
   const additionalFilters = [
     {
-      label: 'Service Category(s)',
-      name: 'Select Service Category',
+      label: "Service Category(s)",
+      name: "Select Service Category",
       options: [
-        { value: 'Service Category 1', label: 'Service Category 1' },
-        { value: 'Service Category 2', label: 'Service Category 2' },
-        { value: 'Service Category 3', label: 'Service Category 3' }
-      ]
+        { value: "Service Category 1", label: "Service Category 1" },
+        { value: "Service Category 2", label: "Service Category 2" },
+        { value: "Service Category 3", label: "Service Category 3" },
+      ],
     },
     {
-      label: 'Owner(s)',
-      name: 'Select Owner',
+      label: "Owner(s)",
+      name: "Select Owner",
       options: [
-        { value: 'Owner 1', label: 'Owner 1' },
-        { value: 'Owner 2', label: 'Owner 2' },
-        { value: 'Owner 3', label: 'Owner 3' }
-      ]
+        { value: "Owner 1", label: "Owner 1" },
+        { value: "Owner 2", label: "Owner 2" },
+        { value: "Owner 3", label: "Owner 3" },
+      ],
     },
     {
-      label: 'Select Cost',
-      name: 'Select Cost',
+      label: "Select Cost",
+      name: "Select Cost",
       options: [
-        { value: 'Actual Cost', label: 'Actual Cost' },
-        { value: 'Amortized Cost', label: 'Amortized Cost' },
-        { value: 'Cost Unblended', label: 'Cost Unblended' },
-	      {value:'Cost Blended',label:'Cost Blended'},
-      ]
+        { value: "Actual Cost", label: "Actual Cost" },
+        { value: "Amortized Cost", label: "Amortized Cost" },
+        { value: "Cost Unblended", label: "Cost Unblended" },
+        { value: "Cost Blended", label: "Cost Blended" },
+      ],
     },
     {
-      label: 'Environment(s)',
-      name: 'environments',
+      label: "Environment(s)",
+      name: "environments",
       options: [
-        { value: 'Production', label: 'Production' },
-        { value: 'Staging', label: 'Staging' },
-        { value: 'Development', label: 'Development' }
-      ]
+        { value: "Production", label: "Production" },
+        { value: "Staging", label: "Staging" },
+        { value: "Development", label: "Development" },
+      ],
     },
     {
-      label:'Cost Center(s)',
-      name:'Select Cost Center',
+      label: "Cost Center(s)",
+      name: "Select Cost Center",
       options: [
-            { value: 'Cost Center1', label: 'Cost Center1' },
-            { value: 'Cost Center2', label: 'Cost Center2' },
-            { value: 'Cost Center3', label: 'Cost Center3' },
-          ]
+        { value: "Cost Center1", label: "Cost Center1" },
+        { value: "Cost Center2", label: "Cost Center2" },
+        { value: "Cost Center3", label: "Cost Center3" },
+      ],
     },
   ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [
+          billAllocation,
+          invoiceResponse,
+          totalBillVsSimulatedPaygo,
+          topServicesData,
+          topApplicationData,
+          savingsData,
+          normalizedVariationData,
+        ] = await Promise.all([
+          api.getBillAllocation(),
+          api.getInvoiceView(),
+          api.getTotalBillVsSimulatedPaygo(),
+          api.getTopServies(),
+          api.getTopApplications(),
+          api.getSavings(),
+          api.getNormalizedVariation(),
+        ]);
+
+        const formattedBillAllocationData = billAllocation.billAllocation.map(
+          (item) => ({
+            name: item.ApplicationName || "null",
+            ownerName: item.OwnerName || "null",
+            onDemandCost: item.onDemandCost
+              ? `$${item.onDemandCost.toFixed(2)}`
+              : "$0.00",
+            reservedInstanceCost:
+              item.reservedInstanceCost !== null
+                ? `${item.reservedInstanceCost}%`
+                : "null",
+            savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
+            totalBill: item.totalBill
+              ? `$${item.totalBill.toFixed(2)}`
+              : "$0.00",
+          })
+        );
+
+        const formattedInvoiceData = invoiceResponse.invoiceView.map(
+          (item) => ({
+            subscriptionName: item.subscriptionName,
+            onDemandCost: `$${item.onDemandCost.toFixed(2)}`,
+            reservedInstanceCost: `$${item.reservedInstanceCost.toFixed(2)}`,
+            simulatedPayGoCost: `$${item.simulatedPayGoCost.toFixed(2)}`,
+            savings: `$${item.savings.toFixed(2)}`,
+            totalBill: `$${item.totalBill.toFixed(2)}`,
+          })
+        );
+        console.log("TotalBillVsSimulatedPaygo:", totalBillVsSimulatedPaygo);
+        console.log("topApplicationData:", topApplicationData);
+        const formattedChartData = totalBillVsSimulatedPaygo.costsPAYGO.map(
+          (item) => {
+            const savingsItem = totalBillVsSimulatedPaygo.savingsRI.find(
+              (s) => s.modifieddate === item.modifieddate
+            );
+            const simulatedItem = totalBillVsSimulatedPaygo.simulatedpaygo.find(
+              (s) => s.Date === item.modifieddate
+            );
+            return {
+              modifieddate: item.modifieddate.slice(0, 10), // Format the date to "YYYY-MM-DD"
+              costsPAYGO: item.totalCost,
+              savingsRI: savingsItem ? savingsItem.savings : 0,
+              simulated: simulatedItem ? simulatedItem.simulated : 0,
+            };
+          }
+        );
+
+        const formattedTrendData = totalBillVsSimulatedPaygo.simulatedpaygo.map(
+          (item) => ({
+            Date: item.Date.slice(0, 10), // Format the date to "YYYY-MM-DD"
+            simulated: item.simulated,
+          })
+        );
+        const formattedTopServices = topServicesData.topServices.map(
+          (service, index) => ({
+            name: service.Service !== null ? service.Service : "null",
+            value: parseFloat(service.totalcost.toFixed(2)),
+            color: colorPalette[index % colorPalette.length],
+          })
+        );
+        const formattedTopApplications = topApplicationData.topApplications.map(
+          (application, index) => ({
+            name: application.Application !== null ? application.Application : "null",
+            value: parseFloat(application.totalcost.toFixed(2)),
+            color: colorPalette[index % colorPalette.length],
+          })
+        );
+
+        const totalSavings = savingsData.actualCost.toFixed(2);
+        const simulatedBill = savingsData.simulatedCost[0].toFixed(2);
+        const savings = savingsData.savings.toFixed(2);
+        const percentageSavingsOverBill = savingsData.percentageSavings;
+        const savingsOverPayGo = savingsData.savedCostPayGo.toFixed(2);
+        const percentageSavingsOverPayGo = savingsData.percentageSavingsOverPayGo !== null ? savingsData.percentageSavingsOverPayGo : "0.00";
+        const normalizedVariation = normalizedVariationData.Normalized_Variation_MoM || "0.00";
+
+        const dataSet1 = [
+          { number:  `$${totalSavings}`, text: "Total Bill" },
+          { number: `$${simulatedBill}`, text: "Simulated Bill" },
+          { number: `$${savings}`, text: "Total Savings" },
+          { number: `${percentageSavingsOverBill}%`, text: "% Savings over Bill" },
+          { number: `${percentageSavingsOverPayGo}%`, text: "% Savings over Pay-as-you-go" },
+          { number: `${normalizedVariation}%`, text: "Normalized Variation" }, 
+        ];
+
+        setBillAllocationData(formattedBillAllocationData);
+        setFilteredBillAllocationData(formattedBillAllocationData);
+        setInvoiceData(formattedInvoiceData);
+        setChartData(formattedChartData);
+        setTrendData(formattedTrendData);
+        setTopServices(formattedTopServices);
+        setTopApplications(formattedTopApplications);
+        setBoxData(dataSet1);
+        console.log("formatedtopApplications:" ,formattedTopApplications);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
     if (value === "Azure") {
@@ -74,81 +208,36 @@ const BillOverview = () => {
     }
   };
   const handleReportTypeChange = (event) => {
-    setReportType(event.target.value);
+    const selectedReportType = event.target.value;
+    setReportType(selectedReportType);
+
+    if (selectedReportType) {
+      const filteredData = billAllocationData.filter(
+        (item) => item.name === selectedReportType
+      );
+      setFilteredBillAllocationData(filteredData);
+    } else {
+      setFilteredBillAllocationData(billAllocationData);
+    }
   };
 
-  const data1 = [
-    { name: "App 1", value: Math.floor(Math.random() * 100), color: "#0099C6" },
-    { name: "App 2", value: Math.floor(Math.random() * 100), color: "#BA741A" },
-    { name: "App 3", value: Math.floor(Math.random() * 100), color: "#FFCD00" },
-    { name: "App 4", value: Math.floor(Math.random() * 100), color: "#00968F" },
-    { name: "App 5", value: Math.floor(Math.random() * 100), color: "#5F249F" },
-  ];
-
-  const data2 = [
-    {
-      name: "Virtual Machines",
-      value: Math.floor(Math.random() * 100),
-      color: "#0099C6",
-    },
-    {
-      name: "Storage",
-      value: Math.floor(Math.random() * 100),
-      color: "#BA741A",
-    },
-    {
-      name: "Azure NetApp Files",
-      value: Math.floor(Math.random() * 100),
-      color: "#FFCD00",
-    },
-    {
-      name: "Bandwidth",
-      value: Math.floor(Math.random() * 100),
-      color: "#00968F",
-    },
-    { name: "Files", value: Math.floor(Math.random() * 100), color: "#5F249F" },
-  ];
-
-  const dataSet1 = [
-    { number: "$1.40M", text: "Total Bill" },
-    { number: "$2.00M", text: "Simulated Bill" },
-    { number: "$570K", text: "Total Savings" },
-    { number: "52.3%", text: "%Savings over Bill" },
-    { number: "61.3%", text: "%Savings over Pay-as-you-go" },
-    { number: "10.2%", text: "Normalized Variation" },
-    { number: "13.7%", text: "%Raw Variation" },
-  ];
-
-  const dummyData = [
-    { name: 'Subscription 1', onDemandCost: '$100', reservedInstancesCost: '$200', simulatedPAYGO: '$150', savings: '$50', totalBill: '$400' },
-    { name: 'Subscription 2', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
-    { name: 'Subscription 3', onDemandCost: '$120', reservedInstancesCost: '$180', simulatedPAYGO: '$130', savings: '$60', totalBill: '$490' },
-    // Add more dummy data as needed
-  ];
 
   const columns = [
-    { key: 'name', label: 'Subscription/Account Name' },
-    { key: 'onDemandCost', label: 'On Demand Cost' },
-    { key: 'reservedInstancesCost', label: 'Reserved Instances Cost' },
-    { key: 'simulatedPAYGO', label: 'Simulated PAYGO' },
-    { key: 'savings', label: 'Savings' },
-    { key: 'totalBill', label: 'Total Bill' },
+    { key: "subscriptionName", label: "Subscription/Account Name" },
+    { key: "onDemandCost", label: "On Demand Cost" },
+    { key: "reservedInstanceCost", label: "Reserved Instances Cost" },
+    { key: "simulatedPayGoCost", label: "Simulated PAYGO" },
+    { key: "savings", label: "Savings" },
+    { key: "totalBill", label: "Total Bill" },
   ];
 
   const columns1 = [
-    { key: 'name', label: 'Application Name' },
-    { key: 'ownerName', label:'Owner Name'},
-    { key: 'onDemandCost', label: 'On Demand Cost' },
-    { key: 'reservedInstancesCost', label: 'Reserved Instances Cost' },
-    { key: 'savings', label: 'Savings' },
-    { key: 'totalBill', label: 'Total Bill' },
-  ];
-
-  const dummyData1 = [
-    { name: 'Subscription 1',ownerName:'Mark', onDemandCost: '$100', reservedInstancesCost: '$200', savings: '$50', totalBill: '$400' },
-    { name: 'Subscription 2',ownerName:'Jack', onDemandCost: '$120', reservedInstancesCost: '$180',  savings: '$60', totalBill: '$490' },
-    { name: 'Subscription 3',ownerName:'John', onDemandCost: '$100', reservedInstancesCost: '$180',  savings: '$60', totalBill: '$490' },
-    // Add more dummy data as needed
+    { key: "name", label: "Application Name" },
+    { key: "ownerName", label: "Owner Name" },
+    { key: "onDemandCost", label: "On Demand Cost" },
+    { key: "reservedInstanceCost", label: "Reserved Instances Cost" },
+    { key: "savings", label: "Savings" },
+    { key: "totalBill", label: "Total Bill" },
   ];
 
   const pieChartContainerStyle = {
@@ -162,7 +251,11 @@ const BillOverview = () => {
     paddingTop: "45px",
     marginBottom: "110px", // Adjust individual chart width
   };
-  
+
+  // Remove duplicates for the dropdown options
+  const uniqueBillAllocationData = Array.from(
+    new Set(billAllocationData.map((item) => item.name))
+  ).map((name) => billAllocationData.find((item) => item.name === name));
 
   return (
     <div>
@@ -184,8 +277,14 @@ const BillOverview = () => {
       <NavigationBar />
 
       {/* Boxes */}
-      <div style={{ display: "flex", justifyContent: "center",marginLeft:"-20px" }}>
-        <ContainerBox data={dataSet1} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginLeft: "-20px",
+        }}
+      >
+        <ContainerBox data={boxData} />
       </div>
 
       {/* Chart and Table Containers */}
@@ -207,16 +306,16 @@ const BillOverview = () => {
             paddingLeft: "10px",
             paddingRight: "10px",
             width: "128%", // Ensures the container takes full width
-            marginLeft:"-125px",
+            marginLeft: "-125px",
           }}
         >
-          <div style={{ flex: 1, marginLeft:"-10px" }}>
+          <div style={{ flex: 1, marginLeft: "-10px" }}>
             <BarChartContainer chartData={chartData} trendData={trendData} />
           </div>
-          <div style={{ flex: 1, marginLeft:"-115px", marginTop:"10px" }}>
+          <div style={{ flex: 1, marginLeft: "-115px", marginTop: "10px" }}>
             <InvoiceTableView
               title="Invoice View"
-              tableData={dummyData}
+              tableData={invoiceData}
               tableHeight="auto"
               tableWidth="595px"
               columns={columns}
@@ -232,25 +331,32 @@ const BillOverview = () => {
             justifyContent: "space-between",
             width: "70%", // Ensures the container takes full width
             marginBottom: "20px", // Added space between pie chart and next section
-            marginLeft : "-280px",
-            marginTop:"-50px",
+            marginLeft: "-280px",
+            marginTop: "-50px",
           }}
         >
           <div style={{ flex: 1, marginRight: "20px" }}>
             <PieChartContainer
               title1="Top 5 Applications"
-              data1={data1}
+              data1={topApplications}
               title2="Top 5 Services"
-              data2={data2}
+              data2={topServices}
               containerStyle={pieChartContainerStyle}
               chartStyle={pieChartStyle}
             />
           </div>
-          <div style={{ flex: 1,marginLeft:"-7px" }}>
-          <InvoiceTableView
-                title={"Total Bill Allocation across\nApplication/Project"} 
+          <div style={{ flex: 1, marginLeft: "-7px" }}>
+            <InvoiceTableView
+              title={"Total Bill Allocation\nacross Application"}
               dropdown={
-                <FormControl variant="outlined" style={{ minWidth: 110, marginLeft:"-140px",marginRight:"-10px"}}>
+                <FormControl
+                  variant="outlined"
+                  style={{
+                    minWidth: 110,
+                    marginLeft: "-140px",
+                    marginRight: "-10px",
+                  }}
+                >
                   <InputLabel id="report-type-label">Group by</InputLabel>
                   <Select
                     labelId="report-type-label"
@@ -259,22 +365,24 @@ const BillOverview = () => {
                     onChange={handleReportTypeChange}
                     label="Group by Application"
                   >
-                    <MenuItem value="">Group by Application</MenuItem>
-                    <MenuItem value="app1">Application 1</MenuItem>
-                    <MenuItem value="app2">Application 2</MenuItem>
-                    <MenuItem value="app3">Application 3</MenuItem>
+                    <MenuItem value="">All Applications</MenuItem>
+                    {uniqueBillAllocationData.map((item) => (
+                      <MenuItem key={item.name} value={item.name}>
+                        {item.name === "null" ? "null" : item.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               }
-              tableData={dummyData1}
+              tableData={filteredBillAllocationData}
               tableHeight="auto"
               tableWidth="600px"
               columns={columns1}
             />
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };
 
