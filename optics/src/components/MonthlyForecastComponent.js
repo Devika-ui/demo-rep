@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Tooltip } from '@mui/material';
-import '../css/MonthlySpendComponent.scss';
-import iIcon from '../images/Iicon.png';
-import upArrow from '../images/Up Arrow.png';
-import api from '../api.js';
+import React, { useEffect, useState } from "react";
+import { Tooltip } from "@mui/material";
+import "../css/MonthlySpendComponent.scss";
+import iIcon from "../images/Iicon.png";
+import upArrow from "../images/Up Arrow.png";
+import downArrow from "../images/Down Arrow.png";
+import api from "../api.js";
 
 const MonthlyForecastComponent = () => {
   const [lastMonthCost, setLastMonthCost] = useState(null);
@@ -30,16 +31,57 @@ const MonthlyForecastComponent = () => {
     fetchData();
   }, []);
 
+  const GrowthIndicator = ({ percentageIncrease }) => {
+    let imageSrc;
+    let altText;
+
+    if (percentageIncrease > 0) {
+      imageSrc = upArrow;
+      altText = "Upward Trend";
+    } else if (percentageIncrease < 0) {
+      imageSrc = downArrow;
+      altText = "Downward Trend";
+    } else {
+      imageSrc = null;
+      altText = "No Change";
+    }
+    return (
+      <div className="right">
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {percentageIncrease !== null ? (
+            <strong>{percentageIncrease.toFixed(2)}%</strong>
+          ) : (
+            <strong>N/A</strong>
+          )}
+          {imageSrc && (
+            <span className="icon" style={{ marginLeft: "8px" }}>
+              <img
+                src={imageSrc}
+                alt={altText}
+                style={{ width: "20px", height: "20px" }}
+              />
+            </span>
+          )}
+        </div>
+        <div>Over last month</div>
+      </div>
+    );
+  };
+
   return (
     <div className="monthly-forecast-container">
       {/* Top Part */}
       <div className="top-part">
         <div className="left">
-          <strong style={{ fontFamily: 'sans-serif' }}>Monthly Forecast</strong>
+          <strong style={{ fontFamily: "sans-serif" }}>Monthly Forecast</strong>
         </div>
         <div className="right">
           <Tooltip title="Monthly Forecast">
-            <img style={{ height: '16px', width: '16px' }} src={iIcon} alt="I-icon" />
+            <img
+              style={{ height: "16px", width: "16px" }}
+              src={iIcon}
+              alt="I-icon"
+            />
           </Tooltip>
         </div>
       </div>
@@ -53,9 +95,11 @@ const MonthlyForecastComponent = () => {
             <strong>Loading...</strong>
           )}
         </div>
-        <div className="right">
-          <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
-            <span className="icon"><img src={upArrow} alt="AzureLogo" /></span>
+        {/* <div className="right">
+          <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+            <span className="icon">
+              <img src={upArrow} alt="AzureLogo" />
+            </span>
             {percentageIncrease !== null ? (
               <strong>{percentageIncrease.toFixed(2)}%</strong>
             ) : (
@@ -63,7 +107,8 @@ const MonthlyForecastComponent = () => {
             )}
           </div>
           <div>Over last month</div>
-        </div>
+        </div> */}
+        <GrowthIndicator percentageIncrease={percentageIncrease} />
       </div>
     </div>
   );
