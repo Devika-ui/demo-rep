@@ -40,8 +40,8 @@ export const useAuth = () => {
     isRun.current = true;
 
     const keycloak = new Keycloak({
-      url: "http://127.0.0.1:8180/",
-      realm: "Finpos",
+      url: "http://127.0.0.1:8080/",
+      realm: "Finops",
       clientId: "Optics",
     });
 
