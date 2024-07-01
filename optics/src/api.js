@@ -726,6 +726,33 @@ const api = {
       throw error;
     }
   },
+  getDataForAnomaly: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/businesscostsplit/anomaly`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: ["2024-04-01","2024-05-01", "2024-06-01"],
+            Subscription: ["Subscription2"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      //return await response.json();
+      const data = await response.json();
+      console.log("API Response Data:", data); // Log the response data
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
 
   getServiceCategoryCost: async () => {
     try {
