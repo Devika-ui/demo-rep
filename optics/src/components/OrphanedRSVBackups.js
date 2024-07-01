@@ -5,11 +5,12 @@ import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
 import ContainerBox from "./ContainerBox";
 import HorizontalBarGraph from "./HorizontalBarGraph";
-import CategoriesBarChart from "./CategoriesBarChart";
+//import CategoriesBarChart from "./CategoriesBarChart";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
 import Button from "@material-ui/core/Button";
 import ServiceCategory from "./ServiceCategory";
+import GenericBarChart from "./GenericBarChart";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -66,7 +67,7 @@ const OrphanedRSVBackups = () => {
         { name: "Subscription 5", count: 125 },
       ];
 
-      const data = [
+      const data1 = [
         { name: "SQL Database", 
       "Unhealthy" : "9" },
        { name: "Virtual Machine", 
@@ -358,6 +359,14 @@ const OrphanedRSVBackups = () => {
           ],
         },
       ];
+      const bars = [
+        {
+            dataKey: 'Unhealthy',
+            fill: '#2CAFFE',
+            name: 'Unhealthy',
+            barSize: 20,
+         },
+      ];
       
       return (
         <div>
@@ -396,9 +405,12 @@ const OrphanedRSVBackups = () => {
     />
   </div>
   <div style={{ width: "55%",marginLeft:"-20px" }}>
-    <CategoriesBarChart
+    <GenericBarChart
       title="Categories with Unhealthy Protection Status"
-      data={data}
+       yAxisTicks={[0, 5, 10, 15, 20,25]}
+      yAxisDomain={[0, 25]}
+      data={data1}
+      bars={bars}
       //yAxisLabel="Cost (in thousands)"
     />
   </div>

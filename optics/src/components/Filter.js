@@ -56,14 +56,22 @@ const Filter = ({ additionalFilters = [] }) => {
   };
 
   const handleFilterChange = async (filterType, values) => {
-    setSelectedFilters({ ...selectedFilters, [filterType]: values });
-  
+    if (values.length === filterOptions[filterType].length) {
+      // "Select All" case
+      setSelectedFilters({ ...selectedFilters, [filterType]: values });
+    } else if (values.length > 1) {
+      // Restrict to single selection
+      setSelectedFilters({ ...selectedFilters, [filterType]: [values[values.length - 1]] });
+    } else {
+      setSelectedFilters({ ...selectedFilters, [filterType]: values });
+    }
+
     if (filterType === 'subscriptions' && values.length > 0) {
       const selectedSubscriptions = values.map(sub => sub.value);
       try {
         const updatedData = await api.getFilterBasedOnSelection(selectedSubscriptions);
         setFilterOptions({
-          subscriptions: transformToOptions(updatedData.subscriptionName), // Still need this as per your requirements
+          subscriptions: transformToOptions(updatedData.subscriptionName),
           businessUnits: transformToOptions(updatedData.tags_BU_company),
           locations: transformToOptions(updatedData.resourceLocation),
           applications: transformToOptions(updatedData.tags_AppID_AppName),
@@ -94,7 +102,6 @@ const Filter = ({ additionalFilters = [] }) => {
       zIndex: '1040',
     },
   };
- 
 
   const handleApplyFilters = () => {
     console.log('Selected filters:', selectedFilters);
@@ -123,13 +130,20 @@ const Filter = ({ additionalFilters = [] }) => {
         contentLabel='Filter Dialog'
       >
         <div className="filter-options-container">
-          {/* Subscriptions Unit dropdown */}
+          {/* Subscriptions dropdown */}
           <div className="filter-option">
             <label>Subscriptions(s)</label>
             <MultiSelect
               options={filterOptions.subscriptions}
-              onChange={(values) => handleFilterChange('subscriptions', values)}
               value={selectedFilters.subscriptions}
+              onChange={(values) => handleFilterChange('subscriptions', values)}
+              labelledBy="Select"
+              overrideStrings={{
+                selectSomeItems: "Select...",
+                allItemsAreSelected: "All items are selected",
+                selectAll: "Select All",
+                search: "Search",
+              }}
             />
           </div>
           {/* Business Unit dropdown */}
@@ -137,64 +151,100 @@ const Filter = ({ additionalFilters = [] }) => {
             <label>Business Unit(s)</label>
             <MultiSelect
               options={filterOptions.businessUnits}
-              onChange={(values) => handleFilterChange('businessUnits', values)}
               value={selectedFilters.businessUnits}
+              onChange={(values) => handleFilterChange('businessUnits', values)}
+              labelledBy="Select"
+              overrideStrings={{
+                selectSomeItems: "Select...",
+                allItemsAreSelected: "All items are selected",
+                selectAll: "Select All",
+                search: "Search",
+              }}
             />
           </div>
-
           {/* Location dropdown */}
           <div className="filter-option">
             <label>Location(s)</label>
             <MultiSelect
               options={filterOptions.locations}
-              onChange={(values) => handleFilterChange('locations', values)}
               value={selectedFilters.locations}
+              onChange={(values) => handleFilterChange('locations', values)}
+              labelledBy="Select"
+              overrideStrings={{
+                selectSomeItems: "Select...",
+                allItemsAreSelected: "All items are selected",
+                selectAll: "Select All",
+                search: "Search",
+              }}
             />
           </div>
-
           {/* Application dropdown */}
           <div className="filter-option">
             <label>Application(s)</label>
             <MultiSelect
               options={filterOptions.applications}
-              onChange={(values) => handleFilterChange('applications', values)}
               value={selectedFilters.applications}
+              onChange={(values) => handleFilterChange('applications', values)}
+              labelledBy="Select"
+              overrideStrings={{
+                selectSomeItems: "Select...",
+                allItemsAreSelected: "All items are selected",
+                selectAll: "Select All",
+                search: "Search",
+              }}
             />
           </div>
-
           {/* Project dropdown */}
           <div className="filter-option">
             <label>Project(s)</label>
             <MultiSelect
               options={filterOptions.projects}
-              onChange={(values) => handleFilterChange('projects', values)}
               value={selectedFilters.projects}
+              onChange={(values) => handleFilterChange('projects', values)}
+              labelledBy="Select"
+              overrideStrings={{
+                selectSomeItems: "Select...",
+                allItemsAreSelected: "All items are selected",
+                selectAll: "Select All",
+                search: "Search",
+              }}
             />
           </div>
-
           {/* Environment dropdown */}
           <div className="filter-option">
             <label>Environment(s)</label>
             <MultiSelect
               options={filterOptions.environments}
-              onChange={(values) => handleFilterChange('environments', values)}
               value={selectedFilters.environments}
+              onChange={(values) => handleFilterChange('environments', values)}
+              labelledBy="Select"
+              overrideStrings={{
+                selectSomeItems: "Select...",
+                allItemsAreSelected: "All items are selected",
+                selectAll: "Select All",
+                search: "Search",
+              }}
             />
           </div>
-
           {/* Additional filters from props */}
           {additionalFilters?.map((filter, index) => (
             <div key={index} className="filter-option">
               <label>{filter.label}</label>
               <MultiSelect
                 options={filter.options || []}
-                onChange={(values) => handleFilterChange(filter.name, values)}
                 value={selectedFilters[filter.name] || []}
+                onChange={(values) => handleFilterChange(filter.name, values)}
+                labelledBy="Select"
+                overrideStrings={{
+                  selectSomeItems: "Select...",
+                  allItemsAreSelected: "All items are selected",
+                  selectAll: "Select All",
+                  search: "Search",
+                }}
               />
             </div>
           ))}
         </div>
-
         {/* Buttons */}
         <div className="filter-buttons" style={{ textAlign: 'right', marginTop: '20px' }}>
           <button onClick={handleApplyFilters} style={{ backgroundColor: '#5F249F', color: '#fff', marginRight: '10px', padding: '10px 20px', fontSize: '14px', borderRadius: '17px', minWidth: '70px' }}>Apply</button>

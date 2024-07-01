@@ -6,12 +6,13 @@ import NavigationBar from './NavigationBar';
 import ContainerBox from './ContainerBox';
 import PieChartContainer from './PieChartContainer';
 import ServiceCategory from './ServiceCategory';
-import HyperScalarBarChart from './HyperScalarBarChart';
+//import HyperScalarBarChart from './HyperScalarBarChart';
 import { Select, MenuItem } from "@mui/material";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
 import CostsAmortized from "./CostsAmortized.js";
 import Button from "@material-ui/core/Button";
+import GenericBarChart from './GenericBarChart.js';
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -463,6 +464,27 @@ const HyperScalarAdvisor = () => {
     marginBottom: "85px", // Adjust individual chart width
   };
 
+  const bars = [
+    {
+      dataKey: 'High',
+      fill: '#2CAFFE',
+      name: 'High',
+      barSize: 20,
+    },
+    {
+      dataKey: 'Medium',
+      fill: '#006975',
+      name: 'Medium',
+      barSize: 20,
+    },
+    {
+      dataKey: 'Low',
+      fill: '#330072',
+      name: 'Low',
+      barSize: 20,
+     },
+  ];
+
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
@@ -499,21 +521,22 @@ const HyperScalarAdvisor = () => {
       >
         <div style={{ marginTop: "-20px", width: "50%" }}>
           <div style={{ marginTop: "20px", paddingRight: "18px" }}>
-           <HyperScalarBarChart
+           <GenericBarChart
             title="Comparison of Subscriptions Vs Impact"
             data={data}
+            bars={bars}
           >
-              <Select
+            <Select
                 value={groupBy}
                 onChange={handleGroupByChange}
                 displayEmpty
                 className={classes.select}
               >
-                <MenuItem value="">Choose Recommendation Category</MenuItem>
+              <MenuItem value="">Choose Recommendation Category</MenuItem>
               <MenuItem value="auto-scale">Auto-Scale</MenuItem>
               <MenuItem value="rightsize">Right size</MenuItem>
               </Select>
-            </HyperScalarBarChart>
+            </GenericBarChart>
           </div>
         </div>
       </div>

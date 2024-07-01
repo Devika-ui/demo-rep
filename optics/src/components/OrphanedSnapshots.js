@@ -381,6 +381,20 @@ const OrphanedSnapshots = () => {
     { name: "West Europe", count: 75 },
     { name: "West US 2", count: 125 },
   ];
+  const bars = [
+    {
+      dataKey: 'On Demand Cost',
+      fill: '#2CAFFE',
+      name: 'On Demand Cost',
+      barSize: 20,
+    },
+    {
+      dataKey: 'Consumed Meter',
+      fill: '#330072',
+      name: 'Consumed Meter',
+      barSize: 20,
+    },
+  ];
 
   return (
     <div>
@@ -425,6 +439,7 @@ const OrphanedSnapshots = () => {
               title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
               data={data}
               yAxisLabel="Cost (in thousands)"
+              bars={bars}
             >
               <Select
                 value={groupBy}
@@ -433,9 +448,9 @@ const OrphanedSnapshots = () => {
                 className={classes.select}
               >
                 <MenuItem value="">Choose Recommendation</MenuItem>
-                <MenuItem value="subscription">Subscription</MenuItem>
-                <MenuItem value="resourceGroup">Resource Group</MenuItem>
-                <MenuItem value="region">Region</MenuItem>
+                <MenuItem value="subscription">UnattachedManagedDisks</MenuItem>
+                <MenuItem value="resourceGroup">OrphanedSnapshots</MenuItem>
+                <MenuItem value="region">Orphaned Attached  Disks for De-allocated VMs</MenuItem>
               </Select>
             </GenericBarChart>
           </div>

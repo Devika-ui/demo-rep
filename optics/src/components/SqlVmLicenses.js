@@ -488,6 +488,20 @@ const SqlVmLicenses = () => {
     paddingTop: "45px",
     marginBottom: "110px", // Adjust individual chart width
   };
+  const bars = [
+    {
+      dataKey: 'On Demand Cost',
+      fill: '#2CAFFE',
+      name: 'On Demand Cost',
+      barSize: 20,
+    },
+    {
+      dataKey: 'Consumed Meter',
+      fill: '#330072',
+      name: 'Consumed Meter',
+      barSize: 20,
+    },
+  ];
 
   return (
     <div>
@@ -529,6 +543,7 @@ const SqlVmLicenses = () => {
               title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
               data={data}
               yAxisLabel="Cost (in thousands)"
+              bars={bars}
             >
               <Select
                 value={groupBy}

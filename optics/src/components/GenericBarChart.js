@@ -56,9 +56,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Custom tick formatter for YAxis
-const formatYAxis = (tickItem) => `${tickItem / 1000}k`;
-
 // Custom legend component
 const CustomLegend = ({ payload }) => {
   const classes = useStyles();
@@ -77,8 +74,24 @@ const CustomLegend = ({ payload }) => {
   );
 };
 
-const GenericBarChart = ({ title, data, yAxisLabel, children }) => {
+const GenericBarChart = ({
+  title,
+  data,
+  yAxisLabel,
+  yAxisTicks = [0, 100000, 200000, 300000, 400000, 500000],
+  yAxisDomain = [0, 500000],
+  bars,
+  children,
+}) => {
   const classes = useStyles();
+
+  // Custom tick formatter for YAxis
+  const formatYAxis = (tickItem) => {
+    if (yAxisTicks.some(tick => tick >= 1000)) {
+      return `${tickItem / 1000}k`;
+    }
+    return tickItem.toString();
+  };
 
   return (
     <Paper className={classes.container}>
@@ -93,8 +106,8 @@ const GenericBarChart = ({ title, data, yAxisLabel, children }) => {
           <XAxis dataKey="name" tick={{ fontSize: 8 }} />
           <YAxis
             tick={{ fontSize: 12 }}
-            domain={[0, 500000]}
-            ticks={[0, 100000, 200000, 300000, 400000, 500000]}
+            domain={yAxisDomain}
+            ticks={yAxisTicks}
             tickFormatter={formatYAxis}
             label={{
               value: yAxisLabel,
@@ -107,18 +120,9 @@ const GenericBarChart = ({ title, data, yAxisLabel, children }) => {
           />
           <Tooltip />
           <Legend content={<CustomLegend />} />
-          <Bar
-            dataKey="On Demand Cost"
-            fill="#2CAFFE"
-            name="On Demand Cost"
-            barSize={20}
-          />
-          <Bar
-            dataKey="Consumed Meter"
-            fill="#330072"
-            name="Consumed Meter"
-            barSize={20}
-          />
+          {bars.map((bar, index) => (
+            <Bar key={index} {...bar} />
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </Paper>
