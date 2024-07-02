@@ -68,7 +68,7 @@ const CustomLegend = (props) => {
   );
 };
 
-const HorizontalBarGraph = ({ data, title, width, height }) => {
+const HorizontalBarGraph = ({ data, title, width, height, xAxisLabel, yAxisLabel, barName }) => {
   const classes = useStyles();
 
   return (
@@ -91,7 +91,7 @@ const HorizontalBarGraph = ({ data, title, width, height }) => {
             domain={[0, Math.max(...data.map((item) => item.count))]}
             ticks={[0, 50, 100, 150, 200]}
             label={{
-              value: "Count of Snapshots",
+              value: xAxisLabel,
               position: "insideBottomRight",
               offset: -10,
               fontSize: 12,
@@ -104,7 +104,7 @@ const HorizontalBarGraph = ({ data, title, width, height }) => {
             dataKey="name"
             tick={{ fontSize: 12 }}
             label={{
-              value: "Location",
+              value: yAxisLabel,
               angle: -90,
               position: "insideLeft",
               dx: -20, // Adjust this value to move the label further to the left
@@ -117,7 +117,7 @@ const HorizontalBarGraph = ({ data, title, width, height }) => {
             verticalAlign="top"
             align="right"
           />
-          <Bar dataKey="count" fill="#330072" name="Disk Count" barSize={15} />
+          <Bar dataKey="count" fill="#330072" name={barName} barSize={15} />
         </BarChart>
       </ResponsiveContainer>
     </Paper>
@@ -134,12 +134,18 @@ HorizontalBarGraph.propTypes = {
   title: PropTypes.string,
   width: PropTypes.string,
   height: PropTypes.number,
+  xAxisLabel: PropTypes.string,
+  yAxisLabel: PropTypes.string,
+  barName: PropTypes.string,
 };
 
 HorizontalBarGraph.defaultProps = {
   title: "Orphaned Snapshots across locations",
   width: "50%",
   height: 373,
+  xAxisLabel: "Count of Snapshots",
+  yAxisLabel: "Location",
+  barName: "Disk Count",
 };
 
 export default HorizontalBarGraph;

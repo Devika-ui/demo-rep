@@ -402,16 +402,18 @@ const OrphanedRSVBackups = () => {
       title="Comparison of Subscriptions Vs Orphan Backup Counts "
       width="100%"
       height={373}
+      xAxisLabel=""
+      yAxisLabel=""
+      barName="Backup Counts"
     />
   </div>
   <div style={{ width: "55%",marginLeft:"-20px" }}>
     <GenericBarChart
       title="Categories with Unhealthy Protection Status"
-       yAxisTicks={[0, 5, 10, 15, 20,25]}
+      yAxisTicks={[0, 5, 10, 15, 20,25]}
       yAxisDomain={[0, 25]}
       data={data1}
       bars={bars}
-      //yAxisLabel="Cost (in thousands)"
     />
   </div>
   {/* Separate container for buttons */}

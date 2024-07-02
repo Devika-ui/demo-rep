@@ -5,7 +5,8 @@ import AWSBox from '../images/AWS box.png';
 import FilterIcon from '../images/filter.png';
 import LIcon from '../images/Iicon.png';
 import '../css/Subheader.scss';
-import Filter from './Filter.js';
+import AzureFilter from './AzureFilter';
+import AWSFilter from './AWSFilter';
 import { Tooltip } from '@mui/material';
 
 const SubHeader = ({ title, additionalFilters }) => {
@@ -24,13 +25,13 @@ const SubHeader = ({ title, additionalFilters }) => {
           <img src={AzureBox} alt="Azure" style={{ width: '30px', height: '34px', marginRight: '5px' }} />
           <div style={{ fontWeight: 'bold', fontSize: '18px', paddingRight: '5px', marginTop: '5px' }}>Azure</div>
           <img src={FilterIcon} alt="Filter" style={{ width: '20px', height: '20px', marginRight: '5px', marginTop: '5px' }} />
-          <Filter additionalFilters={additionalFilters} />
+          <AzureFilter additionalFilters={additionalFilters} />
         </div>
         <div className='AWSBox' style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
           <img src={AWSBox} alt="AWS" style={{ width: '30px', height: '34px', marginRight: '5px' }} />
           <div style={{ fontWeight: 'bold', fontSize: '18px', paddingRight: '5px', marginTop: '5px' }}>AWS</div>
           <img src={FilterIcon} alt="Filter" style={{ width: '20px', height: '20px', marginRight: '5px', marginTop: '5px' }} />
-          <Filter additionalFilters={additionalFilters} />
+          <AWSFilter additionalFilters={additionalFilters} />
         </div>
       </div>
     </div>
@@ -50,7 +51,7 @@ SubHeader.propTypes = {
 };
 
 SubHeader.defaultProps = {
-  additionalFilters: [], // Provide a default empty array
+  additionalFilters: [],
 };
 
 export default SubHeader;

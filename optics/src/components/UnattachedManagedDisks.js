@@ -380,7 +380,21 @@ const UnattachedManagedDisks = () => {
     { name: "West Europe", count: 75 },
     { name: "West US 2", count: 125 },
   ];
-
+  const bars = [
+    {
+      dataKey: 'On Demand Cost',
+      fill: '#2CAFFE',
+      name: 'On Demand Cost',
+      barSize: 20,
+    },
+    {
+      dataKey: 'Consumed Meter',
+      fill: '#330072',
+      name: 'Consumed Meter',
+      barSize: 20,
+    },
+  ];
+  const formatYAxisSimple = (tickItem) => tickItem.toString();
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
@@ -424,6 +438,8 @@ const UnattachedManagedDisks = () => {
               title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
               data={data}
               yAxisLabel="Cost (in thousands)"
+              bars={bars}
+              yAxisTickFormatter={formatYAxisSimple}
             >
               <Select
                 value={groupBy}
