@@ -73,7 +73,7 @@ const PieChartContainer = ({
                 align="right"
                 verticalAlign="middle"
                 layout="vertical"
-                wrapperStyle={{ right: 0, fontSize: "7px" }}
+                wrapperStyle={{ right: 0, fontSize: "12px" }} // Adjust the font size here
               />
             </PieChart>
           </ResponsiveContainer>
@@ -96,7 +96,7 @@ const PieChartContainer = ({
                 align="right"
                 verticalAlign="middle"
                 layout="vertical"
-                wrapperStyle={{ right: 0, fontSize: "7px" }}
+                wrapperStyle={{ right: 0, fontSize: "10px" }} // Adjust the font size here
               />
             </PieChart>
           </ResponsiveContainer>
