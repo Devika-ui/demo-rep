@@ -48,8 +48,14 @@ const ConsumptionHighlights = () => {
         },
       },
     },
-    labels: ['Application', 'Owner', 'Project', 'Business Unit'],
-    series: tagCompliance.map(tag => (isNaN(parseFloat(tag.compliance)) ? 0 : parseFloat(tag.compliance) * 100)),
+    labels: ['Application', 'Owner', 'Project', 'Business Unit','Environment'],
+    series: [
+      (tagCompliance.applicationpercentage * 100).toFixed(2),
+      (tagCompliance.ownerpercentage * 100).toFixed(2),
+      (tagCompliance.projectpercentage * 100).toFixed(2),
+      (tagCompliance.bupercentage * 100).toFixed(2),
+      (tagCompliance.environmentpercentage * 100).toFixed(2)
+    ],
   };
  
   return (

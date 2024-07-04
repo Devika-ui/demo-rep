@@ -21,7 +21,7 @@ const KPISection = () => {
         setPercentCoverage(coverageData.coverage);
 
         const usageData = await api.getDiscountKPIUsage();
-        setPercentUsage(usageData.RI_Usage_KPI);
+        setPercentUsage(usageData.usage);
 
       } catch (error) {
         // Handle error

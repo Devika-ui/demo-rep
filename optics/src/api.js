@@ -276,7 +276,8 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+            "StartDate" : ["2024-04-01"],
+            "EndDate" : ["2024-04-30"],
             Subscription: ["Subscription2"],
           },
         }),
