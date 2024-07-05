@@ -433,7 +433,7 @@ const api = {
       throw error;
     }
   },
-  getFilterForDropDown: async () => {
+  getFilterForDropDown: async (selectedSubscriptions) => {
     try {
       const response = await fetch(`${apiUrl}/filters`, {
         method: "POST",
