@@ -8,7 +8,7 @@ import ContainerBox from "./ContainerBox";
 import InvoiceTableView from "./InvoiceTableView";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
-
+ 
 const BusinessCostSplit = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [reportType, setReportType] = useState("");
@@ -16,7 +16,7 @@ const BusinessCostSplit = () => {
   const [billAllocationData, setBillAllocationData] = useState([]);
   const [serviceCategoryData, setServiceCategoryData] = useState([]);
   const [filteredBillAllocationData, setFilteredBillAllocationData] = useState([]);
-
+ 
   const additionalFilters = [
     {
       label: "Service Category(s)",
@@ -65,7 +65,7 @@ const BusinessCostSplit = () => {
       ],
     },
   ];
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -84,103 +84,75 @@ const BusinessCostSplit = () => {
           api.getServiceCategoryCost(),
           api.getBillAllocation(),
         ]);
-
+ 
         const formattedBoxData = [
           {
-            number: (applicationsWithTags?.Applicationswithtags?.[0] !== undefined && applicationsWithTags.Applicationswithtags[0] !== null) 
-              ? applicationsWithTags.Applicationswithtags[0] 
+            number: (applicationsWithTags?.Applicationswithtags?.[0] !== undefined && applicationsWithTags.Applicationswithtags[0] !== null)
+              ? applicationsWithTags.Applicationswithtags[0]
               : "NA",
             text: "Applications with Tags",
           },
           {
-            number: (applicationsWithoutTags?.Applicationswithouttags?.[0] !== undefined && applicationsWithoutTags.Applicationswithouttags[0] !== null) 
-              ? applicationsWithoutTags.Applicationswithouttags[0] 
+            number: (applicationsWithoutTags?.Applicationswithouttags?.[0] !== undefined && applicationsWithoutTags.Applicationswithouttags[0] !== null)
+              ? applicationsWithoutTags.Applicationswithouttags[0]
               : "NA",
             text: "Applications without Tags",
           },
           {
-            number: (projectsWithTags?.projectwithtags?.[0] !== undefined && projectsWithTags.projectwithtags[0] !== null) 
-              ? projectsWithTags.projectwithtags[0] 
+            number: (projectsWithTags?.projectwithtags?.[0] !== undefined && projectsWithTags.projectwithtags[0] !== null)
+              ? projectsWithTags.projectwithtags[0]
               : "NA",
             text: "Project with Tags",
           },
           {
-            number: (projectsWithoutTags?.Projectwithouttags?.[0] !== undefined && projectsWithoutTags.Projectwithouttags[0] !== null) 
-              ? projectsWithoutTags.Projectwithouttags[0] 
+            number: (projectsWithoutTags?.Projectwithouttags?.[0] !== undefined && projectsWithoutTags.Projectwithouttags[0] !== null)
+              ? projectsWithoutTags.Projectwithouttags[0]
               : "NA",
             text: "Project without Tags",
           },
         ];
-
-        const aggregateData = (data) => {
-          let totalBill = 0;
-          let onDemandCost = 0;
-          let commitmentsCost = 0;
-          let savings = 0;
-
-          Object.keys(data).forEach((key) => {
-            if (typeof data[key] === "object" && data[key] !== null) {
-              const { totalBill: t, onDemandCost: o, commitmentsCost: c, savings: s } = aggregateData(data[key]);
-              totalBill += t;
-              onDemandCost += o;
-              commitmentsCost += c;
-              savings += s;
-            } else {
-              totalBill += data.TotalBill || 0;
-              onDemandCost += data.OnDemandCost || 0;
-              commitmentsCost += data.CommitmentsCost || 0;
-              savings += data.Savings || 0;
-            }
-          });
-
-          return { totalBill, onDemandCost, commitmentsCost, savings };
-        };
-
+ 
+        
         const formattedServiceCategoryData = Object.keys(serviceCategoryCost).map(
-          (serviceCategory) => {
-            const { totalBill, onDemandCost, commitmentsCost, savings } = aggregateData(serviceCategoryCost[serviceCategory]);
-
-            return {
-              name: serviceCategory,
-              totalBill,
-              onDemandCost,
-              commitmentsCost,
-              savings,
-              services: Object.keys(serviceCategoryCost[serviceCategory]).map((service) => {
-                const { totalBill, onDemandCost, commitmentsCost, savings } = aggregateData(serviceCategoryCost[serviceCategory][service]);
-
-                return {
-                  name: service,
-                  totalBill,
-                  onDemandCost,
-                  commitmentsCost,
-                  savings,
-                  resourceGroups: Object.keys(serviceCategoryCost[serviceCategory][service]).map(
-                    (resourceGroup) => {
-                      const { totalBill, onDemandCost, commitmentsCost, savings } = aggregateData(serviceCategoryCost[serviceCategory][service][resourceGroup]);
-
-                      return {
-                        name: resourceGroup,
-                        totalBill,
-                        onDemandCost,
-                        commitmentsCost,
-                        savings,
-                        resources: Object.keys(serviceCategoryCost[serviceCategory][service][resourceGroup]).map((resource) => ({
-                          name: resource,
-                          totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill || "",
-                          onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost || "",
-                          commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost || "",
-                          savings: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings || ""
-                        })),
-                      };
-                    }
-                  ),
-                };
-              }),
-            };
-          }
+          (serviceCategory) => ({
+            name: serviceCategory,
+            totalBill: serviceCategoryCost[serviceCategory].TotalBill,
+            onDemandCost: serviceCategoryCost[serviceCategory].OnDemandCost,
+            commitmentsCost: serviceCategoryCost[serviceCategory].CommitmentsCost,
+            savings: serviceCategoryCost[serviceCategory].Savings,
+            services: Object.keys(serviceCategoryCost[serviceCategory]).map((service) => ({
+              name: service,
+              totalBill: serviceCategoryCost[serviceCategory][service].TotalBill,
+              onDemandCost: serviceCategoryCost[serviceCategory][service].OnDemandCost,
+              commitmentsCost: serviceCategoryCost[serviceCategory][service].CommitmentsCost,
+              savings: serviceCategoryCost[serviceCategory][service].Savings,
+              resourceGroups: Object.keys(serviceCategoryCost[serviceCategory][service]).map(
+                (resourceGroup) => ({
+                  name: resourceGroup,
+                  totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup].TotalBill,
+                  onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup].OnDemandCost,
+                  commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup].CommitmentsCost,
+                  savings: serviceCategoryCost[serviceCategory][service][resourceGroup].Savings,
+                  resources: Object.keys(serviceCategoryCost[serviceCategory][service][resourceGroup]).map((resource) => ({
+                    name: resource,
+                    totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill !== null
+                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill
+                    : "",
+                    onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost !== null
+                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost
+                    : "",
+                    commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost !== null? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost
+                    : "",
+                    savings: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings !== null
+                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings
+                    : ""
+                  })),
+                })
+              ),
+            })),
+          })
         );
-
+ 
         const formattedBillAllocationData = billAllocation.billAllocation.map(
           (item) => ({
             name: item.tags_AppID_AppName || "null",
@@ -193,24 +165,24 @@ const BusinessCostSplit = () => {
             savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
           })
         );
-
+ 
         console.log("formattedBoxData", formattedBoxData);
         console.log("formattedBillAllocationData", formattedBillAllocationData);
         console.log("formattedServiceCategoryData", formattedServiceCategoryData);
-
+ 
         setBoxData(formattedBoxData);
         setServiceCategoryData(formattedServiceCategoryData);
         setBillAllocationData(formattedBillAllocationData);
         setFilteredBillAllocationData(formattedBillAllocationData);
-
+ 
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+ 
     fetchData();
   }, []);
-
+ 
   const handleButtonClick = (value) => {
     if (value === "Azure") {
       setShowStackBars(false); // Hide StackBars and show AzureBars
@@ -218,11 +190,11 @@ const BusinessCostSplit = () => {
       setShowStackBars(true); // Show StackBars
     }
   };
-
+ 
   const handleReportTypeChange = (event) => {
     const selectedReportType = event.target.value;
     setReportType(selectedReportType);
-
+ 
     if (selectedReportType) {
       const filteredData = billAllocationData.filter(
         (item) => item.name === selectedReportType
@@ -232,7 +204,7 @@ const BusinessCostSplit = () => {
       setFilteredBillAllocationData(billAllocationData);
     }
   };
-
+ 
   const columns1 = [
     { key: "name", label: "Application/Project Name" },
     { key: "ownerName", label: "Owner Name" },
@@ -241,7 +213,7 @@ const BusinessCostSplit = () => {
     { key: "rawVariation", label: "%Raw Variation" },
     { key: "savings", label: "Savings" },
   ];
-
+ 
   const tableData = [
     {
       tableTitle: "Service Category Cost Allocation",
@@ -252,12 +224,12 @@ const BusinessCostSplit = () => {
       columnHead5: "Savings",
     },
   ];
-
+ 
   // Remove duplicates for the dropdown options
   const uniqueBillAllocationData = Array.from(
     new Set(billAllocationData.map((item) => item.name))
   ).map((name) => billAllocationData.find((item) => item.name === name));
-
+ 
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
@@ -361,5 +333,5 @@ const BusinessCostSplit = () => {
     </div>
   );
 };
-
+ 
 export default BusinessCostSplit;
