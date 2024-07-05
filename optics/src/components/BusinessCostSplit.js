@@ -111,46 +111,74 @@ const BusinessCostSplit = () => {
             text: "Project without Tags",
           },
         ];
-        
+
+        const aggregateData = (data) => {
+          let totalBill = 0;
+          let onDemandCost = 0;
+          let commitmentsCost = 0;
+          let savings = 0;
+
+          Object.keys(data).forEach((key) => {
+            if (typeof data[key] === "object" && data[key] !== null) {
+              const { totalBill: t, onDemandCost: o, commitmentsCost: c, savings: s } = aggregateData(data[key]);
+              totalBill += t;
+              onDemandCost += o;
+              commitmentsCost += c;
+              savings += s;
+            } else {
+              totalBill += data.TotalBill || 0;
+              onDemandCost += data.OnDemandCost || 0;
+              commitmentsCost += data.CommitmentsCost || 0;
+              savings += data.Savings || 0;
+            }
+          });
+
+          return { totalBill, onDemandCost, commitmentsCost, savings };
+        };
 
         const formattedServiceCategoryData = Object.keys(serviceCategoryCost).map(
-          (serviceCategory) => ({
-            name: serviceCategory,
-            totalBill: serviceCategoryCost[serviceCategory].TotalBill,
-            onDemandCost: serviceCategoryCost[serviceCategory].OnDemandCost,
-            commitmentsCost: serviceCategoryCost[serviceCategory].CommitmentsCost,
-            savings: serviceCategoryCost[serviceCategory].Savings,
-            services: Object.keys(serviceCategoryCost[serviceCategory]).map((service) => ({
-              name: service,
-              totalBill: serviceCategoryCost[serviceCategory][service].TotalBill,
-              onDemandCost: serviceCategoryCost[serviceCategory][service].OnDemandCost,
-              commitmentsCost: serviceCategoryCost[serviceCategory][service].CommitmentsCost,
-              savings: serviceCategoryCost[serviceCategory][service].Savings,
-              resourceGroups: Object.keys(serviceCategoryCost[serviceCategory][service]).map(
-                (resourceGroup) => ({
-                  name: resourceGroup,
-                  totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup].TotalBill,
-                  onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup].OnDemandCost,
-                  commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup].CommitmentsCost,
-                  savings: serviceCategoryCost[serviceCategory][service][resourceGroup].Savings,
-                  resources: Object.keys(serviceCategoryCost[serviceCategory][service][resourceGroup]).map((resource) => ({
-                    name: resource,
-                    totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill !== null
-                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill
-                    : "",
-                    onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost !== null
-                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost
-                    : "",
-                    commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost !== null? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost
-                    : "",
-                    savings: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings !== null
-                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings
-                    : ""
-                  })),
-                })
-              ),
-            })),
-          })
+          (serviceCategory) => {
+            const { totalBill, onDemandCost, commitmentsCost, savings } = aggregateData(serviceCategoryCost[serviceCategory]);
+
+            return {
+              name: serviceCategory,
+              totalBill,
+              onDemandCost,
+              commitmentsCost,
+              savings,
+              services: Object.keys(serviceCategoryCost[serviceCategory]).map((service) => {
+                const { totalBill, onDemandCost, commitmentsCost, savings } = aggregateData(serviceCategoryCost[serviceCategory][service]);
+
+                return {
+                  name: service,
+                  totalBill,
+                  onDemandCost,
+                  commitmentsCost,
+                  savings,
+                  resourceGroups: Object.keys(serviceCategoryCost[serviceCategory][service]).map(
+                    (resourceGroup) => {
+                      const { totalBill, onDemandCost, commitmentsCost, savings } = aggregateData(serviceCategoryCost[serviceCategory][service][resourceGroup]);
+
+                      return {
+                        name: resourceGroup,
+                        totalBill,
+                        onDemandCost,
+                        commitmentsCost,
+                        savings,
+                        resources: Object.keys(serviceCategoryCost[serviceCategory][service][resourceGroup]).map((resource) => ({
+                          name: resource,
+                          totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill || "",
+                          onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost || "",
+                          commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost || "",
+                          savings: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings || ""
+                        })),
+                      };
+                    }
+                  ),
+                };
+              }),
+            };
+          }
         );
 
         const formattedBillAllocationData = billAllocation.billAllocation.map(
@@ -166,14 +194,14 @@ const BusinessCostSplit = () => {
           })
         );
 
-        console.log("formattedBoxData",formattedBoxData);
-        console.log("formattedBillAllocationData",formattedBillAllocationData);
-        console.log("formattedServiceCategoryData",formattedServiceCategoryData);
+        console.log("formattedBoxData", formattedBoxData);
+        console.log("formattedBillAllocationData", formattedBillAllocationData);
+        console.log("formattedServiceCategoryData", formattedServiceCategoryData);
 
         setBoxData(formattedBoxData);
         setServiceCategoryData(formattedServiceCategoryData);
         setBillAllocationData(formattedBillAllocationData);
-        setFilteredBillAllocationData(formattedBillAllocationData); 
+        setFilteredBillAllocationData(formattedBillAllocationData);
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -218,7 +246,7 @@ const BusinessCostSplit = () => {
     {
       tableTitle: "Service Category Cost Allocation",
       columnHead1: "Service Category",
-      columnHead2: " Total Bill ",
+      columnHead2: "Total Bill",
       columnHead3: "On Demand Cost",
       columnHead4: "Commitments Cost",
       columnHead5: "Savings",
