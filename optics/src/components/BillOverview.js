@@ -319,6 +319,7 @@ const BillOverview = () => {
               tableHeight="auto"
               tableWidth="595px"
               columns={columns}
+              headerLabel="April - 24" // value for the prop
             />
           </div>
         </div>
@@ -378,6 +379,7 @@ const BillOverview = () => {
               tableHeight="auto"
               tableWidth="600px"
               columns={columns1}
+              headerLabel="April - 24" // value for the prop
             />
           </div>
         </div>

@@ -88,7 +88,8 @@ const InvoiceTableView = ({
   tableData,
   tableHeight,
   tableWidth,
-  columns
+  columns,
+  headerLabel // new prop
 }) => {
   const classes = useStyles();
 
@@ -109,7 +110,7 @@ const InvoiceTableView = ({
           <TableHead>
             <TableRow>
               <TableCell className={`${classes.tableHeadCell} ${classes.stickyHeader}`} colSpan={columns.length}>
-                April - 24
+                {headerLabel} {/* using the new prop */}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -143,11 +144,13 @@ InvoiceTableView.propTypes = {
     key: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   })).isRequired,
+  headerLabel: PropTypes.string // new prop type
 };
 
 InvoiceTableView.defaultProps = {
   tableHeight: 'auto',
   tableWidth: '94%',
+  headerLabel: 'April - 24' // default value for the prop
 };
 
 export default InvoiceTableView;
