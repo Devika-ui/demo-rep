@@ -66,13 +66,6 @@ const BusinessCostSplit = () => {
     },
   ];
 
-  const dataSet = [
-    { number: 55, text: "Applications with Tags" },
-    { number: 47, text: "Applications without Tags" },
-    { number: 2, text: "Project with Tags" },
-    { number: "NA", text: "Project without Tags" },
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -94,22 +87,31 @@ const BusinessCostSplit = () => {
 
         const formattedBoxData = [
           {
-            number: applicationsWithTags.Applicationswithtags[0],
+            number: (applicationsWithTags?.Applicationswithtags?.[0] !== undefined && applicationsWithTags.Applicationswithtags[0] !== null) 
+              ? applicationsWithTags.Applicationswithtags[0] 
+              : "NA",
             text: "Applications with Tags",
           },
           {
-            number: applicationsWithoutTags.Applicationswithouttags[0],
+            number: (applicationsWithoutTags?.Applicationswithouttags?.[0] !== undefined && applicationsWithoutTags.Applicationswithouttags[0] !== null) 
+              ? applicationsWithoutTags.Applicationswithouttags[0] 
+              : "NA",
             text: "Applications without Tags",
           },
           {
-            number: projectsWithTags.projectwithtags[0] || "NA",
+            number: (projectsWithTags?.projectwithtags?.[0] !== undefined && projectsWithTags.projectwithtags[0] !== null) 
+              ? projectsWithTags.projectwithtags[0] 
+              : "NA",
             text: "Project with Tags",
           },
           {
-            number: projectsWithoutTags.Projectwithouttags[0],
+            number: (projectsWithoutTags?.Projectwithouttags?.[0] !== undefined && projectsWithoutTags.Projectwithouttags[0] !== null) 
+              ? projectsWithoutTags.Projectwithouttags[0] 
+              : "NA",
             text: "Project without Tags",
           },
         ];
+        
 
         const formattedServiceCategoryData = Object.keys(serviceCategoryCost).map(
           (serviceCategory) => ({
@@ -133,10 +135,17 @@ const BusinessCostSplit = () => {
                   savings: serviceCategoryCost[serviceCategory][service][resourceGroup].Savings,
                   resources: Object.keys(serviceCategoryCost[serviceCategory][service][resourceGroup]).map((resource) => ({
                     name: resource,
-                    totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill,
-                    onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost,
-                    commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost,
-                    savings: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings,
+                    totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill !== null
+                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill
+                    : "",
+                    onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost !== null
+                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost
+                    : "",
+                    commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost !== null? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost
+                    : "",
+                    savings: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings !== null
+                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings
+                    : ""
                   })),
                 })
               ),
@@ -146,8 +155,8 @@ const BusinessCostSplit = () => {
 
         const formattedBillAllocationData = billAllocation.billAllocation.map(
           (item) => ({
-            name: item.ApplicationName || "null",
-            ownerName: item.OwnerName || "null",
+            name: item.tags_AppID_AppName || "null",
+            ownerName: item.tags_owner || "null",
             totalBill: item.totalBill ? `$${item.totalBill.toFixed(2)}` : "$0.00",
             normalizedVariation: item.Normalized_Variation_MoM !== null
               ? `${item.Normalized_Variation_MoM}%`
@@ -157,10 +166,14 @@ const BusinessCostSplit = () => {
           })
         );
 
+        console.log("formattedBoxData",formattedBoxData);
+        console.log("formattedBillAllocationData",formattedBillAllocationData);
+        console.log("formattedServiceCategoryData",formattedServiceCategoryData);
+
         setBoxData(formattedBoxData);
         setServiceCategoryData(formattedServiceCategoryData);
         setBillAllocationData(formattedBillAllocationData);
-        setFilteredBillAllocationData(formattedBillAllocationData); // Initialize filtered data
+        setFilteredBillAllocationData(formattedBillAllocationData); 
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -191,34 +204,6 @@ const BusinessCostSplit = () => {
       setFilteredBillAllocationData(billAllocationData);
     }
   };
-
-  const dummyData1 = [
-    {
-      name: "Project 1",
-      ownerName: "Owner A",
-      totalBill: "$400",
-      normalizedVariation: "10%",
-      rawVariation: "5%",
-      savings: "$50",
-    },
-    {
-      name: "Project 2",
-      ownerName: "Owner B",
-      totalBill: "$490",
-      normalizedVariation: "8%",
-      rawVariation: "6%",
-      savings: "$60",
-    },
-    {
-      name: "Project 3",
-      ownerName: "Owner C",
-      totalBill: "$495",
-      normalizedVariation: "10%",
-      rawVariation: "8%",
-      savings: "$70",
-    },
-    // Add more dummy data as needed
-  ];
 
   const columns1 = [
     { key: "name", label: "Application/Project Name" },

@@ -13,6 +13,7 @@ const Ondemand = () => {
     const loadData = async () => {
       try {
         const data = await api.getDataForAnomaly();
+        console.log("anamoly:", data);
 
         // Parse the date and sort the data by month
         const sortedData = data.sort((a, b) => new Date(a.Month) - new Date(b.Month));

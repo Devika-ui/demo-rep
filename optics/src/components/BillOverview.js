@@ -99,15 +99,14 @@ const BillOverview = () => {
 
         const formattedBillAllocationData = billAllocation.billAllocation.map(
           (item) => ({
-            name: item.ApplicationName || "null",
-            ownerName: item.OwnerName || "null",
+            name: item.tags_AppID_AppName || "null",
+            ownerName: item.tags_owner || "null",
             onDemandCost: item.onDemandCost
               ? `$${item.onDemandCost.toFixed(2)}`
               : "$0.00",
-            reservedInstanceCost:
-              item.reservedInstanceCost !== null
-                ? `${item.reservedInstanceCost}%`
-                : "null",
+              reservedInstanceCost: item.reservedInstanceCost !== null
+              ? `$${item.reservedInstanceCost.toFixed(2)}`
+              : "$0.00",
             savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
             totalBill: item.totalBill
               ? `$${item.totalBill.toFixed(2)}`
@@ -166,12 +165,13 @@ const BillOverview = () => {
         );
 
         const totalSavings = savingsData.actualCost.toFixed(2);
-        const simulatedBill = savingsData.simulatedCost[0].toFixed(2);
+        const simulatedBill = savingsData.simulatedCost.toFixed(2);
         const savings = savingsData.savings.toFixed(2);
         const percentageSavingsOverBill = savingsData.percentageSavings;
-        const savingsOverPayGo = savingsData.savedCostPayGo.toFixed(2);
-        const percentageSavingsOverPayGo = savingsData.percentageSavingsOverPayGo !== null ? savingsData.percentageSavingsOverPayGo : "0.00";
+        const savingsOverPayGo = savingsData.savingsPayGo.toFixed(2); // Updated property name
+        const percentageSavingsOverPayGo = savingsData.percentageSavingsOverPayGo!== null ? savingsData.percentageSavingsOverPayGo : "0.00";
         const normalizedVariation = normalizedVariationData.Normalized_Variation_MoM || "0.00";
+
 
         const dataSet1 = [
           { number:  `$${totalSavings}`, text: "Total Bill" },

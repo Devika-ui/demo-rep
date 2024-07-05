@@ -20,7 +20,7 @@ const DateRangeDropdown = () => {
   useEffect(() => {
     const fetchDates = async () => {
       try {
-        const data = await api.getAllFilters();
+        const data = await api.getFilterForDropDown();
         const modifiedDates = data.modifieddate.map(date => new Date(date));
         const uniqueMonths = Array.from(
           new Set(modifiedDates.map(date => format(date, 'MMMM yyyy', { locale: enUS })))

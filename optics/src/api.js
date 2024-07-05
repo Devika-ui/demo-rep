@@ -425,20 +425,44 @@ const api = {
         }),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch filter");
+        throw new Error("Failed to fetch filter on selection");
       }
       return await response.json();
     } catch (error) {
-      console.error("Error fetching filter:", error);
+      console.error("Error fetching filter on selection:", error);
       throw error;
     }
   },
+  getFilterForDropDown: async (selectedSubscriptions) => {
+    try {
+      const response = await fetch(`${apiUrl}/filters`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: ["2024-03-01","2024-04-01", "2024-05-01"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch filter on selection");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching filter on selection:", error);
+      throw error;
+    }
+  },
+  
 
   /* with bill overview page  */
 
   getSavings: async () => {
     try {
-      const response = await fetch(`${apiUrl}/billoverview/header/savings`, {
+      const response = await fetch(`${apiUrl}/billoverview/header`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -546,7 +570,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: ["Subscription2"],
+            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
           },
         }),
       });
@@ -569,7 +593,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: ["Subscription2"],
+            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
           },
         }),
       });
@@ -591,7 +615,7 @@ const api = {
   getApplicationWithTags: async () => {
     try {
       const response = await fetch(
-        `${apiUrl}/buisnesscostspliy/header/applicationwithtags`,
+        `${apiUrl}/buisnesscostsplit/header/applicationwithtags`,
         {
           method: "POST",
           headers: {
@@ -619,7 +643,7 @@ const api = {
   getApplicationWithoutTags: async () => {
     try {
       const response = await fetch(
-        `${apiUrl}/buisnesscostspliy/header/applicationwithouttags`,
+        `${apiUrl}/buisnesscostsplit/header/applicationwithouttags`,
         {
           method: "POST",
           headers: {
@@ -647,7 +671,7 @@ const api = {
   getProjectWithTags: async () => {
     try {
       const response = await fetch(
-        `${apiUrl}/buisnesscostspliy/header/projectwithtags`,
+        `${apiUrl}/buisnesscostsplit/header/projectwithtags`,
         {
           method: "POST",
           headers: {
@@ -675,7 +699,7 @@ const api = {
   getProjectWithoutTags: async () => {
     try {
       const response = await fetch(
-        `${apiUrl}/buisnesscostspliy/header/projectwithouttags`,
+        `${apiUrl}/buisnesscostsplit/header/projectwithouttags`,
         {
           method: "POST",
           headers: {
@@ -712,8 +736,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
-              Subscription: ["Subscription2"],
+              BillingMonthStartDate: ["2024-03-01","2024-04-01", "2024-05-01"],
             },
           }),
         }
@@ -758,7 +781,7 @@ const api = {
   getServiceCategoryCost: async () => {
     try {
       const response = await fetch(
-        `${apiUrl}/buisnesscostspliy/servicecategorycost`,
+        `${apiUrl}/buisnesscostsplit/servicecategorycost`,
         {
           method: "POST",
           headers: {
@@ -767,7 +790,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-05-01"],
+              BillingMonthStartDate: ["2024-04-01","2024-05-01"],
               Subscription: ["Subscription2"],
             },
           }),
