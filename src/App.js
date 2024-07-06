@@ -53,17 +53,17 @@ import BusinessCostSplit from "./components/BusinessCostSplit";
 import InventoryCostSplit from "./components/InventoryCostSplit";
 import OrphanedSnapshots from "./components/OrphanedSnapshots";
 import UnattachedManagedDisks from "./components/UnattachedManagedDisks";
-import { useAuth } from "./components/useAuth";
+//import { useAuth } from "./components/useAuth";
 import HyperScalarAdvisor from "./components/HyperScalarAdvisor";
 import SqlVmLicenses from "./components/SqlVmLicenses";
 import OrphanedRSVBackups from "./components/OrphanedRSVBackups";
 import "./App.css";
 
 function App() {
-  const { isLogin, loading, roles } = useAuth();
+  /*const { isLogin, loading, roles } = useAuth();
 
   if (loading) return <div>Loading...</div>;
-  if (!isLogin) return <div>Not logged in</div>;
+  if (!isLogin) return <div>Not logged in</div>;*/
 
   return (
     <BrowserRouter>
