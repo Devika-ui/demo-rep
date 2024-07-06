@@ -1,8 +1,6 @@
 import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import userpool from '../userpool';
-import { logout } from '../services/authenticate';
 import api from '../api.js';
 import Header from './Header.js';
 import Subheader from './SubHeader.js'
@@ -71,28 +69,9 @@ const Dashboard = () => {
   };
 
   const Navigate = useNavigate();
-  // const [subscriptions, setSubscriptions] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      //   try {
-      //     const subscriptionsData = await api.getSubscriptions();
-      //     setSubscriptions(subscriptionsData);
-      //   } catch (error) {
-      //     // Handle error
-      //   }
-    };
-
-    fetchData();
-    let user = userpool.getCurrentUser();
-    console.log(user);
-    if (!user) {
-      //Navigate('/login');
-    }
-  }, []);
 
   const handleLogoout = () => {
-    logout();
+    
   };
 
   return (
