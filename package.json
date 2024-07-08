@@ -18,6 +18,7 @@
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
     "daterangepicker": "^3.1.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jwt-decode": "^4.0.0",
     "keycloak-js": "^25.0.1",
@@ -40,7 +41,8 @@
     "web-vitals": "^4.2.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start-dev": "react-scripts start",
+    "start": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

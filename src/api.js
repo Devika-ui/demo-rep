@@ -1,4 +1,5 @@
-const apiUrl = "http://localhost:3001/api/v1";
+const domainUrl = process.env.REACT_APP_API_DOMAIN;
+const apiUrl = `${domainUrl}/api/v1`;
 
 const api = {
   getMonthlyActualSpend: async () => {
