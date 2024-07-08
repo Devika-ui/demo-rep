@@ -1,0 +1,41 @@
+.cmpGBChart_container {
+    width: 86% ;
+    max-width: 860px ;
+    height: 350px ; 
+    margin: 32px auto;
+    padding: 24px;
+    background-color: #f9f9f9 !important ;
+  }
+  .cmpGBChart_heading {
+    color: #63666A ;
+    font-size: 14px !important;
+    margin-bottom: 16px !important;
+  }
+  .cmpGBChart_legendContainer {
+    display: flex ;
+    justify-content: center ;
+    align-items: center ;
+    margin-bottom: 50px ;
+  }
+  .cmpGBChart_legend {
+    font-size: 12px ; 
+    display: flex ;
+    align-items: center ;
+  }
+  .cmpGBChart_legendItem {
+    display: flex ;
+    align-items: center ;
+    margin-right: 16px ;
+  }
+  .cmpGBChart_legendColor {
+    display: inline-block ;
+    width: 10px ;
+    height: 10px ;
+    border-radius: 50% ;
+    margin-right: 8px ;
+  }
+  .cmpGBChart_dropdownContainer {
+    display: flex ;
+    justify-content: left ;
+    margin-bottom: 16px ;
+  }

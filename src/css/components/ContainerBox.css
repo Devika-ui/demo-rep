@@ -1,0 +1,12 @@
+.cmp_containerBox {
+    margin: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 87px;
+    margin-right: 20px;
+    width: 1130px; 
+    height: 75px; 
+  }

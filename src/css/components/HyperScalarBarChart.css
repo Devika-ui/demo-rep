@@ -1,0 +1,41 @@
+.cmpHSBC_container {
+    width: 86%;
+    max-width: 860;
+    height: 350; 
+    margin: 32px auto;
+    padding: 24px;
+    background-color: #f9f9f9;
+  }
+.cmpHSBC_heading {
+  color: #63666A;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.cmpHSBC_legendContainer {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-bottom: 50px;
+}
+.cmpHSBC_legend {
+  font-size: 12px; 
+  display: flex;
+  align-items: center;
+}
+.cmpHSBC_legendItem {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+.cmpHSBC_legendColor {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.cmpHSBC_dropdownContainer {
+  display: flex;
+  justify-content: left;
+  margin-bottom: 16px;
+}

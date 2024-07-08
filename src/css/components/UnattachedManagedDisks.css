@@ -1,0 +1,42 @@
+.cmpUAMD_heading {
+    color: #63666A;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+.cmpUAMD_buttonContainer {
+    position: absolute;
+    top: 235;
+    left: 880;
+    z-index: 1000;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+.cmpUAMD_button {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    color: #63666A;
+    border-color: #63666A;
+  }
+.cmpUAMD_dialogPaper {
+    background-color: #D9D9D9;
+    max-width: 280px; 
+    top: 140px;
+    left: 280px;
+    margin-bottom: 200px;
+    padding: 20px; 
+  }
+.cmpUAMD_select {
+    font-size: 0.7rem;
+    padding: 2px 4px;
+    color: #63666A;
+    border-color: #63666A;
+    min-width: auto;
+}
+.cmpUAMD_select .MuiSelect-select {
+    padding: 2px 4px; 
+}
+.cmpUAMD_select .MuiOutlinedInput-input {
+    padding: 2px 4px; 
+}

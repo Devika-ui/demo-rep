@@ -1,0 +1,30 @@
+.cmpPieChart_container {
+    display: flex;
+    justify-content: space-between;
+    width: 1300px;
+    max-width:  550px !important; 
+    margin: 16px auto ;
+    margin-bottom: 30px ;
+  }
+  .cmpPieChart_chartContainer {
+    width: 50%; 
+  }
+  .cmpPieChart_chart {
+    width: 101%;
+    height: 200px; 
+    position: relative;
+  }
+  .cmpPieChart_legend {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .cmpPieChart_title {
+    font-family: Inter, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #63666A;
+    margin-bottom:  16px !important;
+    margin-left: 15px !important;
+  }

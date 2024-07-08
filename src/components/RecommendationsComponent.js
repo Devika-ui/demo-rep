@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../css/RecommendationsComponent.scss';
 import { Select, MenuItem, FormControl, Typography } from '@mui/material';
 import api from '../api.js';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropDownIcon from '@mui/icons-material//ArrowDropDown';
 
 const RecommendationsComponent = () => {
   const [recommendations, setRecommendations] = useState([]);

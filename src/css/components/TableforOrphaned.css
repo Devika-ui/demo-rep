@@ -1,0 +1,68 @@
+.cmpTblOrphan_container {
+    width: 560px;
+    height: 400px;
+	margin-left: -510;
+    margin-top: 12px;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+  }
+  .cmpTblOrphan_header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  .cmpTblOrphan_title {
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19.36px;
+    text-align: left;
+    color: #63666A;
+    margin-bottom: 8px;
+  }
+  .cmpTblOrphan_buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .cmpTblOrphan_button {
+    font-size: 0.7rem !important;
+    padding: 4px 8px !important;
+    color: #63666A !important;
+    border-color: #63666A !important;
+  }
+  .cmpTblOrphan_tableContainer {
+    border: 1px solid #ddd;
+    border-radius: 0;
+    overflow: hidden;
+  }
+  .cmpTblOrphan_tableHeader {
+    padding: 4px 8px;
+    text-align: center;
+    color: #63666A;
+  }
+  .cmpTblOrphan_table {
+    table-layout: fixed;
+  }
+  .cmpTblOrphan_nestedRow {
+    background-color: #f9f9f9;
+  }
+  .cmpTblOrphan_cell {
+    padding: 4px 8px !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    color: #63666A !important;
+    border-right: 1px solid #ddd !important;
+  }
+  .cmpTblOrphan_columnHeader {
+    text-align: center !important;
+    padding: 4px 8px !important;
+    color: #63666A !important;
+    border-bottom: 2px solid #63666A !important;
+  }
+  .cmpTblOrphan_indentedCell {
+    font-size: 0.8rem;
+  }

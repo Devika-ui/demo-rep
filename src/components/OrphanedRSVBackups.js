@@ -1,43 +1,18 @@
 import React, { useState} from "react";
-import { makeStyles} from "@material-ui/core/styles";
 import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
 import ContainerBox from "./ContainerBox";
 import HorizontalBarGraph from "./HorizontalBarGraph";
 //import CategoriesBarChart from "./CategoriesBarChart";
-import IconButton from "@material-ui/core/IconButton";
-import ShareIcon from "@material-ui/icons/Share";
-import Button from "@material-ui/core/Button";
+import IconButton from "@mui/material/IconButton";
+import ShareIcon from "@mui/icons-material/Share";
+import Button from "@mui/material/Button";
 import ServiceCategory from "./ServiceCategory";
 import GenericBarChart from "./GenericBarChart";
-
-const useStyles = makeStyles((theme) => ({
-  heading: {
-    color: "#63666A",
-    fontSize: "14px",
-    marginBottom: theme.spacing(2),
-  },
-  buttonContainer: {
-    position: "absolute",
-    top: 235,
-    left: 1000,
-    zIndex: 1000,
-    margin: "20px",
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-  },
-  button: {
-    fontSize: "0.7rem",
-    padding: "4px 8px",
-    color: "#63666A",
-    borderColor: "#63666A",
-  },
-}));
+import "../css/components/OrphanedRSVBackups.css"
 
 const OrphanedRSVBackups = () => {
-    const classes = useStyles();
     const [showStackBars, setShowStackBars] = useState(true);
     const [groupBy, setGroupBy] = useState("");
   
@@ -417,11 +392,11 @@ const OrphanedRSVBackups = () => {
     />
   </div>
   {/* Separate container for buttons */}
-  <div className={classes.buttonContainer}>
-    <Button variant="contained" className={classes.button}>
+  <div className="cmpOrphanRB_buttonContainer">
+    <Button variant="contained" className="cmpOrphanRB_button" color="inherit">
       Customize Report
     </Button>
-    <IconButton className={classes.button}>
+    <IconButton className="cmpOrphanRB_button">
       <ShareIcon />
     </IconButton>
   </div>

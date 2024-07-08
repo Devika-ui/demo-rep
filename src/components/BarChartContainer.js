@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
+import Paper from "@mui/material/Paper";
 import {
   ComposedChart,
   Bar,
@@ -12,31 +11,12 @@ import {
   ResponsiveContainer,
   Line,
 } from "recharts";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import { format, parseISO } from "date-fns";
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    width: "63%",
-    maxWidth: 700,
-    height: 350,
-    margin: theme.spacing(4, "auto"),
-    padding: theme.spacing(3),
-    backgroundColor: "#f9f9f9",
-    marginRight: "15px",
-    paddingRight: 0,
-    paddingLeft: 10,
-    paddingTop: 4,
-  },
-  heading: {
-    color: "#63666A",
-    fontSize: "14px",
-    marginBottom: theme.spacing(2),
-  },
-}));
+import "../css/components/BarChartContainer.css"
 
 const BarChartContainer = ({ chartData, trendData }) => {
-  const classes = useStyles();
+  
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -56,8 +36,8 @@ const BarChartContainer = ({ chartData, trendData }) => {
   }, [chartData, trendData]);
 
   return (
-    <Paper className={classes.container}>
-      <Typography className={classes.heading}>
+    <Paper className="cmpBarChart_container">
+      <Typography className="cmpBarChart_heading">
         Total Bill Cost Vs Simulated PayGO
       </Typography>
       <ResponsiveContainer width="100%" height={350}>

@@ -1,0 +1,73 @@
+.cmpBillAlloc_container {
+    width: 520px; 
+    height: 337px; 
+    background-color: white;
+    padding: 10px; 
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden; 
+  }
+  .cmpBillAlloc_header {
+    display: flex;
+    flex-direction: column; 
+    margin-bottom: 10px; 
+  }
+  .cmpBillAlloc_title {
+    font-family: Inter, sans-serif; 
+    font-size: 16px;
+    font-weight: 700; 
+    line-height: 19.36px; 
+    text-align: left; 
+    color: #63666A; 
+    margin-bottom: 19px; 
+  }
+  .cmpBillAlloc_buttons {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 10px;
+  }
+  .cmpBillAlloc_button {
+    font-size: 0.7rem !important; 
+    padding: 4px 8px !important; 
+    color: #63666A !important;
+    border-color: #63666A !important; 
+  }
+  .cmpBillAlloc_tableContainer {
+    border: 1px solid #ddd; 
+    border-radius: 0; 
+    overflow: hidden; 
+  }
+  .cmpBillAlloc_tableHeader {
+    padding: 4px 8px; 
+    text-align: center;
+    color: #63666A; 
+  }
+  .cmpBillAlloc_table {
+    table-layout: fixed; 
+  }
+  .cmpBillAlloc_cell {
+    padding: 4px 8px !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    color: #63666A !important;
+    border-right: 1px solid #ddd; 
+  }
+  .cmpBillAlloc_columnHeader {
+    text-align: center !important;
+    padding: 4px 8px !important; 
+    color: #63666A !important;
+    border-bottom: 2px solid #63666A !important; 
+  }
+  .cmpBillAlloc_select {
+    font-size: 0.7rem !important;
+    padding: 2px 4px;
+    color: #63666A !important;
+    border-color: #63666A;
+    min-width: auto;
+  }
+  .cmpBillAlloc_select .MuiSelect-select {
+    padding: 2px 4px;
+  }
+  .cmpBillAlloc_select .MuiOutlinedInput-input {
+    padding: 2px 4px; 
+  }

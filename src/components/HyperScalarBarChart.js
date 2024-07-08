@@ -1,6 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
+import Paper from "@mui/material/Paper";
 import {
   BarChart,
   Bar,
@@ -10,67 +9,23 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
+import "../css/components/HyperScalarBarChart.css"
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    width: "86%",
-    maxWidth: 860,
-    height: 350, // Increased height to accommodate the dropdown
-    margin: theme.spacing(4, "auto"),
-    padding: theme.spacing(3),
-    backgroundColor: "#f9f9f9",
-  },
-  heading: {
-    color: "#63666A",
-    fontSize: "14px",
-    marginBottom: theme.spacing(2),
-  },
-  legendContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: "50px",
-  },
-  legend: {
-    fontSize: "12px", // Set the desired font size for the legend
-    display: "flex",
-    alignItems: "center",
-  },
-  legendItem: {
-    display: "flex",
-    alignItems: "center",
-    marginRight: theme.spacing(2),
-  },
-  legendColor: {
-    display: "inline-block",
-    width: "10px",
-    height: "10px",
-    borderRadius: "50%",
-    marginRight: theme.spacing(1),
-  },
-  dropdownContainer: {
-    display: "flex",
-    justifyContent: "left",
-    marginBottom: theme.spacing(2),
-  },
-}));
 
 // Custom tick formatter for YAxis
 const formatYAxis = (tickItem) => `${tickItem / 1000}k`;
 
 // Custom legend component
 const CustomLegend = ({ payload }) => {
-  const classes = useStyles();
   return (
-    <div className={classes.legendContainer}>
+    <div className="cmpHSBC_legendContainer">
       {payload.map((entry, index) => (
-        <div key={`item-${index}`} className={classes.legendItem}>
+        <div key={`item-${index}`} className="cmpHSBC_legendItem">
           <span
-            className={classes.legendColor}
-            style={{ backgroundColor: entry.color }}
+            className="cmpHSBC_legendColor"
           />
-          <span className={classes.legend}>{entry.value}</span>
+          <span className="cmpHSBC_legend">{entry.value}</span>
         </div>
       ))}
     </div>
@@ -78,12 +33,11 @@ const CustomLegend = ({ payload }) => {
 };
 
 const HyperScalarBarChart = ({ title, data, yAxisLabel, children }) => {
-  const classes = useStyles();
 
   return (
-    <Paper className={classes.container}>
-      <div className={classes.dropdownContainer}>{children}</div>
-      <Typography className={classes.heading}>{title}</Typography>
+    <Paper className="cmpHSBC_container">
+      <div className="cmpHSBC_dropdownContainer">{children}</div>
+      <Typography className="cmpHSBC_heading">{title}</Typography>
       <ResponsiveContainer width="100%" height={350}>
         <BarChart
           data={data}

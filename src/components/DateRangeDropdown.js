@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Menu, MenuItem, Button } from '@material-ui/core';
+import { Menu, MenuItem, Button } from '@mui/material';
 import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import api from '../api.js'; // Adjust the path to your API module
+import "../css/components/DateRangeDropdown.css"
 
-const useStyles = makeStyles((theme) => ({
-  button: {
-    textTransform: 'none',
-  },
-}));
 
 const DateRangeDropdown = () => {
-  const classes = useStyles();
+  
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState([]);
   const [months, setMonths] = useState([]);
@@ -54,7 +49,7 @@ const DateRangeDropdown = () => {
   return (
     <div>
       <Button
-        className={classes.button}
+        className="cmpDateRangePick_button"
         aria-controls="date-range-menu"
         aria-haspopup="true"
         onClick={handleOpen}

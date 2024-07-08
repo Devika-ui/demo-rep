@@ -1,0 +1,70 @@
+.cmpInvTv_container {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    background-color: white;
+    padding: 16px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+  }
+  .cmpInvTv_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .cmpInvTv_title {
+    font-size: 1.2rem;
+    color: #63666A;
+	white-space: pre-wrap;
+    padding-right: 10px;
+  }
+  .cmpInvTv_buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+	align-items: center;
+  }
+  .cmpInvTv_button {
+    font-size: 0.7rem !important;
+    color: #63666A !important;
+  }
+  .cmpInvTv_dropdown {
+    margin-left: -10px;
+  }
+  .cmpInvTv_dropdown select {
+      height: 10;
+      width: 50;
+      font-size: 0.9rem,
+   }
+  
+  .cmpInvTv_tableCell {
+    color: #63666A !important;
+    font-size: 0.8rem !important;
+    padding: 13px 16px !important; 
+    border-bottom: none !important; 
+    vertical-align: top !important; 
+    border-bottom : 1px solid black !important;
+    border-top : 1px solid Black;
+  }
+  .cmpInvTv_tableHeadCell {
+    background-color: #f0f0f0 !important;
+    text-align: center !important;
+    border-bottom: 1px solid black !important;
+    border-left : 1px solid black !important;
+    border-top : 1px solid Black !important;
+    border-right : 1px solid Black !important;
+    padding: 8px 16px !important; 
+  }
+  .cmpInvTv_tableContainer {
+    max-height: 300;
+    overflow-y: auto;
+  }
+  .cmpInvTv_stickyHeader {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1 !important;
+    background-color: #f0f0f0 !important;
+  }
+ 

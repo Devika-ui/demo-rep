@@ -1,27 +1,18 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import "../css/components/CostsAmortized.css"
 
-const useStyles = makeStyles({
-  button: {
-    fontSize: '0.7rem',
-    padding: '4px 8px',
-    color: '#63666A',
-    borderColor: '#63666A',
-  },
-});
 
 const CostsAmortized = ({ dialogPaperClass }) => {
-  const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -40,7 +31,7 @@ const CostsAmortized = ({ dialogPaperClass }) => {
 
   return (
     <div>
-      <Button variant="contained" className={classes.button} onClick={handleClickOpen}>Costs Amortized</Button>
+      <Button variant="contained" className="cmpCostAmort_button" onClick={handleClickOpen}>Costs Amortized</Button>
       <Dialog
         open={open}
         onClose={handleClose}

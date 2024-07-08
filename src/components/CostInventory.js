@@ -1,149 +1,21 @@
 import React, { useState } from 'react';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import ShareIcon from '@material-ui/icons/Share';
-import SearchIcon from '@material-ui/icons/Search';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import InputBase from '@material-ui/core/InputBase';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import ShareIcon from '@mui/icons-material/Share';
+import SearchIcon from '@mui/icons-material/Search';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import Box from '@mui/material/Box';
+import InputBase from '@mui/material/InputBase';
 import { MultiSelect } from 'react-multi-select-component';
 import CostsAmortized from './CostsAmortized'; // Import the new component
-
-const useStyles = makeStyles({
-  container: {
-    width: 1120,
-    height: 693,
-    backgroundColor: 'white',
-    padding: 10,
-    border: '1px solid #ddd',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    overflow: 'auto',
-  },
-  header: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: 10,
-    position: 'relative',
-  },
-  title: {
-    fontFamily: 'Inter, sans-serif',
-    fontSize: '18px',
-    fontWeight: 700,
-    lineHeight: '19.36px',
-    textAlign: 'left',
-    color: '#63666A',
-    marginTop: '2px',
-    marginBottom: 8,
-  },
-  buttonsContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  groupByContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  buttons: {
-    display: 'flex',
-    gap: 10,
-  },
-  button: {
-    fontSize: '0.7rem',
-    padding: '4px 8px',
-    color: '#63666A',
-    borderColor: '#63666A',
-  },
-  tableContainer: {
-    border: '1px solid #ddd',
-    borderRadius: '0',
-    overflow: 'hidden',
-  },
-  tableHeader: {
-    padding: '4px 8px',
-    textAlign: 'center',
-    color: '#63666A',
-  },
-  nestedRow: {
-    backgroundColor: '#f9f9f9',
-  },
-  cell: {
-    padding: '4px 8px',
-    overflow: 'hidden',
-    textAlign: 'center',
-    color: '#63666A',
-    borderRight: '1px solid #ddd', // Add right border for vertical lines
-  },
-  columnHeader: {
-    textAlign: 'center',
-    padding: '4px 8px',
-    color: '#63666A',
-    borderBottom: '2px solid #63666A',
-  },
-  columnHeaderNoBorder: {
-    textAlign: 'center',
-    padding: '4px 8px',
-    color: '#63666A',
-    borderBottom: 'none',
-  },
-  indentedCell: {
-    fontSize: '0.8rem',
-  },
-  search: {
-    display: 'flex',
-    alignItems: 'center',
-    position: 'absolute',
-    top: 0,
-    left: '348px',
-    width: '477px',
-    backgroundColor: '#D9D9D9',
-    borderRadius: '7px',
-    padding: '2px 4px',
-    boxShadow: '0px 4px 4px 0px #00000040',
-  },
-  searchIcon: {
-    padding: 4,
-    color: '#63666A',
-  },
-  inputRoot: {
-    marginLeft: 4,
-    flex: 1,
-  },
-  inputInput: {
-    padding: '4px 0',
-    paddingLeft: 4,
-  },
-  groupByLabel: {
-    fontFamily: 'Inter, sans-serif',
-    color: '#63666A',
-    fontWeight: 'bold',
-    marginTop: '17px',
-    marginLeft: '5px',
-  },
-  groupBySelect: {
-    minWidth: 200,
-    marginLeft: 8,
-    marginTop: 17,
-    color: '#63666A',
-  },
-  dialogPaper: {
-    backgroundColor: '#D9D9D9',
-    maxWidth: '280px',  // Set a maximum width
-    top: '140px',
-    left: '280px',
-    marginBottom: '200px',
-    padding: '20px',  // Add padding if needed
-  },
-});
+import "../css/components/CostInventory.css"
 
 const dummyData = [
   {
@@ -272,15 +144,15 @@ const dummyData = [
 ];
 
 const TableRowComponent = ({ data, level, toggleRow, expandedRows, rowKey, indentIncrement }) => {
-  const classes = useStyles();
+  
   const indentLevel = level * indentIncrement;
 
   return (
     <>
       {data.map((item, index) => (
         <React.Fragment key={`${rowKey}-${index}`}>
-          <TableRow className={classes.nestedRow}>
-            <TableCell style={{ paddingLeft: indentLevel }} className={`${classes.tableCell} ${classes.cell}`}>
+          <TableRow className="cmpCostInv_nestedRow">
+            <TableCell style={{ paddingLeft: indentLevel }} className="cmpCostInv_tableCell cmpCostInv_cell">
               {item.services || item.resourceGroups || item.resources ? (
                 <IconButton size="small" onClick={() => toggleRow(rowKey, index)}>
                   {expandedRows[rowKey]?.[index] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -290,8 +162,8 @@ const TableRowComponent = ({ data, level, toggleRow, expandedRows, rowKey, inden
             </TableCell>
             {['april', 'may', 'june', 'july'].map(month => (
               <React.Fragment key={month}>
-                <TableCell className={classes.cell}>{item[`${month}OnDemandCost`]}</TableCell>
-                <TableCell className={classes.cell}>{item[`${month}Savings`]}</TableCell>
+                <TableCell className="cmpCostInv_cell">{item[`${month}OnDemandCost`]}</TableCell>
+                <TableCell className="cmpCostInv_cell">{item[`${month}Savings`]}</TableCell>
               </React.Fragment>
             ))}
           </TableRow>
@@ -312,7 +184,7 @@ const TableRowComponent = ({ data, level, toggleRow, expandedRows, rowKey, inden
 };
 
 const CostInventory = () => {
-  const classes = useStyles();
+
   const [expandedRows, setExpandedRows] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [groupBy, setGroupBy] = useState([]); // State for Group By dropdown
@@ -353,62 +225,62 @@ const CostInventory = () => {
   });
 
   return (
-    <div className={classes.container}>
-      <div className={classes.header}>
-        <h2 className={classes.title}>Cloud Inventory</h2>
-        <div className={classes.buttonsContainer}>
-          <div className={classes.groupByContainer}>
-            <span className={classes.groupByLabel}>Group by:(max 5)</span>
+    <div className="cmpCostInv_container">
+      <div className="cmpCostInv_header">
+        <h2 className="cmpCostInv_title">Cloud Inventory</h2>
+        <div className="cmpCostInv_buttonsContainer">
+          <div className="cmpCostInv_groupByContainer">
+            <span className="cmpCostInv_groupByLabel">Group by:(max 5)</span>
             <MultiSelect
               options={groupByOptions}
               value={groupBy}
               onChange={setGroupBy}
               labelledBy="Select"
-              className={classes.groupBySelect}
+              className="cmpCostInv_groupBySelect"
             />
           </div>
-          <div className={classes.search}>
-            <SearchIcon className={classes.searchIcon} />
+          <div className="cmpCostInv_search">
+            <SearchIcon className="cmpCostInv_searchIcon" />
             <InputBase
               placeholder="Search..."
               classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
+                root: "cmpCostInv_inputRoot",
+                input: "cmpCostInv_inputInput",
               }}
               value={searchQuery}
               onChange={handleSearchChange}
             />
           </div>
-          <div className={classes.buttons}>
-            <CostsAmortized dialogPaperClass={classes.dialogPaper} />
-            <Button variant="contained" className={classes.button}>Customize Report</Button>
+          <div className="cmpCostInv_buttons">
+            <CostsAmortized dialogPaperClass="cmpCostInv_dialogPaper" />
+            <Button variant="contained" className="cmpCostInv_button" color="inherit">Customize Report</Button>
 
-            <IconButton className={classes.button}>
+            <IconButton className="cmpCostInv_button">
               <ShareIcon />
             </IconButton>
           </div>
         </div>
       </div>
-      <Box className={classes.tableContainer}>
+      <Box className="cmpCostInv_tableContainer">
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell rowSpan={2} className={classes.columnHeader}>Subscription Name</TableCell>
-                <TableCell colSpan={2} className={classes.columnHeaderNoBorder}>April-24</TableCell>
-                <TableCell colSpan={2} className={classes.columnHeaderNoBorder}>May-24</TableCell>
-                <TableCell colSpan={2} className={classes.columnHeaderNoBorder}>June-24</TableCell>
-                <TableCell colSpan={2} className={classes.columnHeaderNoBorder}>July-24</TableCell>
+                <TableCell rowSpan={2} className="cmpCostInv_columnHeader">Subscription Name</TableCell>
+                <TableCell colSpan={2} className="cmpCostInv_columnHeaderNoBorder">April-24</TableCell>
+                <TableCell colSpan={2} className="cmpCostInv_columnHeaderNoBorder">May-24</TableCell>
+                <TableCell colSpan={2} className="cmpCostInv_columnHeaderNoBorder">June-24</TableCell>
+                <TableCell colSpan={2} className="cmpCostInv_columnHeaderNoBorder">July-24</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className={classes.columnHeader}>On Demand Cost</TableCell>
-                <TableCell className={classes.columnHeader}>Savings Plan</TableCell>
-                <TableCell className={classes.columnHeader}>On Demand Cost</TableCell>
-                <TableCell className={classes.columnHeader}>Savings Plan</TableCell>
-                <TableCell className={classes.columnHeader}>On Demand Cost</TableCell>
-                <TableCell className={classes.columnHeader}>Savings Plan</TableCell>
-                <TableCell className={classes.columnHeader}>On Demand Cost</TableCell>
-                <TableCell className={classes.columnHeader}>Savings Plan</TableCell>
+                <TableCell className="cmpCostInv_columnHeader">On Demand Cost</TableCell>
+                <TableCell className="cmpCostInv_columnHeader">Savings Plan</TableCell>
+                <TableCell className="cmpCostInv_columnHeader">On Demand Cost</TableCell>
+                <TableCell className="cmpCostInv_columnHeader">Savings Plan</TableCell>
+                <TableCell className="cmpCostInv_columnHeader">On Demand Cost</TableCell>
+                <TableCell className="cmpCostInv_columnHeader">Savings Plan</TableCell>
+                <TableCell className="cmpCostInv_columnHeader">On Demand Cost</TableCell>
+                <TableCell className="cmpCostInv_columnHeader">Savings Plan</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

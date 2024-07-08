@@ -1,0 +1,33 @@
+.cmpHBgraph_container {
+    width: 50%;
+    max-width: 500px;
+    margin-top: -430px;
+    margin-right: 30px;
+    height: 373px;
+	  margin: 32px auto;
+    padding: 24px;
+    background-color: #f9f9f9;
+  }
+  .cmpHBgraph_heading {
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #63666A;
+    margin-bottom: 2;
+  }
+  .cmpHBgraph_legend {
+    font-size: 12px;
+    color: #63666A; 
+    display: flex;
+    justify-content: flex-end;
+  }
+  .cmpHBgraph_legendItem {
+    display: flex;
+    align-items: center;
+    margin-right: -16px;
+  }
+  .cmpHBgraph_legendColorBox {
+    width: 10px;
+    height: 10px;
+    margin-left: 10px;
+  }

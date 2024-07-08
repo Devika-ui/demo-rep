@@ -6,57 +6,13 @@ import PieChartContainer from "./PieChartContainer";
 import ContainerBox from "./ContainerBox";
 import GenericBarChart from "./GenericBarChart";
 import ServiceCategory from "./ServiceCategory";
-import { makeStyles } from "@material-ui/core/styles";
 import { Select, MenuItem } from "@mui/material";
-import IconButton from "@material-ui/core/IconButton";
-import ShareIcon from "@material-ui/icons/Share";
+import IconButton from "@mui/material/IconButton";
+import ShareIcon from "@mui/icons-material/Share";
 import CostsAmortized from "./CostsAmortized.js";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
+import "../css/components/SqlVmLicenses.css"
 
-const useStyles = makeStyles((theme) => ({
-  heading: {
-    color: "#63666A",
-    fontSize: "14px",
-    marginBottom: theme.spacing(2),
-  },
-  buttonContainer: {
-    position: "absolute",
-    top: 235,
-    left: 880,
-    zIndex: 1000,
-    margin: "20px",
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-  },
-  button: {
-    fontSize: "0.7rem",
-    padding: "4px 8px",
-    color: "#63666A",
-    borderColor: "#63666A",
-  },
-  dialogPaper: {
-    backgroundColor: "#D9D9D9",
-    maxWidth: "280px", // Set a maximum width
-    top: "140px",
-    left: "280px",
-    marginBottom: "200px",
-    padding: "20px", // Add padding if needed
-  },
-  select: {
-    fontSize: "0.7rem",
-    padding: "2px 4px",
-    color: "#63666A",
-    borderColor: "#63666A",
-    minWidth: "auto",
-    "& .MuiSelect-select": {
-      padding: "2px 4px", // Ensuring the inner padding is reduced
-    },
-    "& .MuiOutlinedInput-input": {
-      padding: "2px 4px", // Adjusting input padding
-    },
-  },
-}));
 const additionalFilters = [
   {
     label: 'Service Category(s)',
@@ -97,7 +53,6 @@ const additionalFilters = [
 ];
 
 const SqlVmLicenses = () => {
-  const classes = useStyles();
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
 
@@ -549,7 +504,7 @@ const SqlVmLicenses = () => {
                 value={groupBy}
                 onChange={handleGroupByChange}
                 displayEmpty
-                className={classes.select}
+                className="cmpSqlVM_select"
               >
                 <MenuItem value="">Choose an option</MenuItem>
                 <MenuItem value="sqlvmlicenses">SQL VM Licenses</MenuItem>
@@ -563,12 +518,12 @@ const SqlVmLicenses = () => {
       {/* Include PieChartContainer */}
       <div>
         {/* Separate container for buttons */}
-        <div className={classes.buttonContainer}>
-          <CostsAmortized dialogPaperClass={classes.dialogPaper} />
-          <Button variant="contained" className={classes.button}>
+        <div className="cmpSqlVM_buttonContainer">
+          <CostsAmortized dialogPaperClass="cmpSqlVM_dialogPaper" />
+          <Button variant="contained" className="cmpSqlVM_button" color="inherit">
             Customize Report
           </Button>
-          <IconButton className={classes.button}>
+          <IconButton className="cmpSqlVM_button">
             <ShareIcon />
           </IconButton>
         </div>

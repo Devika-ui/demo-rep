@@ -1,120 +1,18 @@
 import React, { useState } from "react";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import ShareIcon from "@material-ui/icons/Share";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
- 
-const useStyles = makeStyles({
-  container: {
-    backgroundColor: "white",
- 
-    padding: 10,
- 
-    border: "1px solid #ddd",
- 
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
- 
-    overflow: "auto",
-  },
- 
-  header: {
-    display: "flex",
- 
-    flexDirection: "column",
- 
-    marginBottom: 10,
-  },
- 
-  title: {
-    fontFamily: "Inter, sans-serif",
- 
-    fontSize: "16px",
- 
-    fontWeight: 700,
- 
-    lineHeight: "19.36px",
-    textAlign: "left",
-    color: "#63666A",
-    marginBottom: 8,
-  },
- 
-  buttons: {
-    display: "flex",
- 
-    justifyContent: "flex-end",
- 
-    gap: 10,
-  },
- 
-  button: {
-    fontSize: "0.7rem",
- 
-    padding: "4px 8px",
- 
-    color: "#63666A",
- 
-    borderColor: "#63666A",
-  },
- 
-  tableContainer: {
-    border: "1px solid #ddd",
- 
-    borderRadius: "0",
- 
-    overflow: "hidden",
-  },
- 
-  tableHeader: {
-    padding: "4px 8px",
- 
-    textAlign: "center",
- 
-    color: "#63666A",
-  },
- 
-  table: {
-    tableLayout: "fixed",
-  },
- 
-  nestedRow: {
-    backgroundColor: "#f9f9f9",
-  },
- 
-  cell: {
-    padding: "4px 8px",
- 
-    overflow: "hidden",
- 
-    textAlign: "center",
- 
-    color: "#63666A",
- 
-    borderRight: "1px solid #ddd",
-  },
- 
-  columnHeader: {
-    textAlign: "center",
- 
-    padding: "4px 8px",
- 
-    color: "#63666A",
- 
-    borderBottom: "2px solid #63666A",
-  },
- 
-  indentedCell: {
-    fontSize: "0.8rem",
-  },
-});
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import ShareIcon from "@mui/icons-material/Share";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Box from "@mui/material/Box";
+import "../css/components/ServiceCategory.css" 
+
  
 // const dummyData = [
 //   {
@@ -365,7 +263,6 @@ const TableRowComponent = ({
   rowKey,
   indentIncrement,
 }) => {
-  const classes = useStyles();
  
   const indentLevel = level * indentIncrement;
  
@@ -373,10 +270,10 @@ const TableRowComponent = ({
     <>
       {data.map((item, index) => (
         <React.Fragment key={`${rowKey}-${index}`}>
-          <TableRow className={classes.nestedRow}>
+          <TableRow className="cmpSvcCat_nestedRow">
             <TableCell
               style={{ paddingLeft: indentLevel }}
-              className={classes.tableCell}
+              className="cmpSvcCat_tableCell"
             >
               {item.services || item.resourceGroups || item.resources ? (
                 <IconButton
@@ -402,20 +299,20 @@ const TableRowComponent = ({
                   key !== "resources"
               )
               .map((key, cellIndex) => (
-                <TableCell key={cellIndex} className={classes.cell}>
+                <TableCell key={cellIndex} className="cmpSvcCat_cell">
                   {item[key]}
                 </TableCell>
               ))}
             {/*
-            <TableCell className={classes.cell}>{item.totalBill}</TableCell>
+            <TableCell className="cmpSvcCat_cell">{item.totalBill}</TableCell>
  
-            <TableCell className={classes.cell}>{item.onDemandCost}</TableCell>
+            <TableCell className="cmpSvcCat_cell">{item.onDemandCost}</TableCell>
  
-            <TableCell className={classes.cell}>
+            <TableCell className="cmpSvcCat_cell">
               {item.commitmentsCost}
             </TableCell>
  
-            <TableCell className={classes.cell}>{item.savings}</TableCell> */}
+            <TableCell className="cmpSvcCat_cell">{item.savings}</TableCell> */}
           </TableRow>
  
           {expandedRows[rowKey]?.[index] && (
@@ -437,7 +334,6 @@ const TableRowComponent = ({
 };
  
 const ServiceCategory = ({ dummyData, tableData, height, width }) => {
-  const classes = useStyles();
   const headers = Object.keys(tableData[0]).filter((key) =>
     key.startsWith("columnHead")
   );
@@ -459,51 +355,51 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
   const indentIncrement = 30;
  
   return (
-    <div className={classes.container} style={{ height: height, width: width }}>
-      <div className={classes.header}>
-        <h2 className={classes.title}>{tableData[0].tableTitle}</h2>
+    <div className="cmpSvcCat_container" style={{ height: height, width: width }}>
+      <div className="cmpSvcCat_header">
+        <h2 className="cmpSvcCat_title">{tableData[0].tableTitle}</h2>
  
-        <div className={classes.buttons}>
-          <Button variant="contained" className={classes.button}>
+        <div className="cmpSvcCat_buttons">
+          <Button variant="contained" className="cmpSvcCat_button" color="inherit">
             Customize Report
           </Button>
  
-          <IconButton className={classes.button}>
+          <IconButton className="cmpSvcCat_button">
             <ShareIcon />
           </IconButton>
         </div>
       </div>
  
-      <Box className={classes.tableContainer}>
-        <div className={classes.tableHeader}>April - 24</div>
+      <Box className="cmpSvcCat_tableContainer">
+        <div className="cmpSvcCat_tableHeader">April - 24</div>
  
         <TableContainer>
           <Table>
             <TableHead>
               {/* <TableRow>
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead1}
                 </TableCell>
  
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead2}
                 </TableCell>
  
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead3}
                 </TableCell>
  
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead4}
                 </TableCell>
  
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead5}
                 </TableCell>
               </TableRow> */}
               <TableRow>
                 {headers.map((headerKey, index) => (
-                  <TableCell key={index} className={classes.columnHeader}>
+                  <TableCell key={index} className="cmpSvcCat_columnHeader">
                     {tableData[0][headerKey]}
                   </TableCell>
                 ))}

@@ -1,89 +1,17 @@
 import React, { useState } from "react";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import ShareIcon from "@material-ui/icons/Share";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-
-const useStyles = makeStyles({
-  container: {
-    width: 560,
-    height: 400,
-    marginLeft: -510,
-    marginTop: 12,
-    backgroundColor: "white",
-    padding: 10,
-    border: "1px solid #ddd",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    overflow: "auto",
-  },
-  header: {
-    display: "flex",
-    flexDirection: "column",
-    marginBottom: 10,
-  },
-  title: {
-    fontFamily: "Inter, sans-serif",
-    fontSize: "16px",
-    fontWeight: 700,
-    lineHeight: "19.36px",
-    textAlign: "left",
-    color: "#63666A",
-    marginBottom: 8,
-  },
-  buttons: {
-    display: "flex",
-    justifyContent: "flex-end",
-    gap: 10,
-  },
-  button: {
-    fontSize: "0.7rem",
-    padding: "4px 8px",
-    color: "#63666A",
-    borderColor: "#63666A",
-  },
-  tableContainer: {
-    border: "1px solid #ddd",
-    borderRadius: "0",
-    overflow: "hidden",
-  },
-  tableHeader: {
-    padding: "4px 8px",
-    textAlign: "center",
-    color: "#63666A",
-  },
-  table: {
-    tableLayout: "fixed",
-  },
-  nestedRow: {
-    backgroundColor: "#f9f9f9",
-  },
-  cell: {
-    padding: "4px 8px",
-    overflow: "hidden",
-    textAlign: "center",
-    color: "#63666A",
-    borderRight: "1px solid #ddd",
-  },
-  columnHeader: {
-    textAlign: "center",
-    padding: "4px 8px",
-    color: "#63666A",
-    borderBottom: "2px solid #63666A",
-  },
-  indentedCell: {
-    fontSize: "0.8rem",
-  },
-});
-
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import ShareIcon from "@mui/icons-material/Share";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Box from "@mui/material/Box";
+import "../css/components/TableforOrphaned.css"
 const orphanedData = [
   {
     name: "Subscription 1",
@@ -204,17 +132,16 @@ const TableRowComponent = ({
   rowKey,
   indentIncrement,
 }) => {
-  const classes = useStyles();
   const indentLevel = level * indentIncrement;
 
   return (
     <>
       {data.map((item, index) => (
         <React.Fragment key={`${rowKey}-${index}`}>
-          <TableRow className={classes.nestedRow}>
+          <TableRow className="cmpTblOrphan_nestedRow">
             <TableCell
               style={{ paddingLeft: indentLevel }}
-              className={classes.cell}
+              className="cmpTblOrphan_cell"
             >
               {item.children ? (
                 <IconButton
@@ -230,9 +157,9 @@ const TableRowComponent = ({
               ) : null}
               {item.name}
             </TableCell>
-            <TableCell className={classes.cell}>{item.totalCost}</TableCell>
-            <TableCell className={classes.cell}>{item.countOfDisks}</TableCell>
-            <TableCell className={classes.cell}>{item.environment}</TableCell>
+            <TableCell className="cmpTblOrphan_cell">{item.totalCost}</TableCell>
+            <TableCell className="cmpTblOrphan_cell">{item.countOfDisks}</TableCell>
+            <TableCell className="cmpTblOrphan_cell">{item.environment}</TableCell>
           </TableRow>
           {expandedRows[rowKey]?.[index] && (
             <TableRowComponent
@@ -251,7 +178,6 @@ const TableRowComponent = ({
 };
 
 const TableforOrphaned = () => {
-  const classes = useStyles();
   const [expandedRows, setExpandedRows] = useState({});
 
   const toggleRow = (rowKey, index) => {
@@ -267,39 +193,39 @@ const TableforOrphaned = () => {
   const indentIncrement = 30;
 
   return (
-    <div className={classes.container}>
-      <div className={classes.header}>
-        <h2 className={classes.title}>
+    <div className="cmpTblOrphan_container">
+      <div className="cmpTblOrphan_header">
+        <h2 className="cmpTblOrphan_title">
           On-Demand Cost Allocation for Orphaned Snapshots
         </h2>
-        <div className={classes.buttons}>
-          <Button variant="contained" className={classes.button}>
+        <div className="cmpTblOrphan_buttons">
+          <Button variant="contained" className="cmpTblOrphan_button" color="inherit">
             Customize Report
           </Button>
-          <IconButton className={classes.button}>
+          <IconButton className="cmpTblOrphan_button">
             <ShareIcon />
           </IconButton>
         </div>
       </div>
-      <Box className={classes.tableContainer}>
-        <div className={classes.tableHeader}>April - 24</div>
+      <Box className="cmpTblOrphan_tableContainer">
+        <div className="cmpTblOrphan_tableHeader">April - 24</div>
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpTblOrphan_columnHeader">
                   Application/Project Name
                 </TableCell>
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpTblOrphan_columnHeader">
                   Owner Name
                 </TableCell>
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpTblOrphan_columnHeader">
                   Total Cost
                 </TableCell>
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpTblOrphan_columnHeader">
                   Count of Disks
                 </TableCell>
-                <TableCell className={classes.columnHeader}>
+                <TableCell className="cmpTblOrphan_columnHeader">
                   Environment
                 </TableCell>
               </TableRow>
