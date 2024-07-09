@@ -30,8 +30,8 @@ const options = {
               color: "#000",
               font: {
                   family: "Roboto",
-                  size: 16, // Increased font size for legend labels
-                  weight: 'bold', // Added bold weight for better visibility
+                  size: 16,
+                  weight: 'bold',
               },
           },
       },
@@ -43,7 +43,7 @@ const options = {
                   if (label) {
                       label += ': ';
                   }
-                  label += context.raw.toFixed(2); // Ensure two decimal places
+                  label += context.raw.toFixed(2);
                   return label;
               }
           }
@@ -62,8 +62,6 @@ const options = {
               callback: function (value, index, values) {
                   const date = new Date(this.getLabelForValue(value));
                   const midMonthDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() / 2;
-  
-                  // Display month label in the middle of the month
                   if (date.getDate() === Math.ceil(midMonthDay)) {
                       return date.toLocaleString('default', { month: 'long', year: 'numeric' });
                   }
@@ -79,13 +77,13 @@ const options = {
           },
           ticks: {
               stepSize: 4000,
-              max: 6000, // Adjust max to fit the data
+              max: 6000,
           },
       },
   },
   layout: {
       padding: {
-          top: 0, // Add padding to the top to give more space for the title
+          top: 0,
       },
   },
 };
@@ -95,6 +93,7 @@ const AzureBars = () => {
       labels: [],
       datasets: [],
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
       const fetchData = async () => {
@@ -144,12 +143,18 @@ const AzureBars = () => {
               ];
 
               setData({ labels, datasets });
+              setLoading(false); // Data fetching is complete
           } catch (error) {
               console.error("Failed to fetch data", error);
+              setLoading(false); // Data fetching failed
           }
       };
       fetchData();
   }, []);
+
+  if (loading) {
+      return null; // Show nothing while loading
+  }
 
   return (
     <div style={{ position: "relative" }}>
