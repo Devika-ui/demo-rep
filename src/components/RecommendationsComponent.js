@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import '../css/RecommendationsComponent.scss';
-import { Select, MenuItem, FormControl, Typography } from '@mui/material';
-import api from '../api.js';
-import ArrowDropDownIcon from '@mui/icons-material//ArrowDropDown';
+import React, { useEffect, useState } from "react";
+import "../css/RecommendationsComponent.scss";
+import { Select, MenuItem, FormControl, Typography } from "@mui/material";
+import api from "../api.js";
+import ArrowDropDownIcon from "@mui/icons-material//ArrowDropDown";
 
 const RecommendationsComponent = () => {
   const [recommendations, setRecommendations] = useState([]);
@@ -24,12 +24,25 @@ const RecommendationsComponent = () => {
     fetchData();
   }, []);
 
-  const totalSavings = recommendations.reduce((total, rec) => total + rec.value, 0).toFixed(2);
+  const totalSavings = recommendations
+    .reduce((total, rec) => total + rec.value, 0)
+    .toFixed(2);
 
   return (
-    <div className="recommendations-container">
+    <div
+      className="recommendations-container"
+      style={{ width: "353px", height: "370px" }}
+    >
       <div className="top-part">
-        <h2 style={{ color: '#5f249f', fontFamily:'sans-serif', fontSize:'16px'}}>Top 3 Recommendations</h2>
+        <h2
+          style={{
+            color: "#5f249f",
+            fontFamily: "sans-serif",
+            fontSize: "16px",
+          }}
+        >
+          Top 3 Recommendations
+        </h2>
       </div>
       <div className="divider"></div>
       <div className="subheading">
@@ -60,10 +73,24 @@ const RecommendationsComponent = () => {
           </div>
         </div>
       ))}
-      
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: '8px' }}>
-        <div style={{ display: 'inline-block', color: '#5f249f' }}>Total Savings Potential</div>
-        <div style={{ display: 'inline-block', float: 'right' }} className="price">${totalSavings}</div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingTop: "8px",
+        }}
+      >
+        <div style={{ display: "inline-block", color: "#5f249f" }}>
+          Total Savings Potential
+        </div>
+        <div
+          style={{ display: "inline-block", float: "right" }}
+          className="price"
+        >
+          ${totalSavings}
+        </div>
       </div>
     </div>
   );

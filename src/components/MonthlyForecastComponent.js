@@ -69,7 +69,7 @@ const MonthlyForecastComponent = () => {
   };
 
   return (
-    <div className="monthly-forecast-container">
+    <div className="monthly-forecast-container" style={{ width: "28.5%" }}>
       {/* Top Part */}
       <div className="top-part">
         <div className="left">

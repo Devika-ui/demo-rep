@@ -1,8 +1,7 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import iIcon from '../images/Iicon.png';
-import api from '../api.js';
+import iIcon from "../images/Iicon.png";
+import api from "../api.js";
 
 const OverallTotalRealizedSavings = () => {
   const [reservations, setReservations] = useState([]);
@@ -13,8 +12,15 @@ const OverallTotalRealizedSavings = () => {
     const fetchReservationsData = async () => {
       try {
         const reservationsData = await api.getOverallSavingsRI();
-        setReservations(reservationsData.map(entry => entry.savings));
-        setLabels(reservationsData.map(entry => new Date(entry.modifieddate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })));
+        setReservations(reservationsData.map((entry) => entry.savings));
+        setLabels(
+          reservationsData.map((entry) =>
+            new Date(entry.modifieddate).toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            })
+          )
+        );
       } catch (error) {
         // Handle error
       }
@@ -26,8 +32,17 @@ const OverallTotalRealizedSavings = () => {
     const fetchSimulatedSavingsData = async () => {
       try {
         const simulatedSavingsData = await api.getOverallSavingsStimulated();
-        setSimulatedSavings(simulatedSavingsData.map(entry => entry.simulated));
-        setLabels(simulatedSavingsData.map(entry => new Date(entry.Date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })));
+        setSimulatedSavings(
+          simulatedSavingsData.map((entry) => entry.simulated)
+        );
+        setLabels(
+          simulatedSavingsData.map((entry) =>
+            new Date(entry.Date).toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            })
+          )
+        );
       } catch (error) {
         // Handle error
       }
@@ -42,7 +57,7 @@ const OverallTotalRealizedSavings = () => {
       {
         label: "Reservations",
         backgroundColor: "rgba(255, 140, 0, 0.7)",
-        data: reservations.map(entry => parseFloat(entry.toFixed(2))),
+        data: reservations.map((entry) => parseFloat(entry.toFixed(2))),
       },
     ],
   };
@@ -53,7 +68,7 @@ const OverallTotalRealizedSavings = () => {
     datasets: [
       {
         borderColor: "#0079B9",
-        data: simulatedSavings.map(entry => parseFloat(entry.toFixed(2))), // Using simulatedSavings data for the trendline
+        data: simulatedSavings.map((entry) => parseFloat(entry.toFixed(2))), // Using simulatedSavings data for the trendline
         fill: false,
         type: "line",
         pointRadius: 0, // Hide points
@@ -106,7 +121,7 @@ const OverallTotalRealizedSavings = () => {
   return (
     <div
       style={{
-        width: "554px",
+        width: "558px",
         height: "449px",
         borderRadius: "5px",
         overflow: "hidden",

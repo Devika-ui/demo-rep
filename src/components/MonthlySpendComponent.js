@@ -67,7 +67,7 @@ const MonthlySpendComponent = () => {
   };
 
   return (
-    <div className="monthly-spend-container">
+    <div className="monthly-spend-container" style={{ width: "28%" }}>
       {/* Top Part */}
       <div className="top-part">
         <div className="left">

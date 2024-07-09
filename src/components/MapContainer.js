@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -23,7 +22,7 @@ const MapContainer = () => {
 
     const map = L.map(mapRef.current, {
       center: [28.6139, 77.209],
-      zoom: 11, 
+      zoom: 11,
       layers: [
         L.tileLayer(
           "https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=h45ALe3FWSTc6f08j9daEyl98fINF4L8",
@@ -35,7 +34,7 @@ const MapContainer = () => {
       ],
     });
 
-    mapData.forEach(location => {
+    mapData.forEach((location) => {
       if (location.LT && location.LN) {
         L.marker([parseFloat(location.LT), parseFloat(location.LN)], {
           icon: L.icon({
@@ -70,7 +69,7 @@ const MapContainer = () => {
           height: "32px",
           display: "flex",
           alignItems: "center",
-          width: "535px",
+          width: "570px",
           borderRadius: "5px",
         }}
       >
@@ -79,7 +78,7 @@ const MapContainer = () => {
       <div
         id="map-container"
         style={{
-          width: "554px",
+          width: "585px",
           height: "399px",
           position: "relative",
           borderRadius: "5px",
