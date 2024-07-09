@@ -16,6 +16,8 @@ const BusinessCostSplit = () => {
   const [billAllocationData, setBillAllocationData] = useState([]);
   const [serviceCategoryData, setServiceCategoryData] = useState([]);
   const [filteredBillAllocationData, setFilteredBillAllocationData] = useState([]);
+  const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] = useState([]);
+  const [uniqueBillAllocationData1, setUniqueBillAllocationData] = useState([]);
  
   const additionalFilters = [
     {
@@ -75,7 +77,7 @@ const BusinessCostSplit = () => {
           projectsWithTags,
           projectsWithoutTags,
           serviceCategoryCost,
-          billAllocation
+          billAllocation,
         ] = await Promise.all([
           api.getApplicationWithTags(),
           api.getApplicationWithoutTags(),
@@ -111,6 +113,22 @@ const BusinessCostSplit = () => {
             text: "Project without Tags",
           },
         ];
+
+        const aggregateData = (data) => {
+          let totalBill = 0;
+          let onDemandCost = 0;
+          let commitmentsCost = 0;
+          let savings = 0;
+
+          data.forEach((item) => {
+            totalBill += item.totalBill || 0;
+            onDemandCost += item.onDemandCost || 0;
+            commitmentsCost += item.commitmentsCost || 0;
+            savings += item.savings || 0;
+          });
+
+          return { totalBill, onDemandCost, commitmentsCost, savings };
+        };
  
         
         const formattedServiceCategoryData = Object.keys(serviceCategoryCost).map(
@@ -153,28 +171,60 @@ const BusinessCostSplit = () => {
           })
         );
  
-        const formattedBillAllocationData = billAllocation.billAllocation.map(
-          (item) => ({
-            name: item.tags_AppID_AppName || "null",
-            ownerName: item.tags_owner || "null",
-            totalBill: item.totalBill ? `$${item.totalBill.toFixed(2)}` : "$0.00",
-            normalizedVariation: item.Normalized_Variation_MoM !== null
-              ? `${item.Normalized_Variation_MoM}%`
-              : "null",
-            rawVariation: item.rawVariation !== null ? `${item.rawVariation}%` : "null",
-            savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
-          })
+        const billAllocationMap = billAllocation.billAllocation.reduce(
+          (acc, item) => {
+            const modifiedDate = new Date(item.modifieddate);
+            const monthString = modifiedDate.toLocaleString("en-US", {
+              month: "long",
+            });
+            const yearString = modifiedDate.getFullYear().toString().slice(-2);
+            const formattedDate = `${monthString}-${yearString}`;
+
+            if (!acc[formattedDate]) {
+              acc[formattedDate] = [];
+            }
+
+            acc[formattedDate].push({
+              name: item.tags_AppID_AppName || "null",
+              ownerName: item.tags_owner || "null",
+              totalBill: item.totalBill ? `$${item.totalBill.toFixed(2)}` : "$0.00",
+              normalizedVariation:
+                item.Normalized_Variation_MoM !== null
+                  ? `${item.Normalized_Variation_MoM}%`
+                  : "null",
+              rawVariation: item.rawVariation !== null ? `${item.rawVariation}%` : "null",
+              savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
+            });
+
+            return acc;
+          },
+          {}
+        );
+
+        const uniqueModifiedDatesForBillAllocation = Object.keys(billAllocationMap);
+        const flattenedBillAllocationData = uniqueModifiedDatesForBillAllocation.reduce(
+          (acc, date, dateIndex) => {
+            billAllocationMap[date].forEach((item, itemIndex) => {
+              if (!acc[itemIndex]) acc[itemIndex] = {};
+              columns1.forEach((col) => {
+                acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
+              });
+            });
+            return acc;
+          },
+          []
         );
  
         console.log("formattedBoxData", formattedBoxData);
-        console.log("formattedBillAllocationData", formattedBillAllocationData);
+        console.log("flattenedBillAllocationData", flattenedBillAllocationData);
         console.log("formattedServiceCategoryData", formattedServiceCategoryData);
  
         setBoxData(formattedBoxData);
         setServiceCategoryData(formattedServiceCategoryData);
-        setBillAllocationData(formattedBillAllocationData);
-        setFilteredBillAllocationData(formattedBillAllocationData);
- 
+        setBillAllocationData(flattenedBillAllocationData);
+        setFilteredBillAllocationData(flattenedBillAllocationData);
+        setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
+        setUniqueBillAllocationData();
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -206,7 +256,7 @@ const BusinessCostSplit = () => {
   };
  
   const columns1 = [
-    { key: "name", label: "Application/Project Name" },
+    { key: "name", label: "Application Name" },
     { key: "ownerName", label: "Owner Name" },
     { key: "totalBill", label: "Total Bill" },
     { key: "normalizedVariation", label: "%Normalized Variation" },
@@ -312,6 +362,7 @@ const BusinessCostSplit = () => {
           tableHeight="auto"
           tableWidth="528px"
           columns={columns1}
+          headerLabels={headerLabelsForBillAllocation}
         />
       </div>
       <div

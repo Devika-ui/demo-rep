@@ -24,6 +24,9 @@ const BillOverview = () => {
   const [topServices, setTopServices] = useState([]);
   const [topApplications, setTopApplications] = useState([]);
   const [boxData, setBoxData] = useState([]);
+  const [headerLabelsForInvoice, setHeaderLabelsForInvoice] = useState([]);
+  const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] = useState([]);
+  const [uniqueBillAllocationData1, setUniqueBillAllocationData] = useState([]);
 
   const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
 
@@ -97,8 +100,18 @@ const BillOverview = () => {
           api.getNormalizedVariation(),
         ]);
 
-        const formattedBillAllocationData = billAllocation.billAllocation.map(
-          (item) => ({
+        //formatted bill application 
+        const billAllocationMap = billAllocation.billAllocation.reduce((acc, item) => {
+          const modifiedDate = new Date(item.modifieddate);
+          const monthString = modifiedDate.toLocaleString('en-US', { month: 'long' });
+          const yearString = modifiedDate.getFullYear().toString().slice(-2);
+          const formattedDate = `${monthString}-${yearString}`;
+  
+          if (!acc[formattedDate]) {
+            acc[formattedDate] = [];
+          }
+  
+          acc[formattedDate].push({
             name: item.tags_AppID_AppName || "null",
             ownerName: item.tags_owner || "null",
             onDemandCost: item.onDemandCost
@@ -111,19 +124,60 @@ const BillOverview = () => {
             totalBill: item.totalBill
               ? `$${item.totalBill.toFixed(2)}`
               : "$0.00",
-          })
+          });
+  
+          return acc;
+        }, {});
+  
+        const uniqueModifiedDatesForBillAllocation = Object.keys(billAllocationMap);
+        const flattenedBillAllocationData = uniqueModifiedDatesForBillAllocation.reduce(
+          (acc, date, dateIndex) => {
+            billAllocationMap[date].forEach((item, itemIndex) => {
+              if (!acc[itemIndex]) acc[itemIndex] = {};
+              columns1.forEach((col) => {
+                acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
+              });
+            });
+            return acc;
+          },
+          []
         );
 
-        const formattedInvoiceData = invoiceResponse.invoiceView.map(
-          (item) => ({
+        
+        const invoiceMap = invoiceResponse.invoiceView.reduce((acc, item) => {
+          const modifiedDate = new Date(item.modifieddate);
+          const monthString = modifiedDate.toLocaleString('en-US', { month: 'long' });
+          const yearString = modifiedDate.getFullYear().toString().slice(-2);
+          const formattedDate = `${monthString}-${yearString}`;
+  
+          if (!acc[formattedDate]) {
+            acc[formattedDate] = [];
+          }
+  
+          acc[formattedDate].push({
             subscriptionName: item.subscriptionName,
             onDemandCost: `$${item.onDemandCost.toFixed(2)}`,
             reservedInstanceCost: `$${item.reservedInstanceCost.toFixed(2)}`,
             simulatedPayGoCost: `$${item.simulatedPayGoCost.toFixed(2)}`,
             savings: `$${item.savings.toFixed(2)}`,
             totalBill: `$${item.totalBill.toFixed(2)}`,
-          })
-        );
+          });
+  
+          return acc;
+        }, {});
+  
+        const uniqueModifiedDatesForInvoice = Object.keys(invoiceMap);
+        const flattenedInvoiceData = uniqueModifiedDatesForInvoice.reduce((acc, date, dateIndex) => {
+          invoiceMap[date].forEach((item, itemIndex) => {
+            if (!acc[itemIndex]) acc[itemIndex] = {};
+            columns.forEach((col) => {
+              acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
+            });
+          });
+          return acc;
+        }, []);
+
+
         console.log("TotalBillVsSimulatedPaygo:", totalBillVsSimulatedPaygo);
         console.log("topApplicationData:", topApplicationData);
         const formattedChartData = totalBillVsSimulatedPaygo.costsPAYGO.map(
@@ -182,15 +236,18 @@ const BillOverview = () => {
           { number: `${normalizedVariation}%`, text: "Normalized Variation" }, 
         ];
 
-        setBillAllocationData(formattedBillAllocationData);
-        setFilteredBillAllocationData(formattedBillAllocationData);
-        setInvoiceData(formattedInvoiceData);
+        setBillAllocationData(flattenedBillAllocationData);
+        setFilteredBillAllocationData(flattenedBillAllocationData);
         setChartData(formattedChartData);
         setTrendData(formattedTrendData);
         setTopServices(formattedTopServices);
         setTopApplications(formattedTopApplications);
         setBoxData(dataSet1);
         console.log("formatedtopApplications:" ,formattedTopApplications);
+        setInvoiceData(flattenedInvoiceData);
+        setHeaderLabelsForInvoice(uniqueModifiedDatesForInvoice);
+        setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
+        setUniqueBillAllocationData();
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -319,7 +376,7 @@ const BillOverview = () => {
               tableHeight="auto"
               tableWidth="595px"
               columns={columns}
-              headerLabel="April - 24" // value for the prop
+              headerLabels={headerLabelsForInvoice}
             />
           </div>
         </div>
@@ -379,7 +436,7 @@ const BillOverview = () => {
               tableHeight="auto"
               tableWidth="600px"
               columns={columns1}
-              headerLabel="April - 24" // value for the prop
+              headerLabels={headerLabelsForBillAllocation} // value for the prop
             />
           </div>
         </div>

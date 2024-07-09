@@ -20,9 +20,33 @@ const InvoiceTableView = ({
   tableHeight,
   tableWidth,
   columns,
-  headerLabel // new prop
+  headerLabels // new prop
 }) => {
 
+  const renderTableHead = () => (
+    <TableHead>
+      <TableRow>
+        {headerLabels.map((label, labelIndex) => (
+          <TableCell
+            key={labelIndex}
+            className="cmpInvTv_tableHeadCell cmpInvTv_stickyHeader"
+            colSpan={columns.length}
+          >
+            {label}
+          </TableCell>
+        ))}
+      </TableRow>
+      <TableRow>
+        {headerLabels.flatMap((_, labelIndex) => (
+          columns.map((column, colIndex) => (
+            <TableCell key={`${labelIndex}-${colIndex}`} className={`$"cmpInvTv_tableHeadCell} $"cmpInvTv_stickyHeader}`}>
+              {column.label}
+            </TableCell>
+          ))
+        ))}
+      </TableRow>
+    </TableHead>
+  );
 
   return (
     <div className="cmpInvTv_container" style={{ width: tableWidth, height: tableHeight }}>
@@ -38,23 +62,16 @@ const InvoiceTableView = ({
       </div>
       <TableContainer className="cmpInvTv_tableContainer">
         <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell className="cmpInvTv_tableHeadCell cmpInvTv_stickyHeader" colSpan={columns.length}>
-                {headerLabel} {/* using the new prop */}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              {columns.map((column, index) => (
-                <TableCell key={index} className={`$"cmpInvTv_tableHeadCell} $"cmpInvTv_stickyHeader}`}>{column.label}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
+          {renderTableHead()}
           <TableBody>
-            {tableData.map((row, index) => (
-              <TableRow key={index} className="cmpInvTv_tableRow">
-                {columns.map((column, colIndex) => (
-                  <TableCell key={colIndex} className="cmpInvTv_tableCell">{row[column.key]}</TableCell>
+            {tableData.map((row, rowIndex) => (
+              <TableRow key={rowIndex} className="cmpInvTv_tableRow">
+                {headerLabels.flatMap((_, labelIndex) => (
+                  columns.map((column, colIndex) => (
+                    <TableCell key={`${labelIndex}-${colIndex}`} className="cmpInvTv_tableCell">
+                      {row[`${column.key}_${labelIndex}`]}
+                    </TableCell>
+                  ))
                 ))}
               </TableRow>
             ))}
@@ -75,13 +92,13 @@ InvoiceTableView.propTypes = {
     key: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   })).isRequired,
-  headerLabel: PropTypes.string // new prop type
+  headerLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 InvoiceTableView.defaultProps = {
   tableHeight: 'auto',
   tableWidth: '94%',
-  headerLabel: 'April - 24' // default value for the prop
+  headerLabels: ['April - 24'],
 };
 
 export default InvoiceTableView;
