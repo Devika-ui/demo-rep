@@ -410,13 +410,13 @@ const BusinessCostSplit = () => {
           display: "flex",
           justifyContent: "center",
           marginLeft: "630px",
-          marginTop: "-833px",
+          marginTop: "-798px",
           marginBottom: "30px",
         }}
       >
         <ServiceCategory
           dummyData={serviceCategoryData}
-          height="790px"
+          height="765px"
           width="600px"
           tableData={tableData}
         />
