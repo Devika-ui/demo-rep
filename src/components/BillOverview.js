@@ -26,7 +26,7 @@ const BillOverview = () => {
   const [boxData, setBoxData] = useState([]);
   const [headerLabelsForInvoice, setHeaderLabelsForInvoice] = useState([]);
   const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] = useState([]);
-  const [uniqueBillAllocationData1, setUniqueBillAllocationData] = useState([]);
+  const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
 
   const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
 
@@ -142,7 +142,17 @@ const BillOverview = () => {
           },
           []
         );
-
+        // Extract unique application names from flattenedBillAllocationData
+        const uniqueNamesSet = new Set();
+        flattenedBillAllocationData.forEach((item) => {
+          Object.keys(item).forEach((key) => {
+            if (key.startsWith("name_")) {
+              uniqueNamesSet.add(item[key]);
+            }
+          });
+        });
+        const uniqueNames = [...uniqueNamesSet];
+        console.log("uniqueNames",uniqueNames);
         
         const invoiceMap = invoiceResponse.invoiceView.reduce((acc, item) => {
           const modifiedDate = new Date(item.modifieddate);
@@ -247,7 +257,7 @@ const BillOverview = () => {
         setInvoiceData(flattenedInvoiceData);
         setHeaderLabelsForInvoice(uniqueModifiedDatesForInvoice);
         setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
-        setUniqueBillAllocationData();
+        setUniqueBillAllocationData(uniqueNames);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -264,20 +274,23 @@ const BillOverview = () => {
       setShowStackBars(true); // Show StackBars
     }
   };
+  
   const handleReportTypeChange = (event) => {
     const selectedReportType = event.target.value;
     setReportType(selectedReportType);
 
+
     if (selectedReportType) {
       const filteredData = billAllocationData.filter(
-        (item) => item.name === selectedReportType
+        (item) => {
+          return Object.keys(item).some(key => key.startsWith('name_') && item[key] === selectedReportType);
+        }
       );
       setFilteredBillAllocationData(filteredData);
     } else {
       setFilteredBillAllocationData(billAllocationData);
     }
   };
-
 
   const columns = [
     { key: "subscriptionName", label: "Subscription/Account Name" },
@@ -309,10 +322,6 @@ const BillOverview = () => {
     marginBottom: "110px", // Adjust individual chart width
   };
 
-  // Remove duplicates for the dropdown options
-  const uniqueBillAllocationData = Array.from(
-    new Set(billAllocationData.map((item) => item.name))
-  ).map((name) => billAllocationData.find((item) => item.name === name));
 
   return (
     <div>
@@ -424,9 +433,9 @@ const BillOverview = () => {
                     label="Group by Application"
                   >
                     <MenuItem value="">All Applications</MenuItem>
-                    {uniqueBillAllocationData.map((item) => (
-                      <MenuItem key={item.name} value={item.name}>
-                        {item.name === "null" ? "null" : item.name}
+                    {uniqueBillAllocationData.map((name, index) => (
+                      <MenuItem key={index} value={name}>
+                        {name === "null" ? "null" : name}
                       </MenuItem>
                     ))}
                   </Select>

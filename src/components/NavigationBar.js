@@ -23,7 +23,7 @@ const NavigationBar = () => {
 
     fetchMenuItems();
   }, []);
-
+  
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
   };
@@ -34,7 +34,7 @@ const NavigationBar = () => {
         return [
           { label: 'Bill Overview', path: '/billOverview' },
           { label: 'Business Cost Split View', path: '/businessCostSplit' },
-          { label: 'Inventory Cost Split View', path: '/cost-and-usage/subitem3' },
+          { label: 'Inventory Cost Split View', path: '/inventoryCostSplit' },
           { label: 'Infra Consumption Cost Study', path: '/cost-and-usage/subitem4' },
           { label: 'Infra Changes Audit', path: '/cost-and-usage/subitem1' },
           { label: 'Favourite Reports', path: '/cost-and-usage/subitem1' }
@@ -47,13 +47,11 @@ const NavigationBar = () => {
         ];
       case 'Recommendations':
         return [
-          { label: 'Unattached Managed disks', path: '/recommendations/subitem1' },
-          { label: 'Orphaned Screenshots', path: '/recommendations/subitem2' },
-          { label: 'Orphaned disks', path: '/recommendations/subitem3' },
-          { label: 'Hyper Scalar Advisor', path: '/recommendations/subitem4' },
-          { label: 'VM & SQL Licenses', path: '/recommendations/subitem5' },
-          { label: 'Orphaned RSV Backups', path: '/recommendations/subitem6' },
-          { label: 'Favourite Reports', path: '/recommendations/subitem7' }
+          { label: 'Unattached Managed disks', path: '/unattachedManagedDisks' },
+          { label: 'Orphaned Screenshots', path: '/orphanedSnapshots' },
+          { label: 'Hyper Scalar Advisor', path: '/hyperScalarAdvisor' },
+          { label: 'VM & SQL Licenses', path: '/sqlVmLicenses' },
+          { label: 'Orphaned RSV Backups', path: '/orphanedrsvbackups' },
         ];
       case 'Monitoring':
         return [
@@ -68,6 +66,25 @@ const NavigationBar = () => {
 
   const handleToggleSubmenu = (index) => {
     setOpenSubmenuIndex((prevIndex) => (prevIndex === index ? null : index)); // Toggle the submenu only if it's not already open
+  };
+
+  const getPathForItem = (label) => {
+    switch (label) {
+      case 'Overview':
+        return '/dashboard';
+      case 'Favorites':
+        return '/favorites';
+      case 'FAQs':
+        return '/faqs';
+      case 'Contact Us':
+        return '/contact';
+      case 'Settings':
+        return '/settings';
+      case 'Logout':
+        return '/logout';
+      default:
+        return `/${label.toLowerCase().replace(/\s+/g, '-')}`;
+    }
   };
 
   return (
@@ -109,7 +126,7 @@ const NavigationBar = () => {
               style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
             >
               <Link
-                to={`/${item.label.toLowerCase().replace(/\s+/g, '-')}`} // Generate path based on label
+                to={getPathForItem(item.label)} // Generate path based on label
                 style={{ color: '#fff', textDecoration: 'none', margin: '10px 0', display: 'flex', alignItems: 'center' }}
               >
                 <img src={item.icon} alt={item.label} style={{ width: '20px', marginRight: '10px' }} />
@@ -139,7 +156,7 @@ const NavigationBar = () => {
         {menuItems.map((item, index) => (
           <Link
             key={index}
-            to={`/${item.label.toLowerCase().replace(/\s+/g, '-')}`} // Generate path based on label
+            to={getPathForItem(item.label)} // Generate path based on label
             style={{ color: '#fff', textDecoration: 'none', margin: '10px 0', display: 'flex', alignItems: 'center' }}
           >
             <img src={item.icon} alt={item.label} style={{ width: '20px', marginRight: '10px' }} />

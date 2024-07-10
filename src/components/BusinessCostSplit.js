@@ -17,7 +17,7 @@ const BusinessCostSplit = () => {
   const [serviceCategoryData, setServiceCategoryData] = useState([]);
   const [filteredBillAllocationData, setFilteredBillAllocationData] = useState([]);
   const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] = useState([]);
-  const [uniqueBillAllocationData1, setUniqueBillAllocationData] = useState([]);
+  const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
  
   const additionalFilters = [
     {
@@ -129,46 +129,75 @@ const BusinessCostSplit = () => {
 
           return { totalBill, onDemandCost, commitmentsCost, savings };
         };
- 
-        
+
         const formattedServiceCategoryData = Object.keys(serviceCategoryCost).map(
-          (serviceCategory) => ({
-            name: serviceCategory,
-            totalBill: serviceCategoryCost[serviceCategory].TotalBill,
-            onDemandCost: serviceCategoryCost[serviceCategory].OnDemandCost,
-            commitmentsCost: serviceCategoryCost[serviceCategory].CommitmentsCost,
-            savings: serviceCategoryCost[serviceCategory].Savings,
-            services: Object.keys(serviceCategoryCost[serviceCategory]).map((service) => ({
-              name: service,
-              totalBill: serviceCategoryCost[serviceCategory][service].TotalBill,
-              onDemandCost: serviceCategoryCost[serviceCategory][service].OnDemandCost,
-              commitmentsCost: serviceCategoryCost[serviceCategory][service].CommitmentsCost,
-              savings: serviceCategoryCost[serviceCategory][service].Savings,
-              resourceGroups: Object.keys(serviceCategoryCost[serviceCategory][service]).map(
-                (resourceGroup) => ({
+          (serviceCategory) => {
+            const services = Object.keys(
+              serviceCategoryCost[serviceCategory]
+            ).map((service) => {
+              const resourceGroups = Object.keys(
+                serviceCategoryCost[serviceCategory][service]
+              ).map((resourceGroup) => {
+                const resources = Object.keys(
+                  serviceCategoryCost[serviceCategory][service][resourceGroup]
+                ).map((resource) => ({
+                  name: resource,
+                  totalBill:
+                    serviceCategoryCost[serviceCategory][service][resourceGroup][
+                      resource
+                    ].TotalBill || 0,
+                  onDemandCost:
+                    serviceCategoryCost[serviceCategory][service][resourceGroup][
+                      resource
+                    ].OnDemandCost || 0,
+                  commitmentsCost:
+                    serviceCategoryCost[serviceCategory][service][resourceGroup][
+                      resource
+                    ].CommitmentsCost || 0,
+                  savings:
+                    serviceCategoryCost[serviceCategory][service][resourceGroup][
+                      resource
+                    ].Savings || 0,
+                }));
+
+                const { totalBill, onDemandCost, commitmentsCost, savings } =
+                  aggregateData(resources);
+
+                return {
                   name: resourceGroup,
-                  totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup].TotalBill,
-                  onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup].OnDemandCost,
-                  commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup].CommitmentsCost,
-                  savings: serviceCategoryCost[serviceCategory][service][resourceGroup].Savings,
-                  resources: Object.keys(serviceCategoryCost[serviceCategory][service][resourceGroup]).map((resource) => ({
-                    name: resource,
-                    totalBill: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill !== null
-                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].TotalBill
-                    : "",
-                    onDemandCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost !== null
-                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].OnDemandCost
-                    : "",
-                    commitmentsCost: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost !== null? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].CommitmentsCost
-                    : "",
-                    savings: serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings !== null
-                    ? serviceCategoryCost[serviceCategory][service][resourceGroup][resource].Savings
-                    : ""
-                  })),
-                })
-              ),
-            })),
-          })
+                  totalBill,
+                  onDemandCost,
+                  commitmentsCost,
+                  savings,
+                  resources,
+                };
+              });
+
+              const { totalBill, onDemandCost, commitmentsCost, savings } =
+                aggregateData(resourceGroups);
+
+              return {
+                name: service,
+                totalBill,
+                onDemandCost,
+                commitmentsCost,
+                savings,
+                resourceGroups,
+              };
+            });
+
+            const { totalBill, onDemandCost, commitmentsCost, savings } =
+              aggregateData(services);
+
+            return {
+              name: serviceCategory,
+              totalBill,
+              onDemandCost,
+              commitmentsCost,
+              savings,
+              services,
+            };
+          }
         );
  
         const billAllocationMap = billAllocation.billAllocation.reduce(
@@ -214,6 +243,18 @@ const BusinessCostSplit = () => {
           },
           []
         );
+        // Extract unique application names from flattenedBillAllocationData
+        const uniqueNamesSet = new Set();
+        flattenedBillAllocationData.forEach((item) => {
+          Object.keys(item).forEach((key) => {
+            if (key.startsWith("name_")) {
+              uniqueNamesSet.add(item[key]);
+            }
+          });
+        });
+        const uniqueNames = [...uniqueNamesSet];
+
+        console.log("uniqueNames", uniqueNames);
  
         console.log("formattedBoxData", formattedBoxData);
         console.log("flattenedBillAllocationData", flattenedBillAllocationData);
@@ -224,7 +265,7 @@ const BusinessCostSplit = () => {
         setBillAllocationData(flattenedBillAllocationData);
         setFilteredBillAllocationData(flattenedBillAllocationData);
         setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
-        setUniqueBillAllocationData();
+        setUniqueBillAllocationData(uniqueNames);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -240,20 +281,24 @@ const BusinessCostSplit = () => {
       setShowStackBars(true); // Show StackBars
     }
   };
- 
+
   const handleReportTypeChange = (event) => {
     const selectedReportType = event.target.value;
     setReportType(selectedReportType);
- 
+
+
     if (selectedReportType) {
       const filteredData = billAllocationData.filter(
-        (item) => item.name === selectedReportType
+        (item) => {
+          return Object.keys(item).some(key => key.startsWith('name_') && item[key] === selectedReportType);
+        }
       );
       setFilteredBillAllocationData(filteredData);
     } else {
       setFilteredBillAllocationData(billAllocationData);
     }
   };
+ 
  
   const columns1 = [
     { key: "name", label: "Application Name" },
@@ -274,12 +319,7 @@ const BusinessCostSplit = () => {
       columnHead5: "Savings",
     },
   ];
- 
-  // Remove duplicates for the dropdown options
-  const uniqueBillAllocationData = Array.from(
-    new Set(billAllocationData.map((item) => item.name))
-  ).map((name) => billAllocationData.find((item) => item.name === name));
- 
+
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
@@ -350,12 +390,12 @@ const BusinessCostSplit = () => {
                 }}
               >
                 <MenuItem value="">All Applications</MenuItem>
-                {uniqueBillAllocationData.map((item) => (
-                  <MenuItem key={item.name} value={item.name}>
-                    {item.name === "null" ? "null" : item.name}
-                  </MenuItem>
-                ))}
-              </Select>
+                    {uniqueBillAllocationData.map((name, index) => (
+                      <MenuItem key={index} value={name}>
+                        {name === "null" ? "null" : name}
+                      </MenuItem>
+                    ))}
+                </Select>
             </FormControl>
           }
           tableData={filteredBillAllocationData}
