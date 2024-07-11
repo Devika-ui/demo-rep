@@ -1,3 +1,6 @@
+body {
+  overflow-x: hidden;
+}
 .cmpOrphanSnap_heading {
     color: #63666A;
     font-size: 14px;
