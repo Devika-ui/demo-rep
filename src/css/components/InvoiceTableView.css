@@ -68,4 +68,6 @@
     z-index: 1 !important;
     background-color: #f0f0f0 !important;
   }
- 
+ .cmpInvTv_tableContainer th {
+  border: 1px solid black;
+}
