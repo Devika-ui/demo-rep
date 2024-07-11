@@ -3,4 +3,13 @@
     padding: 4px 8px !important;
     color: #63666A !important;
     border-color: #63666A !important ;
+    background-color: #d9d9d9 !important; 
+}
+.cmpCostInv_dialogPaper {
+   background-color: #d9d9d9 !important;
+   max-width: 280px !important;
+   top: 140px !important;
+   left: 280px !important;
+   margin-bottom: 200px !important;
+   padding: 20px !important;
 }
