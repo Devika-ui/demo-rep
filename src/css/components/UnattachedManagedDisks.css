@@ -1,3 +1,6 @@
+body {
+  overflow-x: hidden;
+}
 .cmpUAMD_heading {
     color: #63666A;
     font-size: 14px;
@@ -5,27 +8,27 @@
   }
 .cmpUAMD_buttonContainer {
     position: absolute;
-    top: 235;
-    left: 880;
-    z-index: 1000;
+    top: 235px;
+    left: 880px;
+    z-index: 100;
     margin: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
   }
 .cmpUAMD_button {
-    font-size: 0.7rem;
-    padding: 4px 8px;
-    color: #63666A;
-    border-color: #63666A;
+    font-size: 0.7rem !important;
+    padding: 4px 8px !important;
+    color: #63666A !important;
+    border-color: #63666A !important;
   }
 .cmpUAMD_dialogPaper {
-    background-color: #D9D9D9;
-    max-width: 280px; 
-    top: 140px;
-    left: 280px;
-    margin-bottom: 200px;
-    padding: 20px; 
+    background-color: #D9D9D9 !important;
+    max-width: 280px !important; 
+    top: 140px !important;
+    left: 280px !important;
+    margin-bottom: 200px !important;
+    padding: 20px !important; 
   }
 .cmpUAMD_select {
     font-size: 0.7rem;
