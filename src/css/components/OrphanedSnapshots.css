@@ -20,12 +20,12 @@
     border-color: #63666A !important;
   }
   .cmpOrphanSnap_dialogPaper {
-    background-color: #D9D9D9;
-    max-width: 280px; 
-    top: 140px;
-    left: 280px;
-    margin-bottom: 200px;
-    padding: 20px; 
+    background-color: #D9D9D9 !important;
+    max-width: 280px !important; 
+    top: 140px !important;
+    left: 280px !important;
+    margin-bottom: 200px !important;
+    padding: 20px !important; 
   }
   .cmpOrphanSnap_select {
     font-size: 0.7rem;
