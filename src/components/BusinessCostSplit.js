@@ -323,7 +323,7 @@ const BusinessCostSplit = () => {
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
-      <div style={{ marginLeft: "-13px" }}>
+      <div style={{ marginLeft: "0px" }}>
         <Subheader
           title={
             <div>
@@ -341,7 +341,9 @@ const BusinessCostSplit = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "-25px",
+          marginLeft: "-12px",
+          paddingRight : "0px",
+          paddingLeft : "10px",
         }}
       >
         <ContainerBox data={boxData} />
@@ -351,7 +353,7 @@ const BusinessCostSplit = () => {
           marginBottom: "30px",
           textAlign: "left",
           width: "100%",
-          marginLeft: "-280px",
+          marginLeft: "-268px",
           marginTop: "-20px",
         }}
       >
@@ -362,8 +364,8 @@ const BusinessCostSplit = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "left",
-          marginLeft: "-558px",
-          marginTop: "-20px",
+          marginLeft: "-537px",
+          marginTop: "-23px",
         }}
       >
         <InvoiceTableView
@@ -400,7 +402,7 @@ const BusinessCostSplit = () => {
           }
           tableData={filteredBillAllocationData}
           tableHeight="auto"
-          tableWidth="528px"
+          tableWidth="524px"
           columns={columns1}
           headerLabels={headerLabelsForBillAllocation}
         />
@@ -410,14 +412,14 @@ const BusinessCostSplit = () => {
           display: "flex",
           justifyContent: "center",
           marginLeft: "630px",
-          marginTop: "-798px",
+          marginTop: "-794px",
           marginBottom: "30px",
         }}
       >
         <ServiceCategory
           dummyData={serviceCategoryData}
-          height="765px"
-          width="600px"
+          height="754px"
+          width="575px"
           tableData={tableData}
         />
       </div>

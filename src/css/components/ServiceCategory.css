@@ -40,6 +40,8 @@
     padding: 4px 8px !important; 
     text-align: center !important;
     color: #63666A !important; 
+    border-bottom : 1px solid black !important;
+    border-top : 1px solid black !important;
   }
   .cmpSvcCat_table {
     table-layout: fixed; 
@@ -59,6 +61,7 @@
     padding: 4px 8px; 
     color: #63666A; 
     border-bottom: 2px solid #63666A; 
+    border-bottom : 1px solid black !important;
   }
   .cmpSvcCat_indentedCell {
     font-size: 0.8rem; 
