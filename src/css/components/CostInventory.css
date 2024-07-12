@@ -6,6 +6,7 @@
     border: 1px solid #ddd ;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: auto ;
+    margin-left: 5px;
   }
   .cmpCostInv_header {
     display: flex ;
@@ -36,10 +37,11 @@
   .cmpCostInv_buttons {
     display: flex ;
     gap: 10px ;
+    margin-top: 10px;
   }
   .cmpCostInv_button {
     font-size: 0.7rem !important;
-    padding: 4px 8px !important;
+    padding: 2px 5px !important;
     color: #63666A !important;
     border-color: #63666A !important ;
   }
