@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api.js'; // Update the path as needed
 
@@ -6,6 +6,7 @@ const NavigationBar = () => {
   const [isNavOpen, setNavOpen] = useState(false);
   const [menuItems, setMenuItems] = useState([]);
   const [openSubmenuIndex, setOpenSubmenuIndex] = useState(null); // Track the index of the open submenu
+  const navRef = useRef(null);
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -23,7 +24,25 @@ const NavigationBar = () => {
 
     fetchMenuItems();
   }, []);
-  
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setNavOpen(false);
+      }
+    };
+
+    if (isNavOpen) {
+      document.addEventListener('click', handleClickOutside);
+    } else {
+      document.removeEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isNavOpen]);
+
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
   };
@@ -89,6 +108,7 @@ const NavigationBar = () => {
 
   return (
     <nav
+      ref={navRef}
       style={{
         backgroundColor: isNavOpen ? '#5f249f' : '#5f249f',
         color: '#fff',
@@ -114,7 +134,10 @@ const NavigationBar = () => {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        onClick={toggleNav}
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleNav();
+        }}
       >
         ☰
       </div>
@@ -128,12 +151,13 @@ const NavigationBar = () => {
               <Link
                 to={getPathForItem(item.label)} // Generate path based on label
                 style={{ color: '#fff', textDecoration: 'none', margin: '10px 0', display: 'flex', alignItems: 'center' }}
+                onClick={(e) => e.stopPropagation()}
               >
                 <img src={item.icon} alt={item.label} style={{ width: '20px', marginRight: '10px' }} />
                 {isNavOpen && item.label}
               </Link>
-              {!['Overview', 'Favorites','FAQs', 'Contact Us', 'Settings', 'Logout'].includes(item.label) && (
-                <span style={{ marginLeft: 'auto' }}>{openSubmenuIndex === index ? '▼' : '  ▶'}</span>
+              {!['Overview', 'Favorites', 'FAQs', 'Contact Us', 'Settings', 'Logout'].includes(item.label) && (
+                <span style={{ marginLeft: 'auto' }}>{openSubmenuIndex === index ? '▼' : '▶'}</span>
               )}
             </div>
             {isNavOpen && openSubmenuIndex === index && (
@@ -143,6 +167,7 @@ const NavigationBar = () => {
                     key={subIndex}
                     to={subItem.path}
                     style={{ color: '#fff', textDecoration: 'none', margin: '10px 0', display: 'flex', alignItems: 'center' }}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {subItem.label}
                   </Link>
@@ -158,6 +183,7 @@ const NavigationBar = () => {
             key={index}
             to={getPathForItem(item.label)} // Generate path based on label
             style={{ color: '#fff', textDecoration: 'none', margin: '10px 0', display: 'flex', alignItems: 'center' }}
+            onClick={(e) => e.stopPropagation()}
           >
             <img src={item.icon} alt={item.label} style={{ width: '20px', marginRight: '10px' }} />
           </Link>
