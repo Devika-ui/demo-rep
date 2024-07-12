@@ -72,10 +72,10 @@ const InventoryCostSplit = () => {
             />
             <NavigationBar />
             {/* ContainerBoxForInventory */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginRight: "14px" }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginRight: "3px" }}>
             <ContainerBox data={dataSet1} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', marginRight: "14px", marginLeft: "60px", marginBottom: "10px" }}> 
+            <div style={{ display: 'flex', justifyContent: 'center', marginRight: "14px", marginLeft: "70px", marginBottom: "10px" }}> 
                 <CostInventory />
             </div>
             
