@@ -39,7 +39,9 @@
   .cmpSvcCat_tableHeader {
     padding: 4px 8px !important; 
     text-align: center !important;
-    color: #63666A !important; 
+    color: #0a0a0a !important; 
+    background-color: #D9D9D9;
+    
     border-bottom : 1px solid black !important;
     border-top : 1px solid black !important;
   }

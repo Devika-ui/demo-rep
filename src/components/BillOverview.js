@@ -313,7 +313,7 @@ const BillOverview = () => {
   const pieChartContainerStyle = {
     display: "flex",
     justifyContent: "space-around",
-    margin: "20px 0", // Adjusted margin to create space between components
+    margin: "20px -7px", // Adjusted margin to create space between components
   };
 
   const pieChartStyle = {
@@ -326,7 +326,7 @@ const BillOverview = () => {
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
-      <div style={{ marginLeft: "-12px", width: "200%" }}>
+      <div style={{ marginLeft: "1px", width: "200%" }}>
         <Subheader
           title={
             <div>
@@ -339,15 +339,18 @@ const BillOverview = () => {
           additionalFilters={additionalFilters}
         />
       </div>
-
-      <NavigationBar />
+          <NavigationBar />
+      
 
       {/* Boxes */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "-20px",
+          marginLeft: "19px",
+          paddingLeft:"27px",
+          paddingRight:"32px",
+          marginRight :"12px"
         }}
       >
         <ContainerBox data={boxData} />
@@ -359,7 +362,7 @@ const BillOverview = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          paddingLeft: "30px",
+          paddingLeft: "35px",
         }}
       >
         {/* Chart and Table Container */}
@@ -371,19 +374,20 @@ const BillOverview = () => {
             marginBottom: 20,
             paddingLeft: "10px",
             paddingRight: "10px",
-            width: "128%", // Ensures the container takes full width
-            marginLeft: "-125px",
+            width: "129%", // Ensures the container takes full width
+            marginLeft: "-119px",
+            marginTop:"-22px",
           }}
         >
-          <div style={{ flex: 1, marginLeft: "-10px" }}>
+          <div style={{ flex: 1, marginLeft: "-5px", marginBottom:"15px", marginRight:"-3px" }}>
             <BarChartContainer chartData={chartData} trendData={trendData} />
           </div>
-          <div style={{ flex: 1, marginLeft: "-115px", marginTop: "10px" }}>
+          <div style={{ flex: 1, marginLeft: "-130px", marginTop: "11px",paddingRight:"5px" }}>
             <InvoiceTableView
               title="Invoice View"
               tableData={invoiceData}
-              tableHeight="auto"
-              tableWidth="595px"
+              tableHeight="346px"
+              tableWidth="570px"
               columns={columns}
               headerLabels={headerLabelsForInvoice}
             />
@@ -396,13 +400,13 @@ const BillOverview = () => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "70%", // Ensures the container takes full width
+            width: "68%", // Ensures the container takes full width
             marginBottom: "20px", // Added space between pie chart and next section
             marginLeft: "-280px",
-            marginTop: "-50px",
+            marginTop: "-68px",
           }}
         >
-          <div style={{ flex: 1, marginRight: "20px" }}>
+          <div style={{ flex: 1, marginRight: "10px", paddingRight:"7px",paddingLeft:"1px" }}>
             <PieChartContainer
               title1="Top 5 Applications"
               data1={topApplications}
@@ -412,7 +416,7 @@ const BillOverview = () => {
               chartStyle={pieChartStyle}
             />
           </div>
-          <div style={{ flex: 1, marginLeft: "-7px" }}>
+          <div style={{ flex: 1, marginLeft: "-20x", paddingLeft:"0px" }}>
             <InvoiceTableView
               title={"Total Bill Allocation\nacross Application"}
               dropdown={
@@ -442,8 +446,8 @@ const BillOverview = () => {
                 </FormControl>
               }
               tableData={filteredBillAllocationData}
-              tableHeight="auto"
-              tableWidth="600px"
+              tableHeight="365px"
+              tableWidth="572px"
               columns={columns1}
               headerLabels={headerLabelsForBillAllocation} // value for the prop
             />
