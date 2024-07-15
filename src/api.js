@@ -277,8 +277,8 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            "StartDate" : ["2024-04-01"],
-            "EndDate" : ["2024-04-30"],
+            StartDate: ["2024-04-01"],
+            EndDate: ["2024-04-30"],
             Subscription: ["Subscription2"],
           },
         }),
@@ -444,7 +444,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-03-01","2024-04-01", "2024-05-01"],
+            BillingMonthStartDate: ["2024-03-01", "2024-04-01", "2024-05-01"],
           },
         }),
       });
@@ -457,7 +457,6 @@ const api = {
       throw error;
     }
   },
-  
 
   /* with bill overview page  */
 
@@ -508,9 +507,7 @@ const api = {
       throw error;
     }
   },
-  
 
-  
   getInvoiceView: async () => {
     try {
       const response = await fetch(`${apiUrl}/billoverview/invoice_view`, {
@@ -603,10 +600,7 @@ const api = {
       }
       return await response.json();
     } catch (error) {
-      console.error(
-        "Error fetching  application data:",
-        error
-      );
+      console.error("Error fetching  application data:", error);
       throw error;
     }
   },
@@ -737,7 +731,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-03-01","2024-04-01", "2024-05-01"],
+              BillingMonthStartDate: ["2024-03-01", "2024-04-01", "2024-05-01"],
             },
           }),
         }
@@ -761,7 +755,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-04-01","2024-05-01", "2024-06-01"],
+            BillingMonthStartDate: ["2024-04-01", "2024-05-01", "2024-06-01"],
             Subscription: ["Subscription2"],
           },
         }),
@@ -791,9 +785,143 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-04-01","2024-05-01"],
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
               Subscription: ["Subscription2"],
             },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getMonthBillAndIncreasedPercentage: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/overview/monthly/spend/actual`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: ["2024-04-01", "2024-05-01", "2024-06-01"],
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getTotalResouces: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/inventorycostsplit/header/totalresources`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01", "2024-05-01", "2024-06-01"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getCloudInventoryCount: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/inventorycostsplit/cloudinventory/count`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {},
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getCloudInventory1: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/inventorycostsplit/cloudinventory`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01"],
+              Subscription: ["Subscription1"],
+            },
+            page: "1",
+            pageSize: "1000",
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getCloudInventory2: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/inventorycostsplit/cloudinventory`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-04-01"],
+              Subscription: ["Subscription2"],
+            },
+            page: "1",
+            pageSize: "1000",
           }),
         }
       );

@@ -1,303 +1,292 @@
-import React, { useState } from 'react';
-import TableContainer from '@mui/material/TableContainer';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import ShareIcon from '@mui/icons-material/Share';
-import SearchIcon from '@mui/icons-material/Search';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import Box from '@mui/material/Box';
-import InputBase from '@mui/material/InputBase';
-import { MultiSelect } from 'react-multi-select-component';
-import CostsAmortized from './CostsAmortized'; // Import the new component
-import "../css/components/CostInventory.css"
+import React, { useState, useEffect } from "react";
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import ShareIcon from "@mui/icons-material/Share";
+import SearchIcon from "@mui/icons-material/Search";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Box from "@mui/material/Box";
+import InputBase from "@mui/material/InputBase";
+import { MultiSelect } from "react-multi-select-component";
+import CostsAmortized from "./CostsAmortized";
+import "../css/components/CostInventory.css";
+import api from "../api";
 
-const dummyData = [
-  {
-    name: 'Subscription 1',
-    aprilOnDemandCost: 3000,
-    aprilSavings: 900,
-    mayOnDemandCost: 3200,
-    maySavings: 960,
-    juneOnDemandCost: 3400,
-    juneSavings: 1020,
-    julyOnDemandCost: 3600,
-    julySavings: 1080,
-    services: [
-      {
-        name: 'Virtual Machine 1',
-        aprilOnDemandCost: 1500,
-        aprilSavings: 450,
-        mayOnDemandCost: 1600,
-        maySavings: 480,
-        juneOnDemandCost: 1700,
-        juneSavings: 510,
-        julyOnDemandCost: 1800,
-        julySavings: 540,
-        resourceGroups: [
-          {
-            name: 'EV3 Series',
-            aprilOnDemandCost: 800,
-            aprilSavings: 240,
-            mayOnDemandCost: 850,
-            maySavings: 255,
-            juneOnDemandCost: 900,
-            juneSavings: 270,
-            julyOnDemandCost: 950,
-            julySavings: 285,
-            resources: [
-              {
-                name: 'Resource Group 1',
-                aprilOnDemandCost: 400,
-                aprilSavings: 120,
-                mayOnDemandCost: 420,
-                maySavings: 126,
-                juneOnDemandCost: 440,
-                juneSavings: 132,
-                julyOnDemandCost: 460,
-                julySavings: 138,
-              },
-              {
-                name: 'Resource Group 2',
-                aprilOnDemandCost: 400,
-                aprilSavings: 120,
-                mayOnDemandCost: 430,
-                maySavings: 129,
-                juneOnDemandCost: 460,
-                juneSavings: 138,
-                julyOnDemandCost: 480,
-                julySavings: 144,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Subscription 2',
-    aprilOnDemandCost: 3000,
-    aprilSavings: 900,
-    mayOnDemandCost: 3200,
-    maySavings: 960,
-    juneOnDemandCost: 3400,
-    juneSavings: 1020,
-    julyOnDemandCost: 3600,
-    julySavings: 1080,
-    services: [
-      {
-        name: 'Virtual Machine 2',
-        aprilOnDemandCost: 1500,
-        aprilSavings: 450,
-        mayOnDemandCost: 1600,
-        maySavings: 480,
-        juneOnDemandCost: 1700,
-        juneSavings: 510,
-        julyOnDemandCost: 1800,
-        julySavings: 540,
-        resourceGroups: [
-          {
-            name: 'EV4 Series',
-            aprilOnDemandCost: 800,
-            aprilSavings: 240,
-            mayOnDemandCost: 850,
-            maySavings: 255,
-            juneOnDemandCost: 900,
-            juneSavings: 270,
-            julyOnDemandCost: 950,
-            julySavings: 285,
-            resources: [
-              {
-                name: 'Resource Group 3',
-                aprilOnDemandCost: 400,
-                aprilSavings: 120,
-                mayOnDemandCost: 420,
-                maySavings: 126,
-                juneOnDemandCost: 440,
-                juneSavings: 132,
-                julyOnDemandCost: 460,
-                julySavings: 138,
-              },
-              {
-                name: 'Resource Group 4',
-                aprilOnDemandCost: 400,
-                aprilSavings: 120,
-                mayOnDemandCost: 430,
-                maySavings: 129,
-                juneOnDemandCost: 460,
-                juneSavings: 138,
-                julyOnDemandCost: 480,
-                julySavings: 144,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  // Add more subscriptions if needed
-];
-
-const TableRowComponent = ({ data, level, toggleRow, expandedRows, rowKey, indentIncrement }) => {
-  
+const TableRowComponent = ({
+  data,
+  level,
+  toggleRow,
+  expandedRows,
+  rowKey,
+  indentIncrement,
+}) => {
   const indentLevel = level * indentIncrement;
+
+  const calculateAggregates = (value) => {
+    let aggregatedOnDemandCost = 0;
+    let aggregatedSavings = 0;
+
+    if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+      for (const subValue of Object.values(value)) {
+        if (subValue.OnDemandCost) {
+          aggregatedOnDemandCost += parseFloat(subValue.OnDemandCost);
+        }
+        if (subValue.Savings) {
+          aggregatedSavings += parseFloat(subValue.Savings);
+        } else if (typeof subValue === "object") {
+          const { onDemandCost, savings } = calculateAggregates(subValue);
+          aggregatedOnDemandCost += onDemandCost;
+          aggregatedSavings += savings;
+        }
+      }
+    }
+    return { onDemandCost: aggregatedOnDemandCost, savings: aggregatedSavings };
+  };
+
+  const renderRow = (key, value, index) => {
+    const newKey = `${rowKey}-${index}`;
+    const hasNestedData =
+      typeof value === "object" &&
+      value !== null &&
+      !Array.isArray(value) &&
+      !("Date" in value && "OnDemandCost" in value && "Savings" in value);
+
+    const { onDemandCost: aggregatedOnDemandCost, savings: aggregatedSavings } =
+      calculateAggregates(value);
+
+    return (
+      <React.Fragment key={newKey}>
+        <TableRow className="cmpSvcCat_nestedRow">
+          <TableCell
+            style={{ paddingLeft: indentLevel }}
+            className="cmpCostInv_tableCell "
+          >
+            {hasNestedData ? (
+              <IconButton size="small" onClick={() => toggleRow(rowKey, index)}>
+                {expandedRows[rowKey]?.[index] ? (
+                  <ExpandLessIcon />
+                ) : (
+                  <ExpandMoreIcon />
+                )}
+              </IconButton>
+            ) : null}
+            {key}
+          </TableCell>
+          {typeof value === "object" &&
+          value !== null &&
+          !Array.isArray(value) ? (
+            <>
+              <TableCell className="cmpCostInv_cell">
+                {hasNestedData
+                  ? aggregatedOnDemandCost.toFixed(2)
+                  : value.OnDemandCost}
+              </TableCell>
+              <TableCell className="cmpCostInv_cell">
+                {hasNestedData ? aggregatedSavings.toFixed(2) : value.Savings}
+              </TableCell>
+            </>
+          ) : (
+            <>
+              <TableCell className="cmpCostInv_cell" />
+              <TableCell className="cmpCostInv_cell" />
+            </>
+          )}
+        </TableRow>
+        {expandedRows[rowKey]?.[index] && hasNestedData && (
+          <TableRowComponent
+            data={value}
+            level={level + 1}
+            toggleRow={toggleRow}
+            expandedRows={expandedRows}
+            rowKey={newKey}
+            indentIncrement={indentIncrement}
+          />
+        )}
+      </React.Fragment>
+    );
+  };
 
   return (
     <>
-      {data.map((item, index) => (
-        <React.Fragment key={`${rowKey}-${index}`}>
-          <TableRow className="cmpCostInv_nestedRow">
-            <TableCell style={{ paddingLeft: indentLevel }} className="cmpCostInv_tableCell cmpCostInv_cell">
-              {item.services || item.resourceGroups || item.resources ? (
-                <IconButton size="small" onClick={() => toggleRow(rowKey, index)}>
-                  {expandedRows[rowKey]?.[index] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                </IconButton>
-              ) : null}
-              {item.name}
-            </TableCell>
-            {['april', 'may', 'june', 'july'].map(month => (
-              <React.Fragment key={month}>
-                <TableCell className="cmpCostInv_cell">{item[`${month}OnDemandCost`]}</TableCell>
-                <TableCell className="cmpCostInv_cell">{item[`${month}Savings`]}</TableCell>
-              </React.Fragment>
-            ))}
-          </TableRow>
-          {expandedRows[rowKey]?.[index] && (
-            <TableRowComponent
-              data={item.services || item.resourceGroups || item.resources || []}
-              level={level + 1}
-              toggleRow={toggleRow}
-              expandedRows={expandedRows}
-              rowKey={`${rowKey}-${index}`}
-              indentIncrement={indentIncrement}
-            />
-          )}
-        </React.Fragment>
-      ))}
+      {Object.entries(data).map(([key, value], index) =>
+        renderRow(key, value, index)
+      )}
     </>
   );
 };
-
-const CostInventory = () => {
-
+const Tory = () => {
   const [expandedRows, setExpandedRows] = useState({});
-  const [searchQuery, setSearchQuery] = useState('');
-  const [groupBy, setGroupBy] = useState([]); // State for Group By dropdown
-
-  const groupByOptions = [
-    { label: "On Demand", value: "onDemand" },
-    { label: "Savings Plan", value: "savingsPlan" },
-    { label: "Reservation", value: "reservation" },
-    { label: "Market Purchase", value: "marketPurchase" },
-    { label: "Total Bill", value: "totalBill" },
-  ];
+  const [searchQuery, setSearchQuery] = useState("");
+  const [groupBy, setGroupBy] = useState([]);
+  const [tableData1, setTableData1] = useState([]);
+  const [tableData2, setTableData2] = useState([]);
+  const [date, setDate] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const toggleRow = (rowKey, index) => {
-    setExpandedRows((prev) => ({
-      ...prev,
-      [rowKey]: {
-        ...prev[rowKey],
-        [index]: !prev[rowKey]?.[index],
-      },
-    }));
+  const handleGroupByChange = (selectedOptions) => {
+    setGroupBy(selectedOptions);
   };
 
-  const indentIncrement = 30; // You can change this value to adjust the indentation
+  const toggleRow = (rowKey, index) => {
+    setExpandedRows((prevExpandedRows) => {
+      const newExpandedRows = { ...prevExpandedRows };
+      if (!newExpandedRows[rowKey]) {
+        newExpandedRows[rowKey] = {};
+      }
+      newExpandedRows[rowKey][index] = !newExpandedRows[rowKey][index];
+      return newExpandedRows;
+    });
+  };
 
-  // Filtering data based on search query
-  const filteredData = dummyData.filter(item => {
-    const searchLower = searchQuery.toLowerCase();
-    const searchInItems = (items) =>
-      items.some(subItem => {
-        const values = Object.values(subItem).join(' ').toLowerCase();
-        return values.includes(searchLower) || (subItem.services && searchInItems(subItem.services)) || (subItem.resourceGroups && searchInItems(subItem.resourceGroups)) || (subItem.resources && searchInItems(subItem.resources));
-      });
-    return item.name.toLowerCase().includes(searchLower) || searchInItems(item.services || []);
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiData1 = await api.getCloudInventory1();
+        console.log(apiData1);
+        setTableData1(apiData1);
+
+        const apiData2 = await api.getCloudInventory2();
+        console.log(apiData2);
+        setTableData2(apiData2);
+
+        const datesSet = new Set();
+        const extractDates = (data) => {
+          for (const key in data) {
+            const value = data[key];
+            if (typeof value === "object" && value !== null) {
+              extractDates(value);
+            } else if (key === "Date") {
+              datesSet.add(value);
+            }
+          }
+        };
+
+        extractDates(apiData1);
+        // Convert the set back to an array
+        const uniqueDates = Array.from(datesSet);
+        const formatMonthYear = (dateString) => {
+          const date = new Date(dateString);
+          const month = date.toLocaleString("default", { month: "long" });
+          const year = date.getFullYear().toString().slice(-2);
+          return `${month}-${year}`;
+        };
+
+        const formattedDates = uniqueDates.map(formatMonthYear);
+        setDate(formattedDates);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <div className="cmpCostInv_container">
+    <Box className="cmpCostInv_container">
       <div className="cmpCostInv_header">
         <h2 className="cmpCostInv_title">Cloud Inventory</h2>
+        <Box className="cmpCostInv_search">
+          <div className="cmpCostInv_searchIcon">
+            <SearchIcon />
+          </div>
+          <InputBase
+            placeholder="Search by resource group"
+            classes={{
+              root: "cmpCostInv_inputRoot",
+              input: "cmpCostInv_inputInput",
+            }}
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+        </Box>
         <div className="cmpCostInv_buttonsContainer">
           <div className="cmpCostInv_groupByContainer">
-            <span className="cmpCostInv_groupByLabel">Group by:(max 5)</span>
+            <span className="cmpCostInv_groupByLabel">Group By</span>
             <MultiSelect
-              options={groupByOptions}
-              value={groupBy}
-              onChange={setGroupBy}
-              labelledBy="Select"
               className="cmpCostInv_groupBySelect"
+              options={[
+                { label: "Resource", value: "Resource" },
+                { label: "Resource Group", value: "Resource Group" },
+              ]}
+              value={groupBy}
+              onChange={handleGroupByChange}
+              labelledBy="Select"
             />
           </div>
-          <div className="cmpCostInv_search">
-            <SearchIcon className="cmpCostInv_searchIcon" />
-            <InputBase
-              placeholder="Search..."
-              classes={{
-                root: "cmpCostInv_inputRoot",
-                input: "cmpCostInv_inputInput",
-              }}
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-          </div>
+
           <div className="cmpCostInv_buttons">
             <CostsAmortized dialogPaperClass="cmpCostInv_dialogPaper" />
-            <Button variant="contained" className="cmpCostInv_button" color="inherit">Customize Report</Button>
-
+            <Button
+              variant="contained"
+              className="cmpCostInv_button"
+              color="inherit"
+            >
+              Customize Report
+            </Button>
             <IconButton className="cmpCostInv_button">
               <ShareIcon />
             </IconButton>
           </div>
         </div>
       </div>
-      <Box className="cmpCostInv_tableContainer">
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell rowSpan={2} className="cmpCostInv_columnHeader">Subscription Name</TableCell>
-                <TableCell colSpan={2} className="cmpCostInv_columnHeaderNoBorder">April-24</TableCell>
-                <TableCell colSpan={2} className="cmpCostInv_columnHeaderNoBorder">May-24</TableCell>
-                <TableCell colSpan={2} className="cmpCostInv_columnHeaderNoBorder">June-24</TableCell>
-                <TableCell colSpan={2} className="cmpCostInv_columnHeaderNoBorder">July-24</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="cmpCostInv_columnHeader">On Demand Cost</TableCell>
-                <TableCell className="cmpCostInv_columnHeader">Savings Plan</TableCell>
-                <TableCell className="cmpCostInv_columnHeader">On Demand Cost</TableCell>
-                <TableCell className="cmpCostInv_columnHeader">Savings Plan</TableCell>
-                <TableCell className="cmpCostInv_columnHeader">On Demand Cost</TableCell>
-                <TableCell className="cmpCostInv_columnHeader">Savings Plan</TableCell>
-                <TableCell className="cmpCostInv_columnHeader">On Demand Cost</TableCell>
-                <TableCell className="cmpCostInv_columnHeader">Savings Plan</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRowComponent
-                data={filteredData}
-                level={0}
-                toggleRow={toggleRow}
-                expandedRows={expandedRows}
-                rowKey="root"
-                indentIncrement={indentIncrement}
-              />
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </div>
+      <TableContainer className="cmpCostInv_tableContainer">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell className="cmpCostInv_columnHeader" />
+              <TableCell
+                colSpan={2}
+                className="cmpCostInv_columnHeaderNoBorder"
+              >
+                {date}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="cmpCostInv_columnHeader">
+                Subsciption Name
+              </TableCell>
+              <TableCell className="cmpCostInv_columnHeader">
+                On Demand
+              </TableCell>
+              <TableCell className="cmpCostInv_columnHeader">
+                Savings Plan
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRowComponent
+              data={tableData1}
+              level={0}
+              toggleRow={toggleRow}
+              expandedRows={expandedRows}
+              rowKey={"tableData1"}
+              indentIncrement={20}
+            />
+            <TableRowComponent
+              data={tableData2}
+              level={0}
+              toggleRow={toggleRow}
+              expandedRows={expandedRows}
+              rowKey={"tableData2"}
+              indentIncrement={20}
+            />
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 
-export default CostInventory;
+export default Tory;
