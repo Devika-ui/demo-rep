@@ -39,6 +39,10 @@ const RecommendationsComponent = () => {
             color: "#5f249f",
             fontFamily: "sans-serif",
             fontSize: "16px",
+            marginLeft: "0",
+            marginRight: "auto",
+            display: "block",
+            textAlign: "left",
           }}
         >
           Top 3 Recommendations
