@@ -122,7 +122,7 @@ const OverallTotalRealizedSavings = () => {
     <div
       style={{
         width: "558px",
-        height: "449px",
+        height: "453px",
         borderRadius: "5px",
         overflow: "hidden",
         backgroundColor: "white",
