@@ -49,7 +49,8 @@ const RecommendationsComponent = () => {
         </h2>
       </div>
       <div className="divider"></div>
-      <div className="subheading">
+      <div className="subheading" style={{ fontSize: "15px" }}>
+        {/* <div className="subheading" > */}
         Show Recommendations by :
         <br />
         {/*<FormControl style={{ paddingTop: '5px' }}>
