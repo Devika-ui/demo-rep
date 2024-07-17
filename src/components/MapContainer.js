@@ -21,8 +21,6 @@ const MapContainer = () => {
     if (!mapRef.current || !mapData.length) return;
 
     const map = L.map(mapRef.current, {
-      center: [28.6139, 77.209],
-      zoom: 11,
       layers: [
         L.tileLayer(
           "https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=h45ALe3FWSTc6f08j9daEyl98fINF4L8",
@@ -34,19 +32,25 @@ const MapContainer = () => {
       ],
     });
 
-    mapData.forEach((location) => {
-      if (location.LT && location.LN) {
+    const markers = mapData
+      .filter((location) => location.LT && location.LN)
+      .map((location) =>
         L.marker([parseFloat(location.LT), parseFloat(location.LN)], {
           icon: L.icon({
             iconUrl: fallbackMarkerIcon,
             iconSize: [32, 32],
             iconAnchor: [16, 32],
           }),
-        })
-          .addTo(map)
-          .bindPopup(location.locations);
-      }
-    });
+        }).bindPopup(location.locations)
+      );
+
+    const markerGroup = L.featureGroup(markers).addTo(map);
+
+    if (markers.length > 0) {
+      map.fitBounds(markerGroup.getBounds(), { padding: [50, 50] });
+    } else {
+      map.setView([28.6139, 77.209], 11); // Default view if no markers
+    }
 
     return () => {
       map.remove();
