@@ -114,7 +114,7 @@ const NavigationBar = () => {
         color: '#fff',
         padding: '15px',
         position: 'fixed',
-        top: '60px',
+        top: '62px',
         left: '0',
         height: '100%',
         display: 'flex',
