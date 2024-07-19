@@ -98,7 +98,7 @@ const StackBars = () => {
               stepSize: 4000,
               max: 6000, // Adjust max to fit the data
               color: "rgba(0, 0, 0, 0.5)",
-          },
+            },
           },
         },
         plugins: {
@@ -109,23 +109,28 @@ const StackBars = () => {
             align: 'start',
             font: {
               size: 16,
-              weight: 'bold'
-            }
+              weight: 'bold',
+            },
+            padding: {
+              bottom: 10, // Padding between the title and the legend
+              top:10,
+              left :10,
+            },
           },
           legend: {
             position: 'top',
-            align: 'start',
+            align: 'between',
             labels: {
-              padding: 5,
+              padding: 10,
               font: {
                 size: 12,
               },
             },
-            onClick: () => {},
           },
           layout: {
             padding: {
-              top: 10,
+              top: 100, // Increased padding at the top of the chart area
+              bottom: 20, // Padding at the bottom of the chart area
             },
           },
         },
@@ -140,16 +145,16 @@ const StackBars = () => {
   }, [subscriptions]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", marginBottom: "0px", height : "400px" }}>
       <div style={{ position: "absolute", top: 0, left: 0 }}>
         <Typography
           variant="subtitle1"
-          style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}
+          style={{ color: "black", fontWeight: "bold", fontSize: "16px", paddingLeft: "20px", paddingTop: "10px" }}
         >
           Total Bill Cost by Providers:
         </Typography>
       </div>
-      <canvas ref={chartContainer}></canvas>
+      <canvas style={{paddingTop:"5px"}}  ref={chartContainer}></canvas>
     </div>
   );
 };
