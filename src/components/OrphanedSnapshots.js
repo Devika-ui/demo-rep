@@ -12,44 +12,44 @@ import CostsAmortized from "./CostsAmortized.js";
 import Button from "@mui/material/Button";
 import ContainerBox from "./ContainerBox.js";
 import ServiceCategory from "./ServiceCategory.js";
-import "../css/components/OrphanedSnapshots.css"
+import "../css/components/OrphanedSnapshots.css";
 
 const additionalFilters = [
   {
-    label: 'Service Category(s)',
-    name: 'Select Service Category',
+    label: "Service Category(s)",
+    name: "Select Service Category",
     options: [
-      { value: 'Service Category 1', label: 'Service Category 1' },
-      { value: 'Service Category 2', label: 'Service Category 2' },
-      { value: 'Service Category 3', label: 'Service Category 3' }
-    ]
+      { value: "Service Category 1", label: "Service Category 1" },
+      { value: "Service Category 2", label: "Service Category 2" },
+      { value: "Service Category 3", label: "Service Category 3" },
+    ],
   },
   {
-    label: 'Owner(s)',
-    name: 'Select Owner',
+    label: "Owner(s)",
+    name: "Select Owner",
     options: [
-      { value: 'Owner 1', label: 'Owner 1' },
-      { value: 'Owner 2', label: 'Owner 2' },
-      { value: 'Owner 3', label: 'Owner 3' }
-    ]
+      { value: "Owner 1", label: "Owner 1" },
+      { value: "Owner 2", label: "Owner 2" },
+      { value: "Owner 3", label: "Owner 3" },
+    ],
   },
   {
-    label: 'Environment(s)',
-    name: 'environments',
+    label: "Environment(s)",
+    name: "environments",
     options: [
-      { value: 'Production', label: 'Production' },
-      { value: 'Staging', label: 'Staging' },
-      { value: 'Development', label: 'Development' }
-    ]
+      { value: "Production", label: "Production" },
+      { value: "Staging", label: "Staging" },
+      { value: "Development", label: "Development" },
+    ],
   },
   {
-    label:'Cost Center(s)',
-    name:'Select Cost Center',
+    label: "Cost Center(s)",
+    name: "Select Cost Center",
     options: [
-          { value: 'Cost Center1', label: 'Cost Center1' },
-          { value: 'Cost Center2', label: 'Cost Center2' },
-          { value: 'Cost Center3', label: 'Cost Center3' },
-        ]
+      { value: "Cost Center1", label: "Cost Center1" },
+      { value: "Cost Center2", label: "Cost Center2" },
+      { value: "Cost Center3", label: "Cost Center3" },
+    ],
   },
 ];
 
@@ -228,7 +228,6 @@ const data = [
 ];
 
 const OrphanedSnapshots = () => {
-
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
 
@@ -338,15 +337,15 @@ const OrphanedSnapshots = () => {
   ];
   const bars = [
     {
-      dataKey: 'On Demand Cost',
-      fill: '#2CAFFE',
-      name: 'On Demand Cost',
+      dataKey: "On Demand Cost",
+      fill: "#2CAFFE",
+      name: "On Demand Cost",
       barSize: 20,
     },
     {
-      dataKey: 'Consumed Meter',
-      fill: '#330072',
-      name: 'Consumed Meter',
+      dataKey: "Consumed Meter",
+      fill: "#330072",
+      name: "Consumed Meter",
       barSize: 20,
     },
   ];
@@ -354,7 +353,7 @@ const OrphanedSnapshots = () => {
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
-      <div style={{ marginLeft: "-12px", width: "200%" }}>
+      <div style={{ marginLeft: "-12px" }}>
         <Subheader
           title={
             <div>
@@ -405,7 +404,9 @@ const OrphanedSnapshots = () => {
                 <MenuItem value="">Choose Recommendation</MenuItem>
                 <MenuItem value="subscription">UnattachedManagedDisks</MenuItem>
                 <MenuItem value="resourceGroup">OrphanedSnapshots</MenuItem>
-                <MenuItem value="region">Orphaned Attached  Disks for De-allocated VMs</MenuItem>
+                <MenuItem value="region">
+                  Orphaned Attached Disks for De-allocated VMs
+                </MenuItem>
               </Select>
             </GenericBarChart>
           </div>
@@ -417,7 +418,11 @@ const OrphanedSnapshots = () => {
         {/* Separate container for buttons */}
         <div className="cmpOrphanSnap_buttonContainer">
           <CostsAmortized dialogPaperClass="cmpOrphanSnap_dialogPaper" />
-          <Button variant="contained" className="cmpOrphanSnap_button" color="inherit">
+          <Button
+            variant="contained"
+            className="cmpOrphanSnap_button"
+            color="inherit"
+          >
             Customize Report
           </Button>
           <IconButton className="cmpOrphanSnap_button">

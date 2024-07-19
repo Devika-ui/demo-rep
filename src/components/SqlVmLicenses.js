@@ -11,44 +11,44 @@ import IconButton from "@mui/material/IconButton";
 import ShareIcon from "@mui/icons-material/Share";
 import CostsAmortized from "./CostsAmortized.js";
 import Button from "@mui/material/Button";
-import "../css/components/SqlVmLicenses.css"
+import "../css/components/SqlVmLicenses.css";
 
 const additionalFilters = [
   {
-    label: 'Service Category(s)',
-    name: 'Select Service Category',
+    label: "Service Category(s)",
+    name: "Select Service Category",
     options: [
-      { value: 'Service Category 1', label: 'Service Category 1' },
-      { value: 'Service Category 2', label: 'Service Category 2' },
-      { value: 'Service Category 3', label: 'Service Category 3' }
-    ]
+      { value: "Service Category 1", label: "Service Category 1" },
+      { value: "Service Category 2", label: "Service Category 2" },
+      { value: "Service Category 3", label: "Service Category 3" },
+    ],
   },
   {
-    label: 'Owner(s)',
-    name: 'Select Owner',
+    label: "Owner(s)",
+    name: "Select Owner",
     options: [
-      { value: 'Owner 1', label: 'Owner 1' },
-      { value: 'Owner 2', label: 'Owner 2' },
-      { value: 'Owner 3', label: 'Owner 3' }
-    ]
+      { value: "Owner 1", label: "Owner 1" },
+      { value: "Owner 2", label: "Owner 2" },
+      { value: "Owner 3", label: "Owner 3" },
+    ],
   },
   {
-    label: 'Environment(s)',
-    name: 'environments',
+    label: "Environment(s)",
+    name: "environments",
     options: [
-      { value: 'Production', label: 'Production' },
-      { value: 'Staging', label: 'Staging' },
-      { value: 'Development', label: 'Development' }
-    ]
+      { value: "Production", label: "Production" },
+      { value: "Staging", label: "Staging" },
+      { value: "Development", label: "Development" },
+    ],
   },
   {
-    label:'Cost Center(s)',
-    name:'Select Cost Center',
+    label: "Cost Center(s)",
+    name: "Select Cost Center",
     options: [
-          { value: 'Cost Center1', label: 'Cost Center1' },
-          { value: 'Cost Center2', label: 'Cost Center2' },
-          { value: 'Cost Center3', label: 'Cost Center3' },
-        ]
+      { value: "Cost Center1", label: "Cost Center1" },
+      { value: "Cost Center2", label: "Cost Center2" },
+      { value: "Cost Center3", label: "Cost Center3" },
+    ],
   },
 ];
 
@@ -445,15 +445,15 @@ const SqlVmLicenses = () => {
   };
   const bars = [
     {
-      dataKey: 'On Demand Cost',
-      fill: '#2CAFFE',
-      name: 'On Demand Cost',
+      dataKey: "On Demand Cost",
+      fill: "#2CAFFE",
+      name: "On Demand Cost",
       barSize: 20,
     },
     {
-      dataKey: 'Consumed Meter',
-      fill: '#330072',
-      name: 'Consumed Meter',
+      dataKey: "Consumed Meter",
+      fill: "#330072",
+      name: "Consumed Meter",
       barSize: 20,
     },
   ];
@@ -520,7 +520,11 @@ const SqlVmLicenses = () => {
         {/* Separate container for buttons */}
         <div className="cmpSqlVM_buttonContainer">
           <CostsAmortized dialogPaperClass="cmpSqlVM_dialogPaper" />
-          <Button variant="contained" className="cmpSqlVM_button" color="inherit">
+          <Button
+            variant="contained"
+            className="cmpSqlVM_button"
+            color="inherit"
+          >
             Customize Report
           </Button>
           <IconButton className="cmpSqlVM_button">
@@ -542,8 +546,8 @@ const SqlVmLicenses = () => {
 
       <div
         style={{
-          marginLeft: -70,
-          marginTop: 12,
+          marginLeft: -65,
+          marginTop: 10,
           padding: 10,
           display: "flex",
           justifyContent: "center",

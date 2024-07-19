@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import Header from './Header';
-import Subheader from './SubHeader';
-import NavigationBar from './NavigationBar';
-import ContainerBox from './ContainerBox';
-import PieChartContainer from './PieChartContainer';
-import ServiceCategory from './ServiceCategory';
+import React, { useEffect, useState } from "react";
+import Header from "./Header";
+import Subheader from "./SubHeader";
+import NavigationBar from "./NavigationBar";
+import ContainerBox from "./ContainerBox";
+import PieChartContainer from "./PieChartContainer";
+import ServiceCategory from "./ServiceCategory";
 //import HyperScalarBarChart from './HyperScalarBarChart';
 import { Select, MenuItem } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ShareIcon from "@mui/icons-material/Share";
 import CostsAmortized from "./CostsAmortized.js";
 import Button from "@mui/material/Button";
-import GenericBarChart from './GenericBarChart.js';
-import "../css/components/HyperScalarAdvisor.css"
-
+import GenericBarChart from "./GenericBarChart.js";
+import "../css/components/HyperScalarAdvisor.css";
 
 const HyperScalarAdvisor = () => {
   const [showStackBars, setShowStackBars] = useState(true);
@@ -33,50 +32,50 @@ const HyperScalarAdvisor = () => {
 
   const additionalFilters = [
     {
-      label: 'Service Category(s)',
-      name: 'Select Service Category',
+      label: "Service Category(s)",
+      name: "Select Service Category",
       options: [
-        { value: 'Service Category 1', label: 'Service Category 1' },
-        { value: 'Service Category 2', label: 'Service Category 2' },
-        { value: 'Service Category 3', label: 'Service Category 3' }
-      ]
+        { value: "Service Category 1", label: "Service Category 1" },
+        { value: "Service Category 2", label: "Service Category 2" },
+        { value: "Service Category 3", label: "Service Category 3" },
+      ],
     },
     {
-      label: 'Owner(s)',
-      name: 'Select Owner',
+      label: "Owner(s)",
+      name: "Select Owner",
       options: [
-        { value: 'Owner 1', label: 'Owner 1' },
-        { value: 'Owner 2', label: 'Owner 2' },
-        { value: 'Owner 3', label: 'Owner 3' }
-      ]
+        { value: "Owner 1", label: "Owner 1" },
+        { value: "Owner 2", label: "Owner 2" },
+        { value: "Owner 3", label: "Owner 3" },
+      ],
     },
     {
-      label: 'Environment(s)',
-      name: 'environments',
+      label: "Environment(s)",
+      name: "environments",
       options: [
-        { value: 'Production', label: 'Production' },
-        { value: 'Staging', label: 'Staging' },
-        { value: 'Development', label: 'Development' }
-      ]
+        { value: "Production", label: "Production" },
+        { value: "Staging", label: "Staging" },
+        { value: "Development", label: "Development" },
+      ],
     },
     {
-      label:'Cost Center(s)',
-      name:'Select Cost Center',
+      label: "Cost Center(s)",
+      name: "Select Cost Center",
       options: [
-            { value: 'Cost Center1', label: 'Cost Center1' },
-            { value: 'Cost Center2', label: 'Cost Center2' },
-            { value: 'Cost Center3', label: 'Cost Center3' },
-          ]
+        { value: "Cost Center1", label: "Cost Center1" },
+        { value: "Cost Center2", label: "Cost Center2" },
+        { value: "Cost Center3", label: "Cost Center3" },
+      ],
     },
   ];
 
   const data = [
-    { name: "Subscription 1", "High": 400000, "Medium": 50000, "Low": 2000 },
-    { name: "Subscription 2", "High": 250000, "Medium": 80000, "Low": 5000 },
-    { name: "Subscription 3", "High": 90000, "Medium": 10000, "Low": 3000 },
-    { name: "Subscription 4", "High": 50000, "Medium": 115000, "Low": 10000 },
-    { name: "Subscription 5", "High": 25000, "Medium": 100000, "Low": 10000 },
-    { name: "Subscription 6", "High": 15000, "Medium": 75000, "Low": 7000 },
+    { name: "Subscription 1", High: 400000, Medium: 50000, Low: 2000 },
+    { name: "Subscription 2", High: 250000, Medium: 80000, Low: 5000 },
+    { name: "Subscription 3", High: 90000, Medium: 10000, Low: 3000 },
+    { name: "Subscription 4", High: 50000, Medium: 115000, Low: 10000 },
+    { name: "Subscription 5", High: 25000, Medium: 100000, Low: 10000 },
+    { name: "Subscription 6", High: 15000, Medium: 75000, Low: 7000 },
   ];
 
   const dataSet1 = [
@@ -93,10 +92,22 @@ const HyperScalarAdvisor = () => {
   ];
 
   const data2 = [
-    { name: "Virtual Machines", value: Math.floor(Math.random() * 100), color: "#0099C6" },
+    {
+      name: "Virtual Machines",
+      value: Math.floor(Math.random() * 100),
+      color: "#0099C6",
+    },
     { name: "DR", value: Math.floor(Math.random() * 100), color: "#BA741A" },
-    { name: "Storage", value: Math.floor(Math.random() * 100), color: "#FFCD00" },
-    { name: "Bandwidth", value: Math.floor(Math.random() * 100), color: "#00968F" },
+    {
+      name: "Storage",
+      value: Math.floor(Math.random() * 100),
+      color: "#FFCD00",
+    },
+    {
+      name: "Bandwidth",
+      value: Math.floor(Math.random() * 100),
+      color: "#00968F",
+    },
     { name: "ANF", value: Math.floor(Math.random() * 100), color: "#5F249F" },
   ];
 
@@ -396,23 +407,23 @@ const HyperScalarAdvisor = () => {
 
   const bars = [
     {
-      dataKey: 'High',
-      fill: '#2CAFFE',
-      name: 'High',
+      dataKey: "High",
+      fill: "#2CAFFE",
+      name: "High",
       barSize: 20,
     },
     {
-      dataKey: 'Medium',
-      fill: '#006975',
-      name: 'Medium',
+      dataKey: "Medium",
+      fill: "#006975",
+      name: "Medium",
       barSize: 20,
     },
     {
-      dataKey: 'Low',
-      fill: '#330072',
-      name: 'Low',
+      dataKey: "Low",
+      fill: "#330072",
+      name: "Low",
       barSize: 20,
-     },
+    },
   ];
 
   return (
@@ -451,20 +462,20 @@ const HyperScalarAdvisor = () => {
       >
         <div style={{ marginTop: "-20px", width: "50%" }}>
           <div style={{ marginTop: "20px", paddingRight: "18px" }}>
-           <GenericBarChart
-            title="Comparison of Subscriptions Vs Impact"
-            data={data}
-            bars={bars}
-          >
-            <Select
+            <GenericBarChart
+              title="Comparison of Subscriptions Vs Impact"
+              data={data}
+              bars={bars}
+            >
+              <Select
                 value={groupBy}
                 onChange={handleGroupByChange}
                 displayEmpty
                 className="cmpHSA_select"
               >
-              <MenuItem value="">Choose Recommendation Category</MenuItem>
-              <MenuItem value="auto-scale">Auto-Scale</MenuItem>
-              <MenuItem value="rightsize">Right size</MenuItem>
+                <MenuItem value="">Choose Recommendation Category</MenuItem>
+                <MenuItem value="auto-scale">Auto-Scale</MenuItem>
+                <MenuItem value="rightsize">Right size</MenuItem>
               </Select>
             </GenericBarChart>
           </div>
@@ -485,7 +496,7 @@ const HyperScalarAdvisor = () => {
         </div>
         {/* Container for the PieChartContainer */}
         <div>
-         <PieChartContainer
+          <PieChartContainer
             title1="Applications with High Impact Recommendations"
             data1={data1}
             title2="Service Category with High Impact Recommendations"
@@ -498,8 +509,8 @@ const HyperScalarAdvisor = () => {
 
       <div
         style={{
-          marginLeft: -70,
-          marginTop: 12,
+          marginLeft: -65,
+          marginTop: 10,
           padding: 10,
           display: "flex",
           justifyContent: "center",
