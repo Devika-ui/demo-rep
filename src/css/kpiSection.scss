@@ -1,42 +1,48 @@
 .kpi-container {
-    width: 630px;
-    height: 265px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 10px;
+  width: 630px;
+  height: 265px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  overflow: hidden;
 }
 
 .kpi-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 10px;
 }
 
 .kpi-title {
-    color: #5f249f;
-    font-size: 16px;
-    margin: 0;
+  color: #5f249f;
+  font-size: 16px;
+  margin: 0;
+  padding-top: 5px;
 }
 
 .kpi-dropdown {
-    padding: 5px;
+  padding: 5px;
 }
 
 .kpi-line {
-    border-bottom: 2px solid rgba(152, 152, 152, 0.5764705882);
-    margin-bottom: 10px;
-    width: 100%;
+  //   border-bottom: 2px solid rgba(152, 152, 152, 0.5764705882);
+  margin-top: 9px;
+  width: 120%;
+  height: 2px;
+  background-color: rgba(152, 152, 152, 0.5764705882);
+  margin-left: -10px;
 }
 
 .kpi-bottom-container {
-    display: flex;
-    padding-top: 20px;
-    padding-bottom: 20px;
+  display: flex;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .kpi-graph {
-    width: 50%;
-    padding: 10px;
+  width: 50%;
+  padding: 10px;
 }

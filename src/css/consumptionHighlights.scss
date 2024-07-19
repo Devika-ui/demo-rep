@@ -1,4 +1,3 @@
-/* consumptionHighlights.css */
 .consumption-wrapper {
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -32,15 +31,23 @@
 
 .tiles-container {
   width: calc(56% - 20px); /* Adjust the width as needed */
-  padding-right: 20px; /* Add padding to the right to create space between tiles and chart */
+  padding-right: 0px;
+  margin-left: 10px;
+  /* Add padding to the right to create space between tiles and chart */
 }
 
 .chart-container {
-  width: calc(44% - 20px); /* Adjust the width as needed */
+  width: calc(60% - 20px); /* Increase the width */
   padding-left: 20px; /* Add padding to the left to create space between tiles and chart */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-
+.chart-wrapper {
+  width: 100%;
+  height: 300px; /* Increase the height */
+}
 
 .tile {
   font-size: 14px;
@@ -49,6 +56,7 @@
   align-items: center;
   margin-bottom: 10px;
   padding: 12px;
+  height: 30px;
   border: 1px solid #ccc;
   border-radius: 5px;
   &:hover {
@@ -97,11 +105,11 @@
   .consumption-wrapper {
     flex-direction: column;
   }
-  
+
   .tiles-wrapper {
     flex-direction: column;
   }
-  
+
   .tiles-container {
     margin-right: 0;
     margin-bottom: 20px;
