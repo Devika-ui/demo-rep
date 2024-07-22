@@ -11,15 +11,14 @@ const Header = ({ onButtonClick }) => {
   const [isNavOpen, setNavOpen] = useState(false);
   // const [clientData1200, setClientData1200] = useState(null); // State to store client data for customerId 1200
   // const [clientData1700, setClientData1700] = useState(null); // State to store client data for customerId 1700
-
   const siteIdentityStyle = {
     float: 'right',
   };
 
   const clientLogoStyle = {
-    width: '120px',
-    height: '35px',
-    marginTop: '18px',
+    width: '100px',
+    height: '50px',
+    marginTop: '8px',
   };
 
   const lineStyle = {
@@ -36,10 +35,11 @@ const Header = ({ onButtonClick }) => {
   const DateRangeDropdownStyle = {
     marginTop: '8.2px',
     marginLeft: '6px',
+    position : 'relative',
   };
 
   const logoImageStyle = {
-    imageRendering: 'pixelated', // Prevent image from appearing blurry
+    imageRendering: 'auto', // Prevent image from appearing blurry
   };
 
   {/* useEffect(() => {

@@ -29,9 +29,9 @@ const options = {
           labels: {
               color: "#000",
               font: {
-                  family: "Roboto",
+                  family: "Roboto", // Set the font family to Roboto
                   size: 16,
-                  weight: 'bold',
+                  weight: 'none',
               },
           },
       },
@@ -83,7 +83,8 @@ const options = {
   },
   layout: {
       padding: {
-          top: 0,
+          top: 5,
+        //   bottom : 5,
       },
   },
 };
@@ -160,11 +161,15 @@ const AzureBars = () => {
     <div style={{ position: "relative" }}>
       <Typography
         variant="h4"
-        style={{ color: "black", fontWeight: "bold", fontSize: "20px", marginTop: "10px" }}
+        style={{ color: "black", fontWeight: "bold", fontSize: "15px", marginTop: "10px", paddingLeft:"10px" }}
       >
-        Azure Total Bill Cost
+        Azure Total Bill Cost 
       </Typography>
-      <Bar options={options} data={data} />
+      <Bar 
+        style={{ paddingTop: "5px" }}
+        options={options} 
+        data={data} 
+      />
     </div>
   );
 };

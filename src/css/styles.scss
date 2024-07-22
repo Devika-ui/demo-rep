@@ -1,3 +1,8 @@
+html {
+  overflow-y: scroll;
+}
+
+
 body {
   font-family: sans-serif;
   margin: 0;
@@ -43,8 +48,11 @@ a {
   height: auto;
   float: left;
   margin-right: 12px;
-  width: 100px;
-  height: 60px;
+  margin-left: -5px;
+  margin-top: -4px;
+  margin-bottom: 0px;
+  width: 150px;
+  height: 65px;
 }
 
 .site-navigation {
@@ -77,6 +85,11 @@ a {
     float: none;
     text-align: center;
   }
+}
+
+
+.date-range-dropdown {
+  position: relative; /* Ensure dropdown is positioned relative to its container */
 }
 
 /* Media query for screens 601 pixels and above (large screens) */

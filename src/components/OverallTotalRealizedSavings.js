@@ -1,7 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  BarElement,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import iIcon from "../images/Iicon.png";
 import api from "../api.js";
+
+ChartJS.register(
+  BarElement,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Tooltip,
+  Legend
+);
 
 const OverallTotalRealizedSavings = () => {
   const [reservations, setReservations] = useState([]);
@@ -67,6 +87,7 @@ const OverallTotalRealizedSavings = () => {
     labels,
     datasets: [
       {
+        label: "Simulated PAYGO",
         borderColor: "#0079B9",
         data: simulatedSavings.map((entry) => parseFloat(entry.toFixed(2))), // Using simulatedSavings data for the trendline
         fill: false,
@@ -74,7 +95,6 @@ const OverallTotalRealizedSavings = () => {
         pointRadius: 0, // Hide points
         showLine: true, // Show line
         borderWidth: 1, // Adjust line width
-        label: "", // No legend for trend line
       },
     ],
   };
@@ -95,6 +115,52 @@ const OverallTotalRealizedSavings = () => {
           },
         },
       },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          label: function (tooltipItem) {
+            if (tooltipItem.datasetIndex === 1) {
+              return `Simulated PAYGO: ${tooltipItem.raw}`;
+            } else if (tooltipItem.datasetIndex === 0) {
+              return `Reservations: ${tooltipItem.raw}`;
+            }
+            return null;
+          },
+          labelColor: function (tooltipItem) {
+            if (tooltipItem.datasetIndex === 1) {
+              return {
+                borderColor: '#0079B9',
+                backgroundColor: '#0079B9',
+              };
+            }
+            return {
+              borderColor: 'rgba(255, 140, 0, 0.7)',
+              backgroundColor: 'rgba(255, 140, 0, 0.7)',
+            };
+          },
+        },
+        filter: function (tooltipItem) {
+          if (tooltipItem.datasetIndex === 1) {
+            return true;
+          }
+          return tooltipItem.dataIndex === tooltipItem.chart.tooltip.dataPoints?.[0]?.dataIndex;
+        },
+        itemSort: function (a, b) {
+          // Ensure "Simulated PAYGO" appears above "Reservations"
+          if (a.datasetIndex === 1 && b.datasetIndex === 0) {
+            return -1;
+          }
+          if (a.datasetIndex === 0 && b.datasetIndex === 1) {
+            return 1;
+          }
+          return 0;
+        },
+      },
+    },
+    hover: {
+      mode: 'index',
+      intersect: false, // Ensure the tooltip is shown when hovering anywhere on the line
     },
     layout: {
       padding: {
