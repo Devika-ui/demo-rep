@@ -73,7 +73,7 @@ const MapContainer = () => {
           height: "32px",
           display: "flex",
           alignItems: "center",
-          width: "570px",
+          width: "573px",
           borderRadius: "5px",
         }}
       >
@@ -82,7 +82,7 @@ const MapContainer = () => {
       <div
         id="map-container"
         style={{
-          width: "585px",
+          width: "591px",
           height: "399px",
           position: "relative",
           borderRadius: "5px",

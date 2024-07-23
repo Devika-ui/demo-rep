@@ -28,7 +28,7 @@ const TotalSubscriptionsComponent = () => {
   const awsCount = 2;
 
   return (
-    <div className="total-subscriptions-container">
+    <div className="total-subscriptions-container" style={{ width: "436px" }}>
       {/* Top Part */}
       <div className="top-part" style={{ paddingBottom: "11px" }}>
         <div>

@@ -116,7 +116,7 @@ const OverallTotalRealizedSavings = () => {
         },
       },
       tooltip: {
-        mode: 'index',
+        mode: "index",
         intersect: false,
         callbacks: {
           label: function (tooltipItem) {
@@ -130,13 +130,13 @@ const OverallTotalRealizedSavings = () => {
           labelColor: function (tooltipItem) {
             if (tooltipItem.datasetIndex === 1) {
               return {
-                borderColor: '#0079B9',
-                backgroundColor: '#0079B9',
+                borderColor: "#0079B9",
+                backgroundColor: "#0079B9",
               };
             }
             return {
-              borderColor: 'rgba(255, 140, 0, 0.7)',
-              backgroundColor: 'rgba(255, 140, 0, 0.7)',
+              borderColor: "rgba(255, 140, 0, 0.7)",
+              backgroundColor: "rgba(255, 140, 0, 0.7)",
             };
           },
         },
@@ -144,7 +144,10 @@ const OverallTotalRealizedSavings = () => {
           if (tooltipItem.datasetIndex === 1) {
             return true;
           }
-          return tooltipItem.dataIndex === tooltipItem.chart.tooltip.dataPoints?.[0]?.dataIndex;
+          return (
+            tooltipItem.dataIndex ===
+            tooltipItem.chart.tooltip.dataPoints?.[0]?.dataIndex
+          );
         },
         itemSort: function (a, b) {
           // Ensure "Simulated PAYGO" appears above "Reservations"
@@ -159,7 +162,7 @@ const OverallTotalRealizedSavings = () => {
       },
     },
     hover: {
-      mode: 'index',
+      mode: "index",
       intersect: false, // Ensure the tooltip is shown when hovering anywhere on the line
     },
     layout: {
@@ -187,7 +190,7 @@ const OverallTotalRealizedSavings = () => {
   return (
     <div
       style={{
-        width: "558px",
+        width: "578px",
         height: "453px",
         borderRadius: "5px",
         overflow: "hidden",

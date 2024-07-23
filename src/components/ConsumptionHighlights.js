@@ -64,7 +64,7 @@ const ConsumptionHighlights = () => {
   return (
     <div
       className="consumption-wrapper"
-      style={{ width: "558px", height: "290px", marginBottom: "20px" }}
+      style={{ width: "605px", height: "290px", marginBottom: "20px" }}
     >
       <div
         className="consumption-header"

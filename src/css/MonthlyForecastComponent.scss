@@ -6,7 +6,7 @@
   font-family: sans-serif;
   display: inline-block;
   padding: 0;
-  margin-right: 15px;
+  margin-right: 8px;
   margin-bottom: 10px;
   margin-top: 15px;
   background-color: white;
@@ -57,7 +57,8 @@
 
     .left {
       width: 50%;
-      color: #00a3e1;
+      color: #00968f;
+      //color: #00a3e1;
     }
 
     .right {
@@ -86,9 +87,8 @@
     z-index: 999; // Ensure it appears above other elements
     display: none;
   }
-  
+
   .right:hover .info-box {
     display: block;
   }
-  
 }

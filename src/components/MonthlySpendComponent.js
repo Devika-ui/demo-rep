@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Tooltip } from "@mui/material";
 import "../css/MonthlySpendComponent.scss";
 import iIcon from "../images/Iicon.png";
-import upArrow from "../images/Up Arrow.png";
-import downArrow from "../images/Down Arrow.png";
+import upArrow1 from "../images/Up Arrow1.png";
+import downArrow1 from "../images/Down Arrow1.png";
 import api from "../api.js";
 
 const MonthlySpendComponent = () => {
@@ -29,12 +29,13 @@ const MonthlySpendComponent = () => {
   const GrowthIndicator = ({ growthPercentage }) => {
     let imageSrc;
     let altText;
+    console.log("uparrow", upArrow1);
 
     if (growthPercentage > 0) {
-      imageSrc = upArrow;
+      imageSrc = upArrow1;
       altText = "Upward Trend";
     } else if (growthPercentage < 0) {
-      imageSrc = downArrow;
+      imageSrc = downArrow1;
       altText = "Downward Trend";
     } else {
       imageSrc = null;
@@ -45,29 +46,36 @@ const MonthlySpendComponent = () => {
 
     return (
       <div className="right">
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {growthPercentage !== null ? (
-            <strong>{growthPercentage.toFixed(2)}%</strong>
-          ) : (
-            <strong>N/A</strong>
-          )}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            width: "90%",
+          }}
+        >
           {imageSrc && (
             <span className="icon" style={{ marginLeft: "8px" }}>
               <img
                 src={imageSrc}
                 alt={altText}
-                style={{ width: "16px", height: "20px" }}
+                style={{ width: "27px", height: "20px" }}
               />
             </span>
           )}
+          {growthPercentage !== null ? (
+            <strong>{growthPercentage.toFixed(2)}%</strong>
+          ) : (
+            <strong>N/A</strong>
+          )}
         </div>
-        <div>Over last month</div>
+        <div style={{ fontWeight: "bold" }}>Over last month</div>
       </div>
     );
   };
 
   return (
-    <div className="monthly-spend-container" style={{ width: "28%" }}>
+    <div className="monthly-spend-container" style={{ width: "29.5%" }}>
       {/* Top Part */}
       <div className="top-part">
         <div className="left">

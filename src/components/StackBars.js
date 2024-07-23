@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Typography } from '@mui/material';
-import Chart from 'chart.js/auto';
-import api from '../api.js';
+import React, { useState, useEffect, useRef } from "react";
+import { Typography } from "@mui/material";
+import Chart from "chart.js/auto";
+import api from "../api.js";
 
 const StackBars = () => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -32,7 +32,7 @@ const StackBars = () => {
     const azureData = {};
 
     subscriptions.forEach(({ dailydate, totalcost, RIDTYPE }) => {
-      const date = new Date(dailydate).toISOString().split('T')[0];
+      const date = new Date(dailydate).toISOString().split("T")[0];
 
       if (!awsData[date]) {
         awsData[date] = Math.random() * 10000; // Random data for AWS
@@ -48,21 +48,21 @@ const StackBars = () => {
     const sortedDates = Object.keys(azureData).sort();
 
     chartInstance.current = new Chart(ctx, {
-      type: 'bar',
+      type: "bar",
       data: {
         labels: sortedDates,
         datasets: [
           {
             label: "AWS",
-            data: sortedDates.map(date => awsData[date].toFixed(2)), // Fixed to 2 decimal places
+            data: sortedDates.map((date) => awsData[date].toFixed(2)), // Fixed to 2 decimal places
             backgroundColor: "rgba(255, 153, 10, 0.7)",
-            stack: "01"
+            stack: "01",
           },
           {
             label: "Azure",
-            data: sortedDates.map(date => azureData[date].toFixed(2)), // Fixed to 2 decimal places
+            data: sortedDates.map((date) => azureData[date].toFixed(2)), // Fixed to 2 decimal places
             backgroundColor: "rgba(10, 163, 225, 0.7)",
-            stack: "01"
+            stack: "01",
           },
         ],
       },
@@ -79,12 +79,20 @@ const StackBars = () => {
               minRotation: 0,
               callback: function (value, index, values) {
                 const date = new Date(this.getLabelForValue(value));
-                const midMonthDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() / 2;
+                const midMonthDay =
+                  new Date(
+                    date.getFullYear(),
+                    date.getMonth() + 1,
+                    0
+                  ).getDate() / 2;
                 // Display month label in the middle of the month
                 if (date.getDate() === Math.ceil(midMonthDay)) {
-                  return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                  return date.toLocaleString("default", {
+                    month: "long",
+                    year: "numeric",
+                  });
                 }
-                return '';
+                return "";
               },
               color: "rgba(0, 0, 0, 0.5)",
             },
@@ -104,22 +112,22 @@ const StackBars = () => {
         plugins: {
           title: {
             display: true,
-            text: '',
-            position: 'top',
-            align: 'start',
+            text: "",
+            position: "top",
+            align: "start",
             font: {
               size: 16,
-              weight: 'bold',
+              weight: "bold",
             },
             padding: {
               bottom: 10, // Padding between the title and the legend
-              top:10,
-              left :10,
+              top: 10,
+              left: 10,
             },
           },
           legend: {
-            position: 'top',
-            align: 'between',
+            position: "top",
+            align: "between",
             labels: {
               padding: 10,
               font: {
@@ -145,16 +153,40 @@ const StackBars = () => {
   }, [subscriptions]);
 
   return (
-    <div style={{ position: "relative", marginBottom: "0px", height : "400px" }}>
+    <div
+      style={{
+        position: "relative",
+        marginBottom: "0px",
+        height: "400px",
+        borderRadius: "10px",
+        overflow: "hidden",
+        backgroundColor: "white",
+      }}
+    >
       <div style={{ position: "absolute", top: 0, left: 0 }}>
         <Typography
           variant="subtitle1"
-          style={{ color: "black", fontWeight: "bold", fontSize: "16px", paddingLeft: "20px", paddingTop: "10px" }}
+          style={{
+            color: "black",
+            fontWeight: "bold",
+            fontSize: "16px",
+            paddingLeft: "20px",
+            paddingTop: "10px",
+          }}
         >
           Total Bill Cost by Providers:
         </Typography>
       </div>
-      <canvas style={{paddingTop:"5px"}}  ref={chartContainer}></canvas>
+      <div
+        style={{
+          borderRadius: "10px",
+          overflow: "hidden",
+          height: "calc(100% - 40px)", // Adjust height to ensure chart fits within the container
+          marginTop: "40px", // Adjust margin to ensure chart fits within the container
+        }}
+      >
+        <canvas style={{ paddingTop: "5px" }} ref={chartContainer}></canvas>
+      </div>
     </div>
   );
 };

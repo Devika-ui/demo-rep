@@ -31,7 +31,7 @@ const RecommendationsComponent = () => {
   return (
     <div
       className="recommendations-container"
-      style={{ width: "353px", height: "370px" }}
+      style={{ width: "387px ", height: "370px" }}
     >
       <div className="top-part">
         <h2
