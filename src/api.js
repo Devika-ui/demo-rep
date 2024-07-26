@@ -876,7 +876,65 @@ const api = {
       throw error;
     }
   },
-  getCloudInventory1: async () => {
+  getCloudInventory1: async (page) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/inventorycostsplit/cloudinventory`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-03-01"],
+              Subscription: ["Subscription1"],
+            },
+            page: page.toString(), // Updated to use the page parameter
+            pageSize: "1000",
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getCloudInventory2: async (page) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/inventorycostsplit/cloudinventory`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: ["2024-03-01"],
+              Subscription: ["Subscription2"],
+            },
+            page: page.toString(),
+            pageSize: "1000",
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getCloudInventory11: async (page) => {
     try {
       const response = await fetch(
         `${apiUrl}/inventorycostsplit/cloudinventory`,
@@ -891,13 +949,13 @@ const api = {
               BillingMonthStartDate: ["2024-04-01"],
               Subscription: ["Subscription1"],
             },
-            page: "1",
+            page: page.toString(), // Updated to use the page parameter
             pageSize: "1000",
           }),
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to data");
+        throw new Error("Failed to fetch data");
       }
       return await response.json();
     } catch (error) {
@@ -905,7 +963,7 @@ const api = {
       throw error;
     }
   },
-  getCloudInventory2: async () => {
+  getCloudInventory12: async (page) => {
     try {
       const response = await fetch(
         `${apiUrl}/inventorycostsplit/cloudinventory`,
@@ -920,13 +978,13 @@ const api = {
               BillingMonthStartDate: ["2024-04-01"],
               Subscription: ["Subscription2"],
             },
-            page: "1",
+            page: page.toString(), // Updated to use the page parameter
             pageSize: "1000",
           }),
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to data");
+        throw new Error("Failed to fetch data");
       }
       return await response.json();
     } catch (error) {

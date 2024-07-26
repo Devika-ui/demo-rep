@@ -65,15 +65,11 @@ const TableRowComponent = ({
         <TableRow className="cmpSvcCat_nestedRow">
           <TableCell
             style={{ paddingLeft: indentLevel }}
-            className="cmpCostInv_tableCell "
+            className="cmpCostInv_tableCell"
           >
             {hasNestedData ? (
-              <IconButton size="small" onClick={() => toggleRow(rowKey, index)}>
-                {expandedRows[rowKey]?.[index] ? (
-                  <ExpandLessIcon />
-                ) : (
-                  <ExpandMoreIcon />
-                )}
+              <IconButton size="small" onClick={() => toggleRow(newKey)}>
+                {expandedRows[newKey] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </IconButton>
             ) : null}
             {key}
@@ -98,7 +94,7 @@ const TableRowComponent = ({
             </>
           )}
         </TableRow>
-        {expandedRows[rowKey]?.[index] && hasNestedData && (
+        {expandedRows[newKey] && hasNestedData && (
           <TableRowComponent
             data={value}
             level={level + 1}
@@ -120,14 +116,19 @@ const TableRowComponent = ({
     </>
   );
 };
-const Tory = () => {
+
+const CostInventory = () => {
   const [expandedRows, setExpandedRows] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [groupBy, setGroupBy] = useState([]);
-  const [tableData1, setTableData1] = useState([]);
-  const [tableData2, setTableData2] = useState([]);
-  const [date, setDate] = useState([]);
+  const [tableData1, setTableData1] = useState({});
+  const [tableData2, setTableData2] = useState({});
   const [loading, setLoading] = useState(true);
+  const [date, setDate] = useState([]);
+  const [page1, setPage1] = useState(1);
+  const [page2, setPage2] = useState(1);
+  const [totalPages1, setTotalPages1] = useState(1);
+  const [totalPages2, setTotalPages2] = useState(1);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -137,26 +138,111 @@ const Tory = () => {
     setGroupBy(selectedOptions);
   };
 
-  const toggleRow = (rowKey, index) => {
-    setExpandedRows((prevExpandedRows) => {
-      const newExpandedRows = { ...prevExpandedRows };
-      if (!newExpandedRows[rowKey]) {
-        newExpandedRows[rowKey] = {};
+  const toggleRow = async (rowKey) => {
+    setExpandedRows((prevExpandedRows) => ({
+      ...prevExpandedRows,
+      [rowKey]: !prevExpandedRows[rowKey],
+    }));
+
+    if (!expandedRows[rowKey]) {
+      if (rowKey.startsWith("root1")) {
+        await fetchCloudInventory1Data();
+      } else if (rowKey.startsWith("root2")) {
+        await fetchCloudInventory2Data();
       }
-      newExpandedRows[rowKey][index] = !newExpandedRows[rowKey][index];
-      return newExpandedRows;
-    });
+    }
+  };
+
+  const fetchCloudInventory1Data = async () => {
+    try {
+      for (let i = page1 + 1; i <= totalPages1; i++) {
+        const apiData1 = await api.getCloudInventory1(i);
+        setTableData1((prevTableData) => ({
+          ...prevTableData,
+          ...appendData(prevTableData, apiData1),
+        }));
+        setPage1(i);
+      }
+    } catch (error) {
+      console.error("Error fetching more data:", error);
+    }
+  };
+
+  const fetchCloudInventory2Data = async () => {
+    try {
+      for (let i = page2 + 1; i <= totalPages2; i++) {
+        const apiData2 = await api.getCloudInventory2(i);
+        setTableData2((prevTableData) => ({
+          ...prevTableData,
+          ...appendData(prevTableData, apiData2),
+        }));
+
+        setPage2(i);
+      }
+    } catch (error) {
+      console.error("Error fetching more data:", error);
+    }
+  };
+
+  const appendData = (originalData, newData) => {
+    const mergedData = { ...originalData };
+
+    const recursiveMerge = (orig, newData) => {
+      for (const [key, value] of Object.entries(newData)) {
+        if (
+          orig[key] &&
+          typeof orig[key] === "object" &&
+          !Array.isArray(orig[key])
+        ) {
+          recursiveMerge(orig[key], value);
+        } else {
+          if (key === "OnDemandCost" || key === "Savings") {
+            orig[key] = (
+              parseFloat(orig[key] || 0) + parseFloat(value)
+            ).toFixed(2);
+          } else {
+            orig[key] = value;
+          }
+        }
+      }
+    };
+
+    recursiveMerge(mergedData, newData);
+    return mergedData;
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiData1 = await api.getCloudInventory1();
-        console.log(apiData1);
+        const countData = await api.getCloudInventoryCount();
+        const totalCount1 = countData.find(
+          (item) => item.subscriptionName === "Subscription1"
+        )?.totalcount;
+
+        // const totalCount1 = countData
+        //   .filter((item) => item.subscriptionName === "Subscription1")
+        //   .reduce((sum, item) => sum + item.totalcount, 0);
+
+        console.log("1st api", totalCount1);
+        setTotalPages1(Math.ceil(totalCount1 / 1000));
+
+        const totalCount2 = countData.find(
+          (item) => item.subscriptionName === "Subscription2"
+        )?.totalcount;
+
+        // const totalCount2 = countData
+        //   .filter((item) => item.subscriptionName === "Subscription2")
+        //   .reduce((sum, item) => sum + item.totalcount, 0);
+
+        console.log("2nd api", totalCount2);
+        setTotalPages2(Math.ceil(totalCount2 / 1000));
+
+        // Fetch initial page data for Subscription1
+        const apiData1 = await api.getCloudInventory1(1);
         setTableData1(apiData1);
 
-        const apiData2 = await api.getCloudInventory2();
-        console.log(apiData2);
+        // Fetch initial page data for Subscription2
+        const apiData2 = await api.getCloudInventory2(1);
         setTableData2(apiData2);
 
         const datesSet = new Set();
@@ -172,6 +258,8 @@ const Tory = () => {
         };
 
         extractDates(apiData1);
+        extractDates(apiData2);
+
         // Convert the set back to an array
         const uniqueDates = Array.from(datesSet);
         const formatMonthYear = (dateString) => {
@@ -180,11 +268,11 @@ const Tory = () => {
           const year = date.getFullYear().toString().slice(-2);
           return `${month}-${year}`;
         };
-
-        const formattedDates = uniqueDates.map(formatMonthYear);
+        const formattedDates = uniqueDates.map((date) => formatMonthYear(date));
+        console.log("formattedDates", formattedDates);
         setDate(formattedDates);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching initial data:", error);
       } finally {
         setLoading(false);
       }
@@ -196,7 +284,7 @@ const Tory = () => {
   return (
     <Box className="cmpCostInv_container">
       <div className="cmpCostInv_header">
-        <h2 className="cmpCostInv_title">Cloud Inventory</h2>
+        <h2 className="cmpCostInv_title">Cost Inventory</h2>
         <Box className="cmpCostInv_search">
           <div className="cmpCostInv_searchIcon">
             <SearchIcon />
@@ -241,7 +329,7 @@ const Tory = () => {
           </div>
         </div>
       </div>
-      <TableContainer className="cmpCostInv_tableContainer">
+      <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
@@ -253,35 +341,41 @@ const Tory = () => {
                 {date}
               </TableCell>
             </TableRow>
-            <TableRow>
-              <TableCell className="cmpCostInv_columnHeader">
-                Subsciption Name
+            <TableRow className="cmpCostInv_tableRow">
+              <TableCell className="cmpCostInv_tableHead">
+                Subscription
               </TableCell>
-              <TableCell className="cmpCostInv_columnHeader">
-                On Demand
+              <TableCell className="cmpCostInv_tableHead">
+                On Demand Cost
               </TableCell>
-              <TableCell className="cmpCostInv_columnHeader">
-                Savings Plan
-              </TableCell>
+              <TableCell className="cmpCostInv_tableHead">Savings</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRowComponent
-              data={tableData1}
-              level={0}
-              toggleRow={toggleRow}
-              expandedRows={expandedRows}
-              rowKey={"tableData1"}
-              indentIncrement={20}
-            />
-            <TableRowComponent
-              data={tableData2}
-              level={0}
-              toggleRow={toggleRow}
-              expandedRows={expandedRows}
-              rowKey={"tableData2"}
-              indentIncrement={20}
-            />
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={3}>Loading...</TableCell>
+              </TableRow>
+            ) : (
+              <>
+                <TableRowComponent
+                  data={tableData1}
+                  level={0}
+                  toggleRow={toggleRow}
+                  expandedRows={expandedRows}
+                  rowKey="root1"
+                  indentIncrement={20}
+                />
+                <TableRowComponent
+                  data={tableData2}
+                  level={0}
+                  toggleRow={toggleRow}
+                  expandedRows={expandedRows}
+                  rowKey="root2"
+                  indentIncrement={20}
+                />
+              </>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -289,4 +383,4 @@ const Tory = () => {
   );
 };
 
-export default Tory;
+export default CostInventory;
