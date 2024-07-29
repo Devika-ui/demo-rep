@@ -1,15 +1,15 @@
-import React from 'react';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import "../css/components/Box.css"
+import React from "react";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import "../css/components/Box.css";
+import "../css/components/ContainerBox.css";
 
 const Box = ({ number, text }) => {
-
   // Calculate width based on text length
   const getTextWidth = (text) => {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    context.font = '16px Arial'; // You can adjust the font size as needed
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    context.font = "16px Arial"; // You can adjust the font size as needed
     return context.measureText(text).width + 40; // Adding some extra padding
   };
 
@@ -17,8 +17,18 @@ const Box = ({ number, text }) => {
 
   return (
     <Paper className="cmp_box" style={{ width: boxWidth }}>
-      <Typography style={{ fontSize: '17px', fontWeight:'normal' }} variant="h5">{number}</Typography>
-      <Typography style={{ fontSize: '12px',color: '#63666A' }} variant="body1">{text}</Typography>
+      <Typography
+        style={{ fontSize: "17px", fontWeight: "normal" }}
+        variant="h5"
+      >
+        {number}
+      </Typography>
+      <Typography
+        style={{ fontSize: "12px", color: "#63666A" }}
+        variant="body1"
+      >
+        {text}
+      </Typography>
     </Paper>
   );
 };

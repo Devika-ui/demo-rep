@@ -25,7 +25,8 @@ const BillOverview = () => {
   const [topApplications, setTopApplications] = useState([]);
   const [boxData, setBoxData] = useState([]);
   const [headerLabelsForInvoice, setHeaderLabelsForInvoice] = useState([]);
-  const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] = useState([]);
+  const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] =
+    useState([]);
   const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
 
   const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
@@ -100,48 +101,56 @@ const BillOverview = () => {
           api.getNormalizedVariation(),
         ]);
 
-        //formatted bill application 
-        const billAllocationMap = billAllocation.billAllocation.reduce((acc, item) => {
-          const modifiedDate = new Date(item.modifieddate);
-          const monthString = modifiedDate.toLocaleString('en-US', { month: 'long' });
-          const yearString = modifiedDate.getFullYear().toString().slice(-2);
-          const formattedDate = `${monthString}-${yearString}`;
-  
-          if (!acc[formattedDate]) {
-            acc[formattedDate] = [];
-          }
-  
-          acc[formattedDate].push({
-            name: item.tags_AppID_AppName || "null",
-            ownerName: item.tags_owner || "null",
-            onDemandCost: item.onDemandCost
-              ? `$${item.onDemandCost.toFixed(2)}`
-              : "$0.00",
-              reservedInstanceCost: item.reservedInstanceCost !== null
-              ? `$${item.reservedInstanceCost.toFixed(2)}`
-              : "$0.00",
-            savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
-            totalBill: item.totalBill
-              ? `$${item.totalBill.toFixed(2)}`
-              : "$0.00",
-          });
-  
-          return acc;
-        }, {});
-  
-        const uniqueModifiedDatesForBillAllocation = Object.keys(billAllocationMap);
-        const flattenedBillAllocationData = uniqueModifiedDatesForBillAllocation.reduce(
-          (acc, date, dateIndex) => {
-            billAllocationMap[date].forEach((item, itemIndex) => {
-              if (!acc[itemIndex]) acc[itemIndex] = {};
-              columns1.forEach((col) => {
-                acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
-              });
+        //formatted bill application
+        const billAllocationMap = billAllocation.billAllocation.reduce(
+          (acc, item) => {
+            const modifiedDate = new Date(item.modifieddate);
+            const monthString = modifiedDate.toLocaleString("en-US", {
+              month: "long",
             });
+            const yearString = modifiedDate.getFullYear().toString().slice(-2);
+            const formattedDate = `${monthString}-${yearString}`;
+
+            if (!acc[formattedDate]) {
+              acc[formattedDate] = [];
+            }
+
+            acc[formattedDate].push({
+              name: item.tags_AppID_AppName || "null",
+              ownerName: item.tags_owner || "null",
+              onDemandCost: item.onDemandCost
+                ? `$${item.onDemandCost.toFixed(2)}`
+                : "$0.00",
+              reservedInstanceCost:
+                item.reservedInstanceCost !== null
+                  ? `$${item.reservedInstanceCost.toFixed(2)}`
+                  : "$0.00",
+              savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
+              totalBill: item.totalBill
+                ? `$${item.totalBill.toFixed(2)}`
+                : "$0.00",
+            });
+
             return acc;
           },
-          []
+          {}
         );
+
+        const uniqueModifiedDatesForBillAllocation =
+          Object.keys(billAllocationMap);
+        const flattenedBillAllocationData =
+          uniqueModifiedDatesForBillAllocation.reduce(
+            (acc, date, dateIndex) => {
+              billAllocationMap[date].forEach((item, itemIndex) => {
+                if (!acc[itemIndex]) acc[itemIndex] = {};
+                columns1.forEach((col) => {
+                  acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
+                });
+              });
+              return acc;
+            },
+            []
+          );
         // Extract unique application names from flattenedBillAllocationData
         const uniqueNamesSet = new Set();
         flattenedBillAllocationData.forEach((item) => {
@@ -152,18 +161,20 @@ const BillOverview = () => {
           });
         });
         const uniqueNames = [...uniqueNamesSet];
-        console.log("uniqueNames",uniqueNames);
-        
+        console.log("uniqueNames", uniqueNames);
+
         const invoiceMap = invoiceResponse.invoiceView.reduce((acc, item) => {
           const modifiedDate = new Date(item.modifieddate);
-          const monthString = modifiedDate.toLocaleString('en-US', { month: 'long' });
+          const monthString = modifiedDate.toLocaleString("en-US", {
+            month: "long",
+          });
           const yearString = modifiedDate.getFullYear().toString().slice(-2);
           const formattedDate = `${monthString}-${yearString}`;
-  
+
           if (!acc[formattedDate]) {
             acc[formattedDate] = [];
           }
-  
+
           acc[formattedDate].push({
             subscriptionName: item.subscriptionName,
             onDemandCost: `$${item.onDemandCost.toFixed(2)}`,
@@ -172,21 +183,23 @@ const BillOverview = () => {
             savings: `$${item.savings.toFixed(2)}`,
             totalBill: `$${item.totalBill.toFixed(2)}`,
           });
-  
+
           return acc;
         }, {});
-  
-        const uniqueModifiedDatesForInvoice = Object.keys(invoiceMap);
-        const flattenedInvoiceData = uniqueModifiedDatesForInvoice.reduce((acc, date, dateIndex) => {
-          invoiceMap[date].forEach((item, itemIndex) => {
-            if (!acc[itemIndex]) acc[itemIndex] = {};
-            columns.forEach((col) => {
-              acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
-            });
-          });
-          return acc;
-        }, []);
 
+        const uniqueModifiedDatesForInvoice = Object.keys(invoiceMap);
+        const flattenedInvoiceData = uniqueModifiedDatesForInvoice.reduce(
+          (acc, date, dateIndex) => {
+            invoiceMap[date].forEach((item, itemIndex) => {
+              if (!acc[itemIndex]) acc[itemIndex] = {};
+              columns.forEach((col) => {
+                acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
+              });
+            });
+            return acc;
+          },
+          []
+        );
 
         console.log("TotalBillVsSimulatedPaygo:", totalBillVsSimulatedPaygo);
         console.log("topApplicationData:", topApplicationData);
@@ -222,7 +235,10 @@ const BillOverview = () => {
         );
         const formattedTopApplications = topApplicationData.topApplications.map(
           (application, index) => ({
-            name: application.Application !== null ? application.Application : "null",
+            name:
+              application.Application !== null
+                ? application.Application
+                : "null",
             value: parseFloat(application.totalcost.toFixed(2)),
             color: colorPalette[index % colorPalette.length],
           })
@@ -233,17 +249,26 @@ const BillOverview = () => {
         const savings = savingsData.savings.toFixed(2);
         const percentageSavingsOverBill = savingsData.percentageSavings;
         const savingsOverPayGo = savingsData.savingsPayGo.toFixed(2); // Updated property name
-        const percentageSavingsOverPayGo = savingsData.percentageSavingsOverPayGo!== null ? savingsData.percentageSavingsOverPayGo : "0.00";
-        const normalizedVariation = normalizedVariationData.Normalized_Variation_MoM || "0.00";
-
+        const percentageSavingsOverPayGo =
+          savingsData.percentageSavingsOverPayGo !== null
+            ? savingsData.percentageSavingsOverPayGo
+            : "0.00";
+        const normalizedVariation =
+          normalizedVariationData.Normalized_Variation_MoM || "0.00";
 
         const dataSet1 = [
-          { number:  `$${totalSavings}`, text: "Total Bill" },
+          { number: `$${totalSavings}`, text: "Total Bill" },
           { number: `$${simulatedBill}`, text: "Simulated Bill" },
           { number: `$${savings}`, text: "Total Savings" },
-          { number: `${percentageSavingsOverBill}%`, text: "% Savings over Bill" },
-          { number: `${percentageSavingsOverPayGo}%`, text: "% Savings over Pay-as-you-go" },
-          { number: `${normalizedVariation}%`, text: "Normalized Variation" }, 
+          {
+            number: `${percentageSavingsOverBill}%`,
+            text: "% Savings over Bill",
+          },
+          {
+            number: `${percentageSavingsOverPayGo}%`,
+            text: "% Savings over Pay-as-you-go",
+          },
+          { number: `${normalizedVariation}%`, text: "Normalized Variation" },
         ];
 
         setBillAllocationData(flattenedBillAllocationData);
@@ -253,7 +278,7 @@ const BillOverview = () => {
         setTopServices(formattedTopServices);
         setTopApplications(formattedTopApplications);
         setBoxData(dataSet1);
-        console.log("formatedtopApplications:" ,formattedTopApplications);
+        console.log("formatedtopApplications:", formattedTopApplications);
         setInvoiceData(flattenedInvoiceData);
         setHeaderLabelsForInvoice(uniqueModifiedDatesForInvoice);
         setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
@@ -274,18 +299,17 @@ const BillOverview = () => {
       setShowStackBars(true); // Show StackBars
     }
   };
-  
+
   const handleReportTypeChange = (event) => {
     const selectedReportType = event.target.value;
     setReportType(selectedReportType);
 
-
     if (selectedReportType) {
-      const filteredData = billAllocationData.filter(
-        (item) => {
-          return Object.keys(item).some(key => key.startsWith('name_') && item[key] === selectedReportType);
-        }
-      );
+      const filteredData = billAllocationData.filter((item) => {
+        return Object.keys(item).some(
+          (key) => key.startsWith("name_") && item[key] === selectedReportType
+        );
+      });
       setFilteredBillAllocationData(filteredData);
     } else {
       setFilteredBillAllocationData(billAllocationData);
@@ -322,7 +346,6 @@ const BillOverview = () => {
     marginBottom: "110px", // Adjust individual chart width
   };
 
-
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
@@ -339,8 +362,7 @@ const BillOverview = () => {
           additionalFilters={additionalFilters}
         />
       </div>
-          <NavigationBar />
-      
+      <NavigationBar />
 
       {/* Boxes */}
       <div
@@ -348,9 +370,9 @@ const BillOverview = () => {
           display: "flex",
           justifyContent: "center",
           marginLeft: "19px",
-          paddingLeft:"27px",
-          paddingRight:"32px",
-          marginRight :"12px"
+          paddingLeft: "27px",
+          paddingRight: "32px",
+          marginRight: "12px",
         }}
       >
         <ContainerBox data={boxData} />
@@ -376,13 +398,27 @@ const BillOverview = () => {
             paddingRight: "10px",
             width: "129%", // Ensures the container takes full width
             marginLeft: "-119px",
-            marginTop:"-22px",
+            marginTop: "-22px",
           }}
         >
-          <div style={{ flex: 1, marginLeft: "-5px", marginBottom:"15px", marginRight:"-3px" }}>
+          <div
+            style={{
+              flex: 1,
+              marginLeft: "-5px",
+              marginBottom: "15px",
+              marginRight: "-3px",
+            }}
+          >
             <BarChartContainer chartData={chartData} trendData={trendData} />
           </div>
-          <div style={{ flex: 1, marginLeft: "-130px", marginTop: "11px",paddingRight:"5px" }}>
+          <div
+            style={{
+              flex: 1,
+              marginLeft: "-130px",
+              marginTop: "11px",
+              paddingRight: "5px",
+            }}
+          >
             <InvoiceTableView
               title="Invoice View"
               tableData={invoiceData}
@@ -406,7 +442,14 @@ const BillOverview = () => {
             marginTop: "-68px",
           }}
         >
-          <div style={{ flex: 1, marginRight: "10px", paddingRight:"7px",paddingLeft:"1px" }}>
+          <div
+            style={{
+              flex: 1,
+              marginRight: "10px",
+              paddingRight: "7px",
+              paddingLeft: "1px",
+            }}
+          >
             <PieChartContainer
               title1="Top 5 Applications"
               data1={topApplications}
@@ -416,7 +459,7 @@ const BillOverview = () => {
               chartStyle={pieChartStyle}
             />
           </div>
-          <div style={{ flex: 1, marginLeft: "-20x", paddingLeft:"0px" }}>
+          <div style={{ flex: 1, marginLeft: "-20x", paddingLeft: "0px" }}>
             <InvoiceTableView
               title={"Total Bill Allocation\nacross Application"}
               dropdown={

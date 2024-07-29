@@ -3,7 +3,6 @@ import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
 import CostInventory from "./CostInventory";
-import Inven from "./Inven";
 import ContainerBox from "./ContainerBox";
 import api from "../api";
 

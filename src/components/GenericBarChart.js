@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import Typography from "@mui/material/Typography";
 
-import "../css/components/GenericBarChart.css"
+import "../css/components/GenericBarChart.css";
 
 // Custom legend component
 const CustomLegend = ({ payload }) => {
@@ -39,10 +39,9 @@ const GenericBarChart = ({
   bars,
   children,
 }) => {
-
   // Custom tick formatter for YAxis
   const formatYAxis = (tickItem) => {
-    if (yAxisTicks.some(tick => tick >= 1000)) {
+    if (yAxisTicks.some((tick) => tick >= 1000)) {
       return `${tickItem / 1000}k`;
     }
     return tickItem.toString();

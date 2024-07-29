@@ -1,12 +1,23 @@
 .cmp_containerBox {
-    margin: 8px;
-    padding: 16px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-left: 87px;
-    margin-right: 20px;
-    width: 1130px; 
-    height: 75px; 
-  }
+  margin: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 87px;
+  margin-right: 20px;
+  width: 1130px;
+  height: 75px;
+}
+
+.cmp_box {
+  padding: 16px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.cmp_box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}

@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import "../css/components/PieChartContainer.css"
+import "../css/components/PieChartContainer.css";
 
 const PieChartContainer = ({
   title1,
@@ -19,12 +19,14 @@ const PieChartContainer = ({
   containerStyle,
   chartStyle,
 }) => {
-  
-
   return (
     <Paper className="cmpPieChart_container" style={containerStyle}>
       <div className="cmpPieChart_chartContainer" style={chartStyle}>
-        <Typography variant="subtitle1" gutterBottom className="cmpPieChart_title">
+        <Typography
+          variant="subtitle1"
+          gutterBottom
+          className="cmpPieChart_title"
+        >
           {title1}
         </Typography>
         <div className="cmpPieChart_chart">
@@ -47,7 +49,11 @@ const PieChartContainer = ({
         </div>
       </div>
       <div className="cmpPieChart_chartContainer" style={chartStyle}>
-        <Typography variant="subtitle1" gutterBottom className="cmpPieChart_title">
+        <Typography
+          variant="subtitle1"
+          gutterBottom
+          className="cmpPieChart_title"
+        >
           {title2}
         </Typography>
         <div className="cmpPieChart_chart">
