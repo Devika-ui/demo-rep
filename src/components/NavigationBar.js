@@ -61,13 +61,11 @@ const NavigationBar = () => {
             path: "/cost-and-usage/subitem4",
           },
           { label: "Infra Changes Audit", path: "/cost-and-usage/subitem1" },
-          { label: "Favourite Reports", path: "/cost-and-usage/subitem1" },
         ];
       case "Commitments":
         return [
           { label: "Coverage Analysis", path: "/committments/subitem1" },
           { label: "Usage Analysis", path: "/committments/subitem2" },
-          { label: "Favourite Reports", path: "/committments/subitem3" },
         ];
       case "Recommendations":
         return [
@@ -84,7 +82,6 @@ const NavigationBar = () => {
         return [
           { label: "Action Tracker Follow Up", path: "/monitoring/subitem1" },
           { label: "Anamoly Detection Alerts", path: "/monitoring/subitem2" },
-          { label: "Favourite Reports", path: "/monitoring/subitem3" },
         ];
       default:
         return []; // No submenu items for other menu items
