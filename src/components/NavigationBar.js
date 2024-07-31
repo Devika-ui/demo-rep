@@ -167,15 +167,21 @@ const NavigationBar = () => {
             }}
           >
             <div
-              onClick={() => handleToggleSubmenu(index)}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (defineSubItems(item.label).length > 0) {
+                  handleToggleSubmenu(index);
+                } else {
+                  window.location.href = getPathForItem(item.label);
+                }
+              }}
               style={{
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
               }}
             >
-              <Link
-                to={getPathForItem(item.label)} // Generate path based on label
+              <div
                 style={{
                   color: "#fff",
                   textDecoration: "none",
@@ -184,7 +190,6 @@ const NavigationBar = () => {
                   alignItems: "center",
                   width: "100%",
                 }}
-                onClick={(e) => e.stopPropagation()}
               >
                 <img
                   src={item.icon}
@@ -192,15 +197,8 @@ const NavigationBar = () => {
                   style={{ width: "20px", marginRight: "10px" }}
                 />
                 {isNavOpen && item.label}
-              </Link>
-              {![
-                "Overview",
-                "Favorites",
-                "FAQs",
-                "Contact Us",
-                "Settings",
-                "Logout",
-              ].includes(item.label) && (
+              </div>
+              {defineSubItems(item.label).length > 0 && (
                 <span style={{ marginLeft: "auto" }}>
                   {openSubmenuIndex === index ? "▼" : "▶"}
                 </span>
