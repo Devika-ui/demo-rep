@@ -121,14 +121,13 @@ const CostInventory = () => {
   const [expandedRows, setExpandedRows] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [groupBy, setGroupBy] = useState([]);
-  const [tableData1, setTableData1] = useState({});
-  const [tableData2, setTableData2] = useState({});
+  const [tableData, setTableData] = useState({});
   const [loading, setLoading] = useState(true);
   const [date, setDate] = useState([]);
-  const [page1, setPage1] = useState(1);
-  const [page2, setPage2] = useState(1);
-  const [totalPages1, setTotalPages1] = useState(1);
-  const [totalPages2, setTotalPages2] = useState(1);
+  const [pageState, setPageState] = useState({});
+  const [totalPagesState, setTotalPagesState] = useState({});
+  const [loadedSubscriptions, setLoadedSubscriptions] = useState({});
+  const [loadedInnerRows, setLoadedInnerRows] = useState({});
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -139,46 +138,63 @@ const CostInventory = () => {
   };
 
   const toggleRow = async (rowKey) => {
+    const isExpanded = !expandedRows[rowKey];
     setExpandedRows((prevExpandedRows) => ({
       ...prevExpandedRows,
-      [rowKey]: !prevExpandedRows[rowKey],
+      [rowKey]: isExpanded,
     }));
 
-    if (!expandedRows[rowKey]) {
-      if (rowKey.startsWith("root1")) {
-        await fetchCloudInventory1Data();
-      } else if (rowKey.startsWith("root2")) {
-        await fetchCloudInventory2Data();
-      }
+    // Extract the top-level subscription from the rowKey
+    const topLevelSubscription = rowKey.split("-")[0];
+
+    // If expanding, and data for the top-level subscription is not yet fully loaded
+    if (isExpanded && !loadedSubscriptions[topLevelSubscription]) {
+      const subscriptionNames = rowKey.split("-");
+      const fetchAllData = async () => {
+        for (const subscriptionName of subscriptionNames) {
+          // Ensure we don't refetch data if it is already fully loaded
+          if (loadedSubscriptions[subscriptionName]) continue;
+
+          const currentPage = pageState[subscriptionName] || 1;
+          const totalPages = totalPagesState[subscriptionName] || 1;
+
+          const fetchDataForPages = async (page) => {
+            await fetchCloudInventoryData(subscriptionName, page);
+            if (page < totalPages) {
+              await fetchDataForPages(page + 1);
+            }
+          };
+
+          await fetchDataForPages(currentPage + 1);
+        }
+
+        // Mark the top-level subscription as fully loaded
+        setLoadedSubscriptions((prevLoadedSubscriptions) => ({
+          ...prevLoadedSubscriptions,
+          [topLevelSubscription]: true,
+        }));
+      };
+      await fetchAllData();
     }
   };
 
-  const fetchCloudInventory1Data = async () => {
+  // Example of fetchCloudInventoryData function
+  const fetchCloudInventoryData = async (subscriptionName, page) => {
     try {
-      for (let i = page1 + 1; i <= totalPages1; i++) {
-        const apiData1 = await api.getCloudInventory1(i);
-        setTableData1((prevTableData) => ({
-          ...prevTableData,
-          ...appendData(prevTableData, apiData1),
-        }));
-        setPage1(i);
-      }
-    } catch (error) {
-      console.error("Error fetching more data:", error);
-    }
-  };
+      const apiData = await api.getCloudInventory(subscriptionName, page);
 
-  const fetchCloudInventory2Data = async () => {
-    try {
-      for (let i = page2 + 1; i <= totalPages2; i++) {
-        const apiData2 = await api.getCloudInventory2(i);
-        setTableData2((prevTableData) => ({
-          ...prevTableData,
-          ...appendData(prevTableData, apiData2),
-        }));
+      setTableData((prevTableData) => ({
+        ...prevTableData,
+        [subscriptionName]: appendData(
+          prevTableData[subscriptionName] || {},
+          apiData
+        ),
+      }));
 
-        setPage2(i);
-      }
+      setPageState((prevPageState) => ({
+        ...prevPageState,
+        [subscriptionName]: page,
+      }));
     } catch (error) {
       console.error("Error fetching more data:", error);
     }
@@ -215,36 +231,43 @@ const CostInventory = () => {
     const fetchData = async () => {
       try {
         const countData = await api.getCloudInventoryCount();
-        const totalCount1 = countData.find(
-          (item) => item.subscriptionName === "Subscription1"
-        )?.totalcount;
 
-        // const totalCount1 = countData
-        //   .filter((item) => item.subscriptionName === "Subscription1")
-        //   .reduce((sum, item) => sum + item.totalcount, 0);
+        // Filter for March data
+        const marchData = countData.filter(
+          (item) => new Date(item.monthdetail).getMonth() === 2
+        );
 
-        console.log("1st api", totalCount1);
-        setTotalPages1(Math.ceil(totalCount1 / 1000));
+        // Extract unique subscriptions
+        const subscriptions = Array.from(
+          new Set(marchData.map((item) => item.subscriptionName))
+        );
 
-        const totalCount2 = countData.find(
-          (item) => item.subscriptionName === "Subscription2"
-        )?.totalcount;
+        // Initialize state for pages and data
+        const pageState = {};
+        const dataState = {};
 
-        // const totalCount2 = countData
-        //   .filter((item) => item.subscriptionName === "Subscription2")
-        //   .reduce((sum, item) => sum + item.totalcount, 0);
+        // Fetch total pages and data for each subscription
+        await Promise.all(
+          subscriptions.map(async (subscription) => {
+            const totalCount = marchData
+              .filter((item) => item.subscriptionName === subscription)
+              .reduce((sum, item) => sum + item.totalcount, 0);
 
-        console.log("2nd api", totalCount2);
-        setTotalPages2(Math.ceil(totalCount2 / 1000));
+            pageState[subscription] = Math.ceil(totalCount / 1000);
 
-        // Fetch initial page data for Subscription1
-        const apiData1 = await api.getCloudInventory1(1);
-        setTableData1(apiData1);
+            // Fetch initial data for each subscription
+            dataState[subscription] = await api.getCloudInventory(
+              subscription,
+              1
+            );
+          })
+        );
 
-        // Fetch initial page data for Subscription2
-        const apiData2 = await api.getCloudInventory2(1);
-        setTableData2(apiData2);
+        // Update state with fetched data
+        setTotalPagesState(pageState);
+        setTableData(dataState);
 
+        // Extract dates from data
         const datesSet = new Set();
         const extractDates = (data) => {
           for (const key in data) {
@@ -257,8 +280,9 @@ const CostInventory = () => {
           }
         };
 
-        extractDates(apiData1);
-        extractDates(apiData2);
+        Object.values(dataState).forEach((subscriptionData) =>
+          extractDates(subscriptionData)
+        );
 
         // Convert the set back to an array
         const uniqueDates = Array.from(datesSet);
@@ -269,7 +293,8 @@ const CostInventory = () => {
           return `${month}-${year}`;
         };
         const formattedDates = uniqueDates.map((date) => formatMonthYear(date));
-        console.log("formattedDates", formattedDates);
+
+        // Update dates state
         setDate(formattedDates);
       } catch (error) {
         console.error("Error fetching initial data:", error);
@@ -330,52 +355,30 @@ const CostInventory = () => {
         </div>
       </div>
       <TableContainer>
-        <Table>
+        <Table className="cmpCostInv_table">
           <TableHead>
             <TableRow>
-              <TableCell className="cmpCostInv_columnHeader" />
-              <TableCell
-                colSpan={2}
-                className="cmpCostInv_columnHeaderNoBorder"
-              >
-                {date}
-              </TableCell>
-            </TableRow>
-            <TableRow className="cmpCostInv_tableRow">
-              <TableCell className="cmpCostInv_tableHead">
-                Subscription
-              </TableCell>
-              <TableCell className="cmpCostInv_tableHead">
+              <TableCell className="cmpCostInv_tableHeadCell">Name</TableCell>
+              <TableCell className="cmpCostInv_tableHeadCell">
                 On Demand Cost
               </TableCell>
-              <TableCell className="cmpCostInv_tableHead">Savings</TableCell>
+              <TableCell className="cmpCostInv_tableHeadCell">
+                Savings
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={3}>Loading...</TableCell>
-              </TableRow>
-            ) : (
-              <>
-                <TableRowComponent
-                  data={tableData1}
-                  level={0}
-                  toggleRow={toggleRow}
-                  expandedRows={expandedRows}
-                  rowKey="root1"
-                  indentIncrement={20}
-                />
-                <TableRowComponent
-                  data={tableData2}
-                  level={0}
-                  toggleRow={toggleRow}
-                  expandedRows={expandedRows}
-                  rowKey="root2"
-                  indentIncrement={20}
-                />
-              </>
-            )}
+            {Object.entries(tableData).map(([subscriptionName, data]) => (
+              <TableRowComponent
+                key={subscriptionName}
+                data={data}
+                level={0}
+                toggleRow={toggleRow}
+                expandedRows={expandedRows}
+                rowKey={subscriptionName}
+                indentIncrement={20}
+              />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
