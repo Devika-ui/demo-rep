@@ -342,8 +342,23 @@ const BillOverview = () => {
 
   const pieChartStyle = {
     width: "55%",
-    paddingTop: "45px",
-    marginBottom: "110px", // Adjust individual chart width
+    paddingTop: "25px",
+    marginBottom: "160px", // Adjust individual chart width
+    marginTop: "-25px",
+  };
+
+  const titleStyle1 = {
+    fontSize: "1.2rem",
+    marginLeft: "50px",
+    marginBottom: "-5px",
+    marginTop: "10px",
+  };
+
+  const titleStyle2 = {
+    fontSize: "1.2rem",
+    marginLeft: "80px",
+    marginBottom: "-5px",
+    marginTop: "10px",
   };
 
   return (
@@ -436,8 +451,8 @@ const BillOverview = () => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "68%", // Ensures the container takes full width
-            marginBottom: "20px", // Added space between pie chart and next section
+            width: "68%",
+            marginBottom: "3px",
             marginLeft: "-280px",
             marginTop: "-68px",
           }}
@@ -457,6 +472,10 @@ const BillOverview = () => {
               data2={topServices}
               containerStyle={pieChartContainerStyle}
               chartStyle={pieChartStyle}
+              pieChartHeight1={350} // Override the height for the first PieChart
+              pieChartHeight2={330}
+              titleStyle1={titleStyle1}
+              titleStyle2={titleStyle2}
             />
           </div>
           <div style={{ flex: 1, marginLeft: "-20x", paddingLeft: "0px" }}>
