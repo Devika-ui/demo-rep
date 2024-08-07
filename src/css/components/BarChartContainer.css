@@ -1,17 +1,17 @@
-.cmpBarChart_container  {
-    width: 63%;
-    max-width: 700px;
-    height: 350px;
-    margin: 32px auto;
-    padding: 24px;
-    background-color: #f9f9f9;
-    margin-right : 15px;
-    padding-right : 0;
-    padding-left : 10px;
-    padding-top : 4px;
-  }
-  .cmpBarChart_heading {
-    color: #63666A;
-    font-size: 14px;
-    margin-bottom: 16px;
-  }
+.cmpBarChart_container {
+  width: 63%;
+  max-width: 700px;
+  height: 350px;
+  margin: 32px auto;
+  padding: 24px;
+  background-color: white;
+  margin-right: 15px;
+  padding-right: 0;
+  padding-left: 10px;
+  padding-top: 4px;
+}
+.cmpBarChart_heading {
+  color: #63666a;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}

@@ -1,14 +1,15 @@
 .cmp_containerBox {
-  margin: 8px;
+  margin: 16px;
   padding: 16px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-left: 87px;
-  margin-right: 20px;
-  width: 1130px;
+  margin-left: 82px;
+  margin-right: 5px;
+  width: 1147px;
   height: 75px;
+  margin-bottom: 1px;
 }
 
 .cmp_box {

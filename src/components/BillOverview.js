@@ -364,19 +364,17 @@ const BillOverview = () => {
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
-      <div style={{ marginLeft: "1px", width: "200%" }}>
-        <Subheader
-          title={
-            <div>
-              <span style={{ fontSize: "18px" }}>Cost & Usage/</span>
-              <span style={{ color: "#0070C0", fontSize: "18px" }}>
-                Bill Overview
-              </span>
-            </div>
-          }
-          additionalFilters={additionalFilters}
-        />
-      </div>
+      <Subheader
+        title={
+          <div>
+            <span style={{ fontSize: "18px" }}>Cost & Usage/</span>
+            <span style={{ color: "#0070C0", fontSize: "18px" }}>
+              Bill Overview
+            </span>
+          </div>
+        }
+        additionalFilters={additionalFilters}
+      />
       <NavigationBar />
 
       {/* Boxes */}
@@ -387,7 +385,7 @@ const BillOverview = () => {
           marginLeft: "19px",
           paddingLeft: "27px",
           paddingRight: "32px",
-          marginRight: "12px",
+          marginRight: "25px",
         }}
       >
         <ContainerBox data={boxData} />
@@ -399,7 +397,7 @@ const BillOverview = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          paddingLeft: "35px",
+          paddingLeft: "37px",
         }}
       >
         {/* Chart and Table Container */}
@@ -410,8 +408,8 @@ const BillOverview = () => {
             justifyContent: "space-between",
             marginBottom: 20,
             paddingLeft: "10px",
-            paddingRight: "10px",
-            width: "129%", // Ensures the container takes full width
+            paddingRight: "5px",
+            width: "133%", // Ensures the container takes full width
             marginLeft: "-119px",
             marginTop: "-22px",
           }}
@@ -421,7 +419,7 @@ const BillOverview = () => {
               flex: 1,
               marginLeft: "-5px",
               marginBottom: "15px",
-              marginRight: "-3px",
+              marginRight: "-17px",
             }}
           >
             <BarChartContainer chartData={chartData} trendData={trendData} />
@@ -431,7 +429,7 @@ const BillOverview = () => {
               flex: 1,
               marginLeft: "-130px",
               marginTop: "11px",
-              paddingRight: "5px",
+              paddingRight: "14px",
             }}
           >
             <InvoiceTableView
@@ -451,18 +449,19 @@ const BillOverview = () => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "68%",
-            marginBottom: "3px",
-            marginLeft: "-280px",
-            marginTop: "-68px",
+            width: "85%",
+            marginBottom: "20px",
+            marginLeft: "-230x",
+            marginTop: "-77px",
+            marginRight: "94px",
           }}
         >
           <div
             style={{
               flex: 1,
               marginRight: "10px",
-              paddingRight: "7px",
-              paddingLeft: "1px",
+              paddingRight: "6px",
+              paddingLeft: "0px",
             }}
           >
             <PieChartContainer
@@ -508,8 +507,8 @@ const BillOverview = () => {
                 </FormControl>
               }
               tableData={filteredBillAllocationData}
-              tableHeight="365px"
-              tableWidth="572px"
+              tableHeight="366px"
+              tableWidth="570px"
               columns={columns1}
               headerLabels={headerLabelsForBillAllocation} // value for the prop
             />
