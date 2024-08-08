@@ -151,8 +151,8 @@ import { Tooltip } from "@mui/material";
 //   );
 // };
 
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"; // Import the expand more icon
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"; // Import the expand more icon
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 const SubHeader = ({ title, additionalFilters }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
