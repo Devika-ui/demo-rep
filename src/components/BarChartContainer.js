@@ -13,10 +13,9 @@ import {
 } from "recharts";
 import Typography from "@mui/material/Typography";
 import { format, parseISO } from "date-fns";
-import "../css/components/BarChartContainer.css"
+import "../css/components/BarChartContainer.css";
 
-const BarChartContainer = ({ chartData, trendData }) => {
-  
+const BarChartContainer = ({ chartData, trendData, legendData }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -69,24 +68,26 @@ const BarChartContainer = ({ chartData, trendData }) => {
             iconSize={10}
             contentStyle={{ fontSize: 10 }}
           />
-          <Bar
-            dataKey="costsPAYGO"
-            fill="rgba(95, 36, 159, 0.8)"
-            name="Pay as you go"
-          />
-          <Bar
-            dataKey="savingsRI"
-            fill="rgba(0, 150, 143, 0.8)"
-            name="Reservations"
-          />
-          <Line
-            type="monotone"
-            dataKey="simulated"
-            stroke="rgba(0, 153, 198, 0.8)"
-            strokeWidth={2}
-            dot={false}
-            name="Simulated PAYGO"
-          />
+          {legendData.map((legendItem) =>
+            legendItem.type === "Bar" ? (
+              <Bar
+                key={legendItem.dataKey}
+                dataKey={legendItem.dataKey}
+                fill={legendItem.color}
+                name={legendItem.name}
+              />
+            ) : (
+              <Line
+                key={legendItem.dataKey}
+                type="monotone"
+                dataKey={legendItem.dataKey}
+                stroke={legendItem.color}
+                strokeWidth={2}
+                dot={false}
+                name={legendItem.name}
+              />
+            )
+          )}
         </ComposedChart>
       </ResponsiveContainer>
     </Paper>
