@@ -34,7 +34,6 @@ const PieChartContainer = ({
   const onPieLeave2 = () => setActiveIndex2(null);
 
   const renderActiveShape = (props) => {
-    const RADIAN = Math.PI / 180;
     const {
       cx,
       cy,
@@ -45,22 +44,43 @@ const PieChartContainer = ({
       endAngle,
       fill,
     } = props;
-    const sin = Math.sin(-RADIAN * midAngle);
-    const cos = Math.cos(-RADIAN * midAngle);
-    const sx = cx + (outerRadius + 10) * cos;
-    const sy = cy + (outerRadius + 10) * sin;
     return (
-      <g>
-        <Sector
-          cx={cx}
-          cy={cy}
-          innerRadius={innerRadius}
-          outerRadius={outerRadius + 10}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          fill={fill}
-        />
-      </g>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius + 10}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+    );
+  };
+
+  const formatValue = (value) => {
+    if (value >= 1000) {
+      return `${(value / 1000).toFixed(1)}k`;
+    }
+    return value;
+  };
+
+  const renderLabel = (entry) => {
+    const { cx, cy, midAngle, innerRadius, outerRadius, value } = entry;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
+    const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor="middle"
+        dominantBaseline="central"
+        style={{ fontSize: "12px" }}
+      >
+        {formatValue(value)}
+      </text>
     );
   };
 
@@ -86,6 +106,8 @@ const PieChartContainer = ({
                 nameKey="name"
                 onMouseEnter={onPieEnter1}
                 onMouseLeave={onPieLeave1}
+                label={renderLabel}
+                labelLine={false}
               >
                 {data1.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
@@ -96,7 +118,7 @@ const PieChartContainer = ({
                 align="center"
                 verticalAlign="bottom"
                 layout="horizontal"
-                wrapperStyle={{ bottom: 0, fontSize: "12px" }}
+                wrapperStyle={{ bottom: 5, fontSize: "12px" }}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -122,6 +144,8 @@ const PieChartContainer = ({
                 nameKey="name"
                 onMouseEnter={onPieEnter2}
                 onMouseLeave={onPieLeave2}
+                label={renderLabel}
+                labelLine={false}
               >
                 {data2.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />

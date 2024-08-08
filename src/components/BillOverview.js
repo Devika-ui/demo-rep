@@ -28,6 +28,7 @@ const BillOverview = () => {
   const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] =
     useState([]);
   const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
+  const [legendData, setLegendData] = useState([]);
 
   const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
 
@@ -283,6 +284,28 @@ const BillOverview = () => {
         setHeaderLabelsForInvoice(uniqueModifiedDatesForInvoice);
         setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
         setUniqueBillAllocationData(uniqueNames);
+
+        const legendData = [
+          {
+            dataKey: "costsPAYGO",
+            name: "Pay as you go",
+            color: "rgba(95, 36, 159, 0.8)",
+            type: "Bar",
+          },
+          {
+            dataKey: "savingsRI",
+            name: "Reservations",
+            color: "rgba(0, 150, 143, 0.8)",
+            type: "Bar",
+          },
+          {
+            dataKey: "simulated",
+            name: "Simulated PAYGO",
+            color: "rgba(0, 153, 198, 0.8)",
+            type: "Line",
+          },
+        ];
+        setLegendData(legendData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -356,7 +379,7 @@ const BillOverview = () => {
 
   const titleStyle2 = {
     fontSize: "1.2rem",
-    marginLeft: "80px",
+    marginLeft: "70px",
     marginBottom: "-5px",
     marginTop: "10px",
   };
@@ -422,7 +445,11 @@ const BillOverview = () => {
               marginRight: "-17px",
             }}
           >
-            <BarChartContainer chartData={chartData} trendData={trendData} />
+            <BarChartContainer
+              chartData={chartData}
+              trendData={trendData}
+              legendData={legendData}
+            />
           </div>
           <div
             style={{
