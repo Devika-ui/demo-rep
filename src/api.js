@@ -8,6 +8,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -33,6 +34,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -54,7 +56,12 @@ const api = {
 
   getTotalSubscription: async () => {
     try {
-      const response = await fetch(`${apiUrl}/overview/suboraccount/count`);
+      const response = await fetch(`${apiUrl}/overview/suboraccount/count`,{
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + window.accessToken
+        }
+      });
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -67,7 +74,12 @@ const api = {
 
   getRecommendations: async () => {
     try {
-      const response = await fetch(`${apiUrl}/recommendations/top3`);
+      const response = await fetch(`${apiUrl}/recommendations/top3`,{
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + window.accessToken
+        }
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
@@ -86,6 +98,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -114,6 +127,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -142,6 +156,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -170,6 +185,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -192,7 +208,12 @@ const api = {
 
   getSubscriptionsByCustomerId: async (customerId) => {
     try {
-      const response = await fetch(`${apiUrl}/subscription/${customerId}`);
+      const response = await fetch(`${apiUrl}/subscription/${customerId}`,{
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + window.accessToken
+        }
+      });
       if (!response.ok) {
         throw new Error(
           `Failed to fetch subscriptions for customer ${customerId}`
@@ -210,7 +231,12 @@ const api = {
 
   getMenuItems: async () => {
     try {
-      const response = await fetch(`${apiUrl}/overview/menuitems/`);
+      const response = await fetch(`${apiUrl}/overview/menuitems/`,{
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + window.accessToken
+        }
+      });
       if (!response.ok) {
         throw new Error(`Failed to fetch menuitems for customer `);
       }
@@ -227,6 +253,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -252,6 +279,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({ customerId }),
       });
@@ -273,6 +301,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -299,6 +328,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -327,6 +357,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -353,6 +384,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -376,6 +408,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -400,7 +433,12 @@ const api = {
   },
   getAllFilters: async () => {
     try {
-      const response = await fetch(`${apiUrl}/filters`);
+      const response = await fetch(`${apiUrl}/filters`,{
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + window.accessToken
+        }
+      });
       if (!response.ok) {
         throw new Error(`Failed to fetch filters `);
       }
@@ -416,6 +454,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -440,6 +479,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -466,6 +506,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -490,6 +531,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -514,6 +556,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -540,6 +583,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -564,6 +608,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -587,6 +632,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -615,6 +661,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -643,6 +690,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -671,6 +719,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -699,6 +748,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -727,6 +777,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -751,6 +802,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -781,6 +833,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -807,6 +860,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -833,6 +887,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -860,6 +915,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -885,6 +941,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
