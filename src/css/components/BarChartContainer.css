@@ -11,7 +11,9 @@
   padding-top: 4px;
 }
 .cmpBarChart_heading {
+  font-family: Inter, sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
   color: #63666a;
-  font-size: 1.2rem;
   margin-bottom: 16px;
 }
