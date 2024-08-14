@@ -328,7 +328,7 @@ const BusinessCostSplit = () => {
           title={
             <div>
               <span style={{ fontSize: "18px" }}>Cost & Usage/</span>
-              <span style={{ color: "#0070C0", fontSize: "18px" }}>
+              <span style={{ color: "#5f249f", fontSize: "18px" }}>
                 Business Cost Split
               </span>
             </div>

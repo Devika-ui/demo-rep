@@ -391,7 +391,7 @@ const BillOverview = () => {
         title={
           <div>
             <span style={{ fontSize: "18px" }}>Cost & Usage/</span>
-            <span style={{ color: "#0070C0", fontSize: "18px" }}>
+            <span style={{ color: "#5f249f", fontSize: "18px" }}>
               Bill Overview
             </span>
           </div>

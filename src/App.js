@@ -13,6 +13,7 @@ import OrphanedRSVBackups from "./components/OrphanedRSVBackups";
 import "./App.css";
 import { ReactKeycloakProvider, useKeycloak } from "@react-keycloak/web";
 import keycloak from "./components/Keycloak"
+import OnDemandCostStudy from "./components/OnDemandCostStudy";
 
 const App=()  =>{
 
@@ -35,6 +36,7 @@ const App=()  =>{
             <Route path="/hyperScalarAdvisor" element={<HyperScalarAdvisor />} />
             <Route path="/sqlVmLicenses" element={<SqlVmLicenses />} />
             <Route path="/orphanedrsvbackups" element={<OrphanedRSVBackups />} />
+            <Route path="/ondemandCostStudy" element={<OnDemandCostStudy />}  />
           </Routes>
         </BrowserRouter>
       );
