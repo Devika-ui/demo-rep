@@ -357,7 +357,7 @@ const BusinessCostSplit = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "-21px",
+          marginLeft: "-12px",
           paddingRight: "0px",
           paddingLeft: "10px",
         }}

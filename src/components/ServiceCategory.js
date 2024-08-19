@@ -11,8 +11,8 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Box from "@mui/material/Box";
-import "../css/components/ServiceCategory.css" 
- 
+import "../css/components/ServiceCategory.css";
+
 const TableRowComponent = ({
   data,
   level,
@@ -21,9 +21,8 @@ const TableRowComponent = ({
   rowKey,
   indentIncrement,
 }) => {
- 
   const indentLevel = level * indentIncrement;
- 
+
   return (
     <>
       {data.map((item, index) => (
@@ -45,7 +44,7 @@ const TableRowComponent = ({
                   )}
                 </IconButton>
               ) : null}
- 
+
               {item.name}
             </TableCell>
             {Object.keys(item)
@@ -63,16 +62,16 @@ const TableRowComponent = ({
               ))}
             {/*
             <TableCell className="cmpSvcCat_cell">{item.totalBill}</TableCell>
- 
+
             <TableCell className="cmpSvcCat_cell">{item.onDemandCost}</TableCell>
- 
+
             <TableCell className="cmpSvcCat_cell">
               {item.commitmentsCost}
             </TableCell>
- 
+
             <TableCell className="cmpSvcCat_cell">{item.savings}</TableCell> */}
           </TableRow>
- 
+
           {expandedRows[rowKey]?.[index] && (
             <TableRowComponent
               data={
@@ -90,47 +89,54 @@ const TableRowComponent = ({
     </>
   );
 };
- 
+
 const ServiceCategory = ({ dummyData, tableData, height, width }) => {
   const headers = Object.keys(tableData[0]).filter((key) =>
     key.startsWith("columnHead")
   );
- 
+
   const [expandedRows, setExpandedRows] = useState({});
- 
+
   const toggleRow = (rowKey, index) => {
     setExpandedRows((prev) => ({
       ...prev,
- 
+
       [rowKey]: {
         ...prev[rowKey],
- 
+
         [index]: !prev[rowKey]?.[index],
       },
     }));
   };
- 
+
   const indentIncrement = 30;
- 
+
   return (
-    <div className="cmpSvcCat_container" style={{ height: height, width: width }}>
+    <div
+      className="cmpSvcCat_container"
+      style={{ height: height, width: width }}
+    >
       <div className="cmpSvcCat_header">
         <h2 className="cmpSvcCat_title">{tableData[0].tableTitle}</h2>
- 
+
         <div className="cmpSvcCat_buttons">
-          <Button variant="contained" className="cmpSvcCat_button" color="inherit">
+          <Button
+            variant="contained"
+            className="cmpSvcCat_button"
+            color="inherit"
+          >
             Customize Report
           </Button>
- 
+
           <IconButton className="cmpSvcCat_button">
             <ShareIcon />
           </IconButton>
         </div>
       </div>
- 
+
       <Box className="cmpSvcCat_tableContainer">
         <div className="cmpSvcCat_tableHeader">April - 24</div>
- 
+
         <TableContainer>
           <Table>
             <TableHead>
@@ -138,19 +144,19 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
                 <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead1}
                 </TableCell>
- 
+
                 <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead2}
                 </TableCell>
- 
+
                 <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead3}
                 </TableCell>
- 
+
                 <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead4}
                 </TableCell>
- 
+
                 <TableCell className="cmpSvcCat_columnHeader">
                   {tableData[0].columnHead5}
                 </TableCell>
@@ -163,7 +169,7 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
                 ))}
               </TableRow>
             </TableHead>
- 
+
             <TableBody>
               <TableRowComponent
                 data={dummyData}
@@ -180,5 +186,5 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
     </div>
   );
 };
- 
+
 export default ServiceCategory;

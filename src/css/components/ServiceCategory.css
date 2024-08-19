@@ -1,10 +1,9 @@
 .cmpSvcCat_container {
   background-color: white;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: auto;
-  border-radius: 5px;
 }
 .cmpSvcCat_header {
   display: flex;
@@ -13,11 +12,11 @@
 }
 .cmpSvcCat_title {
   font-family: Inter, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   line-height: 19.36px;
   text-align: left;
-  color: #63666a;
+  color: #5f249f;
   margin-bottom: 8px;
 }
 .cmpSvcCat_buttons {
@@ -26,10 +25,13 @@
   gap: 10px;
 }
 .cmpSvcCat_button {
-  font-size: 0.7rem !important;
-  padding: 4px 8px !important;
+  font-family: Inter, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
   color: #63666a !important;
+  padding: 4px 8px !important;
   border-color: #63666a !important;
+  margin-top: -35px !important;
 }
 .cmpSvcCat_tableContainer {
   border: 1px solid #ddd;
@@ -39,9 +41,8 @@
 .cmpSvcCat_tableHeader {
   padding: 4px 8px !important;
   text-align: center !important;
-  color: #0a0a0a !important;
-  background-color: #d9d9d9;
-
+  color: white !important;
+  background-color: #72509b;
   border-bottom: 1px solid black !important;
   border-top: 1px solid black !important;
 }
@@ -55,16 +56,22 @@
   padding: 4px 8px !important;
   overflow: hidden;
   text-align: center !important;
-  color: #63666a !important;
+  color: rgb(82, 32, 134) !important;
   border-right: 1px solid #ddd;
+  border-bottom: 1px solid black;
 }
 .cmpSvcCat_columnHeader {
   text-align: center;
   padding: 4px 8px;
-  color: #63666a;
-  border-bottom: 2px solid #63666a;
   border-bottom: 1px solid black !important;
+  border-left: 1px solid black !important;
+  border-top: 1px solid black !important;
+  border-right: 1px solid black !important;
+  color: black;
 }
 .cmpSvcCat_indentedCell {
   font-size: 0.8rem;
+}
+.cmpSvcCat_nestedRow > .cmpSvcCat_tableCell {
+  color: rgb(82, 32, 134) !important;
 }

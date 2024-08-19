@@ -10,9 +10,13 @@
 }
 
 .ondemand-title {
+  font-family: Inter, sans-serif;
+  font-size: 18px !important;
+  font-weight: 700;
   position: absolute;
+  color: #5f249f !important;
   top: 20px;
-  left: 31%; /* Centering horizontally */
+  left: 34%; /* Centering horizontally */
   transform: translateX(-50%);
   margin: 0; /* Remove margin */
 }

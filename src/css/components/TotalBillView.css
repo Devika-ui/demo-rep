@@ -1,57 +1,54 @@
 .cmpTBV_container {
-    width: 90%;
-    max-width: 800px;
-    height: auto;
-    background-color: white;
-    padding: 16px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px auto;
-  }
-  .cmpTBV_header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  .cmpTBV_title {
-    font-size: 1.2rem;
-    color: #63666A;
-  }
-  .cmpTBV_buttons {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-  }
-  .cmpTBV_button {
-    font-size: 0.7rem !important;
-    padding: 4px 10px !important;
-    color: #63666A !important;
-    
-  }
-  .cmpTBV_select {
-    font-size: 0.8rem !important;
-    padding: 8px;
-    color: #63666A !important;
-  }
-  .cmpTBV_tableCell {
-    color: #63666A !important;
-    font-size: 0.8rem !important;
-    padding: 8px 16px !important; 
-    border-bottom: 1px solid black !important; 
-    border-top: 1px solid black; 
-    vertical-align: top !important; 
-    border-left: 1px solid black;
-    border-right : 1px solid Black;
-   
-  }
-  .cmpTBV_tableHeadCell {
-    background-color: #f0f0f0;
-    text-align: center !important;
-    border-top: 1px solid black; 
-    border-bottom: 1px solid black !important; 
-    border-left : 1px solid black;
-    border-right : 1px solid Black;
-    padding: 8px 16px !important; 
-  }
-  
+  width: 90%;
+  max-width: 800px;
+  height: auto;
+  background-color: white;
+  padding: 16px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+}
+.cmpTBV_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.cmpTBV_title {
+  font-size: 1.2rem;
+  color: #63666a;
+}
+.cmpTBV_buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.cmpTBV_button {
+  font-size: 0.7rem !important;
+  padding: 4px 10px !important;
+  color: #63666a !important;
+}
+.cmpTBV_select {
+  font-size: 0.8rem !important;
+  padding: 8px;
+  color: #63666a !important;
+}
+.cmpTBV_tableCell {
+  color: #63666a !important;
+  font-size: 0.8rem !important;
+  padding: 8px 16px !important;
+  border-bottom: 1px solid black !important;
+  border-top: 1px solid black;
+  vertical-align: top !important;
+  border-left: 1px solid black;
+  border-right: 1px solid Black;
+}
+.cmpTBV_tableHeadCell {
+  background-color: #f0f0f0;
+  text-align: center !important;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black !important;
+  border-left: 1px solid black;
+  border-right: 1px solid Black;
+  padding: 8px 16px !important;
+}
