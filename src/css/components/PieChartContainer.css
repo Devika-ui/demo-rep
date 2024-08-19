@@ -5,6 +5,8 @@
   max-width: 567px !important;
   margin: 16px auto;
   margin-bottom: 30px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 .cmpPieChart_chartContainer {
   width: 50%;

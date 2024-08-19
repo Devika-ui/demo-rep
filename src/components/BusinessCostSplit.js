@@ -8,17 +8,20 @@ import ContainerBox from "./ContainerBox";
 import InvoiceTableView from "./InvoiceTableView";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
- 
+
 const BusinessCostSplit = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [reportType, setReportType] = useState("");
   const [boxData, setBoxData] = useState([]);
   const [billAllocationData, setBillAllocationData] = useState([]);
   const [serviceCategoryData, setServiceCategoryData] = useState([]);
-  const [filteredBillAllocationData, setFilteredBillAllocationData] = useState([]);
-  const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] = useState([]);
+  const [filteredBillAllocationData, setFilteredBillAllocationData] = useState(
+    []
+  );
+  const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] =
+    useState([]);
   const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
- 
+
   const additionalFilters = [
     {
       label: "Service Category(s)",
@@ -67,7 +70,7 @@ const BusinessCostSplit = () => {
       ],
     },
   ];
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -86,30 +89,39 @@ const BusinessCostSplit = () => {
           api.getServiceCategoryCost(),
           api.getBillAllocation(),
         ]);
- 
+
         const formattedBoxData = [
           {
-            number: (applicationsWithTags?.Applicationswithtags?.[0] !== undefined && applicationsWithTags.Applicationswithtags[0] !== null)
-              ? applicationsWithTags.Applicationswithtags[0]
-              : "NA",
+            number:
+              applicationsWithTags?.Applicationswithtags?.[0] !== undefined &&
+              applicationsWithTags.Applicationswithtags[0] !== null
+                ? applicationsWithTags.Applicationswithtags[0]
+                : "NA",
             text: "Applications with Tags",
           },
           {
-            number: (applicationsWithoutTags?.Applicationswithouttags?.[0] !== undefined && applicationsWithoutTags.Applicationswithouttags[0] !== null)
-              ? applicationsWithoutTags.Applicationswithouttags[0]
-              : "NA",
+            number:
+              applicationsWithoutTags?.Applicationswithouttags?.[0] !==
+                undefined &&
+              applicationsWithoutTags.Applicationswithouttags[0] !== null
+                ? applicationsWithoutTags.Applicationswithouttags[0]
+                : "NA",
             text: "Applications without Tags",
           },
           {
-            number: (projectsWithTags?.projectwithtags?.[0] !== undefined && projectsWithTags.projectwithtags[0] !== null)
-              ? projectsWithTags.projectwithtags[0]
-              : "NA",
+            number:
+              projectsWithTags?.projectwithtags?.[0] !== undefined &&
+              projectsWithTags.projectwithtags[0] !== null
+                ? projectsWithTags.projectwithtags[0]
+                : "NA",
             text: "Project with Tags",
           },
           {
-            number: (projectsWithoutTags?.Projectwithouttags?.[0] !== undefined && projectsWithoutTags.Projectwithouttags[0] !== null)
-              ? projectsWithoutTags.Projectwithouttags[0]
-              : "NA",
+            number:
+              projectsWithoutTags?.Projectwithouttags?.[0] !== undefined &&
+              projectsWithoutTags.Projectwithouttags[0] !== null
+                ? projectsWithoutTags.Projectwithouttags[0]
+                : "NA",
             text: "Project without Tags",
           },
         ];
@@ -130,76 +142,76 @@ const BusinessCostSplit = () => {
           return { totalBill, onDemandCost, commitmentsCost, savings };
         };
 
-        const formattedServiceCategoryData = Object.keys(serviceCategoryCost).map(
-          (serviceCategory) => {
-            const services = Object.keys(
-              serviceCategoryCost[serviceCategory]
-            ).map((service) => {
-              const resourceGroups = Object.keys(
-                serviceCategoryCost[serviceCategory][service]
-              ).map((resourceGroup) => {
-                const resources = Object.keys(
-                  serviceCategoryCost[serviceCategory][service][resourceGroup]
-                ).map((resource) => ({
-                  name: resource,
-                  totalBill:
-                    serviceCategoryCost[serviceCategory][service][resourceGroup][
-                      resource
-                    ].TotalBill || 0,
-                  onDemandCost:
-                    serviceCategoryCost[serviceCategory][service][resourceGroup][
-                      resource
-                    ].OnDemandCost || 0,
-                  commitmentsCost:
-                    serviceCategoryCost[serviceCategory][service][resourceGroup][
-                      resource
-                    ].CommitmentsCost || 0,
-                  savings:
-                    serviceCategoryCost[serviceCategory][service][resourceGroup][
-                      resource
-                    ].Savings || 0,
-                }));
-
-                const { totalBill, onDemandCost, commitmentsCost, savings } =
-                  aggregateData(resources);
-
-                return {
-                  name: resourceGroup,
-                  totalBill,
-                  onDemandCost,
-                  commitmentsCost,
-                  savings,
-                  resources,
-                };
-              });
+        const formattedServiceCategoryData = Object.keys(
+          serviceCategoryCost
+        ).map((serviceCategory) => {
+          const services = Object.keys(
+            serviceCategoryCost[serviceCategory]
+          ).map((service) => {
+            const resourceGroups = Object.keys(
+              serviceCategoryCost[serviceCategory][service]
+            ).map((resourceGroup) => {
+              const resources = Object.keys(
+                serviceCategoryCost[serviceCategory][service][resourceGroup]
+              ).map((resource) => ({
+                name: resource,
+                totalBill:
+                  serviceCategoryCost[serviceCategory][service][resourceGroup][
+                    resource
+                  ].TotalBill || 0,
+                onDemandCost:
+                  serviceCategoryCost[serviceCategory][service][resourceGroup][
+                    resource
+                  ].OnDemandCost || 0,
+                commitmentsCost:
+                  serviceCategoryCost[serviceCategory][service][resourceGroup][
+                    resource
+                  ].CommitmentsCost || 0,
+                savings:
+                  serviceCategoryCost[serviceCategory][service][resourceGroup][
+                    resource
+                  ].Savings || 0,
+              }));
 
               const { totalBill, onDemandCost, commitmentsCost, savings } =
-                aggregateData(resourceGroups);
+                aggregateData(resources);
 
               return {
-                name: service,
+                name: resourceGroup,
                 totalBill,
                 onDemandCost,
                 commitmentsCost,
                 savings,
-                resourceGroups,
+                resources,
               };
             });
 
             const { totalBill, onDemandCost, commitmentsCost, savings } =
-              aggregateData(services);
+              aggregateData(resourceGroups);
 
             return {
-              name: serviceCategory,
+              name: service,
               totalBill,
               onDemandCost,
               commitmentsCost,
               savings,
-              services,
+              resourceGroups,
             };
-          }
-        );
- 
+          });
+
+          const { totalBill, onDemandCost, commitmentsCost, savings } =
+            aggregateData(services);
+
+          return {
+            name: serviceCategory,
+            totalBill,
+            onDemandCost,
+            commitmentsCost,
+            savings,
+            services,
+          };
+        });
+
         const billAllocationMap = billAllocation.billAllocation.reduce(
           (acc, item) => {
             const modifiedDate = new Date(item.modifieddate);
@@ -216,12 +228,15 @@ const BusinessCostSplit = () => {
             acc[formattedDate].push({
               name: item.tags_AppID_AppName || "null",
               ownerName: item.tags_owner || "null",
-              totalBill: item.totalBill ? `$${item.totalBill.toFixed(2)}` : "$0.00",
+              totalBill: item.totalBill
+                ? `$${item.totalBill.toFixed(2)}`
+                : "$0.00",
               normalizedVariation:
                 item.Normalized_Variation_MoM !== null
                   ? `${item.Normalized_Variation_MoM}%`
                   : "null",
-              rawVariation: item.rawVariation !== null ? `${item.rawVariation}%` : "null",
+              rawVariation:
+                item.rawVariation !== null ? `${item.rawVariation}%` : "null",
               savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
             });
 
@@ -230,19 +245,21 @@ const BusinessCostSplit = () => {
           {}
         );
 
-        const uniqueModifiedDatesForBillAllocation = Object.keys(billAllocationMap);
-        const flattenedBillAllocationData = uniqueModifiedDatesForBillAllocation.reduce(
-          (acc, date, dateIndex) => {
-            billAllocationMap[date].forEach((item, itemIndex) => {
-              if (!acc[itemIndex]) acc[itemIndex] = {};
-              columns1.forEach((col) => {
-                acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
+        const uniqueModifiedDatesForBillAllocation =
+          Object.keys(billAllocationMap);
+        const flattenedBillAllocationData =
+          uniqueModifiedDatesForBillAllocation.reduce(
+            (acc, date, dateIndex) => {
+              billAllocationMap[date].forEach((item, itemIndex) => {
+                if (!acc[itemIndex]) acc[itemIndex] = {};
+                columns1.forEach((col) => {
+                  acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
+                });
               });
-            });
-            return acc;
-          },
-          []
-        );
+              return acc;
+            },
+            []
+          );
         // Extract unique application names from flattenedBillAllocationData
         const uniqueNamesSet = new Set();
         flattenedBillAllocationData.forEach((item) => {
@@ -255,11 +272,14 @@ const BusinessCostSplit = () => {
         const uniqueNames = [...uniqueNamesSet];
 
         console.log("uniqueNames", uniqueNames);
- 
+
         console.log("formattedBoxData", formattedBoxData);
         console.log("flattenedBillAllocationData", flattenedBillAllocationData);
-        console.log("formattedServiceCategoryData", formattedServiceCategoryData);
- 
+        console.log(
+          "formattedServiceCategoryData",
+          formattedServiceCategoryData
+        );
+
         setBoxData(formattedBoxData);
         setServiceCategoryData(formattedServiceCategoryData);
         setBillAllocationData(flattenedBillAllocationData);
@@ -270,10 +290,10 @@ const BusinessCostSplit = () => {
         console.error("Error fetching data:", error);
       }
     };
- 
+
     fetchData();
   }, []);
- 
+
   const handleButtonClick = (value) => {
     if (value === "Azure") {
       setShowStackBars(false); // Hide StackBars and show AzureBars
@@ -286,20 +306,18 @@ const BusinessCostSplit = () => {
     const selectedReportType = event.target.value;
     setReportType(selectedReportType);
 
-
     if (selectedReportType) {
-      const filteredData = billAllocationData.filter(
-        (item) => {
-          return Object.keys(item).some(key => key.startsWith('name_') && item[key] === selectedReportType);
-        }
-      );
+      const filteredData = billAllocationData.filter((item) => {
+        return Object.keys(item).some(
+          (key) => key.startsWith("name_") && item[key] === selectedReportType
+        );
+      });
       setFilteredBillAllocationData(filteredData);
     } else {
       setFilteredBillAllocationData(billAllocationData);
     }
   };
- 
- 
+
   const columns1 = [
     { key: "name", label: "Application Name" },
     { key: "ownerName", label: "Owner Name" },
@@ -308,7 +326,7 @@ const BusinessCostSplit = () => {
     { key: "rawVariation", label: "%Raw Variation" },
     { key: "savings", label: "Savings" },
   ];
- 
+
   const tableData = [
     {
       tableTitle: "Service Category Cost Allocation",
@@ -323,38 +341,37 @@ const BusinessCostSplit = () => {
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
-      <div style={{ marginLeft: "0px" }}>
-        <Subheader
-          title={
-            <div>
-              <span style={{ fontSize: "18px" }}>Cost & Usage/</span>
-              <span style={{ color: "#5f249f", fontSize: "18px" }}>
-                Business Cost Split
-              </span>
-            </div>
-          }
-          additionalFilters={additionalFilters}
-        />
-      </div>
+      <Subheader
+        title={
+          <div>
+            <span style={{ fontSize: "18px" }}>Cost & Usage/</span>
+            <span style={{ color: "#5f249f", fontSize: "18px" }}>
+              Business Cost Split
+            </span>
+          </div>
+        }
+        additionalFilters={additionalFilters}
+      />
       <NavigationBar />
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "-12px",
-          paddingRight : "0px",
-          paddingLeft : "10px",
+          marginLeft: "-21px",
+          paddingRight: "0px",
+          paddingLeft: "10px",
         }}
       >
         <ContainerBox data={boxData} />
       </div>
       <div
         style={{
-          marginBottom: "30px",
+          marginBottom: "29px",
           textAlign: "left",
           width: "100%",
-          marginLeft: "-268px",
-          marginTop: "-20px",
+          marginLeft: "-272px",
+          marginRight: "30px",
+          marginTop: "-11px",
         }}
       >
         <Ondemand />
@@ -364,8 +381,9 @@ const BusinessCostSplit = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "left",
-          marginLeft: "-537px",
-          marginTop: "-23px",
+          marginLeft: "-542px",
+          marginRight: "3px",
+          marginTop: "-22px",
         }}
       >
         <InvoiceTableView
@@ -392,17 +410,17 @@ const BusinessCostSplit = () => {
                 }}
               >
                 <MenuItem value="">All Applications</MenuItem>
-                    {uniqueBillAllocationData.map((name, index) => (
-                      <MenuItem key={index} value={name}>
-                        {name === "null" ? "null" : name}
-                      </MenuItem>
-                    ))}
-                </Select>
+                {uniqueBillAllocationData.map((name, index) => (
+                  <MenuItem key={index} value={name}>
+                    {name === "null" ? "null" : name}
+                  </MenuItem>
+                ))}
+              </Select>
             </FormControl>
           }
           tableData={filteredBillAllocationData}
           tableHeight="auto"
-          tableWidth="524px"
+          tableWidth="537px"
           columns={columns1}
           headerLabels={headerLabelsForBillAllocation}
         />
@@ -411,20 +429,20 @@ const BusinessCostSplit = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "630px",
+          marginLeft: "643px",
           marginTop: "-794px",
           marginBottom: "30px",
         }}
       >
         <ServiceCategory
           dummyData={serviceCategoryData}
-          height="754px"
-          width="575px"
+          height="753px"
+          width="580px"
           tableData={tableData}
         />
       </div>
     </div>
   );
 };
- 
+
 export default BusinessCostSplit;

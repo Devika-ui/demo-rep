@@ -10,15 +10,21 @@
   width: 1147px;
   height: 75px;
   margin-bottom: 1px;
+  border: 1px solid #ccc;
 }
-
-.cmp_box {
+s .cmp_box {
   padding: 16px;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .cmp_box:hover {
   transform: translateY(-3px);
+
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   cursor: pointer;
+  background-color: #5f249f;
+}
+
+.cmp_box:hover .cmp_box_text {
+  color: white !important;
 }

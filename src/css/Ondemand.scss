@@ -1,12 +1,14 @@
 .ondemand-container {
-  width: 555px;
+  width: 569px;
   height: 347px;
   margin: 0 auto;
   top: 20px;
   background-color: white;
   position: relative;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
- 
+
 .ondemand-title {
   position: absolute;
   top: 20px;
@@ -15,7 +17,6 @@
   margin: 0; /* Remove margin */
 }
 
- 
 .chart {
   position: absolute;
   top: 60px; /* Adjust as needed */
@@ -24,4 +25,3 @@
   width: 500px;
   height: 320px;
 }
- 

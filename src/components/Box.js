@@ -18,12 +18,14 @@ const Box = ({ number, text }) => {
   return (
     <Paper className="cmp_box" style={{ width: boxWidth }}>
       <Typography
+        className="cmp_box_text"
         style={{ fontSize: "17px", fontWeight: "normal" }}
         variant="h5"
       >
         {number}
       </Typography>
       <Typography
+        className="cmp_box_text"
         style={{ fontSize: "12px", color: "#63666A" }}
         variant="body1"
       >

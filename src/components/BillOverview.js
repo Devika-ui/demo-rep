@@ -462,7 +462,7 @@ const BillOverview = () => {
             <InvoiceTableView
               title="Invoice View"
               tableData={invoiceData}
-              tableHeight="346px"
+              tableHeight="348px"
               tableWidth="570px"
               columns={columns}
               headerLabels={headerLabelsForInvoice}
@@ -480,7 +480,7 @@ const BillOverview = () => {
             marginBottom: "20px",
             marginLeft: "-230x",
             marginTop: "-77px",
-            marginRight: "94px",
+            marginRight: "97px",
           }}
         >
           <div
@@ -534,7 +534,7 @@ const BillOverview = () => {
                 </FormControl>
               }
               tableData={filteredBillAllocationData}
-              tableHeight="366px"
+              tableHeight="368px"
               tableWidth="570px"
               columns={columns1}
               headerLabels={headerLabelsForBillAllocation} // value for the prop

@@ -1,70 +1,70 @@
 .cmpSvcCat_container {
- 
-    background-color: white;
-    padding: 10px; 
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: auto; 
-  }
-  .cmpSvcCat_header {
-    display: flex;
-    flex-direction: column; 
-    margin-bottom: 10px; 
-  }
-  .cmpSvcCat_title {
-    font-family: Inter, sans-serif; 
-    font-size: 16px; 
-    font-weight: 700;
-    line-height: 19.36px; 
-    text-align: left; 
-    color: #63666A; 
-    margin-bottom: 8px; 
-  }
-  .cmpSvcCat_buttons {
-    display: flex;
-    justify-content: flex-end; 
-    gap: 10px;
-  }
-  .cmpSvcCat_button {
-    font-size: 0.7rem !important; 
-    padding: 4px 8px !important; 
-    color: #63666A !important; 
-    border-color: #63666A !important; 
-  }
-  .cmpSvcCat_tableContainer {
-    border: 1px solid #ddd; 
-    border-radius: 0; 
-    overflow: hidden; 
-  }
-  .cmpSvcCat_tableHeader {
-    padding: 4px 8px !important; 
-    text-align: center !important;
-    color: #0a0a0a !important; 
-    background-color: #D9D9D9;
-    
-    border-bottom : 1px solid black !important;
-    border-top : 1px solid black !important;
-  }
-  .cmpSvcCat_table {
-    table-layout: fixed; 
-  }
-  .cmpSvcCat_nestedRow {
-    background-color: #f9f9f9;
-  }
-  .cmpSvcCat_cell {
-    padding: 4px 8px !important;
-    overflow: hidden;
-    text-align: center !important;
-    color: #63666A !important;
-    border-right: 1px solid #ddd; 
-  }
-  .cmpSvcCat_columnHeader {
-    text-align: center;
-    padding: 4px 8px; 
-    color: #63666A; 
-    border-bottom: 2px solid #63666A; 
-    border-bottom : 1px solid black !important;
-  }
-  .cmpSvcCat_indentedCell {
-    font-size: 0.8rem; 
-  }
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  border-radius: 5px;
+}
+.cmpSvcCat_header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.cmpSvcCat_title {
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19.36px;
+  text-align: left;
+  color: #63666a;
+  margin-bottom: 8px;
+}
+.cmpSvcCat_buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.cmpSvcCat_button {
+  font-size: 0.7rem !important;
+  padding: 4px 8px !important;
+  color: #63666a !important;
+  border-color: #63666a !important;
+}
+.cmpSvcCat_tableContainer {
+  border: 1px solid #ddd;
+  border-radius: 0;
+  overflow: hidden;
+}
+.cmpSvcCat_tableHeader {
+  padding: 4px 8px !important;
+  text-align: center !important;
+  color: #0a0a0a !important;
+  background-color: #d9d9d9;
+
+  border-bottom: 1px solid black !important;
+  border-top: 1px solid black !important;
+}
+.cmpSvcCat_table {
+  table-layout: fixed;
+}
+.cmpSvcCat_nestedRow {
+  background-color: #f9f9f9;
+}
+.cmpSvcCat_cell {
+  padding: 4px 8px !important;
+  overflow: hidden;
+  text-align: center !important;
+  color: #63666a !important;
+  border-right: 1px solid #ddd;
+}
+.cmpSvcCat_columnHeader {
+  text-align: center;
+  padding: 4px 8px;
+  color: #63666a;
+  border-bottom: 2px solid #63666a;
+  border-bottom: 1px solid black !important;
+}
+.cmpSvcCat_indentedCell {
+  font-size: 0.8rem;
+}
