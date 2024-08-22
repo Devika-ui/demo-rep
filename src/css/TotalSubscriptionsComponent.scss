@@ -21,6 +21,8 @@
     padding-top: 14px;
     color: #5f249f;
     border-bottom: 2px solid #98989893; // Updated border color
+    font-size: 16px;
+    margin-left: 5px;
   }
 
   .bottom-part {
@@ -29,6 +31,7 @@
     justify-content: space-between;
     align-items: flex-start;
     padding-top: 2px;
+    margin-left: 3px;
 
     .subscription {
       display: flex;
