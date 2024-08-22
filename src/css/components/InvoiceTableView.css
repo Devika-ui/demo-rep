@@ -28,13 +28,14 @@
   gap: 8px;
   margin-top: 10px;
   align-items: center;
+  left: 20px !important;
 }
 .cmpInvTv_button {
   font-family: Inter, sans-serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
   color: #63666a !important;
-  margin-left: 20px !important;
+  left: 20px !important;
 }
 .cmpInvTv_dropdown {
   margin-left: -10px;

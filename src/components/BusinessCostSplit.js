@@ -391,15 +391,42 @@ const BusinessCostSplit = () => {
           dropdown={
             <FormControl
               variant="outlined"
-              style={{ minWidth: 110, marginLeft: "0px" }}
+              style={{
+                minWidth: 170,
+                marginLeft: "-160px",
+                marginRight: "20px",
+                marginTop: "5px",
+                height: "33px",
+                position: "absolute",
+                backgroundColor: "#e0e0e0",
+                border: "none",
+              }}
             >
-              <InputLabel id="report-type-label">Group by</InputLabel>
+              <InputLabel
+                id="report-type-label"
+                style={{
+                  fonfFamily: "Inter, sans-serif",
+                  fontSize: "13px",
+                  fontWeight: "700",
+                  color: "#63666a",
+                  position: "absolute",
+                  top: "-10px",
+                  left: "-7px",
+                }}
+              >
+                Group by Application
+              </InputLabel>
               <Select
                 labelId="report-type-label"
                 id="report-type"
                 value={reportType}
                 onChange={handleReportTypeChange}
                 label="Group by Application"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  padding: "10px",
+                }}
                 MenuProps={{
                   PaperProps: {
                     style: {
