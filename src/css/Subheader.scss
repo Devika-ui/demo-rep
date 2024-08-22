@@ -111,14 +111,14 @@
 // }
 
 .Subheader-Container {
-  width: 1180px;
+  width: 93.4%;
   margin: 0 auto;
   height: 50px;
   border: 1px solid #ccc;
   overflow: hidden;
   font-family: sans-serif;
   padding: 0;
-  margin-right: 10px;
+  margin-right: 74px;
   margin-top: 0px;
   margin-left: 74px;
   margin-bottom: -8px;
@@ -164,15 +164,15 @@
 
 .FilterText {
   font-weight: bold;
-  font-size: 20px;
-  margin-right: 10px;
+  font-size: 16px;
+  margin-right: 2px;
   color: #63666a;
 }
 
 .Dropdown-Icon {
-  width: 20px;
+  width: 16px;
   color: #63666a;
-  height: 20px;
+  height: 20rem;
 }
 
 .Dropdown-Content {
@@ -185,7 +185,9 @@
   z-index: 1;
   padding: 10px;
   border-radius: 5px;
-  width: auto;
+  //width: auto;
+  width: 12rem; /* Width adjusts with the viewport width */
+  padding: 2vh;
   top: 120px; /* Adjust based on the height of the Subheader-Container */
   right: 9px;
 }
@@ -209,7 +211,9 @@
 
 .Subheader-BoxTitle {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
+  font-family: sans-serif;
+  color: #5f249f;
   padding-right: 5px;
 }
 

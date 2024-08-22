@@ -13,7 +13,7 @@
   padding-top: 15px;
 
   .top-part {
-    height: 12%;
+    height: 8%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,9 +54,21 @@
     &:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      background-color: #5f249f;
       cursor: pointer;
+      h2,
+      p,
+      .price,
+      .savings,
+      .titlename {
+        color: white;
+      }
     }
     font-size: 14px;
+  }
+
+  .titlename {
+    font-size: 14x;
   }
 
   .content:hover {
@@ -79,8 +91,8 @@
     opacity: 0.5;
   }
 
-  &:hover {
-    transform: translateY(-3px); // Add a subtle lift effect on hover
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); // Enhanced box shadow on hover
-  }
+  // &:hover {
+  //   transform: translateY(-3px); // Add a subtle lift effect on hover
+  //   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); // Enhanced box shadow on hover
+  // }
 }

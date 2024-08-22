@@ -55,6 +55,8 @@ const Dashboard = () => {
     backgroundColor: "white",
     marginLeft: "35px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
   };
 
   const additionalDivStyleKpi = {
@@ -133,7 +135,7 @@ const Dashboard = () => {
             marginLeft: "33px",
             marginTop: "-20px",
             display: "flex",
-            gap: "10px",
+            gap: "8px",
             width: "100%",
             justifyContent: "left",
             alignItems: "center",

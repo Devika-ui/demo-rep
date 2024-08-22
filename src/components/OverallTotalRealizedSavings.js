@@ -190,7 +190,7 @@ const OverallTotalRealizedSavings = () => {
   return (
     <div
       style={{
-        width: "578px",
+        width: "579px",
         height: "453px",
         borderRadius: "5px",
         overflow: "hidden",
@@ -198,6 +198,8 @@ const OverallTotalRealizedSavings = () => {
         boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
         transition: "transform 0.3s, box-shadow 0.3s",
         position: "relative",
+        border: " 1px solid #ccc",
+        marginRight: "5px",
       }}
     >
       <div

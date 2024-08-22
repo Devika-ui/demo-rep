@@ -95,7 +95,7 @@ const ConsumptionHighlights = () => {
         <div className="tiles-container" style={{ paddingTop: "20px" }}>
           <div className="tile">
             <div>
-              <div>Top Subscription</div>
+              <div className="tilename">Top Subscription</div>
             </div>
             <div className="content">
               <div className="price">
@@ -105,7 +105,7 @@ const ConsumptionHighlights = () => {
           </div>
           <div className="tile">
             <div>
-              <div>Top Service</div>
+              <div className="tilename">Top Service</div>
             </div>
             <div className="content">
               <div className="price">
@@ -115,7 +115,7 @@ const ConsumptionHighlights = () => {
           </div>
           <div className="tile">
             <div>
-              <div>Top Application</div>
+              <div className="tilename">Top Application</div>
             </div>
             <div className="content">
               <div className="price">

@@ -166,11 +166,12 @@ const AzureBars = () => {
       <Typography
         variant="h4"
         style={{
-          color: "black",
+          color: "#5f249f",
+          fontFamily: "sans-serif",
           fontWeight: "bold",
-          fontSize: "15px",
+          fontSize: "16px",
           marginTop: "10px",
-          paddingLeft: "10px",
+          paddingLeft: "20px",
         }}
       >
         Azure Total Bill Cost

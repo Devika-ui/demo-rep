@@ -4,20 +4,19 @@
   margin-bottom: 0px;
 }
 
-
 .button-box {
   display: flex;
   justify-content: space-between; /* Add space between buttons */
   align-items: center;
-  background-color: black; /* Background color for the button box */
+  background-color: white; /* Background color for the button box */
   padding: 2px; /* Reduce padding around the buttons */
   border-radius: 24px;
 }
 
 .separator {
-  width: 1px; /* Width of the separator */
-  height: 30px; /* Height of the separator, adjusted to match button height */
-  background-color: #ccc; /* Color of the separator */
+  width: 0.5px; /* Width of the separator */
+  height: 34px; /* Height of the separator, adjusted to match button height */
+  background-color: #5f249f; /* Color of the separator */
   margin: 0 5px; /* Adjust spacing between separator and buttons */
 }
 

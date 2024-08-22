@@ -31,7 +31,7 @@ const RecommendationsComponent = () => {
   return (
     <div
       className="recommendations-container"
-      style={{ width: "387px ", height: "370px" }}
+      style={{ width: "385px ", height: "370px" }}
     >
       <div className="top-part">
         <h2
@@ -41,8 +41,8 @@ const RecommendationsComponent = () => {
             fontSize: "16px",
             marginLeft: "0",
             marginRight: "auto",
-            display: "block",
             textAlign: "left",
+            paddingBottom: "11px",
           }}
         >
           Top 3 Recommendations
@@ -70,7 +70,7 @@ const RecommendationsComponent = () => {
       {recommendations.slice(0, 3).map((rec, index) => (
         <div key={index} className="tile">
           <div>
-            <div>{rec.name}</div>
+            <div className="titlename">{rec.name}</div>
           </div>
           <div className="content">
             <div className="price">${rec.value.toFixed(2)}</div>

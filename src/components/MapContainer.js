@@ -67,14 +67,15 @@ const MapContainer = () => {
           fontFamily: "sans-serif",
           fontSize: "16px",
           borderBottom: "2px solid rgba(152, 152, 152, 0.576)",
-          margin: "0",
+          margin: "2px",
           padding: "10px 0",
           paddingLeft: "20px",
           height: "32px",
           display: "flex",
           alignItems: "center",
-          width: "573px",
+          width: "570px",
           borderRadius: "5px",
+          border: " 1px solid #ccc",
         }}
       >
         Resource Location
@@ -82,14 +83,15 @@ const MapContainer = () => {
       <div
         id="map-container"
         style={{
-          width: "591px",
+          width: "588px",
           height: "399px",
           position: "relative",
-          borderRadius: "5px",
           overflow: "hidden",
           border: "1px solid #ccc",
-          margin: "0 auto",
+          margin: "0 3px",
           marginBottom: "-1px",
+          border: " 1px solid #ccc",
+          marginTop: "-2px",
         }}
         ref={mapRef}
       ></div>

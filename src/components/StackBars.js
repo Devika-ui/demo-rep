@@ -167,14 +167,15 @@ const StackBars = () => {
         <Typography
           variant="subtitle1"
           style={{
-            color: "black",
+            color: "#5f249f",
+            fontFamily: "sans-serif",
             fontWeight: "bold",
             fontSize: "16px",
             paddingLeft: "20px",
             paddingTop: "10px",
           }}
         >
-          Total Bill Cost by Providers:
+          Total Bill Cost by Providers
         </Typography>
       </div>
       <div

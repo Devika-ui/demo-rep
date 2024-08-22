@@ -62,8 +62,16 @@
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    background-color: #5f249f;
     cursor: pointer;
+    .tilename,
+    .price {
+      color: white;
+    }
   }
+}
+.tilename {
+  font-size: 14px;
 }
 .content {
   display: flex;
