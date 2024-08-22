@@ -517,14 +517,13 @@ const BillOverview = () => {
                     marginTop: "5px",
                     height: "33px",
                     position: "absolute",
-                    backgroundColor: "#e0e0e0",
                     border: "none",
                   }}
                 >
                   <InputLabel
                     id="report-type-label"
                     style={{
-                      fonfFamily: "Inter, sans-serif",
+                      fontFamily: "Inter, sans-serif",
                       fontSize: "13px",
                       fontWeight: "700",
                       color: "#63666a",
@@ -542,22 +541,25 @@ const BillOverview = () => {
                     onChange={handleReportTypeChange}
                     label="Group by Application"
                     style={{
-                      width: "100%",
+                      width: reportType ? "80%" : "100%",
                       height: "100%",
                       padding: "10px",
                     }}
                     MenuProps={{
                       PaperProps: {
                         style: {
-                          display: "flex",
-                          flexDirection: "column",
+                          maxHeight: 300, // Adjust the dropdown height if needed
                         },
                       },
                     }}
                   >
                     <MenuItem value="">All Applications</MenuItem>
                     {uniqueBillAllocationData.map((name, index) => (
-                      <MenuItem key={index} value={name}>
+                      <MenuItem
+                        key={index}
+                        value={name}
+                        style={{ whiteSpace: "normal" }}
+                      >
                         {name === "null" ? "null" : name}
                       </MenuItem>
                     ))}
