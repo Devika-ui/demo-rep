@@ -106,6 +106,7 @@ const StackBars = () => {
               stepSize: 4000,
               max: 6000, // Adjust max to fit the data
               color: "rgba(0, 0, 0, 0.5)",
+              padding: 25,
             },
           },
         },
@@ -157,7 +158,7 @@ const StackBars = () => {
       style={{
         position: "relative",
         marginBottom: "0px",
-        height: "400px",
+        height: "375px",
         borderRadius: "10px",
         overflow: "hidden",
         backgroundColor: "white",
