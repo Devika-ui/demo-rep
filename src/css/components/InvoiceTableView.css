@@ -16,12 +16,14 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  margin-top: -15px;
 }
 .cmpInvTv_title {
   font-size: 1.2rem;
   color: #5f249f;
   white-space: pre-wrap;
   padding-right: 10px;
+  padding-bottom: 20px;
 }
 .cmpInvTv_buttons {
   display: flex;
