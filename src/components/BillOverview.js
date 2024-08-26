@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Box from "./Box";
 import BarChartContainer from "./BarChartContainer";
 import PieChartContainer from "./PieChartContainer";
 import InvoiceTableView from "./InvoiceTableView";
 import Header from "./Header";
 import Subheader from "./SubHeader";
-//import TotalBillView from "./TotalBillView";
 import NavigationBar from "./NavigationBar";
-import ContainerBox from "./ContainerBox";
+import ContainerForBillOverview from "./ContainerForBillOverview";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
 
@@ -267,7 +265,7 @@ const BillOverview = () => {
           },
           {
             number: `${percentageSavingsOverPayGo}%`,
-            text: "% Savings over Pay-as-you-go",
+            text: "% Savings over Pay-Go",
           },
           { number: `${normalizedVariation}%`, text: "Normalized Variation" },
         ];
@@ -405,13 +403,13 @@ const BillOverview = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "19px",
-          paddingLeft: "27px",
-          paddingRight: "32px",
-          marginRight: "25px",
+          marginLeft: "-25px",
+          paddingLeft: "-17px",
+          paddingRight: "-17px",
+          marginRight: "-3px",
         }}
       >
-        <ContainerBox data={boxData} />
+        <ContainerForBillOverview data={boxData} />
       </div>
 
       {/* Chart and Table Containers */}

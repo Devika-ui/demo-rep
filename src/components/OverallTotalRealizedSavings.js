@@ -167,7 +167,7 @@ const OverallTotalRealizedSavings = () => {
     },
     layout: {
       padding: {
-        left: 10,
+        left: 25,
         right: 10,
         top: 0,
         bottom: 0,
@@ -229,7 +229,7 @@ const OverallTotalRealizedSavings = () => {
         style={{
           height: "calc(100% - 51px)",
           overflow: "hidden",
-          paddingTop: "40px",
+          paddingTop: "50px",
         }}
       >
         <Bar data={combinedData} options={options} />

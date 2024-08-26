@@ -1,0 +1,33 @@
+.cmp_box {
+  width: 50px !important;
+  height: 75px;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  word-wrap: break-word;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.cmp_box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  background-color: #5f249f;
+}
+
+.cmp_box:hover .cmp_box_text {
+  color: white !important;
+}
+.cmp_containerBox {
+  margin-left: 90px;
+  padding: 16px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  justify-content: center;
+  border: 1px solid #ccc;
+}

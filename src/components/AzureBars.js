@@ -23,6 +23,7 @@ ChartJS.register(
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       display: true,
@@ -162,7 +163,7 @@ const AzureBars = () => {
   }
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ padding: "10px" }}>
       <Typography
         variant="h4"
         style={{
@@ -171,12 +172,21 @@ const AzureBars = () => {
           fontWeight: "bold",
           fontSize: "16px",
           marginTop: "10px",
-          paddingLeft: "20px",
+          paddingLeft: "10px",
         }}
       >
         Azure Total Bill Cost
       </Typography>
-      <Bar style={{ paddingTop: "5px" }} options={options} data={data} />
+      <div
+        style={{
+          position: "relative",
+          width: "95%",
+          height: "320px",
+          margin: "20px auto",
+        }}
+      >
+        <Bar style={{ paddingTop: "5px" }} options={options} data={data} />
+      </div>
     </div>
   );
 };
