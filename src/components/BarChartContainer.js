@@ -39,10 +39,10 @@ const BarChartContainer = ({ chartData, trendData, legendData }) => {
       <Typography className="cmpBarChart_heading">
         Total Bill Cost Vs Simulated PayGO
       </Typography>
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={370} >
         <ComposedChart
           data={data}
-          margin={{ top: 20, right: 20, left: 5, bottom: 20 }}
+          margin={{ top: 20, right: 20, left: -18, bottom: 20 }}
         >
           <CartesianGrid
             horizontal={true}
@@ -59,9 +59,9 @@ const BarChartContainer = ({ chartData, trendData, legendData }) => {
           <Legend
             layout="vertical"
             verticalAlign="middle"
-            align="left"
+            align="right"
             wrapperStyle={{
-              left: 0,
+              right: 0,
               top: "50%",
               transform: "translateY(-50%)",
             }}

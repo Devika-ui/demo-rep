@@ -397,7 +397,7 @@ const BillOverview = () => {
         additionalFilters={additionalFilters}
       />
       <NavigationBar />
-
+   
       {/* Boxes */}
       <div
         style={{
@@ -411,170 +411,111 @@ const BillOverview = () => {
       >
         <ContainerForBillOverview data={boxData} />
       </div>
-
-      {/* Chart and Table Containers */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          paddingLeft: "37px",
-        }}
-      >
-        {/* Chart and Table Container */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: 20,
-            paddingLeft: "10px",
-            paddingRight: "5px",
-            width: "133%", // Ensures the container takes full width
-            marginLeft: "-119px",
-            marginTop: "-22px",
-          }}
-        >
-          <div
-            style={{
-              flex: 1,
-              marginLeft: "-5px",
-              marginBottom: "15px",
-              marginRight: "-17px",
-            }}
-          >
-            <BarChartContainer
-              chartData={chartData}
-              trendData={trendData}
-              legendData={legendData}
-            />
-          </div>
-          <div
-            style={{
-              flex: 1,
-              marginLeft: "-130px",
-              marginTop: "11px",
-              paddingRight: "14px",
-            }}
-          >
-            <InvoiceTableView
-              title="Invoice View"
-              tableData={invoiceData}
-              tableHeight="348px"
-              tableWidth="570px"
-              columns={columns}
-              headerLabels={headerLabelsForInvoice}
-            />
-          </div>
+   
+      {/* First Row: Invoice View */}
+      <div style={{ display: "flex", justifyContent: "auto", padding: "0 32px" }}>
+        <InvoiceTableView
+          title="Invoice View"
+          tableData={invoiceData}
+          tableHeight="348px"
+          tableWidth="570px"
+          columns={columns}
+          headerLabels={headerLabelsForInvoice}
+        />
+      </div>
+   
+      {/* Second Row: Total Bill Allocation */}
+      <div style={{ display: "flex", justifyContent: "center", padding: "0 32px", marginTop: "20px" }}>
+        <InvoiceTableView
+          title="Total Bill Allocation across Application"
+          dropdown={
+            <FormControl
+              variant="outlined"
+              style={{
+                minWidth: 170,
+                marginRight: "20px",
+                height: "33px",
+              }}
+            >
+              <InputLabel
+                id="report-type-label"
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "13px",
+                  fontWeight: "700",
+                  color: "#63666a",
+                }}
+              >
+                Group by Application
+              </InputLabel>
+              <Select
+                labelId="report-type-label"
+                id="report-type"
+                value={reportType}
+                onChange={handleReportTypeChange}
+                label="Group by Application"
+                style={{
+                  width: reportType ? "80%" : "100%",
+                  height: "100%",
+                  padding: "10px",
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      maxHeight: 300,
+                    },
+                  },
+                }}
+              >
+                <MenuItem value="">All Applications</MenuItem>
+                {uniqueBillAllocationData.map((name, index) => (
+                  <MenuItem
+                    key={index}
+                    value={name}
+                    style={{ whiteSpace: "normal" }}
+                  >
+                    {name === "null" ? "null" : name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          }
+          tableData={filteredBillAllocationData}
+          tableHeight="368px"
+          tableWidth="570px"
+          columns={columns1}
+          headerLabels={headerLabelsForBillAllocation}
+        />
+      </div>
+   
+   {/* Third Row: Pie Chart & Bar Chart */}
+   <div style={{ display: "flex", justifyContent: "space-between", padding: "20px", marginTop: "30px"}}>
+        <div style={{ flex: 1,marginLeft: "60px",marginRight:"10px" }}>
+          <PieChartContainer
+            title1="Top 5 Applications"
+            data1={topApplications}
+            title2="Top 5 Services"
+            data2={topServices}
+            containerStyle={pieChartContainerStyle}
+            chartStyle={pieChartStyle}
+            pieChartHeight1={350}
+            pieChartHeight2={330}
+            titleStyle1={titleStyle1}
+            titleStyle2={titleStyle2}
+          />
         </div>
-
-        {/* Pie Chart Container */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "85%",
-            marginBottom: "20px",
-            marginLeft: "-230x",
-            marginTop: "-77px",
-            marginRight: "97px",
-          }}
-        >
-          <div
-            style={{
-              flex: 1,
-              marginRight: "10px",
-              paddingRight: "6px",
-              paddingLeft: "0px",
-            }}
-          >
-            <PieChartContainer
-              title1="Top 5 Applications"
-              data1={topApplications}
-              title2="Top 5 Services"
-              data2={topServices}
-              containerStyle={pieChartContainerStyle}
-              chartStyle={pieChartStyle}
-              pieChartHeight1={350} // Override the height for the first PieChart
-              pieChartHeight2={330}
-              titleStyle1={titleStyle1}
-              titleStyle2={titleStyle2}
-            />
-          </div>
-          <div style={{ flex: 1, marginLeft: "-20x", paddingLeft: "0px" }}>
-            <InvoiceTableView
-              title={"Total Bill Allocation\nacross Application"}
-              dropdown={
-                <FormControl
-                  variant="outlined"
-                  style={{
-                    minWidth: 170,
-                    marginLeft: "-160px",
-                    marginRight: "20px",
-                    marginTop: "5px",
-                    height: "33px",
-                    position: "absolute",
-                    border: "none",
-                  }}
-                >
-                  <InputLabel
-                    id="report-type-label"
-                    style={{
-                      fontFamily: "Inter, sans-serif",
-                      fontSize: "13px",
-                      fontWeight: "700",
-                      color: "#63666a",
-                      position: "absolute",
-                      top: "-10px",
-                      left: "-7px",
-                    }}
-                  >
-                    Group by Application
-                  </InputLabel>
-                  <Select
-                    labelId="report-type-label"
-                    id="report-type"
-                    value={reportType}
-                    onChange={handleReportTypeChange}
-                    label="Group by Application"
-                    style={{
-                      width: reportType ? "80%" : "100%",
-                      height: "100%",
-                      padding: "10px",
-                    }}
-                    MenuProps={{
-                      PaperProps: {
-                        style: {
-                          maxHeight: 300, // Adjust the dropdown height if needed
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem value="">All Applications</MenuItem>
-                    {uniqueBillAllocationData.map((name, index) => (
-                      <MenuItem
-                        key={index}
-                        value={name}
-                        style={{ whiteSpace: "normal" }}
-                      >
-                        {name === "null" ? "null" : name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              }
-              tableData={filteredBillAllocationData}
-              tableHeight="368px"
-              tableWidth="570px"
-              columns={columns1}
-              headerLabels={headerLabelsForBillAllocation} // value for the prop
-            />
-          </div>
+        <div style={{ flex: 1, marginLeft: "0px" , marginTop: "-10px"}}>
+          <BarChartContainer
+            chartData={chartData}
+            trendData={trendData}
+            showStackBars={showStackBars}
+            title="Total Bill vs. Simulated PAYGO"
+            legendData={legendData}
+          />
         </div>
       </div>
     </div>
   );
-};
-
-export default BillOverview;
+  };
+   
+  export default BillOverview;
