@@ -66,7 +66,7 @@ const InvoiceTableView = ({
           backgroundColor: "#fff",
         }}
       >
-        <Table stickyHeader>
+        <Table id="mytable">
           <TableHead>
             <TableRow>
               {headerLabels.map((label, labelIndex) => (
@@ -79,7 +79,7 @@ const InvoiceTableView = ({
                 </TableCell>
               ))}
             </TableRow>
-            <TableRow>
+            <TableRow className="cmpInvTv_stickyFirstRow">
               {headerLabels.flatMap((_, labelIndex) =>
                 columns.map((column, colIndex) => (
                   <TableCell

@@ -1,48 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import '../css/styles.scss';
-import OpticLogo from '../images/OpticsFinopslogo.png';
-import DXCLogo from '../images/DXCLogo.jpg';
-import HeaderButtons from './HeaderButtons';
-import DateRangeDropdown from './DateRangeDropdown';
-import api from '../api.js';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "../css/styles.scss";
+import OpticLogo from "../images/OpticsFinopslogo.png";
+import DXCLogo from "../images/DXCLogo.jpg";
+import HeaderButtons from "./HeaderButtons";
+import DateRangeDropdown from "./DateRangeDropdown";
+import api from "../api.js";
+import { Link } from "react-router-dom";
 
 const Header = ({ onButtonClick }) => {
   const [isNavOpen, setNavOpen] = useState(false);
   // const [clientData1200, setClientData1200] = useState(null); // State to store client data for customerId 1200
   // const [clientData1700, setClientData1700] = useState(null); // State to store client data for customerId 1700
   const siteIdentityStyle = {
-    float: 'right',
+    float: "right",
   };
 
   const clientLogoStyle = {
-    width: '100px',
-    height: '50px',
-    marginTop: '8px',
+    width: "100px",
+    height: "50px",
+    marginTop: "8px",
   };
 
   const lineStyle = {
-    height: '24px',
-    borderRight: '1px solid lightgray',
-    marginRight: '10px',
-    marginTop: '20px',
+    height: "34px",
+    borderRight: "1px solid #5f249f",
+    marginRight: "10px",
+    marginTop: "8px",
   };
 
   const headerButtonsStyle = {
-    marginTop: '8.2px',
+    marginTop: "8.2px",
+    marginRight: "5px",
   };
 
   const DateRangeDropdownStyle = {
-    marginTop: '8.2px',
-    marginLeft: '6px',
-    position : 'relative',
+    marginTop: "8.2px",
+    marginLeft: "6px",
+    position: "relative",
   };
 
   const logoImageStyle = {
-    imageRendering: 'auto', // Prevent image from appearing blurry
+    imageRendering: "auto", // Prevent image from appearing blurry
   };
 
-  {/* useEffect(() => {
+  {
+    /* useEffect(() => {
     // Fetch client data for customerId 1200 when component mounts
    async function fetchClient1200() {
        try {
@@ -69,7 +71,8 @@ const Header = ({ onButtonClick }) => {
      return () => {
        // Any clean-up code if necessary
     };
-   }, []); // Empty dependency array to run effect only once*/}
+   }, []); // Empty dependency array to run effect only once*/
+  }
 
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
@@ -105,18 +108,26 @@ const Header = ({ onButtonClick }) => {
           )}
         </nav>
         */}
-        <nav className={`site-navigation ${isNavOpen ? 'open' : ''}`}>
-          <ul className="nav" style={{ display: 'flex', alignItems: 'center' }}>
+        <nav className={`site-navigation ${isNavOpen ? "open" : ""}`}>
+          <ul className="nav" style={{ display: "flex", alignItems: "center" }}>
             <li>
               <div className="site-identity" style={siteIdentityStyle}>
                 <Link to="/dashboard">
-                  <img src={DXCLogo} alt="DXC Logo" style={{ ...clientLogoStyle, ...logoImageStyle }} />
+                  <img
+                    src={DXCLogo}
+                    alt="DXC Logo"
+                    style={{ ...clientLogoStyle, ...logoImageStyle }}
+                  />
                 </Link>
               </div>
             </li>
-            <li style={lineStyle}></li>
-            <li style={headerButtonsStyle}><HeaderButtons onButtonClick={onButtonClick} /></li>
-            <li style={DateRangeDropdownStyle}><DateRangeDropdown /></li>
+            {/* <li style={lineStyle}></li> */}
+            <li style={headerButtonsStyle}>
+              <HeaderButtons onButtonClick={onButtonClick} />
+            </li>
+            <li style={DateRangeDropdownStyle}>
+              <DateRangeDropdown />
+            </li>
           </ul>
         </nav>
       </div>

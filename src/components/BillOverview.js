@@ -403,9 +403,7 @@ const BillOverview = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "-25px",
-          paddingLeft: "-17px",
-          paddingRight: "-17px",
+          marginLeft: "-23px",
           marginRight: "-3px",
         }}
       >
@@ -414,13 +412,19 @@ const BillOverview = () => {
 
       {/* First Row: Invoice View */}
       <div
-        style={{ display: "flex", justifyContent: "auto", padding: "0 32px" }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          padding: "33px",
+          width: "100%",
+          marginTop: "-45px",
+        }}
       >
         <InvoiceTableView
           title="Invoice View"
           tableData={invoiceData}
           tableHeight="348px"
-          tableWidth="570px"
+          tableWidth="90.8%"
           columns={columns}
           headerLabels={headerLabelsForInvoice}
         />
@@ -431,8 +435,10 @@ const BillOverview = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          padding: "0 32px",
-          marginTop: "20px",
+          width: "100%",
+          padding: "33px",
+          width: "100%",
+          marginTop: "-97px",
         }}
       >
         <InvoiceTableView
@@ -442,8 +448,12 @@ const BillOverview = () => {
               variant="outlined"
               style={{
                 minWidth: 170,
+                marginLeft: "-160px",
                 marginRight: "20px",
+                marginTop: "5px",
                 height: "33px",
+                position: "absolute",
+                border: "none",
               }}
             >
               <InputLabel
@@ -453,6 +463,9 @@ const BillOverview = () => {
                   fontSize: "13px",
                   fontWeight: "700",
                   color: "#63666a",
+                  position: "absolute",
+                  top: "-10px",
+                  left: "-7px",
                 }}
               >
                 Group by Application
@@ -464,7 +477,8 @@ const BillOverview = () => {
                 onChange={handleReportTypeChange}
                 label="Group by Application"
                 style={{
-                  width: reportType ? "80%" : "100%",
+                  // width: reportType ? "80%" : "100%",
+                  width: "170px",
                   height: "100%",
                   padding: "10px",
                 }}
@@ -490,8 +504,8 @@ const BillOverview = () => {
             </FormControl>
           }
           tableData={filteredBillAllocationData}
-          tableHeight="368px"
-          tableWidth="570px"
+          tableHeight="390px"
+          tableWidth="90.8%"
           columns={columns1}
           headerLabels={headerLabelsForBillAllocation}
         />
@@ -503,10 +517,10 @@ const BillOverview = () => {
           display: "flex",
           justifyContent: "space-between",
           padding: "20px",
-          marginTop: "30px",
+          marginTop: "-85px",
         }}
       >
-        <div style={{ flex: 1, marginLeft: "60px", marginRight: "10px" }}>
+        <div style={{ flex: 1, marginLeft: "62px", marginRight: "10px" }}>
           <PieChartContainer
             title1="Top 5 Applications"
             data1={topApplications}
@@ -520,7 +534,7 @@ const BillOverview = () => {
             titleStyle2={titleStyle2}
           />
         </div>
-        <div style={{ flex: 1, marginLeft: "0px", marginTop: "-10px" }}>
+        <div style={{ flex: 1, marginLeft: "-4px", marginTop: "-10px" }}>
           <BarChartContainer
             chartData={chartData}
             trendData={trendData}

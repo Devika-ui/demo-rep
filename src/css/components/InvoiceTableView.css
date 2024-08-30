@@ -1,6 +1,6 @@
 .cmpInvTv_container {
   width: 100%;
-  max-width: 800px;
+  max-width: 100%;
   height: auto;
   background-color: white;
   padding: 16px;
@@ -54,35 +54,60 @@
 .cmpInvTv_tableCell {
   color: rgb(82, 32, 134) !important;
   font-size: 0.8rem !important;
+  text-align: center !important;
   padding: 13px 16px !important;
-  border-bottom: none !important;
   vertical-align: top !important;
-  border-bottom: 1px solid black !important;
   border-top: 1px solid Black;
+  border-left: 1px solid #ccc;
 }
-.cmpInvTv_tableHeadCell {
+
+.cmpInvTv_tableHeadCell,
+.cmpInvTv_tableFirstRow {
   background-color: #f0f0f0 !important;
   text-align: center !important;
   border-bottom: 1px solid black !important;
   border-left: 1px solid black !important;
-  border-top: 1px solid Black !important;
-  border-right: 1px solid Black !important;
+  /* border-top: 1px solid Black !important; */
+  /* border-right: 1px solid Black !important; */
   padding: 8px 16px !important;
-  color: black;
+
+  /* color: black; */
+}
+.cmpInvTv_stickyFirstRow {
+  position: sticky !important;
+  top: 40px; /* Adjust based on your header height */
+  z-index: 0 !important;
+  background-color: #ffffff; /* Set background color to match table container */
+  border-bottom: 1px solid black !important;
+  border-left: 1px solid black !important;
 }
 .cmpInvTv_tableContainer {
-  max-height: 300px;
+  max-height: 300px !important;
   overflow-y: auto !important;
   overflow-x: auto !important;
+  padding-bottom: 18px;
+  border: 1px solid black !important; /* Add border to the table */
+  border-collapse: collapse;
 }
 .cmpInvTv_stickyHeader {
   position: sticky !important;
   top: 0 !important;
   z-index: 1 !important;
   background-color: #72509b !important;
+  border-left: 1px solid black !important;
+}
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }
 .cmpInvTv_tableContainer th {
   border: 1px solid black;
+  text-align: center !important;
+  border-left: none !important;
+  border-bottom: none !important;
+  border-top: none !important;
 }
 .cmpInvTv_tableHeadCell.cmpInvTv_stickyHeader {
   color: white !important;
@@ -92,4 +117,8 @@
   height: auto;
   max-height: calc(100vh - 100px);
   overflow-y: auto;
+}
+.cmpInvTv_tableContainer th.cmpInvTv_tableHeadCell,
+.cmpInvTv_tableContainer th.cmpInvTv_stickyHeader {
+  border-left: 1px solid black !important;
 }

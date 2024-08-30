@@ -30,7 +30,7 @@ const TotalSubscriptionsComponent = () => {
   return (
     <div className="total-subscriptions-container" style={{ width: "436px" }}>
       {/* Top Part */}
-      <div className="top-part" style={{ paddingBottom: "11px" }}>
+      <div className="top-part" style={{ paddingBottom: "9px" }}>
         <div>
           <strong>Total Subscriptions/Accounts</strong>
         </div>

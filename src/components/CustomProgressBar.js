@@ -5,6 +5,7 @@ import "react-circular-progressbar/dist/styles.css";
 import "../css/customProgressBar.scss";
 
 const CustomProgressBar = ({ title, percentage, gradientColor }) => {
+  const rotation = percentage > 50 ? 0.25 : 0.75;
   return (
     <div className="progress-bar">
       <div
@@ -14,14 +15,17 @@ const CustomProgressBar = ({ title, percentage, gradientColor }) => {
           alignItems: "center",
         }}
       >
-        <div className="progress-bar-title" style={{ color: "#5f249f", fontSize: "16px" }}>
+        <div
+          className="progress-bar-title"
+          style={{ color: "#5f249f", fontSize: "16px" }}
+        >
           {title}
         </div>
         <div
           style={{
             position: "relative",
             width: "200px", // Increased width
-            height: "120px", // Increased height
+            height: "100px", // Increased height
             overflow: "hidden",
           }}
         >
@@ -29,7 +33,7 @@ const CustomProgressBar = ({ title, percentage, gradientColor }) => {
             value={percentage}
             text={""}
             styles={buildStyles({
-              rotation: 0.5,
+              rotation: rotation,
               strokeLinecap: "butt",
               textSize: "16px",
               pathTransitionDuration: 0.5,
@@ -48,14 +52,18 @@ const CustomProgressBar = ({ title, percentage, gradientColor }) => {
               position: "absolute",
               top: "50%",
               left: "50%",
-              transform: "translate(-50%, -50%)",
+              transform: "translate(-54%, -50%)",
               textAlign: "center",
             }}
           >
-            <div style={{ fontSize: "32px", fontWeight: "bold" }}> {/* Increased font size */}
+            <div style={{ fontSize: "22px", fontWeight: "bold" }}>
+              {" "}
+              {/* Increased font size */}
               {percentage}%
             </div>
-            <div style={{ fontSize: "18px", color: "grey" }}> {/* Increased font size */}
+            <div style={{ fontSize: "14px", color: "grey" }}>
+              {" "}
+              {/* Increased font size */}
               Completed
             </div>
           </div>
