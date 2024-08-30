@@ -40,7 +40,10 @@
   left: 20px !important;
 }
 .cmpInvTv_dropdown {
-  margin-left: -10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 .cmpInvTv_dropdown select {
   height: 10;
@@ -68,7 +71,7 @@
   color: black;
 }
 .cmpInvTv_tableContainer {
-  max-height: 300px !important;
+  max-height: 300px;
   overflow-y: auto !important;
   overflow-x: auto !important;
 }
@@ -83,4 +86,10 @@
 }
 .cmpInvTv_tableHeadCell.cmpInvTv_stickyHeader {
   color: white !important;
+}
+.cmpInvTv_container:fullscreen .cmpInvTv_tableContainer {
+  display: block;
+  height: auto;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }

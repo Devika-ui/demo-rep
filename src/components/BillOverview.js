@@ -397,7 +397,7 @@ const BillOverview = () => {
         additionalFilters={additionalFilters}
       />
       <NavigationBar />
-   
+
       {/* Boxes */}
       <div
         style={{
@@ -411,9 +411,11 @@ const BillOverview = () => {
       >
         <ContainerForBillOverview data={boxData} />
       </div>
-   
+
       {/* First Row: Invoice View */}
-      <div style={{ display: "flex", justifyContent: "auto", padding: "0 32px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "auto", padding: "0 32px" }}
+      >
         <InvoiceTableView
           title="Invoice View"
           tableData={invoiceData}
@@ -423,9 +425,16 @@ const BillOverview = () => {
           headerLabels={headerLabelsForInvoice}
         />
       </div>
-   
+
       {/* Second Row: Total Bill Allocation */}
-      <div style={{ display: "flex", justifyContent: "center", padding: "0 32px", marginTop: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          padding: "0 32px",
+          marginTop: "20px",
+        }}
+      >
         <InvoiceTableView
           title="Total Bill Allocation across Application"
           dropdown={
@@ -487,10 +496,17 @@ const BillOverview = () => {
           headerLabels={headerLabelsForBillAllocation}
         />
       </div>
-   
-   {/* Third Row: Pie Chart & Bar Chart */}
-   <div style={{ display: "flex", justifyContent: "space-between", padding: "20px", marginTop: "30px"}}>
-        <div style={{ flex: 1,marginLeft: "60px",marginRight:"10px" }}>
+
+      {/* Third Row: Pie Chart & Bar Chart */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "20px",
+          marginTop: "30px",
+        }}
+      >
+        <div style={{ flex: 1, marginLeft: "60px", marginRight: "10px" }}>
           <PieChartContainer
             title1="Top 5 Applications"
             data1={topApplications}
@@ -504,7 +520,7 @@ const BillOverview = () => {
             titleStyle2={titleStyle2}
           />
         </div>
-        <div style={{ flex: 1, marginLeft: "0px" , marginTop: "-10px"}}>
+        <div style={{ flex: 1, marginLeft: "0px", marginTop: "-10px" }}>
           <BarChartContainer
             chartData={chartData}
             trendData={trendData}
@@ -516,6 +532,6 @@ const BillOverview = () => {
       </div>
     </div>
   );
-  };
-   
-  export default BillOverview;
+};
+
+export default BillOverview;

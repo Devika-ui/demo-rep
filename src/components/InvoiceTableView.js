@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
@@ -9,7 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import ShareIcon from "@mui/icons-material/Share";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import "../css/components/InvoiceTableView.css";
 
 const InvoiceTableView = ({
@@ -19,35 +19,21 @@ const InvoiceTableView = ({
   tableHeight,
   tableWidth,
   columns,
-  headerLabels, // new prop
+  headerLabels,
 }) => {
-  const renderTableHead = () => (
-    <TableHead>
-      <TableRow>
-        {headerLabels.map((label, labelIndex) => (
-          <TableCell
-            key={labelIndex}
-            className="cmpInvTv_tableHeadCell cmpInvTv_stickyHeader"
-            colSpan={columns.length}
-          >
-            {label}
-          </TableCell>
-        ))}
-      </TableRow>
-      <TableRow>
-        {headerLabels.flatMap((_, labelIndex) =>
-          columns.map((column, colIndex) => (
-            <TableCell
-              key={`${labelIndex}-${colIndex}`}
-              className={`$"cmpInvTv_tableHeadCell} $"cmpInvTv_stickyHeader}`}
-            >
-              {column.label}
-            </TableCell>
-          ))
-        )}
-      </TableRow>
-    </TableHead>
-  );
+  const tableRef = useRef(null); // Create a separate ref for the table
+
+  const handleFullScreen = () => {
+    if (tableRef.current.requestFullscreen) {
+      tableRef.current.requestFullscreen();
+    } else if (tableRef.current.webkitRequestFullscreen) {
+      /* Chrome, Safari, and Opera */
+      tableRef.current.webkitRequestFullscreen();
+    } else if (tableRef.current.msRequestFullscreen) {
+      /* IE/Edge */
+      tableRef.current.msRequestFullscreen();
+    }
+  };
 
   return (
     <div
@@ -68,11 +54,44 @@ const InvoiceTableView = ({
           <IconButton className="cmpInvTv_buttons">
             <ShareIcon />
           </IconButton>
+          <IconButton onClick={handleFullScreen} className="cmpInvTv_buttons">
+            <FullscreenIcon />
+          </IconButton>
         </div>
       </div>
-      <TableContainer className="cmpInvTv_tableContainer">
+      <TableContainer
+        ref={tableRef}
+        className="cmpInvTv_tableContainer"
+        style={{
+          backgroundColor: "#fff",
+        }}
+      >
         <Table stickyHeader>
-          {renderTableHead()}
+          <TableHead>
+            <TableRow>
+              {headerLabels.map((label, labelIndex) => (
+                <TableCell
+                  key={labelIndex}
+                  className="cmpInvTv_tableHeadCell cmpInvTv_stickyHeader"
+                  colSpan={columns.length}
+                >
+                  {label}
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              {headerLabels.flatMap((_, labelIndex) =>
+                columns.map((column, colIndex) => (
+                  <TableCell
+                    key={`${labelIndex}-${colIndex}`}
+                    className={`$"cmpInvTv_tableHeadCell} $"cmpInvTv_stickyHeader}`}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))
+              )}
+            </TableRow>
+          </TableHead>
           <TableBody>
             {tableData.map((row, rowIndex) => (
               <TableRow key={rowIndex} className="cmpInvTv_tableRow">

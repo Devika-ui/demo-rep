@@ -1,0 +1,48 @@
+[33me58a9e0[m[33m ([m[1;36mHEAD -> [m[1;32mdev-appservice[m[33m, [m[1;31morigin/dev-appservice[m[33m)[m HEAD@{0}: pull: Fast-forward
+[33mbb2b4b9[m HEAD@{1}: reset: moving to HEAD
+[33mbb2b4b9[m HEAD@{2}: commit: Updated AzureBars and cards in billoverview
+[33m1347f41[m HEAD@{3}: pull origin dev-appservice: Fast-forward
+[33me9db02d[m HEAD@{4}: reset: moving to HEAD
+[33me9db02d[m HEAD@{5}: commit: Updtaed group by container
+[33ma5521f0[m HEAD@{6}: commit: Modified group by container
+[33m4ea9cfd[m HEAD@{7}: commit: changed font color to purple
+[33ma4b5d03[m HEAD@{8}: commit: Added space before y-axis
+[33m3111d06[m HEAD@{9}: commit: updated i icon size
+[33m3377a54[m HEAD@{10}: commit: Updated font to align header and values
+[33m5dfa068[m HEAD@{11}: reset: moving to origin/dev-appservice
+[33md5a96e2[m HEAD@{12}: pull: Merge made by the 'ort' strategy.
+[33m913f217[m HEAD@{13}: reset: moving to HEAD~1
+[33mb2fe5bd[m HEAD@{14}: reset: moving to HEAD
+[33mb2fe5bd[m HEAD@{15}: pull origin dev-appservice: Merge made by the 'ort' strategy.
+[33m913f217[m HEAD@{16}: commit: updated font and aligned with values
+[33m6c9539a[m HEAD@{17}: pull: Fast-forward
+[33m5e08197[m HEAD@{18}: reset: moving to HEAD
+[33m5e08197[m HEAD@{19}: commit: modified font-style, table-border, style and position of buttons
+[33m20af3da[m HEAD@{20}: pull: Fast-forward
+[33md0b23b3[m HEAD@{21}: reset: moving to HEAD
+[33md0b23b3[m HEAD@{22}: pull: Fast-forward
+[33m4e69536[m HEAD@{23}: reset: moving to HEAD
+[33m4e69536[m HEAD@{24}: pull: Fast-forward
+[33mfd6980a[m HEAD@{25}: pull: Fast-forward
+[33m740ddc1[m HEAD@{26}: pull: Fast-forward
+[33md53bd34[m HEAD@{27}: commit: css changes for piechart size, title
+[33m4ea58ef[m HEAD@{28}: commit: Updated barchart for dynamic legends
+[33me61202a[m HEAD@{29}: pull: Fast-forward
+[33me1fc46b[m HEAD@{30}: reset: moving to HEAD
+[33me1fc46b[m HEAD@{31}: commit: Updated Piechart size, legend and added popup
+[33m5c3e3d9[m HEAD@{32}: pull: Fast-forward
+[33m737f47e[m HEAD@{33}: reset: moving to HEAD
+[33m737f47e[m HEAD@{34}: commit: onclick event for menu items with submenus
+[33m0d5d7f4[m HEAD@{35}: commit: Favorites reports under every sub section is removed
+[33m8eb19c8[m HEAD@{36}: commit: pop-up for inner boxes and highlight in nav items
+[33m0541843[m HEAD@{37}: pull: Fast-forward
+[33m0009cc3[m HEAD@{38}: pull: Fast-forward
+[33m5508b33[m HEAD@{39}: commit: css changes
+[33m8898f34[m HEAD@{40}: merge refs/remotes/origin/dev-appservice: Fast-forward
+[33m027d55c[m HEAD@{41}: reset: moving to HEAD
+[33m027d55c[m HEAD@{42}: pull: Fast-forward
+[33m00fd178[m HEAD@{43}: pull: Fast-forward
+[33m963fc28[m HEAD@{44}: pull: Fast-forward
+[33m461a8af[m HEAD@{45}: pull: Fast-forward
+[33m4225865[m HEAD@{46}: pull: Fast-forward
+[33m6843a9c[m HEAD@{47}: clone: from https://github.dxc.com/HybridCloudFinWeb/Optics-ui.git
