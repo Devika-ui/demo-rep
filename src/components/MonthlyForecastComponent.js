@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tooltip } from "@mui/material";
-import "../css/MonthlySpendComponent.scss";
-import iIcon from "../images/Iicon.png";
+import "../css/MonthlyForecastComponent.scss";
 import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
 import api from "../api.js";
@@ -70,52 +69,31 @@ const MonthlyForecastComponent = () => {
             <strong>N/A</strong>
           )}
         </div>
-        <div style={{ fontWeight: "bold" }}>Over last month</div>
+        <div className="container-2-bottom">Over last month</div>
       </div>
     );
   };
 
   return (
-    <div className="monthly-forecast-container" style={{ width: "29.5%" }}>
-      {/* Top Part */}
-      <div className="top-part">
-        <div className="left">
-          <strong style={{ fontFamily: "sans-serif" }}>Monthly Forecast</strong>
-        </div>
-        <div className="right">
-          <Tooltip title="Monthly Forecast">
-            <img
-              style={{ height: "16px", width: "16px" }}
-              src={iIcon}
-              alt="I-icon"
-            />
-          </Tooltip>
-        </div>
+    <div className="monthly-forecast-container">
+      <div className="title">
+        <strong style={{ fontFamily: "sans-serif" }}>Monthly Forecast</strong>
       </div>
-
-      {/* Bottom Part */}
-      <div className="bottom-part">
-        <div className="left">
-          {totalCost !== null ? (
-            <strong>${totalCost.toFixed(2)}</strong>
-          ) : (
-            <strong>Loading...</strong>
-          )}
-        </div>
-        {/* <div className="right">
-          <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-            <span className="icon">
-              <img src={upArrow} alt="AzureLogo" />
-            </span>
-            {percentageIncrease !== null ? (
-              <strong>{percentageIncrease.toFixed(2)}%</strong>
+      <div className="content-wrapper">
+        <div className="container-1">
+          <div className="number">
+            {totalCost !== null ? (
+              <strong>${totalCost.toFixed(2)}</strong>
             ) : (
-              <strong>N/A</strong>
+              <strong>Loading...</strong>
             )}
           </div>
-          <div>Over last month</div>
-        </div> */}
-        <GrowthIndicator percentageIncrease={percentageIncrease} />
+        </div>
+        <div className="container-2">
+          <div className="indicator">
+            <GrowthIndicator percentageIncrease={percentageIncrease} />
+          </div>
+        </div>
       </div>
     </div>
   );

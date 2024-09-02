@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AzureBox from "../images/Azure box.png";
-import AWSBox from "../images/AWS box.png";
 import "../css/TotalSubscriptionsComponent.scss";
 import api from "../api.js";
 
@@ -28,34 +26,22 @@ const TotalSubscriptionsComponent = () => {
   const awsCount = 2;
 
   return (
-    <div className="total-subscriptions-container" style={{ width: "436px" }}>
-      {/* Top Part */}
-      <div className="top-part" style={{ paddingBottom: "9px" }}>
-        <div>
-          <strong>Total Subscriptions/Accounts</strong>
-        </div>
-      </div>
+    <div>
+      {/* Title outside the container */}
+      <div className="subscription-title">Total Subscriptions/Accounts</div>
 
-      {/* Bottom Part */}
-      <div className="bottom-part">
-        <div className="subscription">
-          <div>
-            <span className="icon" style={{ marginRight: "5px" }}>
-              <img src={AzureBox} alt="AzureLogo" style={{ height: "26px" }} />
-            </span>
-            <span className="number">{azureCount}</span>
-          </div>
-          <div className="subscription-text" style={{ fontWeight: "bold" }}>
-            Azure Subscriptions
+      <div className="total-subscriptions-container">
+        {/* Bottom Part */}
+        <div className="bottom-part">
+          <div className="subscription">
+            <div>
+              <span className="number">{azureCount}</span>
+            </div>
+            <div className="subscription-text" style={{ fontWeight: "bold" }}>
+              Azure Subscriptions
+            </div>
           </div>
         </div>
-        {/*<div className="subscription" style={{marginRight:'25px'}}>
-          <div>
-            <span className="icon" role="img" aria-label="icon" style={{ marginRight: '5px' }}><img src={AWSBox} alt="AWSLogo" /></span>
-            <span className="number">{awsCount}</span>
-          </div>
-          <div className="subscription-text">AWS Accounts</div>
-        </div>*/}
       </div>
     </div>
   );

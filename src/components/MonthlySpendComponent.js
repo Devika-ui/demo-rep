@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Tooltip } from "@mui/material";
 import "../css/MonthlySpendComponent.scss";
-import iIcon from "../images/Iicon.png";
 import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
 import api from "../api.js";
@@ -19,7 +17,6 @@ const MonthlySpendComponent = () => {
           setGrowthPercentage(subscriptionsData[0].growthPercentage);
         }
       } catch (error) {
-        // Handle error
         console.error("Error fetching data:", error);
       }
     };
@@ -29,7 +26,6 @@ const MonthlySpendComponent = () => {
   const GrowthIndicator = ({ growthPercentage }) => {
     let imageSrc;
     let altText;
-    console.log("uparrow", upArrow1);
 
     if (growthPercentage > 0) {
       imageSrc = upArrow1;
@@ -41,8 +37,6 @@ const MonthlySpendComponent = () => {
       imageSrc = null;
       altText = "No Change";
     }
-    // console.log("Growth Percentage in Indicator:", growthPercentage);
-    // console.log("Image Source:", imageSrc);
 
     return (
       <div className="right">
@@ -55,7 +49,7 @@ const MonthlySpendComponent = () => {
           }}
         >
           {imageSrc && (
-            <span className="icon" style={{ marginLeft: "8px" }}>
+            <span className="icon" style={{ marginLeft: "3px" }}>
               <img
                 src={imageSrc}
                 alt={altText}
@@ -69,41 +63,33 @@ const MonthlySpendComponent = () => {
             <strong>N/A</strong>
           )}
         </div>
-        <div style={{ fontWeight: "bold" }}>Over last month</div>
+        <div className="second-bottom">Over last month</div>
       </div>
     );
   };
 
   return (
-    <div className="monthly-spend-container" style={{ width: "29.5%" }}>
-      {/* Top Part */}
-      <div className="top-part">
-        <div className="left">
-          <strong style={{ fontFamily: "sans-serif" }}>
-            Monthly Actual Spend
-          </strong>
-        </div>
-        <div className="right">
-          <Tooltip title="Monthly Spend">
-            <img
-              style={{ height: "16px", width: "16px" }}
-              src={iIcon}
-              alt="I-icon"
-            />
-          </Tooltip>
-        </div>
+    <div className="monthly-spend-container">
+      <div className="title">
+        <strong style={{ fontFamily: "sans-serif" }}>
+          Monthly Actual Spend
+        </strong>
       </div>
-
-      {/* Bottom Part */}
-      <div className="bottom-part">
-        <div className="left">
-          {totalCost !== null ? (
-            <strong>${totalCost.toFixed(2)}</strong>
-          ) : (
-            <strong>Loading...</strong>
-          )}
+      <div className="content-wrapper">
+        <div className="first">
+          <div className="number">
+            {totalCost !== null ? (
+              <strong>${totalCost.toFixed(2)}</strong>
+            ) : (
+              <strong>Loading...</strong>
+            )}
+          </div>
         </div>
-        <GrowthIndicator growthPercentage={growthPercentage} />
+        <div className="second">
+          <div className="indicator">
+            <GrowthIndicator growthPercentage={growthPercentage} />
+          </div>
+        </div>
       </div>
     </div>
   );
