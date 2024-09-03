@@ -125,7 +125,7 @@ const NavigationBar = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: isNavOpen ? "flex-start" : "start",
-        width: isNavOpen ? "200px" : "35px",
+        width: isNavOpen ? "200px" : "15px",
         transition: "width 0.3s ease-in-out, background-color 0.3s ease",
         zIndex: 9999,
       }}
@@ -138,6 +138,7 @@ const NavigationBar = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          margin: "0 -1px"
         }}
         onClick={(e) => {
           e.stopPropagation();
@@ -199,7 +200,7 @@ const NavigationBar = () => {
                 {isNavOpen && item.label}
               </div>
               {defineSubItems(item.label).length > 0 && (
-                <span style={{ marginLeft: "auto" }}>
+                <span style={{ marginLeft: "20px" }}>
                   {openSubmenuIndex === index ? "▼" : "▶"}
                 </span>
               )}
@@ -265,7 +266,7 @@ const NavigationBar = () => {
             <img
               src={item.icon}
               alt={item.label}
-              style={{ width: "20px", marginRight: "10px" }}
+              style={{ width: "20px", marginRight: "10px", margin: "0 -3px"}}
             />
           </Link>
         ))}
