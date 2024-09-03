@@ -1,5 +1,5 @@
 .recommendations-container {
-  width: 312px;
+  width: 350px;
   height: 365px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -10,7 +10,7 @@
   margin-right: 5px;
   background-color: white;
   padding: 20px;
-  padding-top: 15px;
+  padding-top: 5px;
 
   .top-part {
     height: 8%;
@@ -33,62 +33,74 @@
   }
 
   .subheading {
-    margin-bottom: 10px;
-    padding-top: 12px;
-    padding-bottom: 8px;
+    margin-bottom: 0px;
+    margin-top: -10px;
+    padding-top: -10px;
+    padding-bottom: 0px;
     font-size: 14px;
   }
-
-  .tile {
+  .tile1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    height: 45px; /* Set desired height */
+    height: 15px; /* Set desired height */
     margin: 10px;
-    margin-left: 1px;
-    margin-right: 2px;
+    margin-left: 0px;
+    margin-right: 0px;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      background-color: #5f249f;
-      cursor: pointer;
-      h2,
-      p,
-      .price,
-      .savings,
-      .titlename {
-        color: white;
-      }
-    }
-    font-size: 14px;
+    font-size: 12px;
   }
-
   .titlename {
     font-size: 14x;
+    border: 1px solid #ccc;
+    height: 15px;
+    width: 200px; /* Set desired height */
+    margin: 10px;
+    margin-left: -19px;
+    margin-right: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    flex: 1;
+    color: #5f249f;
+    font-weight: bold;
   }
 
-  .content:hover {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
+  // .content:hover {
+  //   display: flex;
+  //   flex-direction: column;
+  //   align-items: flex-end;
+  // }
 
   .content {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: center;
     font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 37px;
+    width: 140px;
+    text-align: center;
+    margin-right: -22px;
   }
   .price {
     color: orange;
     font-weight: bold;
   }
   .savings {
-    opacity: 0.5;
+    color: #5f249f;
+    font-weight: bold;
+  }
+  .title1 {
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    margin-left: 15px;
+    color: #5f249f;
   }
 
   // &:hover {

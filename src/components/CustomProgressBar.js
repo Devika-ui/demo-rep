@@ -24,8 +24,8 @@ const CustomProgressBar = ({ title, percentage, gradientColor }) => {
         <div
           style={{
             position: "relative",
-            width: "200px", // Increased width
-            height: "100px", // Increased height
+            width: "150px", // Increased width
+            height: "75px", // Increased height
             overflow: "hidden",
           }}
         >
@@ -44,7 +44,7 @@ const CustomProgressBar = ({ title, percentage, gradientColor }) => {
               trail: { strokeLinecap: "butt" },
               path: { strokeLinecap: "butt" },
             })}
-            strokeWidth={15} // Increased stroke width for thicker progress bar
+            strokeWidth={12} // Increased stroke width for thicker progress bar
           />
           <div
             className="progress-bar-text"

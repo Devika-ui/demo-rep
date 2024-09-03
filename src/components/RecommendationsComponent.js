@@ -29,31 +29,34 @@ const RecommendationsComponent = () => {
     .toFixed(2);
 
   return (
-    <div
-      className="recommendations-container"
-      style={{ width: "385px ", height: "370px" }}
-    >
-      <div className="top-part">
-        <h2
+    <div style={{ marginTop: "-5px" }}>
+      <div className="title1">
+        <strong
           style={{
-            color: "#5f249f",
             fontFamily: "sans-serif",
-            fontSize: "16px",
-            marginLeft: "0",
-            marginRight: "auto",
-            textAlign: "left",
-            paddingBottom: "11px",
+            textAlign: "center",
+            color: " #5f249f",
+            marginTop: "10px",
+            marginBottom: "10px",
+            marginLeft: "79px",
           }}
         >
           Top 3 Recommendations
-        </h2>
+        </strong>
       </div>
-      <div className="divider"></div>
-      <div className="subheading" style={{ fontSize: "15px" }}>
-        {/* <div className="subheading" > */}
-        Show Recommendations by :
-        <br />
-        {/*<FormControl style={{ paddingTop: '5px' }}>
+      <div
+        className="recommendations-container"
+        style={{ width: "340px ", height: "195px", marginTop: "0px" }} // Adjust marginTop for spacing
+      >
+        <div className="top-part"></div>
+        <div
+          className="subheading"
+          style={{ fontSize: "15px", fontWeight: "bold" }}
+        >
+          {/* <div className="subheading" > */}
+          Show Recommendations by
+          <br />
+          {/*<FormControl style={{ paddingTop: '5px' }}>
           <Select 
             value={selectedOption} 
             onChange={handleOptionChange}
@@ -65,36 +68,43 @@ const RecommendationsComponent = () => {
             <MenuItem value="Azure">Azure</MenuItem>
           </Select>
         </FormControl>*/}
-      </div>
-
-      {recommendations.slice(0, 3).map((rec, index) => (
-        <div key={index} className="tile">
-          <div>
-            <div className="titlename">{rec.name}</div>
-          </div>
-          <div className="content">
-            <div className="price">${rec.value.toFixed(2)}</div>
-            <div className="savings">Savings Potential</div>
-          </div>
         </div>
-      ))}
-
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingTop: "8px",
-        }}
-      >
-        <div style={{ display: "inline-block", color: "#5f249f" }}>
-          Total Savings Potential
-        </div>
+        {recommendations.slice(0, 3).map((rec, index) => (
+          <div key={index} className="tile1">
+            <div>
+              <div className="titlename">{rec.name}</div>
+            </div>
+            <div className="content">
+              <div className="price">${rec.value.toFixed(2)}</div>
+              <div className="savings">Savings Potential</div>
+            </div>
+          </div>
+        ))}
         <div
-          style={{ display: "inline-block", float: "right" }}
-          className="price"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            paddingTop: "8px",
+            fontSize: "15px",
+          }}
         >
-          ${totalSavings}
+          <div
+            style={{
+              display: "inline-block",
+              color: "#5f249f",
+              fontWeight: "bold",
+              marginRight: "70px",
+            }}
+          >
+            Total Savings Potential
+          </div>
+          <div
+            style={{ display: "inline-block", float: "right" }}
+            className="price"
+          >
+            ${totalSavings}
+          </div>
         </div>
       </div>
     </div>

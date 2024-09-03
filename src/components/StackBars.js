@@ -103,10 +103,10 @@ const StackBars = () => {
               display: true,
             },
             ticks: {
-              stepSize: 4000,
+              stepSize: 6000,
               max: 6000, // Adjust max to fit the data
               color: "rgba(0, 0, 0, 0.5)",
-              padding: 25,
+              padding: 3,
             },
           },
         },
@@ -121,9 +121,10 @@ const StackBars = () => {
               weight: "bold",
             },
             padding: {
-              bottom: 10, // Padding between the title and the legend
-              top: 10,
-              left: 10,
+              bottom: 32, // Padding between the title and the legend
+              top: -54,
+              left: -100,
+              right: 50,
             },
           },
           legend: {
@@ -138,8 +139,9 @@ const StackBars = () => {
           },
           layout: {
             padding: {
-              top: 100, // Increased padding at the top of the chart area
-              bottom: 20, // Padding at the bottom of the chart area
+              top: 50,
+              bottom: 10,
+              right: 100,
             },
           },
         },
@@ -158,36 +160,24 @@ const StackBars = () => {
       style={{
         position: "relative",
         marginBottom: "0px",
-        height: "375px",
         borderRadius: "10px",
         overflow: "hidden",
         backgroundColor: "white",
       }}
     >
-      <div style={{ position: "absolute", top: 0, left: 0 }}>
-        <Typography
-          variant="subtitle1"
-          style={{
-            color: "#5f249f",
-            fontFamily: "sans-serif",
-            fontWeight: "bold",
-            fontSize: "16px",
-            paddingLeft: "20px",
-            paddingTop: "10px",
-          }}
-        >
-          Total Bill Cost by Providers
-        </Typography>
-      </div>
+      <div style={{ position: "absolute", top: 0, left: 0 }}></div>
       <div
         style={{
           borderRadius: "10px",
           overflow: "hidden",
           height: "calc(100% - 40px)", // Adjust height to ensure chart fits within the container
-          marginTop: "40px", // Adjust margin to ensure chart fits within the container
+          marginTop: "20px", // Adjust margin to ensure chart fits within the container
         }}
       >
-        <canvas style={{ paddingTop: "5px" }} ref={chartContainer}></canvas>
+        <canvas
+          style={{ paddingTop: "5px", paddingRight: "10px" }}
+          ref={chartContainer}
+        ></canvas>
       </div>
     </div>
   );

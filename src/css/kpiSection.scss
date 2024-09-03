@@ -8,6 +8,13 @@
   padding: 10px;
   overflow: hidden;
 }
+.top-part {
+  text-align: center;
+  font-size: 16px;
+  color: #5f249f;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
 
 .kpi-header {
   display: flex;
@@ -38,11 +45,11 @@
 
 .kpi-bottom-container {
   display: flex;
-  padding-top: 20px;
+  padding-top: 40px;
   padding-bottom: 20px;
 }
 
 .kpi-graph {
   width: 50%;
-  padding: 10px;
+  padding: px;
 }

@@ -60,6 +60,7 @@ const options = {
         autoSkip: false,
         maxRotation: 0,
         minRotation: 0,
+
         callback: function (value, index, values) {
           const date = new Date(this.getLabelForValue(value));
           const midMonthDay =
@@ -84,12 +85,13 @@ const options = {
         stepSize: 4000,
         max: 6000,
       },
+      padding: 0,
     },
   },
   layout: {
     padding: {
-      top: 5,
-      //   bottom : 5,
+      top: 0,
+      bottom: -5,
     },
   },
 };
@@ -163,26 +165,13 @@ const AzureBars = () => {
   }
 
   return (
-    <div style={{ padding: "10px" }}>
-      <Typography
-        variant="h4"
-        style={{
-          color: "#5f249f",
-          fontFamily: "sans-serif",
-          fontWeight: "bold",
-          fontSize: "16px",
-          marginTop: "10px",
-          paddingLeft: "10px",
-        }}
-      >
-        Azure Total Bill Cost
-      </Typography>
+    <div>
       <div
         style={{
+          // margin: "10px auto",
           position: "relative",
-          width: "95%",
-          height: "320px",
-          margin: "20px auto",
+          margin: "0px 10px 0 5px",
+          height: "210px",
         }}
       >
         <Bar style={{ paddingTop: "5px" }} options={options} data={data} />

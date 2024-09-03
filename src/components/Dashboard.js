@@ -19,6 +19,7 @@ import AzureBars from "./AzureBars.js";
 import TotalAzureSubscriptions from "./TotalAzureSubscriptions.js";
 import MonthlySpendAWSComponent from "./MonthlySpendAWS.js";
 import MonthlyForecastAWSComponent from "./MonthlyForecastAWS.js";
+import "../css/components/dashboard.css";
 
 const Dashboard = () => {
   const [showStackBars, setShowStackBars] = useState(true);
@@ -50,8 +51,8 @@ const Dashboard = () => {
   };
 
   const additionalDivStyle = {
-    width: "744px",
-    height: "405px",
+    width: "400px",
+    height: "220px",
     backgroundColor: "white",
     marginLeft: "35px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
@@ -104,11 +105,44 @@ const Dashboard = () => {
         {/* <MonthlySpendComponent />
         <MonthlyForecastComponent />
         <TotalSubscriptionsComponent style={{ flex: '1' }} /> */}
-        <div style={{ ...additionalDivStyle, marginRight: "9px" }}>
-          {showStackBars ? <StackBars /> : <AzureBars />}
-          {/* <StackBars /> */}
+        <div
+          style={{
+            display: "flex", // Use flexbox for layout
+            alignItems: "flex-start", // Align items at the start of the container
+            justifyContent: "space-between", // Add spacing between components
+            width: "100%", // Ensure the container takes up the full width
+            marginBottom: "20px",
+            margintop: "5px", // Add some bottom margin
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            <div className="heading" style={{ marginBottom: "-15px" }}>
+              <strong
+                style={{
+                  fontFamily: "sans-serif",
+                  color: "#5f249f",
+                  paddingBottom: "20px",
+                }}
+              >
+                {showStackBars
+                  ? "Total Bill Cost by Providers"
+                  : "Azure Total Bill Cost"}
+              </strong>
+            </div>
+            <div style={{ ...additionalDivStyle, marginRight: "9px" }}>
+              {showStackBars ? <StackBars /> : <AzureBars />}
+            </div>
+          </div>
+
+          <div style={{ flex: 1 }}>
+            <RecommendationsComponent />
+          </div>
+
+          <div style={{ flex: 1, marginLeft: "5px" }}>
+            <KPISection />
+          </div>
         </div>
-        <RecommendationsComponent />
+
         <div
           style={{
             display: "flex",
@@ -120,14 +154,6 @@ const Dashboard = () => {
             paddingBottom: "10px",
           }}
         >
-          <div
-            style={{
-              additionalDivStyleKpi,
-              marginLeft: "35px",
-            }}
-          >
-            <KPISection />
-          </div>
           <ConsumptionHighlights />
         </div>
         <div
