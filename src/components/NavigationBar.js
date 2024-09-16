@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import api from "../api.js"; // Update the path as needed
-
+ 
 const NavigationBar = () => {
   const [isNavOpen, setNavOpen] = useState(false);
   const [menuItems, setMenuItems] = useState([]);
@@ -9,7 +9,7 @@ const NavigationBar = () => {
   const [hoverIndex, setHoverIndex] = useState(null); // Track the index of the hovered item
   const [submenuHoverIndex, setSubmenuHoverIndex] = useState(null); // Track the index of the hovered submenu item
   const navRef = useRef(null);
-
+ 
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
@@ -23,32 +23,32 @@ const NavigationBar = () => {
         console.error("Error fetching menu items:", error);
       }
     };
-
+ 
     fetchMenuItems();
   }, []);
-
+ 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navRef.current && !navRef.current.contains(event.target)) {
         setNavOpen(false);
       }
     };
-
+ 
     if (isNavOpen) {
       document.addEventListener("click", handleClickOutside);
     } else {
       document.removeEventListener("click", handleClickOutside);
     }
-
+ 
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [isNavOpen]);
-
+ 
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
   };
-
+ 
   const defineSubItems = (label) => {
     switch (label) {
       case "Cost & Usage":
@@ -87,11 +87,11 @@ const NavigationBar = () => {
         return []; // No submenu items for other menu items
     }
   };
-
+ 
   const handleToggleSubmenu = (index) => {
     setOpenSubmenuIndex((prevIndex) => (prevIndex === index ? null : index)); // Toggle the submenu only if it's not already open
   };
-
+ 
   const getPathForItem = (label) => {
     switch (label) {
       case "Overview":
@@ -110,12 +110,12 @@ const NavigationBar = () => {
         return `/${label.toLowerCase().replace(/\s+/g, "-")}`;
     }
   };
-
+ 
   return (
     <nav
       ref={navRef}
       style={{
-        backgroundColor: isNavOpen ? "#5f249f" : "#5f249f",
+        backgroundColor: isNavOpen ? "#330074" : "#330074",
         color: "#fff",
         padding: "15px",
         position: "fixed",
@@ -125,7 +125,7 @@ const NavigationBar = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: isNavOpen ? "flex-start" : "start",
-        width: isNavOpen ? "200px" : "15px",
+        width: isNavOpen ? "200px" : "20px",
         transition: "width 0.3s ease-in-out, background-color 0.3s ease",
         zIndex: 9999,
       }}
@@ -133,12 +133,12 @@ const NavigationBar = () => {
       <div
         style={{
           cursor: "pointer",
-          fontSize: "20px",
+          fontSize: "22px",
           marginBottom: "10px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          margin: "0 -1px"
+          margin: "0 -1px",
         }}
         onClick={(e) => {
           e.stopPropagation();
@@ -195,12 +195,12 @@ const NavigationBar = () => {
                 <img
                   src={item.icon}
                   alt={item.label}
-                  style={{ width: "20px", marginRight: "10px" }}
+                  style={{ width: "25px", height: "25px", marginRight: "20px" }}
                 />
                 {isNavOpen && item.label}
               </div>
               {defineSubItems(item.label).length > 0 && (
-                <span style={{ marginLeft: "20px" }}>
+                <span style={{ marginLeft: "15px" }}>
                   {openSubmenuIndex === index ? "▼" : "▶"}
                 </span>
               )}
@@ -266,7 +266,7 @@ const NavigationBar = () => {
             <img
               src={item.icon}
               alt={item.label}
-              style={{ width: "20px", marginRight: "10px", margin: "0 -3px"}}
+              style={{ width: "25px",height: "25px",marginRight: "20px", margin: "0 -3px" }}
             />
           </Link>
         ))}
@@ -274,5 +274,5 @@ const NavigationBar = () => {
     </nav>
   );
 };
-
+ 
 export default NavigationBar;

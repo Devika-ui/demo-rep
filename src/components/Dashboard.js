@@ -33,13 +33,6 @@ const Dashboard = () => {
     }
   };
 
-  // const [filterValue, setFilterValue] = useState('');
-
-  // const handleFilterChange = (value) => {
-  //   // Update the filter value
-  //   setFilterValue(value);
-  // };
-
   const location = {
     latitude: 37.7749, // Example latitude
     longitude: -122.4194, // Example longitude
@@ -82,13 +75,11 @@ const Dashboard = () => {
         style={{
           marginLeft: "37px",
           padding: "2px",
-          display: "flex", // Make the container a flex container
-          alignItems: "flex-start", // Align items at the start of the flex container
-          flexWrap: "wrap", // Allow wrapping of elements
+          display: "flex",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
         }}
       >
-        {/* <CustomFilter/> */}
-        {/* <OpenStreetMap location={location} containerStyle={mapContainerStyle} />  */}
         {!showStackBars ? (
           <>
             <MonthlySpendComponent />
@@ -102,17 +93,15 @@ const Dashboard = () => {
             <TotalSubscriptionsComponent style={{ flex: "1" }} />
           </>
         )}
-        {/* <MonthlySpendComponent />
-        <MonthlyForecastComponent />
-        <TotalSubscriptionsComponent style={{ flex: '1' }} /> */}
+
         <div
           style={{
-            display: "flex", // Use flexbox for layout
-            alignItems: "flex-start", // Align items at the start of the container
-            justifyContent: "space-between", // Add spacing between components
-            width: "100%", // Ensure the container takes up the full width
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            width: "100%",
             marginBottom: "20px",
-            margintop: "5px", // Add some bottom margin
+            margintop: "5px",
           }}
         >
           <div style={{ flex: 1 }}>
@@ -146,56 +135,18 @@ const Dashboard = () => {
         <div
           style={{
             display: "flex",
-            gap: "9px",
             width: "100%",
             justifyContent: "left",
             alignItems: "center",
-            paddingTop: "7px",
-            paddingBottom: "10px",
+            paddingTop: "2px",
+            paddingBottom: "5px",
+            gap: "10px", // Add gap between elements
           }}
         >
-          <ConsumptionHighlights />
+          <ConsumptionHighlights style={{ flex: "1" }} />
+          <MapContainer style={{ flex: "1" }} />
+          <OverallTotalRealizedSavings style={{ flex: "1"  }} />
         </div>
-        <div
-          style={{
-            marginLeft: "33px",
-            marginTop: "-20px",
-            display: "flex",
-            gap: "8px",
-            width: "100%",
-            justifyContent: "left",
-            alignItems: "center",
-            paddingBottom: "10px",
-          }}
-        >
-          <MapContainer />
-          <OverallTotalRealizedSavings />
-        </div>
-        {/* <MapContainer />
-          <OverallTotalRealizedSavings /> */}
-        {/* <div style={{ display: 'flex', gap: '9px', width: '100%', justifyContent: 'left', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px' }}>
-          <div style={{ additionalDivStyleKpi, marginLeft:'32px' }}>
-          <KPISection />
-        </div>
-        <ConsumptionHighlights />
-        </div> */}
-
-        {/* <div>
-          <h2>Total Subscriptions/Accounts</h2>
-          <ul>
-            {subscriptions.map((subscription) => (
-              <li key={subscription.id}>{subscription.displayName}</li>
-            ))}
-          </ul>
-        </div> */}
-
-        {/* <Button
-          style={{ margin: '10px' }}
-          variant='contained'
-          onClick={handleLogoout}
-        >
-          Logout
-        </Button> */}
       </div>
     </div>
   );

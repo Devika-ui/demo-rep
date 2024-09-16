@@ -10,7 +10,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import iIcon from "../images/Iicon.png";
 import api from "../api.js";
 
 ChartJS.register(
@@ -43,6 +42,7 @@ const OverallTotalRealizedSavings = () => {
         );
       } catch (error) {
         // Handle error
+        console.error("Error fetching reservations data:", error);
       }
     };
     fetchReservationsData();
@@ -65,12 +65,12 @@ const OverallTotalRealizedSavings = () => {
         );
       } catch (error) {
         // Handle error
+        console.error("Error fetching simulated savings data:", error);
       }
     };
     fetchSimulatedSavingsData();
   }, []);
 
-  // Data for the chart
   const data = {
     labels,
     datasets: [
@@ -82,24 +82,22 @@ const OverallTotalRealizedSavings = () => {
     ],
   };
 
-  // Trend line data
   const trendlineData = {
     labels,
     datasets: [
       {
         label: "Simulated PAYGO",
         borderColor: "#0079B9",
-        data: simulatedSavings.map((entry) => parseFloat(entry.toFixed(2))), // Using simulatedSavings data for the trendline
+        data: simulatedSavings.map((entry) => parseFloat(entry.toFixed(2))),
         fill: false,
         type: "line",
-        pointRadius: 0, // Hide points
-        showLine: true, // Show line
-        borderWidth: 1, // Adjust line width
+        pointRadius: 0,
+        showLine: true,
+        borderWidth: 1,
       },
     ],
   };
 
-  // Combined data
   const combinedData = {
     labels,
     datasets: [...data.datasets, ...trendlineData.datasets],
@@ -111,7 +109,7 @@ const OverallTotalRealizedSavings = () => {
         display: true,
         labels: {
           filter: (legendItem, chartData) => {
-            return legendItem.datasetIndex !== chartData.datasets.length - 1; // Exclude trendline from legend
+            return legendItem.datasetIndex !== chartData.datasets.length - 1;
           },
         },
       },
@@ -150,7 +148,6 @@ const OverallTotalRealizedSavings = () => {
           );
         },
         itemSort: function (a, b) {
-          // Ensure "Simulated PAYGO" appears above "Reservations"
           if (a.datasetIndex === 1 && b.datasetIndex === 0) {
             return -1;
           }
@@ -163,7 +160,7 @@ const OverallTotalRealizedSavings = () => {
     },
     hover: {
       mode: "index",
-      intersect: false, // Ensure the tooltip is shown when hovering anywhere on the line
+      intersect: false,
     },
     layout: {
       padding: {
@@ -176,66 +173,54 @@ const OverallTotalRealizedSavings = () => {
     scales: {
       x: {
         grid: {
-          display: false, // Remove the x-axis grid lines
+          display: false,
         },
       },
       y: {
         grid: {
-          display: false, // Remove the y-axis grid lines
+          display: false,
         },
       },
     },
   };
 
   return (
-    <div
-      style={{
-        width: "579px",
-        height: "453px",
-        borderRadius: "5px",
-        overflow: "hidden",
-        backgroundColor: "white",
-        boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-        transition: "transform 0.3s, box-shadow 0.3s",
-        position: "relative",
-        border: " 1px solid #ccc",
-        marginRight: "5px",
-      }}
-    >
-      <div
+    <div style={{ position: "relative", marginBottom: "17px", marginLeft: "-30px" }}>
+      <strong
         style={{
-          height: "50px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingLeft: "20px",
-          paddingRight: "10px",
-          borderBottom: "2px solid #98989893",
-          paddingBottom: "2px",
+          position: "absolute",
+          top: "-30px", // Adjust this value to move the title up or down
+          left: "50%",
+          transform: "translateX(-50%)",
+          fontFamily: "sans-serif",
+          color: "#5f249f",
+          display: "block",
+          whiteSpace: "nowrap", // Prevent line break
+          overflow: "hidden", // Hide overflow text
+          textOverflow: "ellipsis", // Show ellipsis if text overflows
         }}
       >
-        <h4 style={{ margin: "0", lineHeight: "1", color: "#5f249f" }}>
-          Overall Total Realized Savings
-        </h4>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <img
-            style={{ height: "17px", width: "18px" }}
-            src={iIcon}
-            alt="I-icon"
-          />
+        Overall Total Realized Savings
+      </strong>
+      <div
+        style={{
+          width: "380px",
+          height: "198px",
+          borderRadius: "5px",
+          backgroundColor: "white",
+          boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
+          border: "1px solid #ccc",
+          marginBottom: "200px",
+          marginRight: "4px",
+          marginTop: "-10px", // Adjust marginTop to position the chart container
+        }}
+      >
+        <div style={{ height: "100%", padding: "5px" }}>
+          <Bar data={combinedData} options={options} />
         </div>
       </div>
-      <div
-        style={{
-          height: "calc(100% - 51px)",
-          overflow: "hidden",
-          paddingTop: "50px",
-        }}
-      >
-        <Bar data={combinedData} options={options} />
-      </div>
     </div>
-  );
+  );  
 };
 
 export default OverallTotalRealizedSavings;

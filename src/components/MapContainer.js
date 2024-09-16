@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import fallbackMarkerIcon from "../images/location.png";
+import "../css/MapContainer.scss";
 import api from "../api.js";
+
 
 const MapContainer = () => {
   const mapRef = useRef(null);
@@ -58,43 +60,11 @@ const MapContainer = () => {
   }, [mapData]);
 
   return (
-    <div>
-      <h2
-        style={{
-          textAlign: "left",
-          backgroundColor: "white",
-          color: "rgb(95, 36, 159)",
-          fontFamily: "sans-serif",
-          fontSize: "16px",
-          borderBottom: "2px solid rgba(152, 152, 152, 0.576)",
-          margin: "2px",
-          padding: "10px 0",
-          paddingLeft: "20px",
-          height: "32px",
-          display: "flex",
-          alignItems: "center",
-          width: "570px",
-          borderRadius: "5px",
-          border: " 1px solid #ccc",
-        }}
-      >
-        Resource Location
-      </h2>
-      <div
-        id="map-container"
-        style={{
-          width: "588px",
-          height: "399px",
-          position: "relative",
-          overflow: "hidden",
-          border: "1px solid #ccc",
-          margin: "0 3px",
-          marginBottom: "-1px",
-          border: " 1px solid #ccc",
-          marginTop: "-2px",
-        }}
-        ref={mapRef}
-      ></div>
+    <div className="container" >
+      <div className="map-heading">
+        <strong>Resource Location</strong>
+      </div>
+      <div className="map-container" ref={mapRef}></div>
     </div>
   );
 };

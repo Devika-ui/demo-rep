@@ -4,28 +4,40 @@ import "../css/consumptionHighlights.scss";
 import api from "../api.js"; // Import API function
 
 const ConsumptionHighlights = () => {
-  const [topSubscriptions, setTopSubscriptions] = useState(null);
-  const [topApplications, setTopApplications] = useState(null);
-  const [topServices, setTopServices] = useState(null);
-  const [tagCompliance, setTagCompliance] = useState(null);
+  const [topSubscriptions, setTopSubscriptions] = useState([]);
+  const [topApplications, setTopApplications] = useState([]);
+  const [topServices, setTopServices] = useState([]);
+  const [tagCompliance, setTagCompliance] = useState({
+    applicationpercentage: 0,
+    ownerpercentage: 0,
+    projectpercentage: 0,
+    bupercentage: 0,
+    environmentpercentage: 0,
+  });
 
   useEffect(() => {
     const fetchConsumptionData = async () => {
       try {
         const subscriptionsData =
           await api.getOverallConsumptionForSubscription();
-        setTopSubscriptions(subscriptionsData.topsubscriptions);
+        setTopSubscriptions(subscriptionsData.topsubscriptions || []);
 
         const applicationsData =
           await api.getOverallConsumptionForApplication();
-        setTopApplications(applicationsData.topApplications);
+        setTopApplications(applicationsData.topApplications || []);
 
         const servicesData = await api.getOverallConsumptionForServies();
-        setTopServices(servicesData.topServices);
+        setTopServices(servicesData.topServices || []);
 
         const tagComplianceData =
           await api.getOverallConsumptionForTagCompliance();
-        setTagCompliance(tagComplianceData);
+        setTagCompliance(tagComplianceData || {
+          applicationpercentage: 0,
+          ownerpercentage: 0,
+          projectpercentage: 0,
+          bupercentage: 0,
+          environmentpercentage: 0,
+        });
       } catch (error) {
         console.error("Error fetching overall consumption data:", error);
       }
@@ -34,9 +46,16 @@ const ConsumptionHighlights = () => {
     fetchConsumptionData();
   }, []);
 
-  if (!topSubscriptions || !topApplications || !topServices || !tagCompliance) {
-    return <div>Loading...</div>; // Render loading indicator while data is being fetched
-  }
+  // Check if data is available and provide default values if not
+  const topSubscriptionCost = topSubscriptions.length > 0
+    ? topSubscriptions[0].totalcost.toFixed(2)
+    : "0.00";
+  const topServiceCost = topServices.length > 0
+    ? topServices[0].totalcost.toFixed(2)
+    : "0.00";
+  const topApplicationCost = topApplications.length > 0
+    ? topApplications[0].totalcost.toFixed(2)
+    : "0.00";
 
   const options = {
     plotOptions: {
@@ -62,82 +81,56 @@ const ConsumptionHighlights = () => {
   };
 
   return (
-    <div
-      className="consumption-wrapper"
-      style={{ width: "605px", height: "290px", marginBottom: "20px" }}
-    >
-      <div
-        className="consumption-header"
-        style={{
-          height: "50px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingRight: "10px",
-          paddingBottom: "0px",
-        }}
-      >
-        <h4
-          style={{
-            color: "#5f249f",
-            paddingLeft: "20px",
-            fontFamily: "sans-serif",
-          }}
-        >
-          Overall Consumption Highlights
-        </h4>
+    <div style={{ marginBottom: "-70px", marginRight: "0px" }}>
+      <div className="top">
+        <strong>Overall Consumption Highlights</strong>
       </div>
-      <hr className="consumption-line" />
       <div
-        className="tiles-wrapper"
-        style={{ padding: "8px", paddingTop: "14px" }}
+        className="consumption-wrapper"
+        style={{ width: "400px", height: "197px", marginBottom: "-197px",marginLeft:"34px"}}
       >
-        <div className="tiles-container" style={{ paddingTop: "20px" }}>
-          <div className="tile">
-            <div>
-              <div className="tilename">Top Subscription</div>
+        <div
+          className="tiles-wrapper"
+          style={{ padding: "0px", paddingBottom: "0px", marginTop: "-20px" }}
+        >
+          <div className="tiles-container" style={{ paddingBottom: "0px" }}>
+            <div className="tile">
+              <div>
+                <div className="tilename">Top Subscription</div>
+              </div>
+              <div className="content">
+                <div className="price">${topSubscriptionCost}</div>
+              </div>
             </div>
-            <div className="content">
-              <div className="price">
-                ${topSubscriptions[0].totalcost.toFixed(2)}
+            <div className="tile">
+              <div>
+                <div className="tilename">Top Service</div>
+              </div>
+              <div className="content">
+                <div className="price">${topServiceCost}</div>
+              </div>
+            </div>
+            <div className="tile">
+              <div>
+                <div className="tilename">Top Application</div>
+              </div>
+              <div className="content">
+                <div className="price">${topApplicationCost}</div>
               </div>
             </div>
           </div>
-          <div className="tile">
-            <div>
-              <div className="tilename">Top Service</div>
+          <div className="chart-container">
+            <h4 style={{ marginTop: "-15px", marginBottom: "0px" }} className="chart-title">
+              % Tag Compliance
+            </h4>
+            <div className="chart-wrapper" style={{ marginTop: "-5px" }}>
+              <Chart
+                options={options}
+                series={options.series}
+                type="radialBar"
+                height="100%" // Set height to 100% to fill the parent container
+              />
             </div>
-            <div className="content">
-              <div className="price">
-                ${topServices[0].totalcost.toFixed(2)}
-              </div>
-            </div>
-          </div>
-          <div className="tile">
-            <div>
-              <div className="tilename">Top Application</div>
-            </div>
-            <div className="content">
-              <div className="price">
-                ${topApplications[0].totalcost.toFixed(2)}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="chart-container">
-          <h4
-            style={{ marginTop: "-15px", marginBottom: "0px" }}
-            className="chart-title"
-          >
-            % Tag Compliance
-          </h4>
-          <div className="chart-wrapper" style={{ marginTop: "-10px" }}>
-            <Chart
-              options={options}
-              series={options.series}
-              type="radialBar"
-              height="100%" // Set height to 100% to fill the parent container
-            />
           </div>
         </div>
       </div>
