@@ -55,12 +55,8 @@ const MonthlyForecastComponent = () => {
           }}
         >
           {imageSrc && (
-            <span className="icon" style={{ marginLeft: "8px" }}>
-              <img
-                src={imageSrc}
-                alt={altText}
-                style={{ width: "27px", height: "20px" }}
-              />
+            <span className="icon">
+              <img src={imageSrc} alt={altText} />
             </span>
           )}
           {percentageIncrease !== null ? (

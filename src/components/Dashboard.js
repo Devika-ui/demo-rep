@@ -67,8 +67,8 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Header onButtonClick={handleButtonClick} />
-      <Subheader title="Overview" />
+      <Header />
+      <Subheader onButtonClick={handleButtonClick} />
       <NavigationBar />
       <div
         className="Dashboard"
@@ -145,7 +145,7 @@ const Dashboard = () => {
         >
           <ConsumptionHighlights style={{ flex: "1" }} />
           <MapContainer style={{ flex: "1" }} />
-          <OverallTotalRealizedSavings style={{ flex: "1"  }} />
+          <OverallTotalRealizedSavings style={{ flex: "1" }} />
         </div>
       </div>
     </div>

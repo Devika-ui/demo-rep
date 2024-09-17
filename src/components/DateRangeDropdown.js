@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, MenuItem, Button } from '@mui/material';
-import { format } from 'date-fns';
-import { enUS } from 'date-fns/locale';
-import api from '../api.js'; // Adjust the path to your API module
-import "../css/components/DateRangeDropdown.css"
-
+import React, { useState, useEffect } from "react";
+import { Menu, MenuItem, Button } from "@mui/material";
+import { format } from "date-fns";
+import { enUS } from "date-fns/locale";
+import api from "../api.js";
+import "../css/components/DateRangeDropdown.css";
 
 const DateRangeDropdown = () => {
-  
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState([]);
   const [months, setMonths] = useState([]);
@@ -16,13 +14,17 @@ const DateRangeDropdown = () => {
     const fetchDates = async () => {
       try {
         const data = await api.getFilterForDropDown();
-        const modifiedDates = data.modifieddate.map(date => new Date(date));
+        const modifiedDates = data.modifieddate.map((date) => new Date(date));
         const uniqueMonths = Array.from(
-          new Set(modifiedDates.map(date => format(date, 'MMMM yyyy', { locale: enUS })))
+          new Set(
+            modifiedDates.map((date) =>
+              format(date, "MMMM yyyy", { locale: enUS })
+            )
+          )
         );
         setMonths(uniqueMonths);
       } catch (error) {
-        console.error('Error fetching dates:', error);
+        console.error("Error fetching dates:", error);
       }
     };
 
@@ -40,7 +42,9 @@ const DateRangeDropdown = () => {
   const toggleMonth = (month) => {
     const isSelected = selectedMonths.includes(month);
     if (isSelected) {
-      setSelectedMonths(selectedMonths.filter(selectedMonth => selectedMonth !== month));
+      setSelectedMonths(
+        selectedMonths.filter((selectedMonth) => selectedMonth !== month)
+      );
     } else {
       setSelectedMonths([...selectedMonths, month]);
     }
@@ -53,10 +57,11 @@ const DateRangeDropdown = () => {
         aria-controls="date-range-menu"
         aria-haspopup="true"
         onClick={handleOpen}
+        style={{ fontSize: "16px" }}
       >
         {selectedMonths.length === 0
-          ? 'Select Months'
-          : selectedMonths.join(', ')}
+          ? "Select Months"
+          : selectedMonths.join(", ")}
       </Button>
       <Menu
         id="date-range-menu"

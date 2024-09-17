@@ -1,4 +1,6 @@
 .cmpDateRangePick_button {
-    text-transform: none !important;
-    color: #5f249f !important;
-  }
+  text-transform: none !important;
+  color: #5f249f !important;
+  text-wrap: nowrap;
+  font-weight: 550 !important;
+}

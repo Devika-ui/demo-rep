@@ -1,224 +1,82 @@
-// .Subheader-Container {
-//   width: 1180px;
-//   margin: "0 auto";
-
-//   height: 50px;
-//   border: 1px solid #ccc;
-//   overflow: hidden;
-//   font-family: sans-serif;
-//   //   display: inline-block;
-//   padding: 0;
-//   margin-right: 10px;
-//   margin-top: 0px;
-//   margin-left: 74px;
-//   margin-bottom: -8px;
-//   background-color: white;
-//   border-radius: 5px;
-//   //   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); // Enhanced box shadow
-//   font-size: 14px;
-// }
-
-// .AWSBox {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   padding-left: 100px;
-//   padding-right: 100px;
-//   padding-top: 7px;
-// }
-
-// .AzureBox {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   padding-left: 100px;
-//   padding-right: 100px;
-//   padding-top: 7px;
-// }
-
-// .Subheader-Container {
-//   width: 1180px;
-//   margin: 0 auto;
-//   height: 50px;
-//   border: 1px solid #ccc;
-//   overflow: hidden;
-//   font-family: sans-serif;
-//   padding: 0;
-//   margin-right: 10px;
-//   margin-top: 0px;
-//   margin-left: 74px;
-//   margin-bottom: -8px;
-//   background-color: white;
-//   border-radius: 5px;
-//   font-size: 14px;
-//   display: flex;
-//   align-items: center;
-//   //justify-content: space-between; /* Ensures space between title and boxes */
-// }
-
-// .Subheader-TitleContainer {
-//   display: flex;
-//   align-items: center;
-// }
-
-// .Subheader-Title {
-//   padding-left: 20px;
-//   font-size: 20px;
-//   color: #63666a;
-//   font-weight: bold;
-// }
-
-// .Subheader-Icon {
-//   width: 20px;
-//   height: 17px;
-//   margin-left: 5px;
-//   cursor: pointer;
-//   margin-top: 2px;
-// }
-
-// .Subheader-Boxes {
-//   display: flex;
-//   align-items: center;
-// }
-
-// .AzureBox,
-// .AWSBox {
-//   display: flex;
-//   align-items: center;
-//   padding-left: 10px; /* Adjusted padding to align properly */
-//   padding-right: 30px;
-//   margin-left: 20px; /* Adjusted margin to space out the boxes */
-// }
-
-// .Subheader-BoxIcon {
-//   width: 30px;
-//   height: 34px;
-//   margin-right: 5px;
-// }
-
-// .Subheader-BoxTitle {
-//   font-weight: bold;
-//   font-size: 18px;
-//   padding-right: 5px;
-//   margin-top: 5px;
-// }
-
-// .Subheader-FilterIcon {
-//   width: 20px;
-//   height: 20px;
-//   margin-right: 5px;
-//   margin-top: 5px;
-// }
-
 .Subheader-Container {
-  width: 93.4%;
-  margin: 0 auto;
-  height: 50px;
-  border: 1px solid #ccc;
-  overflow: hidden;
-  font-family: sans-serif;
-  padding: 0;
-  margin-right: 74px;
-  margin-top: 0px;
-  margin-left: 74px;
-  margin-bottom: -8px;
+  width: 95%;
+  margin: 0px 58px;
+  padding: 5px 0;
   background-color: white;
   border-radius: 5px;
+
+  font-family: sans-serif;
   font-size: 14px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* Ensure alignment in one line */
 }
 
 .Subheader-TitleContainer {
   display: flex;
   align-items: center;
-}
-
-.Subheader-Title {
   padding-left: 20px;
   font-size: 20px;
   color: #5f249f;
   font-weight: bold;
-}
-
-.Subheader-Icon {
-  width: 17px;
-  height: 17px;
-  margin-left: 5px;
-  cursor: pointer;
-  margin-top: 2px;
+  margin-right: 50px;
+  gap: 25px;
 }
 
 .Subheader-Boxes {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.FilterBox {
+.Filter-Options-Row {
   display: flex;
   align-items: center;
-  cursor: pointer;
-  margin-right: 15px;
+  gap: 10px; /* Adjust space between filter options */
+  width: 100%; /* Ensure options take full width */
+  padding: 0; /* Remove extra padding */
 }
 
-.FilterText {
-  font-weight: bold;
-  font-size: 16px;
-  margin-right: 2px;
-  color: #63666a;
-}
-
-.Dropdown-Icon {
-  width: 16px;
-  color: #63666a;
-  height: 20rem;
-}
-
-.Dropdown-Content {
+.filter-option-inline {
   display: flex;
   flex-direction: column;
-  position: absolute;
-  background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  padding: 10px;
-  border-radius: 5px;
-  //width: auto;
-  width: 12rem; /* Width adjusts with the viewport width */
-  padding: 2vh;
-  top: 120px; /* Adjust based on the height of the Subheader-Container */
-  right: 9px;
+  align-items: center; /* Center-align labels */
+  flex: 1; /* Allow the filter options to take available space */
 }
 
-.Dropdown-Box {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-}
-
-.Dropdown-Box:last-child {
-  border-bottom: none;
-}
-
-.Subheader-BoxIcon {
-  width: 30px;
-  height: 34px;
-  margin-right: 5px;
-}
-
-.Subheader-BoxTitle {
+.filter-option-inline label {
+  font-size: 14px;
   font-weight: bold;
-  font-size: 16px;
-  font-family: sans-serif;
-  color: #5f249f;
-  padding-right: 5px;
+  margin-bottom: 5px; /* Space between label and select */
 }
 
-.Subheader-FilterIcon {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
+.Subheader-Buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: 50px; /* Space between filters and buttons */
+}
+
+.Subheader-Buttons .apply-button {
+  background-color: #5f249f;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  min-width: 70px;
+  margin-bottom: 5px; /* Space between Apply and Reset */
+}
+
+.Subheader-Buttons .reset-button {
+  background-color: #ccc;
+  color: black;
+  padding: 5px 10px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  min-width: 70px;
 }

@@ -40,21 +40,10 @@ const MonthlySpendComponent = () => {
 
     return (
       <div className="right">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            width: "90%",
-          }}
-        >
+        <div className="growth-info">
           {imageSrc && (
-            <span className="icon" style={{ marginLeft: "3px" }}>
-              <img
-                src={imageSrc}
-                alt={altText}
-                style={{ width: "27px", height: "20px" }}
-              />
+            <span className="icon">
+              <img src={imageSrc} alt={altText} />
             </span>
           )}
           {growthPercentage !== null ? (
