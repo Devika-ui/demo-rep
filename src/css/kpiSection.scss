@@ -1,55 +1,849 @@
+.kpi-section {
+  position: relative; 
+  padding-top: 2rem !important; /* Make sure this container is relatively positioned */
+}
+
 .kpi-container {
-  width: 630px;
-  height: 265px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  overflow: hidden;
-}
-.top-part {
-  text-align: center;
-  font-size: 16px;
-  color: #5f249f;
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
-
-.kpi-header {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding-left: 10px;
+  flex-direction: column;
+  align-items: center; /* Centers the graphs horizontally */
+  justify-content: center; /* Centers the graphs vertically */
+  width: 100%; /* Full width of the parent container */
+  padding: 1rem; /* Adds some padding around the graphs */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better visual separation */
+  border-radius: 8px; /* Optional rounded corners */
+  background-color: #ffffff; /* Optional background color */
+  margin-top: -2.1rem !important;
+  height: 36.2vh !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
-.kpi-title {
-  color: #5f249f;
+
+.kpi-heading {
+  position: absolute; /* Take it out of the normal document flow */
+  top: -1.4rem !important; /* Position at the top of the section */
+  left: 50%;
+  transform: translateX(-50%); /* Center it horizontally */
   font-size: 16px;
-  margin: 0;
-  padding-top: 5px;
-}
-
-.kpi-dropdown {
-  padding: 5px;
-}
-
-.kpi-line {
-  //   border-bottom: 2px solid rgba(152, 152, 152, 0.5764705882);
-  margin-top: 9px;
-  width: 120%;
-  height: 2px;
-  background-color: rgba(152, 152, 152, 0.5764705882);
-  margin-left: -10px;
+  color: #5f249f;
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
 }
 
 .kpi-bottom-container {
   display: flex;
-  padding-top: 40px;
-  padding-bottom: 20px;
+  flex-direction: column;
+  gap: 20px;
+  height: 20vh !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%
+}
+
+.kpi-graph{
+  width: 100% !important;
+}
+
+@media (min-width: 300px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 50vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-container {
+    padding: 10px;
+  }
+
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 410px) {
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+
+  .kpi-bottom-container {
+    gap: 10px;
+  }
+}.kpi-section {
+  position: relative; 
+  padding-top: 30px; /* Make sure this container is relatively positioned */
+}
+
+.kpi-heading {
+  position: absolute; /* Take it out of the normal document flow */
+  top: -34px; /* Position at the top of the section */
+  left: 50%;
+  transform: translateX(-50%); /* Center it horizontally */
+  font-size: 16px;
+  color: #5f249f;
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
+}
+
+
+.kpi-bottom-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .kpi-graph {
-  width: 50%;
-  padding: px;
+  width: 100%;
 }
+
+@media (min-width: 1285px) {
+ .kpi-container{
+  height: 34vh !important;
+ }
+}
+
+// @media (min-width: 668px){
+//   .kpi-graph{
+//       margin-top: 10rem !important;
+//   }
+// }
+ 
+@media (max-width: 767px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-container {
+    padding: 10px;
+  }
+
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 410px) {
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+
+  .kpi-bottom-container {
+    gap: 10px;
+  }
+}.kpi-section {
+  position: relative; 
+  padding-top: 30px; /* Make sure this container is relatively positioned */
+}
+
+.kpi-heading {
+  position: absolute; /* Take it out of the normal document flow */
+  top: -34px; /* Position at the top of the section */
+  left: 50%;
+  transform: translateX(-50%); /* Center it horizontally */
+  font-size: 16px;
+  color: #5f249f;
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
+}
+
+.kpi-container {
+  width: 100%;
+  height: 28vh;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  box-sizing: border-box;
+  margin-top: 40px; /* Add space below the heading */
+}
+
+.kpi-bottom-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.kpi-graph {
+  width: 100%;
+}
+
+@media (min-width: 300px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-container {
+    padding: 10px;
+  }
+
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 1600px) {
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+
+  .kpi-bottom-container {
+    gap: 10px;
+  }
+}.kpi-section {
+  position: relative; 
+  padding-top: 30px; /* Make sure this container is relatively positioned */
+}
+
+.kpi-heading {
+  position: absolute; /* Take it out of the normal document flow */
+  top: -34px; /* Position at the top of the section */
+  left: 50%;
+  transform: translateX(-50%); /* Center it horizontally */
+  font-size: 16px;
+  color: #5f249f;
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
+}
+
+.kpi-container {
+  width: 100%;
+  height: 28vh;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  box-sizing: border-box;
+  margin-top: 40px; /* Add space below the heading */
+}
+
+.kpi-bottom-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 20vh !important;
+}
+
+.kpi-graph {
+  width: 100%;
+}
+
+@media (min-width: 300px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-container {
+    padding: 10px;
+  }
+
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 410px) {
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+
+  .kpi-bottom-container {
+    gap: 10px;
+  }
+}.kpi-section {
+  position: relative; 
+  padding-top: 30px; /* Make sure this container is relatively positioned */
+}
+
+.kpi-heading {
+  position: absolute; /* Take it out of the normal document flow */
+  top: -34px; /* Position at the top of the section */
+  left: 50%;
+  transform: translateX(-50%); /* Center it horizontally */
+  font-size: 16px;
+  color: #5f249f;
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
+}
+
+.kpi-container {
+  width: 100%;
+  height: 28vh;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  box-sizing: border-box;
+  margin-top: 40px; /* Add space below the heading */
+}
+
+.kpi-bottom-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.kpi-graph {
+  width: 100%;
+}
+
+@media (min-width: 300px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-container {
+    padding: 10px;
+  }
+
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 410px) {
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+
+  .kpi-bottom-container {
+    gap: 10px;
+  }
+}.kpi-section {
+  position: relative; 
+  padding-top: 30px; /* Make sure this container is relatively positioned */
+}
+
+.kpi-heading {
+  position: absolute; /* Take it out of the normal document flow */
+  top: -34px; /* Position at the top of the section */
+  left: 50%;
+  transform: translateX(-50%); /* Center it horizontally */
+  font-size: 16px;
+  color: #5f249f;
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
+}
+
+.kpi-container {
+  width: 100%;
+  height: 28vh;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  box-sizing: border-box;
+  margin-top: 40px; /* Add space below the heading */
+}
+
+.kpi-bottom-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.kpi-graph {
+  width: 100%;
+}
+
+@media (min-width: 300px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-container {
+    padding: 10px;
+  }
+
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 410px) {
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+
+  .kpi-bottom-container {
+    gap: 10px;
+  }
+}.kpi-section {
+  position: relative; 
+  padding-top: 30px; /* Make sure this container is relatively positioned */
+}
+
+.kpi-heading {
+  position: absolute; /* Take it out of the normal document flow */
+  top: -34px; /* Position at the top of the section */
+  left: 50%;
+  transform: translateX(-50%); /* Center it horizontally */
+  font-size: 16px;
+  color: #5f249f;
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
+}
+
+.kpi-container {
+  width: 100%;
+  height: 28vh;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  box-sizing: border-box;
+  margin-top: 40px; /* Add space below the heading */
+}
+
+.kpi-bottom-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.kpi-graph {
+  width: 100%;
+}
+
+@media (min-width: 300px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-container {
+    padding: 10px;
+  }
+
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 410px) {
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+
+  .kpi-bottom-container {
+    gap: 10px;
+  }
+}.kpi-section {
+  position: relative; 
+  padding-top: 30px; /* Make sure this container is relatively positioned */
+}
+
+.kpi-heading {
+  position: absolute; /* Take it out of the normal document flow */
+  top: -34px; /* Position at the top of the section */
+  left: 50%;
+  transform: translateX(-50%); /* Center it horizontally */
+  font-size: 16px;
+  color: #5f249f;
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
+}
+
+.kpi-container {
+  width: 100%;
+  height: 28vh;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  box-sizing: border-box;
+  margin-top: 40px; /* Add space below the heading */
+}
+
+.kpi-bottom-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.kpi-graph {
+  width: 100%;
+}
+
+@media (min-width: 300px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-container {
+    padding: 10px;
+  }
+
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 410px) {
+  .kpi-graph {
+    width: 100%;
+    height: auto;
+  }
+
+  .kpi-bottom-container {
+    gap: 10px;
+  }
+}.kpi-section {
+  position: relative; 
+  padding-top: 30px; /* Make sure this container is relatively positioned */
+}
+
+.kpi-heading {
+  position: absolute; /* Take it out of the normal document flow */
+  top: -34px; /* Position at the top of the section */
+  left: 50%;
+  transform: translateX(-50%); /* Center it horizontally */
+  font-size: 16px;
+  color: #5f249f;
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
+}
+
+.kpi-container {
+  width: 100%;
+  height: 28vh;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  box-sizing: border-box;
+  margin-top: 40px; /* Add space below the heading */
+}
+
+.kpi-bottom-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.kpi-graph {
+  width: 100%;
+}
+
+@media (min-width: 300px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .kpi-bottom-container {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .kpi-graph {
+    width: 48%;
+    height: 20vh;
+  }
+}
+
+@media (max-width: 900px) {
+  .kpi-heading{
+    margin-top: 1.4rem;
+  }
+
+  .kpi-container {
+    margin-top: -0.6rem !important;
+  } 
+}
+
+@media (max-width: 668px) {
+  .kpi-container{
+    height: 39vh !important;
+  }
+  .kpi-bottom-container{
+     margin-left: -2rem;
+     gap: 1px;
+  }
+.kpi-bottom-container {
+   margin-top: -1rem;
+  }
+}
+
+ @media (max-width: 600px) {
+  .kpi-container{
+    margin-top: -1rem !important;
+  }
+
+   .kpi-heading {
+     margin-top: 1rem !important;
+   }
+}
+
+@media screen  and (max-width: 1024px){
+  .kpi-container{
+    height: 33.2vh !important;
+  }
+}
+
+@media(max-width:668px){
+  .kpi-container{
+     height: 38.4vh !important;
+  }
+}
+  
+
+// @media(max-width :1629px){
+//   .kpi-graph{
+//      width: 120%;
+//   }
+// }

@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import api from "../api.js";
+import { Typography } from '@mui/material';
 
 ChartJS.register(
   BarElement,
@@ -41,7 +42,6 @@ const OverallTotalRealizedSavings = () => {
           )
         );
       } catch (error) {
-        // Handle error
         console.error("Error fetching reservations data:", error);
       }
     };
@@ -64,7 +64,6 @@ const OverallTotalRealizedSavings = () => {
           )
         );
       } catch (error) {
-        // Handle error
         console.error("Error fetching simulated savings data:", error);
       }
     };
@@ -104,6 +103,8 @@ const OverallTotalRealizedSavings = () => {
   };
 
   const options = {
+    responsive: true,
+    maintainAspectRatio: false, // Allows responsive height and width
     plugins: {
       legend: {
         display: true,
@@ -164,7 +165,7 @@ const OverallTotalRealizedSavings = () => {
     },
     layout: {
       padding: {
-        left: 25,
+        left: 10, // Adjust padding to prevent overflow
         right: 10,
         top: 0,
         bottom: 0,
@@ -174,6 +175,11 @@ const OverallTotalRealizedSavings = () => {
       x: {
         grid: {
           display: false,
+        },
+        ticks: {
+          autoSkip: true, // Prevents label overflow
+          maxRotation: 0,
+          minRotation: 0,
         },
       },
       y: {
@@ -185,42 +191,27 @@ const OverallTotalRealizedSavings = () => {
   };
 
   return (
-    <div style={{ position: "relative", marginBottom: "17px", marginLeft: "-30px" }}>
-      <strong
+    <>
+      <Typography
+        variant="h6"
+        align="center"
+        sx={{ color: "#5f249f", mb: 2 }}
         style={{
-          position: "absolute",
-          top: "-30px", // Adjust this value to move the title up or down
-          left: "50%",
-          transform: "translateX(-50%)",
-          fontFamily: "sans-serif",
-          color: "#5f249f",
-          display: "block",
-          whiteSpace: "nowrap", // Prevent line break
-          overflow: "hidden", // Hide overflow text
-          textOverflow: "ellipsis", // Show ellipsis if text overflows
+          position: "relative",
+          fontSize: "16px",
+          top: "-2.6rem",
+          whiteSpace: "nowrap", // Ensures heading stays in one line
+          overflow: "hidden",
+          
         }}
       >
-        Overall Total Realized Savings
-      </strong>
-      <div
-        style={{
-          width: "380px",
-          height: "198px",
-          borderRadius: "5px",
-          backgroundColor: "white",
-          boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
-          border: "1px solid #ccc",
-          marginBottom: "200px",
-          marginRight: "4px",
-          marginTop: "-10px", // Adjust marginTop to position the chart container
-        }}
-      >
-        <div style={{ height: "100%", padding: "5px" }}>
-          <Bar data={combinedData} options={options} />
-        </div>
+        <strong>Overall Total Realized Savings</strong>
+      </Typography>
+      <div style={{ height: '30vh', position: 'relative', marginTop: '-45px', width: '100%' }}> {/* Adjusted position and width */}
+        <Bar data={combinedData} options={options} />
       </div>
-    </div>
-  );  
+    </>
+  );
 };
 
 export default OverallTotalRealizedSavings;

@@ -5,8 +5,8 @@ import HeaderButtons from "./HeaderButtons";
 import DateRangeDropdown from "./DateRangeDropdown";
 import "../css/Subheader.scss";
 import api from "../api";
-
-const SubHeader = ({ additionalFilters, onButtonClick }) => {
+ 
+const SubHeader = ({ onButtonClick }) => {
   const [selectedFilters, setSelectedFilters] = useState({
     subscriptions: [],
     businessUnits: [],
@@ -15,7 +15,7 @@ const SubHeader = ({ additionalFilters, onButtonClick }) => {
     projects: [],
     environments: [],
   });
-
+ 
   const [filterOptions, setFilterOptions] = useState({
     subscriptions: [],
     businessUnits: [],
@@ -24,47 +24,79 @@ const SubHeader = ({ additionalFilters, onButtonClick }) => {
     projects: [],
     environments: [],
   });
-
+ 
   useEffect(() => {
-    const fetchFilters = async () => {
-      try {
-        const data = await api.getAllFilters();
-        setFilterOptions({
-          subscriptions: transformToOptions(data.subscriptionName),
-          businessUnits: transformToOptions(data.tags_BU_company),
-          locations: transformToOptions(data.resourceLocation),
-          applications: transformToOptions(data.tags_AppID_AppName),
-          projects: transformToOptions(data.tags_ProjectName),
-          environments: transformToOptions(data.tags_Environment),
-        });
-      } catch (error) {
-        console.error("Error fetching filters:", error);
-      }
-    };
-
-    fetchFilters();
+    fetchInitialFilters();
   }, []);
-
+ 
+  const fetchInitialFilters = async () => {
+    try {
+      const initialData = await api.getFilterBasedOnSelection({});
+      setFilterOptions({
+        subscriptions: transformToOptions(initialData.subscriptionName),
+        businessUnits: transformToOptions(initialData.tags_BU_company),
+        locations: transformToOptions(initialData.resourceLocation),
+        applications: transformToOptions(initialData.tags_AppID_AppName),
+        projects: transformToOptions(initialData.tags_ProjectName),
+        environments: transformToOptions(initialData.tags_Environment),
+      });
+    } catch (error) {
+      console.error("Error fetching initial filters:", error);
+    }
+  };
+ 
+  const fetchFiltersBasedOnSelection = async (filters) => {
+    try {
+      const updatedData = await api.getFilterBasedOnSelection(filters);
+      setFilterOptions({
+        subscriptions: transformToOptions(updatedData.subscriptionName),
+        businessUnits: transformToOptions(updatedData.tags_BU_company),
+        locations: transformToOptions(updatedData.resourceLocation),
+        applications: transformToOptions(updatedData.tags_AppID_AppName),
+        projects: transformToOptions(updatedData.tags_ProjectName),
+        environments: transformToOptions(updatedData.tags_Environment),
+      });
+    } catch (error) {
+      console.error("Error fetching filters based on selection:", error);
+    }
+  };
+ 
   const transformToOptions = (data) => {
-    return data
-      .filter((item) => item !== null)
-      .map((item) => ({ value: item, label: item }));
+    if (!data) return [];
+    return data.map((item) => ({
+      value: item,
+      label: item === null ? "null" : item,
+    }));
   };
-
-  const handleFilterChange = (filterType, values) => {
-    setSelectedFilters({ ...selectedFilters, [filterType]: values });
+ 
+  // Handle change in dropdown selections
+  const handleFilterChange = async (filterType, values) => {
+    const newSelectedFilters = { ...selectedFilters, [filterType]: values };
+    setSelectedFilters(newSelectedFilters);
+ 
+    const filterParams = {
+      subscriptions: newSelectedFilters.subscriptions.map((sub) => sub.value),
+      businessUnits: newSelectedFilters.businessUnits.map((bu) => bu.value),
+      locations: newSelectedFilters.locations.map((loc) => loc.value),
+      applications: newSelectedFilters.applications.map((app) => app.value),
+      projects: newSelectedFilters.projects.map((proj) => proj.value),
+      environments: newSelectedFilters.environments.map((env) => env.value),
+    };
+ 
+    await fetchFiltersBasedOnSelection(filterParams); // Fetch updated filter options based on selections
   };
-
+ 
   return (
     <div className="Subheader-Container">
-      <div className="Subheader-TitleContainer">
+      <div className="Subheader-ButtonsContainer">
         <HeaderButtons onButtonClick={onButtonClick} />
         <DateRangeDropdown />
       </div>
       <div className="Subheader-Boxes">
         <div className="Filter-Options-Row">
           <div className="filter-option-inline">
-            <label>Subscription(s)</label>
+            {/* Subscriptions dropdown */}
+            <label>Subscriptions(s)</label>
             <MultiSelect
               options={filterOptions.subscriptions}
               value={selectedFilters.subscriptions}
@@ -72,15 +104,19 @@ const SubHeader = ({ additionalFilters, onButtonClick }) => {
               labelledBy="Select"
             />
           </div>
+ 
+          {/* Business Unit dropdown */}
           <div className="filter-option-inline">
             <label>Business Unit(s)</label>
             <MultiSelect
-              options={filterOptions.subscriptions}
-              value={selectedFilters.subscriptions}
-              onChange={(values) => handleFilterChange("subscriptions", values)}
+              options={filterOptions.businessUnits}
+              value={selectedFilters.businessUnits}
+              onChange={(values) => handleFilterChange("businessUnits", values)}
               labelledBy="Select"
             />
           </div>
+ 
+          {/* Location dropdown */}
           <div className="filter-option-inline">
             <label>Location(s)</label>
             <MultiSelect
@@ -90,6 +126,8 @@ const SubHeader = ({ additionalFilters, onButtonClick }) => {
               labelledBy="Select"
             />
           </div>
+ 
+          {/* Application dropdown */}
           <div className="filter-option-inline">
             <label>Application(s)</label>
             <MultiSelect
@@ -99,6 +137,8 @@ const SubHeader = ({ additionalFilters, onButtonClick }) => {
               labelledBy="Select"
             />
           </div>
+ 
+          {/* Project dropdown */}
           <div className="filter-option-inline">
             <label>Project(s)</label>
             <MultiSelect
@@ -108,6 +148,8 @@ const SubHeader = ({ additionalFilters, onButtonClick }) => {
               labelledBy="Select"
             />
           </div>
+ 
+          {/* Environment dropdown */}
           <div className="filter-option-inline">
             <label>Environment(s)</label>
             <MultiSelect
@@ -118,7 +160,7 @@ const SubHeader = ({ additionalFilters, onButtonClick }) => {
             />
           </div>
         </div>
-
+ 
         <div className="Subheader-Buttons">
           <button className="apply-button">Apply</button>
           <button className="reset-button">Reset</button>
@@ -127,26 +169,13 @@ const SubHeader = ({ additionalFilters, onButtonClick }) => {
     </div>
   );
 };
-
+ 
 SubHeader.propTypes = {
-  additionalFilters: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      options: PropTypes.arrayOf(
-        PropTypes.shape({
-          value: PropTypes.string.isRequired,
-          label: PropTypes.string.isRequired,
-        })
-      ).isRequired,
-    })
-  ),
   onButtonClick: PropTypes.func,
 };
-
+ 
 SubHeader.defaultProps = {
-  additionalFilters: [],
   onButtonClick: () => {},
 };
-
+ 
 export default SubHeader;

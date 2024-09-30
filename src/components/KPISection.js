@@ -1,16 +1,9 @@
-// KPISection.js
 import React, { useEffect, useState } from "react";
 import CustomProgressBar from "./CustomProgressBar";
 import "../css/kpiSection.scss";
-import { Select, MenuItem, FormControl, Typography } from "@mui/material";
 import api from "../api.js";
 
 const KPISection = () => {
-  const [selectedOption, setSelectedOption] = useState("Select an option");
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
-
   const [percentCoverage, setPercentCoverage] = useState(0);
   const [percentUsage, setPercentUsage] = useState(0);
 
@@ -23,7 +16,6 @@ const KPISection = () => {
         const usageData = await api.getDiscountKPIUsage();
         setPercentUsage(usageData.usage);
       } catch (error) {
-        // Handle error
         console.error("Error fetching data:", error);
       }
     };
@@ -31,30 +23,13 @@ const KPISection = () => {
   }, []);
 
   return (
-    <div style={{ marginTop: "-15px" }}>
-      <div className="top-part">
-        <strong style={{ fontFamily: "sans-serif" }}>
-          Commitment based Discounts KPI
-        </strong>
+    <div className="kpi-section">
+      <div className="kpi-heading-container">
+        <strong className="kpi-heading">Commitment based Discounts KPI</strong>
       </div>
-      <div
-        className="kpi-container"
-        style={{ width: "360px", height: "200px", marginBottom: "20px" }}
-      >
-        {/* <div className="kpi-dropdown">
-          <FormControl>
-            <Select
-              value={selectedOption}
-              onChange={handleOptionChange}
-              style={{ height: '25px', minWidth: '150px', backgroundColor: 'rgb(95, 36, 159,0.9)', color:'white' }}
-            >
-              <MenuItem value="Select an option">Select an option</MenuItem>
-              <MenuItem value="AWS">AWS</MenuItem>
-              <MenuItem value="Azure">Azure</MenuItem>
-            </Select>
-          </FormControl>
-        </div> */}
 
+      {/* New Container for KPI Graphs */}
+      <div className="kpi-container">
         <div className="kpi-bottom-container">
           <div className="kpi-graph">
             <CustomProgressBar

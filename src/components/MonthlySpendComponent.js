@@ -40,10 +40,10 @@ const MonthlySpendComponent = () => {
 
     return (
       <div className="right">
-        <div className="growth-info">
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", width: "90%" }}>
           {imageSrc && (
-            <span className="icon">
-              <img src={imageSrc} alt={altText} />
+            <span className="icon" style={{ marginLeft: "3px" }}>
+              <img src={imageSrc} alt={altText} style={{ width: "27px", height: "20px" }} />
             </span>
           )}
           {growthPercentage !== null ? (
@@ -60,18 +60,12 @@ const MonthlySpendComponent = () => {
   return (
     <div className="monthly-spend-container">
       <div className="title">
-        <strong style={{ fontFamily: "sans-serif" }}>
-          Monthly Actual Spend
-        </strong>
+        <strong style={{ fontFamily: "sans-serif"}}>Monthly Actual Spend</strong>
       </div>
       <div className="content-wrapper">
         <div className="first">
           <div className="number">
-            {totalCost !== null ? (
-              <strong>${totalCost.toFixed(2)}</strong>
-            ) : (
-              <strong>Loading...</strong>
-            )}
+            {totalCost !== null ? <strong>${totalCost.toFixed(2)}</strong> : <strong>Loading...</strong>}
           </div>
         </div>
         <div className="second">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import Chart from "chart.js/auto";
 import api from "../api.js";
 
@@ -21,7 +21,7 @@ const StackBars = () => {
   }, []);
 
   useEffect(() => {
-    if (subscriptions.length === 0) return; // Wait until data is fetched
+    if (subscriptions.length === 0) return;
 
     if (chartInstance.current !== null) {
       chartInstance.current.destroy();
@@ -31,7 +31,7 @@ const StackBars = () => {
     const awsData = {};
     const azureData = {};
 
-    subscriptions.forEach(({ dailydate, totalcost, RIDTYPE }) => {
+    subscriptions.forEach(({ dailydate, totalcost }) => {
       const date = new Date(dailydate).toISOString().split("T")[0];
 
       if (!awsData[date]) {
@@ -41,10 +41,9 @@ const StackBars = () => {
         azureData[date] = 0;
       }
 
-      azureData[date] += totalcost; // Sum up the total cost for Azure for both PAY GO and RI
+      azureData[date] += totalcost;
     });
 
-    // Sorting dates in ascending order
     const sortedDates = Object.keys(azureData).sort();
 
     chartInstance.current = new Chart(ctx, {
@@ -54,13 +53,13 @@ const StackBars = () => {
         datasets: [
           {
             label: "AWS",
-            data: sortedDates.map((date) => awsData[date].toFixed(2)), // Fixed to 2 decimal places
+            data: sortedDates.map((date) => awsData[date].toFixed(2)),
             backgroundColor: "rgba(255, 153, 10, 0.7)",
             stack: "01",
           },
           {
             label: "Azure",
-            data: sortedDates.map((date) => azureData[date].toFixed(2)), // Fixed to 2 decimal places
+            data: sortedDates.map((date) => azureData[date].toFixed(2)),
             backgroundColor: "rgba(10, 163, 225, 0.7)",
             stack: "01",
           },
@@ -77,7 +76,7 @@ const StackBars = () => {
               autoSkip: false,
               maxRotation: 0,
               minRotation: 0,
-              callback: function (value, index, values) {
+              callback: function (value) {
                 const date = new Date(this.getLabelForValue(value));
                 const midMonthDay =
                   new Date(
@@ -85,7 +84,6 @@ const StackBars = () => {
                     date.getMonth() + 1,
                     0
                   ).getDate() / 2;
-                // Display month label in the middle of the month
                 if (date.getDate() === Math.ceil(midMonthDay)) {
                   return date.toLocaleString("default", {
                     month: "long",
@@ -104,7 +102,7 @@ const StackBars = () => {
             },
             ticks: {
               stepSize: 6000,
-              max: 6000, // Adjust max to fit the data
+              max: 6000,
               color: "rgba(0, 0, 0, 0.5)",
               padding: 3,
             },
@@ -112,24 +110,11 @@ const StackBars = () => {
         },
         plugins: {
           title: {
-            display: true,
-            text: "",
-            position: "top",
-            align: "start",
-            font: {
-              size: 16,
-              weight: "bold",
-            },
-            padding: {
-              bottom: 32, // Padding between the title and the legend
-              top: -54,
-              left: -100,
-              right: 50,
-            },
+            display: false, // Disable Chart.js title
           },
           legend: {
             position: "top",
-            align: "between",
+            align: "end",
             labels: {
               padding: 10,
               font: {
@@ -156,30 +141,12 @@ const StackBars = () => {
   }, [subscriptions]);
 
   return (
-    <div
-      style={{
-        position: "relative",
-        marginBottom: "0px",
-        borderRadius: "10px",
-        overflow: "hidden",
-        backgroundColor: "white",
-      }}
-    >
-      <div style={{ position: "absolute", top: 0, left: 0 }}></div>
-      <div
-        style={{
-          borderRadius: "10px",
-          overflow: "hidden",
-          height: "calc(100% - 40px)", // Adjust height to ensure chart fits within the container
-          marginTop: "20px", // Adjust margin to ensure chart fits within the container
-        }}
-      >
-        <canvas
-          style={{ paddingTop: "5px", paddingRight: "10px" }}
-          ref={chartContainer}
-        ></canvas>
-      </div>
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      {/* <Typography variant="h6" align="center" sx={{ color: "#5f249f", mb: 2 }}>
+        Total Bill Cost by Providers
+      </Typography> */}
+      <canvas ref={chartContainer} style={{ flexGrow: 1 }}></canvas>
+    </Box>
   );
 };
 

@@ -1,65 +1,78 @@
 .Subheader-Container {
-  width: 95%;
-  margin: 0px 58px;
+  width: 101%;
+  min-height: 12vh;
   padding: 5px 0;
+  margin-left: -1.2rem !important;
   background-color: white;
   border-radius: 5px;
-
   font-family: sans-serif;
   font-size: 14px;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Ensure alignment in one line */
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-top: 5px;
 }
-
-.Subheader-TitleContainer {
+ 
+.Subheader-ButtonsContainer {
   display: flex;
   align-items: center;
   padding-left: 20px;
   font-size: 20px;
   color: #5f249f;
   font-weight: bold;
-  margin-right: 50px;
+  margin-right: 20px; /* Adjusted margin to fit within container */
   gap: 25px;
 }
-
+ 
 .Subheader-Boxes {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: calc(100% - 120px); /* Account for button width and margin */
   padding: 0;
   box-sizing: border-box;
 }
-
+ 
 .Filter-Options-Row {
   display: flex;
-  align-items: center;
-  gap: 10px; /* Adjust space between filter options */
-  width: 100%; /* Ensure options take full width */
-  padding: 0; /* Remove extra padding */
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 10px;
+  flex: 1; /* Allow row to expand */
+  margin-left: -15px;
 }
-
+ 
 .filter-option-inline {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center-align labels */
-  flex: 1; /* Allow the filter options to take available space */
+  flex: 1; /* Make each filter option take an equal amount of space */
+  min-width: 10%; /* Minimum width to prevent it from getting too small */
+  max-width: 50%; /* Maximum width to prevent it from getting too large */
 }
-
+ 
 .filter-option-inline label {
-  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
   font-weight: bold;
-  margin-bottom: 5px; /* Space between label and select */
 }
-
+ 
 .Subheader-Buttons {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  margin-left: 50px; /* Space between filters and buttons */
+  margin-left: 60px; /* Space between filters and buttons */
+  width: 120px; /* Adjust width to fit buttons */
+  box-sizing: border-box;
 }
-
+ 
+.Subheader-Buttons .apply-button,
+.Subheader-Buttons .reset-button {
+  width: 100%; /* Make buttons fit within the container */
+  box-sizing: border-box;
+  margin-right: 30px;
+}
+ 
 .Subheader-Buttons .apply-button {
   background-color: #5f249f;
   color: white;
@@ -70,7 +83,7 @@
   min-width: 70px;
   margin-bottom: 5px; /* Space between Apply and Reset */
 }
-
+ 
 .Subheader-Buttons .reset-button {
   background-color: #ccc;
   color: black;
@@ -79,4 +92,101 @@
   border: none;
   cursor: pointer;
   min-width: 70px;
+}
+ 
+@media (max-width: 1802px) {
+  .Subheader-Container {
+    width: 102%;
+    justify-content: space-between;
+    margin-left: -20px;
+    margin-top: 0;
+  }
+ 
+  .Filter-Options-Row {
+    gap: 15px;
+    width: auto;
+    margin-right: 5px;
+  }
+ 
+  .filter-option-inline {
+    flex: 1;
+    min-width: unset;
+    max-width: 15%;
+    white-space: nowrap;
+  }
+ 
+  .Subheader-Buttons {
+    margin-left: 40px; /* Adjust space for smaller screens */
+    width: 100px; /* Adjust width for smaller screens */
+  }
+  .Subheader-Buttons .apply-button,
+  .Subheader-Buttons .reset-button {
+    margin-right: 15px;
+  }
+}
+ 
+@media (max-width: 1262px) {
+  .Subheader-Container {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+ 
+  .Subheader-Boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+  }
+ 
+  .Filter-Options-Row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    margin-left: 10px;
+  }
+ 
+  .filter-option-inline {
+    flex: 1;
+    min-width: 150px;
+    max-width: calc(100% / 3 - 20px);
+  }
+ 
+  .Subheader-Buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    margin: 10px 15px; /* Adjust spacing to fit within container */
+    box-sizing: border-box;
+  }
+ 
+  .Subheader-Buttons .apply-button,
+  .Subheader-Buttons .reset-button {
+    margin-bottom: 5px;
+  }
+}
+
+
+
+.subscription-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #5f249f;
+  margin-bottom: 10px;
+  margin-left: 62px;
+  font-family: sans-serif;
+  position: relative;
+  top: -17px;
+  
+ 
+
+  @media (max-width: 600px) {
+    margin-left: 20px;
+    font-size: 14px;
+    text-align: center; /* Center the title on smaller screens */
+  
+  }
 }

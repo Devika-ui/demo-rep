@@ -1,154 +1,144 @@
-import { Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api.js";
-import Header from "./Header.js";
-import Subheader from "./SubHeader.js";
-import StackBars from "./StackBars";
-import MonthlySpendComponent from "./MonthlySpendComponent.js";
-import MonthlyForecastComponent from "./MonthlyForecastComponent.js";
-import TotalSubscriptionsComponent from "./TotalSubscriptionsComponent.js";
-import RecommendationsComponent from "./RecommendationsComponent.js";
-import NavigationBar from "./NavigationBar.js";
-import MapContainer from "./MapContainer.js";
-import OverallTotalRealizedSavings from "./OverallTotalRealizedSavings.js";
-import KPISection from "./KPISection.js";
-import ConsumptionHighlights from "./ConsumptionHighlights.js";
-import CustomFilter from "./CustomFilter.js";
-import AzureBars from "./AzureBars.js";
-import TotalAzureSubscriptions from "./TotalAzureSubscriptions.js";
-import MonthlySpendAWSComponent from "./MonthlySpendAWS.js";
-import MonthlyForecastAWSComponent from "./MonthlyForecastAWS.js";
-import "../css/components/dashboard.css";
+import React, { useState } from 'react'; 
+import { Grid, Box, Paper,Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import Header from './Header.js';
+import Subheader from './SubHeader.js';
+import MonthlySpendComponent from './MonthlySpendComponent';
+import MonthlyForecastComponent from './MonthlyForecastComponent';
+import TotalSubscriptionsComponent from './TotalSubscriptionsComponent';
+import StackBars from './StackBars';
+import AzureBars from './AzureBars';
+import NavigationBar from './NavigationBar.js';
+import RecommendationsComponent from './RecommendationsComponent';
+import KPISection from './KPISection';
+import ConsumptionHighlights from './ConsumptionHighlights';
+import MapContainer from './MapContainer';
+import OverallTotalRealizedSavings from './OverallTotalRealizedSavings';
 
 const Dashboard = () => {
   const [showStackBars, setShowStackBars] = useState(true);
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
-    if (value === "Azure") {
-      setShowStackBars(false); // Hide StackBars and show AzureBars
-    } else {
-      setShowStackBars(true); // Show StackBars
-    }
+    setShowStackBars(value !== 'Azure');
   };
 
-  const location = {
-    latitude: 37.7749, // Example latitude
-    longitude: -122.4194, // Example longitude
-  };
-
-  const mapContainerStyle = {
-    width: "25%",
-    height: "400px", // Adjust the height as needed
-  };
-
-  const additionalDivStyle = {
-    width: "400px",
-    height: "220px",
-    backgroundColor: "white",
-    marginLeft: "35px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-  };
-
-  const additionalDivStyleKpi = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#f9f9f9",
-  };
-
-  const Navigate = useNavigate();
-
-  const handleLogoout = () => {};
+  const navigate = useNavigate();
 
   return (
-    <div>
+    <Box 
+      sx={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        minHeight: '100vh', // Ensures it takes full screen height
+        paddingX: 9.5, 
+        paddingRight: "10px", 
+        maxWidth: '100%' 
+      }}
+    >
       <Header />
-      <Subheader onButtonClick={handleButtonClick} />
-      <NavigationBar />
-      <div
-        className="Dashboard"
-        style={{
-          marginLeft: "37px",
-          padding: "2px",
-          display: "flex",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
+      <Typography 
+        variant="h6" 
+        align="center" 
+        sx={{ 
+          color: '#5f249f', 
+          marginTop: '0.0rem', // Adjust this as needed
+          fontWeight: 'bold'
         }}
       >
-        {!showStackBars ? (
-          <>
+        Overview
+      </Typography>
+      <Subheader onButtonClick={handleButtonClick} />
+      <NavigationBar />
+
+      {/* This is the main content area which should take the remaining height */}
+      <Box 
+        sx={{ 
+          flexGrow: 1, 
+          display: 'flex', 
+          flexDirection: 'column' 
+        }}
+      >
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          {/* First Row: Monthly Spend, Forecast, Subscriptions */}
+          <Grid item xs={12} sm={6} md={4}>
             <MonthlySpendComponent />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={4}>
             <MonthlyForecastComponent />
-            <TotalSubscriptionsComponent style={{ flex: "1" }} />
-          </>
-        ) : (
-          <>
-            <MonthlySpendComponent />
-            <MonthlyForecastComponent />
-            <TotalSubscriptionsComponent style={{ flex: "1" }} />
-          </>
-        )}
+          </Grid>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            width: "100%",
-            marginBottom: "20px",
-            margintop: "5px",
-          }}
-        >
-          <div style={{ flex: 1 }}>
-            <div className="heading" style={{ marginBottom: "-15px" }}>
-              <strong
-                style={{
-                  fontFamily: "sans-serif",
-                  color: "#5f249f",
-                  paddingBottom: "20px",
-                }}
-              >
-                {showStackBars
-                  ? "Total Bill Cost by Providers"
-                  : "Azure Total Bill Cost"}
-              </strong>
-            </div>
-            <div style={{ ...additionalDivStyle, marginRight: "9px" }}>
-              {showStackBars ? <StackBars /> : <AzureBars />}
-            </div>
-          </div>
+          <Grid item xs={12} sm={6} md={4}>
+            <TotalSubscriptionsComponent />
+          </Grid>
 
-          <div style={{ flex: 1 }}>
-            <RecommendationsComponent />
-          </div>
+          {/* Second Row: StackBars (or AzureBars), Recommendations, KPI */}
+          <Grid container spacing={2} sx={{ mt: 2 }}>
+            <Grid item xs={12} sm={6} md={4} sx={{ position: 'relative' }}>
+              <Paper sx={{ p: 2, height: '30vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop:"-10px",boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)"}}>
+                <Box 
+                  sx={{ 
+                    position: 'absolute',
+                    top: '-1rem', // Adjust this value to move the heading up or down
+                    left: 0,
+                    width: '100%',
+                    textAlign: 'center',
+                    color: "#5f249f",
+                    fontSize: '16px',
+                    zIndex: 1,
+                  }}
+                >
+                 <strong>{showStackBars ? "Total Bill Cost by Providers" : "Azure Total Bill Cost"}</strong>
+                </Box>
+                <Box sx={{ flexGrow: 1 }}>
+                  {showStackBars ? <StackBars /> : <AzureBars />}
+                </Box>
+              </Paper>
+            </Grid>
 
-          <div style={{ flex: 1, marginLeft: "5px" }}>
-            <KPISection />
-          </div>
-        </div>
+            <Grid item xs={12} sm={6} md={4}>
+              <Paper sx={{ p: 2, height: '30vh', display: 'flex', flexDirection: 'column',marginTop:"-10px",boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)"}}>
+                <RecommendationsComponent />
+              </Paper>
+            </Grid>
 
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "left",
-            alignItems: "center",
-            paddingTop: "2px",
-            paddingBottom: "5px",
-            gap: "10px", // Add gap between elements
-          }}
-        >
-          <ConsumptionHighlights style={{ flex: "1" }} />
-          <MapContainer style={{ flex: "1" }} />
-          <OverallTotalRealizedSavings style={{ flex: "1" }} />
-        </div>
-      </div>
-    </div>
+            {/* KPI Section in a responsive container */}
+            <Grid 
+              item 
+              xs={12} 
+              sm={6} 
+              md={4} 
+              sx={{ position: 'relative', top: '-10px' }} 
+            >
+              {/* <Paper sx={{ p: 2, height: '30vh', display: 'flex', flexDirection: 'column' }}> */}
+                <KPISection />
+              {/* </Paper> */}
+            </Grid>
+
+            {/* Third Row */}
+            <Grid item xs={12} sm={6} md={4}>
+              <Paper sx={{ p: 2, height: '30vh',marginTop:'12px',boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)"}}>
+                <ConsumptionHighlights />
+              </Paper>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4}>
+              <Paper sx={{ p: 2, height: '30vh',marginTop:'12px',boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)"}}>
+                <MapContainer />
+              </Paper>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4}>
+              <Paper sx={{ p: 2, height: '30vh',marginTop:'12px',boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)"}}>
+                <OverallTotalRealizedSavings />
+              </Paper>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
   );
 };
 

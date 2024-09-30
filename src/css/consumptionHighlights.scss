@@ -1,105 +1,193 @@
-.consumption-wrapper {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  font-family: sans-serif;
-  display: inline-block;
-  margin-right: 30px;
-  margin-left: 20px;
-  background-color: white;
+.consumption-container {
+  position: relative; /* Ensures that the heading can be positioned independently */
 }
 
+/* Independent positioning for the heading */
 .top {
-  text-align: center;
-  margin-top: -270px;
-  margin-bottom: -10px;
-  font-size: 16px;
-  margin-right: 15px;
+  position: absolute;
+  top: -2.7rem; /* Adjust to place the heading where needed */
+  left: 50%;
+  transform: translateX(-50%);
   color: #5f249f;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  z-index: 10; /* Make sure the heading appears above other elements */
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Ensures the heading doesn't overflow */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
 }
 
-.tiles-wrapper {
+.consumption-highlights-wrapper {
   display: flex;
+  flex-wrap: nowrap; /* Ensure items stay side by side */
   justify-content: space-between;
-  flex-wrap: nowrap; /* Ensure elements remain in a row */
+  gap: 20px; /* Spacing between the tiles and chart */
+  margin-top: 5px; /* Ensure the content doesn't overlap with the heading */
 }
 
-.tiles-container {
-  width: 56%; /* Adjust width as needed */
-  padding-right: 0px;
-  margin-left: 10px;
-  margin-top: 50px;
-}
-
-.chart-container {
-  width: 60%; /* Ensure the chart container stays side by side */
-  padding-left: 20px;
+.tiles {
+  flex: 1; /* Allows the tiles section to take available space */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 50px;
-}
-
-.chart-wrapper {
-  width: 100%;
-  height: 300px; /* Adjust the height for the chart */
+  gap: 10px; /* Space between individual tiles */
 }
 
 .tile {
-  font-size: 14px;
+  height: 5vh;
+  width: 100%;
   display: flex;
+  margin-left: -0.8rem;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 12px;
-  height: 15px;
+  padding: 0.7rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    background-color: #5f249f;
-    cursor: pointer;
-    .tilename,
-    .price {
-      color: white;
-    }
-  }
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.tile:hover {
+  background-color: #5f249f;
+  transform: translateY(-3px);
+  color: white;
 }
 
 .tilename {
-  font-size: 12px;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  font-size: 11px;
+  font-size: 0.9rem;
+  position: relative;
+  top: 0.4rem;
+  white-space: nowrap;
 }
 
 .price {
   color: orange;
   font-weight: bold;
+  margin-top: 0.4rem;
+  font-size: 0.9rem !important;
 }
 
-.chart-title {
+.tag-compliance {
+  flex: 0 1 35%; /* Allows the chart section to shrink but stay at least 35% width */
+  display: flex;
+  margin-top: -10px;
+   margin-left: -1.4rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px; /* Ensures the chart has enough space */
+  box-sizing: border-box; /* Includes padding and border in element's total width and height */
+  overflow: hidden; /* Prevents content from overflowing */
+}
+
+.tag-compliance h4 {
+  margin: 0 0 10px; /* Space below the heading */
+  top: 1rem;
+  position: relative;
   font-size: 14px;
-  text-align: center;
+  color: #5f249f;
+  margin-left: -1rem;
 }
 
-@media (max-width: 768px) {
-  .tiles-wrapper {
-    flex-direction: row;
-    justify-content: space-between; /* Keep side-by-side on smaller screens */
+@media (max-width: 1024px) {
+  .consumption-highlights-wrapper {
+    flex-direction: column; /* Stack items vertically on smaller screens */
+    align-items: stretch; /* Ensure full-width alignment */
   }
 
-  .tiles-container, .chart-container {
-    width: 48%; /* Adjust the width for smaller screens */
+  .tiles, .tag-compliance {
+    width: 100%; /* Make both sections full width on small screens */
+    margin-bottom: 20px; /* Space between sections */
+  }
+}
+
+@media (max-width: 990px) {
+  .tile {
+    width: 50%; /* Reduce width to 80%, adjust as needed */
+    margin-left: -0.8rem;
+    height: 4vh;
+    margin-top: -0.3rem;
+  }
+  .price{
+   font-size: 0.8rem;
   }
 
-  .chart-wrapper {
-    height: 250px; /* Reduce height on smaller screens */
+  .tag-compliance{
+    margin-top: -12.5rem;
+    margin-left: 5rem;
   }
+}
+
+@media (max-width:464px){
+  .tag-compliance{
+    margin-left: 6rem !important;
+  }
+}
+
+@media (max-width: 600px){
+  .tag-compliance{
+    margin-left: 8rem;
+  }
+}
+
+@media (max-width :376px){
+  .tag-compliance{
+    margin-left: 5rem !important;
+  }
+  .tilename{
+    margin-top: -0.6rem;
+    margin-left: -0.8rem;
+  }
+  .price{
+    font-size: 0.7rem !important;
+    margin-top: 0.6rem;
+  }
+}
+
+ @media (max-width :976px)
+ {
+  .tilename{
+    margin-top: -0.4rem !important;
+    margin-left: -0.6rem;
+  }
+  .price{
+    font-size: 0.7rem !important;
+    margin-top: 0.2rem;
+  }
+  .tag-compliance{
+    margin-top: -13rem;
+    position: relative;
+  }
+
+  .tag-compliance h4{
+    font-size: 0.7rem !important;
+    top: 1.5rem;
+    position: relative;
+  }
+ }
+
+ @media screen and (min-width: 991px) {
+  .tag-compliance {
+    margin-top: -1rem; /* Move the tag compliance down */
+  }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1024px) {
+  .tile {
+    width: 50%; /* Reduce width to 80%, adjust as needed */
+    margin-left: -0.8rem;
+    height: 4vh;
+    margin-top: -0.3rem;
+  }
+  .price{
+    font-size: 0.8rem;
+   }
+
+   .tag-compliance h4{
+    position: relative;
+    top: 0.5rem;
+   }
+ 
+   .tag-compliance{
+     margin-top: -13rem;
+     margin-left: 5rem;
+   }
 }

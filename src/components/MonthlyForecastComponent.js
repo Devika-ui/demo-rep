@@ -46,17 +46,10 @@ const MonthlyForecastComponent = () => {
     }
     return (
       <div className="right">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            width: "90%",
-          }}
-        >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", width: "90%" }}>
           {imageSrc && (
-            <span className="icon">
-              <img src={imageSrc} alt={altText} />
+            <span className="icon" style={{ marginLeft: "8px" }}>
+              <img src={imageSrc} alt={altText} style={{ width: "27px", height: "20px" }} />
             </span>
           )}
           {percentageIncrease !== null ? (
@@ -78,11 +71,7 @@ const MonthlyForecastComponent = () => {
       <div className="content-wrapper">
         <div className="container-1">
           <div className="number">
-            {totalCost !== null ? (
-              <strong>${totalCost.toFixed(2)}</strong>
-            ) : (
-              <strong>Loading...</strong>
-            )}
+            {totalCost !== null ? <strong>${totalCost.toFixed(2)}</strong> : <strong>Loading...</strong>}
           </div>
         </div>
         <div className="container-2">

@@ -1,110 +1,155 @@
-.recommendations-container {
-  width: 350px;
-  height: 365px;
+.heading {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 0px;
+  text-align: center;
+  color: #5f249f;
+  position: relative;
+  top: -2.4rem; /* Pull the heading above the box */
+}
+.top-part {
+  height: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px "rgba(0, 0, 0, 0.1)"; // Updated border color
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.subheading {
+  margin-bottom: 0px;
+  margin-top: -10px;
+  padding-top: -10px;
+  padding-bottom: 0px;
+  font-size: 0.8rem;
+  position: relative;
+  top: -10px
+}
+.tile1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // margin-bottom: 10px;
+  width: 90%;
+  height: 5.5vh; /* Set desired height */
+  margin: 0.1rem;
+  margin-left: 1rem;
+  font-size: 12px;
+}
+.titlename {
+  font-size: 0.7rem;
+  border: 1px solid #ccc;
+  height: 3vh !important;
+  width: 100%; /* Set desired height */
+  margin-left: -19px;
+  margin-right: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  flex: 1;
+  color: #5f249f;
+  font-weight: bold; 
+}
+
+.tile1:hover {
+  background-color: white;
+  transform: translateY(-3px);
+  color: #5f249f;
+}
+
+
+// .content:hover {
+//   display: flex;
+//   flex-direction: column;
+//   // align-items: flex-end;
+// }
+
+.content {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); // Enhanced box shadow
-  overflow: hidden;
-  font-family: sans-serif;
-  display: inline-block;
-  margin-right: 5px;
-  background-color: white;
-  padding: 20px;
-  padding-top: 5px;
+  height: 6.5vh !important;
+  width: 40% !important;
+  text-align: center;
+  margin-right: -1.4rem;
+}
+.price {
+  color: orange;
+  font-weight: bold;
+}
+.savings {
+  color: #5f249f;
+  font-weight: bold;
+}
 
-  .top-part {
-    height: 8%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px "rgba(0, 0, 0, 0.1)"; // Updated border color
+.total-savings {
+  // height: 0.1vh;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Ensure vertical alignment */
+}
 
-    h2 {
-      margin: 0;
-      font-size: 16px;
-    }
-  }
+.total-savings-text {
+  color: #5f249f;
+  text-align: left; /* Align text to the left */
+  font-size: 14px;
+}
 
-  .divider {
-    width: 120%;
-    height: 2px;
-    background-color: rgba(152, 152, 152, 0.5764705882);
-    margin-left: -10%;
-  }
+.total-savings-amount {
+  color: orange;
+}
 
-  .subheading {
-    margin-bottom: 0px;
-    margin-top: -10px;
-    padding-top: -10px;
-    padding-bottom: 0px;
-    font-size: 14px;
+@media (max-width: 599px)
+{
+  .total-savings-text,.total-savings-amount{
+    margin-top: 1rem !important;
   }
-  .tile1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    height: 15px; /* Set desired height */
-    margin: 10px;
-    margin-left: 0px;
-    margin-right: 0px;
-    padding: 10px;
-    font-size: 12px;
-  }
-  .titlename {
-    font-size: 14x;
-    border: 1px solid #ccc;
-    height: 15px;
-    width: 200px; /* Set desired height */
-    margin: 10px;
-    margin-left: -19px;
-    margin-right: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-    flex: 1;
-    color: #5f249f;
-    font-weight: bold;
-  }
+}
 
-  // .content:hover {
-  //   display: flex;
-  //   flex-direction: column;
-  //   align-items: flex-end;
-  // }
+@media (max-width: 998px)
+{
+  .total-savings-text ,.total-savings-amount{
+    margin-top: 0.1rem
+  }
+}
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    height: 37px;
-    width: 140px;
-    text-align: center;
-    margin-right: -22px;
+@media (max-width: 1000px)
+{
+  .total-savings{
+    margin-top: -1rem !important;
   }
-  .price {
-    color: orange;
-    font-weight: bold;
+}
+ 
+@media (max-width : 668px)
+{
+  .content{
+    height: 8.5vh !important;
   }
-  .savings {
-    color: #5f249f;
-    font-weight: bold;
-  }
-  .title1 {
-    text-align: center;
-    margin-top: 0px;
-    margin-bottom: 5px;
-    font-size: 16px;
-    margin-left: 15px;
-    color: #5f249f;
+  .savings{
+    white-space: nowrap;
   }
 
-  // &:hover {
-  //   transform: translateY(-3px); // Add a subtle lift effect on hover
-  //   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); // Enhanced box shadow on hover
-  // }
+  .total-savings-amount,.total-savings-text{
+    margin-top: 0.1rem;
+    font-size: 0.8rem;
+  }
+  
+  .tile1{
+    height: 4.8vh;
+  }
+   .titlename, .content{
+    font-size: 0.6rem !important;
+   }
 }
