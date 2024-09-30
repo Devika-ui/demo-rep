@@ -43,7 +43,7 @@ const Dashboard = () => {
         align="center" 
         sx={{ 
           color: '#5f249f', 
-          marginTop: '0.0rem', // Adjust this as needed
+          marginTop: '-1rem', // Adjust this as needed
           fontWeight: 'bold'
         }}
       >
