@@ -150,11 +150,19 @@
 @media (max-width: 998px)
 {
   .total-savings-text ,.total-savings-amount{
-    margin-top: 1rem
+    margin-top: 1rem;
+    font-size: 0.9rem;
   }
-  .savings{
+  .savings,.titlename{
     font-size: 0.7rem;
   }
+  .subheading{
+    margin-top: -1.5rem;
+  }
+  .content{
+    height: 8vh;
+  }
+
 }
 
 @media (max-width: 1000px)

@@ -60,7 +60,7 @@ const CustomProgressBar = ({ title, percentage, gradientColor }) => {
               {/* Increased font size */}
               {percentage}%
             </div>
-            <div style={{ fontSize: "14px", color: "grey",marginTop:"-8px" }}>
+            <div style={{ fontSize: "14px", color: "grey",marginTop:"-14px" }}>
               {" "}
               {/* Increased font size */}
               Completed
