@@ -25,7 +25,7 @@
   margin-top: -10px;
   padding-top: -10px;
   padding-bottom: 0px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   position: relative;
   top: -10px
 }
@@ -41,9 +41,9 @@
   font-size: 12px;
 }
 .titlename {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   border: 1px solid #ccc;
-  height: 3vh !important;
+  height: 3vh;
   width: 100%; /* Set desired height */
   margin-left: -19px;
   margin-right: 5px;
@@ -74,11 +74,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  height: 6.5vh !important;
-  width: 40% !important;
+  height: 6.5vh;
+  width: 40%;
   text-align: center;
   margin-right: -1.4rem;
 }
@@ -93,7 +93,7 @@
 
 .total-savings {
   // height: 0.1vh;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: bold;
   margin-top: 10px;
   display: flex;
@@ -104,7 +104,7 @@
 .total-savings-text {
   color: #5f249f;
   text-align: left; /* Align text to the left */
-  font-size: 14px;
+  font-size: 0.9rem;
 }
 
 .total-savings-amount {
@@ -118,38 +118,74 @@
   }
 }
 
+@media (min-width: 667px) and (max-width:668px)
+{
+  .content{
+    height: 8.5vh;
+  }
+  .savings{
+    white-space: nowrap;
+  }
+
+  .total-savings-amount,.total-savings-text,.price{
+    margin-top: 0rem;
+    font-size: 0.9rem;
+  }
+  .price{
+    font-size: 0.8rem !important;
+  }
+  .tile1{
+   height: 5vh;
+   margin-bottom: 5px;
+  }
+  .subheading{
+    font-size: 0.8rem;
+    margin-top: -1.5rem;
+  }
+   .titlename{
+    font-size: 0.7rem;
+   }
+}
+
 @media (max-width: 998px)
 {
   .total-savings-text ,.total-savings-amount{
-    margin-top: 0.1rem
+    margin-top: 1rem
+  }
+  .savings{
+    font-size: 0.7rem;
   }
 }
 
 @media (max-width: 1000px)
 {
   .total-savings{
-    margin-top: -1rem !important;
+    margin-top: -2rem;
   }
 }
- 
-@media (max-width : 668px)
-{
+@media(max-width:400px){
   .content{
-    height: 8.5vh !important;
+    height: 6vh !important;
   }
-  .savings{
-    white-space: nowrap;
+  .tiles{
+    margin-top: 1rem;
   }
+  .content{
+    font-size: 0.74rem !important;
+}
+}
+ 
+@media (min-width :768px) and (max-width:768px){
+  .content{
+    height: 5vh;
+  }
+  .price{
+    font-size: 0.9rem !important;
+  }
+}
 
-  .total-savings-amount,.total-savings-text{
-    margin-top: 0.1rem;
-    font-size: 0.8rem;
+@media (min-width:1600px){
+  .content{
+    height: 5.2vh;
   }
-  
-  .tile1{
-    height: 4.8vh;
-  }
-   .titlename, .content{
-    font-size: 0.6rem !important;
-   }
 }

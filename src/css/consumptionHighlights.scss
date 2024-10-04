@@ -62,7 +62,7 @@
   color: orange;
   font-weight: bold;
   margin-top: 0.4rem;
-  font-size: 0.9rem !important;
+  font-size: 0.9rem;
 }
 
 .tag-compliance {
@@ -103,15 +103,20 @@
   .tile {
     width: 50%; /* Reduce width to 80%, adjust as needed */
     margin-left: -0.8rem;
-    height: 4vh;
+    height: 5vh;
     margin-top: -0.3rem;
   }
   .price{
-   font-size: 0.8rem;
+   font-size: 0.7rem;
+   margin-right: -0.6rem;
   }
-
+  .tilename{
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-left: -0.6rem;
+  }
   .tag-compliance{
-    margin-top: -12.5rem;
+    margin-top: -13rem;
     margin-left: 5rem;
   }
 }
@@ -122,11 +127,6 @@
   }
 }
 
-@media (max-width: 600px){
-  .tag-compliance{
-    margin-left: 8rem;
-  }
-}
 
 @media (max-width :376px){
   .tag-compliance{
@@ -141,15 +141,21 @@
     margin-top: 0.6rem;
   }
 }
-
+@media (min-width: 667px) and (max-width:668px){
+  .tile{
+    height: 4vh;
+  }
+}
  @media (max-width :976px)
  {
   .tilename{
     margin-top: -0.4rem !important;
     margin-left: -0.6rem;
+    font-size: 0.68rem;
+    font-weight: bold;
   }
   .price{
-    font-size: 0.7rem !important;
+    font-size: 0.6rem;
     margin-top: 0.2rem;
   }
   .tag-compliance{
@@ -163,6 +169,18 @@
     position: relative;
   }
  }
+ @media (max-width: 600px){
+  .tag-compliance{
+    margin-left: 5rem;
+  }
+  .tilename{
+    font-size: 0.9rem;
+    font-weight: lighter;
+  }
+  .price{
+    font-size: 0.9rem;
+  }
+}
 
  @media screen and (min-width: 991px) {
   .tag-compliance {
@@ -178,7 +196,7 @@
     margin-top: -0.3rem;
   }
   .price{
-    font-size: 0.8rem;
+    font-size: 0.6rem;
    }
 
    .tag-compliance h4{
@@ -189,5 +207,18 @@
    .tag-compliance{
      margin-top: -13rem;
      margin-left: 5rem;
-   }
+    }
+    .tilename{
+      margin-left: -0.5rem;
+      font-size: 0.75rem;
+    }
+}
+
+@media screen and (min-width:989px) and (max-width:989px){
+  .tilename{
+    font-size: 0.6rem;
+  }
+  .price{
+    font-size: 0.4rem;
+  }
 }

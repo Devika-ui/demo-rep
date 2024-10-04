@@ -1,4 +1,3 @@
-// CustomProgressBar.js
 import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -21,12 +20,12 @@ const CustomProgressBar = ({ title, percentage, gradientColor }) => {
         >
           {title}
         </div>
-        <div
+        <div className="progress-bar-graph"
           style={{
-            position: "relative",
-            width: "150px", // Increased width
-            height: "75px", // Increased height
-            overflow: "hidden",
+            // position: "relative",
+            // width: "150px", // Increased width
+            // height: "75px", // Increased height
+            // overflow: "hidden",
           }}
         >
           <CircularProgressbar
@@ -56,12 +55,12 @@ const CustomProgressBar = ({ title, percentage, gradientColor }) => {
               textAlign: "center",
             }}
           >
-            <div style={{ fontSize: "22px", fontWeight: "bold" }}>
+            <div className="bar-text">
               {" "}
               {/* Increased font size */}
               {percentage}%
             </div>
-            <div style={{ fontSize: "14px", color: "grey" }}>
+            <div style={{ fontSize: "14px", color: "grey",marginTop:"-8px" }}>
               {" "}
               {/* Increased font size */}
               Completed

@@ -796,7 +796,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 899px) {
   .kpi-heading{
     margin-top: 1.4rem;
   }
@@ -811,7 +811,7 @@
     height: 39vh !important;
   }
   .kpi-bottom-container{
-     margin-left: -2rem;
+     margin-left: -0.1rem;
      gap: 1px;
   }
 .kpi-bottom-container {
@@ -829,10 +829,14 @@
    }
 }
 
-@media screen  and (max-width: 1024px){
+@media  (min-width: 1024px) and (max-width:1024px){
   .kpi-container{
-    height: 33.2vh !important;
+    height: 34.7vh !important;
   }
+ .kpi-bottom-container{
+  gap: 5px;
+  margin-left: -1.5rem !important;
+ }
 }
 
 @media(max-width:668px){
@@ -840,10 +844,15 @@
      height: 38.4vh !important;
   }
 }
-  
+ 
+@media screen  and (min-height: 769px){
+  .kpi-container{
+    height: 33vh !important;
+  }
+}
 
-// @media(max-width :1629px){
-//   .kpi-graph{
-//      width: 120%;
-//   }
-// }
+@media (min-width:899px) and (max-width:990px){
+  .kpi-container{
+    height: 37.7vh !important;
+  }
+}
