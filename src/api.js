@@ -454,6 +454,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
