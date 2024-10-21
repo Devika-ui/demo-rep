@@ -35,7 +35,7 @@ const RecommendationsComponent = () => {
             <div key={index} className="tile1">
               <div className="titlename">{rec.name}</div>
               <div className="content">
-                <div className="price">${rec.value.toFixed(2)}</div>
+                <div className="price1">${rec.value.toFixed(2)}</div>
                 <div className="savings">Savings Potential</div>
               </div>
             </div>

@@ -23,6 +23,8 @@ const PieChartContainer = ({
   pieChartHeight2 = 250,
   titleStyle1 = {},
   titleStyle2 = {},
+  legendWrapperStyle1 = {},
+  legendWrapperStyle2 = {},
 }) => {
   const [activeIndex1, setActiveIndex1] = useState(null);
   const [activeIndex2, setActiveIndex2] = useState(null);
@@ -32,6 +34,20 @@ const PieChartContainer = ({
 
   const onPieEnter2 = (_, index) => setActiveIndex2(index);
   const onPieLeave2 = () => setActiveIndex2(null);
+
+  const getLegendFontSize = () => {
+    const width = window.innerWidth;
+    if (width <= 600) {
+      return "8px";
+    } else if (width < 990) {
+      return "6px";
+    }
+    return "10px";
+  };
+
+  const legendFontSize1 = getLegendFontSize();
+  const legendFontSize2 = getLegendFontSize();
+
 
   const renderActiveShape = (props) => {
     const {
@@ -64,25 +80,41 @@ const PieChartContainer = ({
     return value;
   };
 
+  const getResponsiveFontSize = () => {
+    const width = window.innerWidth;
+    if (width <= 600) {
+      return "10px"; // Smaller screens
+    } else if (width < 990) {
+      return "8px";  // Medium screens
+    }
+    return "12px";   // Larger screens
+  };
+  
   const renderLabel = (entry) => {
-    const { cx, cy, midAngle, innerRadius, outerRadius, value } = entry;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const { cx, cy, midAngle, outerRadius, value } = entry;
+  
+    // Adjust radius and move labels towards the outer part of the chart
+    const radius = outerRadius * 0.57; // Move the label a bit further outwards
     const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
     const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
-
+  
+    // Get responsive font size
+    const fontSize = getResponsiveFontSize();
+  
     return (
       <text
         x={x}
         y={y}
         fill="white"
-        textAnchor="middle"
+        textAnchor={x > cx ? "start" : "end"} // Align labels to prevent overflow
         dominantBaseline="central"
-        style={{ fontSize: "12px" }}
+        style={{ fontSize }} // Apply the responsive font size
       >
         {formatValue(value)}
       </text>
     );
   };
+  
 
   return (
     <Paper className="cmpPieChart_container" style={containerStyle}>
@@ -118,7 +150,7 @@ const PieChartContainer = ({
                 align="center"
                 verticalAlign="bottom"
                 layout="horizontal"
-                wrapperStyle={{ bottom: 5, fontSize: "12px" }}
+                wrapperStyle={{ fontSize: legendFontSize1}}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -128,7 +160,7 @@ const PieChartContainer = ({
         <Typography
           variant="subtitle1"
           gutterBottom
-          className="cmpPieChart_title"
+          className="cmpPieChart_title1"
           style={titleStyle2}
         >
           {title2}
@@ -156,7 +188,7 @@ const PieChartContainer = ({
                 align="center"
                 verticalAlign="bottom"
                 layout="horizontal"
-                wrapperStyle={{ bottom: 0, fontSize: "12px" }}
+                wrapperStyle={{ fontSize: legendFontSize2 }}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -165,5 +197,8 @@ const PieChartContainer = ({
     </Paper>
   );
 };
-
+PieChartContainer.defaultProps = {
+  legendWrapperStyle1: { bottom: 5, fontSize: "12px" }, 
+  legendWrapperStyle2: { bottom: 5, fontSize: "12px" }, // Default style for legend 2
+};
 export default PieChartContainer;

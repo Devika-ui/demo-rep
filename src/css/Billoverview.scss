@@ -1,0 +1,193 @@
+@media (max-width: 680px) {
+    .chart-container {
+      flex-direction: column; /* Stack the charts vertically */
+    //   align-items: center;
+    }
+    
+    .cmpPieChart_container {
+      width: 103% !important; /* Ensure full width for smaller screens */
+      margin-left: 0; /* Remove any left margin */
+      margin-right: 10px; /* Remove any right margin */
+      margin-top: 0; /* Optional: Adjust margins for spacing */
+    }
+
+    .cmpBarChart_container {
+        width: 94.3%; /* Ensure full width for smaller screens */
+        margin-left: 2.4rem; /* Remove any left margin */
+        margin-right: 0; /* Remove any right margin */
+        margin-top: -25px; /* Optional: Adjust margins for spacing */
+      }
+    }
+  
+    @media (min-width:681px) and (max-width:990px){
+        .cmpPieChart_title{
+          margin-left: 3.2rem !important;
+          font-size: 0.8rem !important;
+        }
+        .cmpPieChart_title1{
+          margin-left: 4rem !important;
+          font-size: 0.8rem !important;
+        }
+        }
+
+  @media (min-width:374px) and (max-width:790px){
+   .cmpPieChart_title,.cmpPieChart_title1{
+    margin-left: 1.8rem !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+@media (min-width:370px) and (max-width:550px){
+    .cmpPieChart_container{
+        width: 105.3% !important;
+    }
+    .cmpPieChart_chart {
+        width: 120% !important;
+        margin-left: -1rem;
+    }
+    .cmpPieChart_title1,.cmpPieChart_title{
+        font-size: 0.97rem !important;
+        // margin-top: 1rem !important;
+        // margin-left: -2rem !important;
+    }
+}
+
+@media (min-width:500px) and (max-width:680px){
+    .cmpPieChart_title{
+        margin-left: 5rem !important;
+    }
+    .cmpPieChart_title1{
+        margin-left: 5.8rem !important;
+    }
+}
+
+@media (min-width:767px) and (max-width:768px){
+    .cmpPieChart_container,.cmpBarChart_container{
+        height: 35vh !important;
+    }
+    .cmpPieChart_chart{
+        width: 125% !important;
+        margin-left: -1.3rem;
+    }
+}
+
+@media (min-width:819px) and (max-width:820px){
+    .cmpPieChart_container,.cmpBarChart_container{
+        height: 30vh !important;
+    }
+    .cmpPieChart_chart{
+        width: 120% !important;
+        margin-left: -1.5rem;
+    }
+    .cmpPieChart_title,.cmpPieChart_title1{
+        margin-left: 1.5rem !important;
+    }
+}
+
+@media (min-width:1023px) and (max-width:1024px){
+    .cmpPieChart_container,.cmpBarChart_container{
+        height: 45vh !important;
+    }
+    .cmpPieChart_chart{
+        width: 124% !important;
+        margin-left: -1.5rem;
+    }
+    .cmpPieChart_title,.cmpPieChart_title1{
+        margin-left: 3.4rem !important;
+    }
+}
+
+@media(min-width:440px) and (max-width:550px){
+    .cmpPieChart_container{
+        width: 104% !important;
+    }
+}
+
+@media (min-width:666px) and (max-width:668px){
+    .cmpPieChart_chart{
+        // width: 170% !important;
+        height: 110%;
+        margin-left: -1rem !important;
+        margin-top: -0.8rem !important;
+    }
+    .cmpPieChart_title,.cmpPieChart_title1{
+        margin-top: -0.8rem !important;
+    }
+}
+
+@media (min-width:413px) and (max-width:414px){
+    .cmpPieChart_chart{
+        width: 125% !important;
+        margin-left: -1.2rem !important;
+    }
+    .cmpPieChart_container{
+        height: 40vh !important;
+    }
+    .cmpPieChart_title1{
+        margin-left: 1.4rem !important;
+    }
+}
+
+@media (min-width:895px) and (max-width:897px){
+    .cmpPieChart_chart{
+        width: 110% !important;
+        // height: 110% !important;
+    }
+    .cmpPieChart_container,.cmpBarChart_container{
+        height: 60vh !important;
+    }
+}
+
+@media (min-width:843px) and (max-width:845px){
+    .cmpPieChart_container,.cmpBarChart_container{
+        height: 60vh !important;
+    }
+    .cmpPieChart_title,.cmpPieChart_title1{
+        margin-left: 3rem !important;
+    }
+}
+
+@media (min-width:931px) and (max-width:932px){
+    .cmpPieChart_chart{
+        width: 110% !important;
+        // height: 110% !important;
+    }
+    .cmpPieChart_container,.cmpBarChart_container{
+        height: 60vh !important;
+    }
+}
+
+@media (min-width:374px) and (max-width:376px){
+    .cmpPieChart_chart{
+        width: 116% !important;
+        margin-left: -0.6rem !important;
+    }
+    .cmpPieChart_title{
+        margin-left: 1rem !important;
+    }
+}
+
+@media(min-width:389px) and (max-width:390px){
+    .cmpPieChart_chart{
+        width: 110% !important;
+    }
+    .cmpPieChart_container,.cmpBarChart_container{
+        height: 40vh !important;
+    }
+}
+
+@media(min-width:429px) and (max-width:430px){
+    .cmpPieChart_chart{
+        width: 125% !important;
+        margin-left: -1.4rem !important ;
+    }
+    .cmpPieChart_container,.cmpBarChart_container{
+        height: 40vh !important;
+    }
+}
+
+@media (min-width:1500px){
+    .cmpPieChart_title,.cmpPieChart_title1{
+        margin-left: 9.8rem !important;
+    }
+}

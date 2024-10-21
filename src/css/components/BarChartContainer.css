@@ -1,24 +1,115 @@
 .cmpBarChart_container {
-  width: 95%;
-  max-width: 700px;
-  height: 370px;
-  margin: 32px auto;
-  padding: 24px;
+  width: 100%;
+  max-width: 100%;
   background-color: white;
+  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-right: 15px;
-  padding-right: 0px;
-  padding-left: 40px;
-  padding-top: 4px;
-  border-radius: 5px;
   border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  height: 47.5vh;/* Remove fixed height */
 }
+
 .cmpBarChart_heading {
   font-family: Inter, sans-serif !important;
-  font-size: 17px !important;
+  font-size: 1rem !important;
   font-weight: 700 !important;
   color: #5f249f;
-  margin-left: 10px !important;
-  margin-bottom: 16px;
-  margin-top: 12px !important;
+  white-space: nowrap; /* Prevent heading from breaking to a new line */
+  margin-left: 2rem !important;
+  margin-top: 0.5rem !important;
+  text-align: center; /* Center heading on small screens */
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 10px; /* Reduced padding for smaller screens */
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width:374px) and (max-width:990px){
+  .cmpBarChart_heading{
+    font-size: 0.8rem !important;
+    margin-left: 0.4rem !important;
   }
+}
+
+@media(min-width:600px) and (max-width:660px){
+  .cmpBarChart_container{
+    width:93.5% !important;
+  }
+}
+
+@media(min-width:539px) and (max-width:600px){
+  .cmpBarChart_container{
+    width:92.7% !important;
+  }
+}
+@media(min-width:500px) and (max-width:538px){
+  .cmpBarChart_container{
+    width: 92.5% !important;
+  }
+}
+
+@media(min-width:430px) and (max-width:499px){
+  .cmpBarChart_container{
+    width: 91.6% !important;
+  }
+}
+
+@media(min-width:400px) and (max-width:430px){
+  .cmpBarChart_container{
+    width: 90.2% !important;
+  }
+}
+
+@media(min-width:376px) and (max-width:400px){
+  .cmpBarChart_container{
+    width: 89.6% !important;
+  }
+}
+
+@media(min-width:374px) and (max-width:376px){
+  .cmpBarChart_container{
+    width: 88.6% !important;
+  }
+}
+
+/*  */
+/* @media (max-width: 790px) {
+  .cmpBarChart_container {
+    margin-left: 0 !important;
+    width: 100%;
+    padding: 0;
+  }
+
+  .cmpBarChart_heading {
+    margin-left: 0 !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .cmpBarChart_container {
+    width: 100% !important;
+  }
+
+  .cmpBarChart_heading {
+    margin-left: 0 !important;
+    font-size: 0.85rem !important;
+  }
+
+  .chart-wrapper {
+    padding: 0; /* Remove padding for small screens */
+  
+
+/* @media(min-width:500px) and (max-width:690px){
+  .cmpBarChart_container{
+       width: 91%;
+       margin-left: 3rem;
+  }
+} */
