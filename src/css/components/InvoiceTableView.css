@@ -11,13 +11,16 @@
   overflow-x: hidden;
   overflow-y: hidden;
 }
-.cmpInvTv_header {
+
+.headerClass,
+.headerClass-1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
   margin-top: -15px;
 }
+
 .cmpInvTv_title {
   font-size: 1.2rem;
   color: #5f249f;
@@ -25,30 +28,24 @@
   padding-right: 10px;
   padding-bottom: 20px;
 }
-.cmpInvTv_buttons {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-  align-items: center;
-  left: 20px !important;
-}
-.cmpInvTv_button {
+
+.cmpInvTv_customizeButton {
   font-family: Inter, sans-serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
   color: #63666a !important;
   left: 20px !important;
 }
-.cmpInvTv_dropdown {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
+
+.cmpInvTv_shareButton {
+  left: 20px !important;
 }
-.cmpInvTv_dropdown select {
-  height: 10;
-  width: 50;
-  font-size: 0.9rem;
+
+.cmpInvTv_fullscreenButton {
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  left: 20px !important;
 }
 
 .cmpInvTv_tableCell {
@@ -67,28 +64,27 @@
   text-align: center !important;
   border-bottom: 1px solid black !important;
   border-left: 1px solid black !important;
-  /* border-top: 1px solid Black !important; */
-  /* border-right: 1px solid Black !important; */
   padding: 8px 16px !important;
-
-  /* color: black; */
 }
+
 .cmpInvTv_stickyFirstRow {
   position: sticky !important;
-  top: 40px; /* Adjust based on your header height */
+  top: 40px;
   z-index: 0 !important;
-  background-color: #ffffff; /* Set background color to match table container */
+  background-color: #ffffff;
   border-bottom: 1px solid black !important;
   border-left: 1px solid black !important;
 }
+
 .cmpInvTv_tableContainer {
-  max-height: 300px !important;
+  max-height: 76% !important;
   overflow-y: auto !important;
   overflow-x: auto !important;
   padding-bottom: 18px;
-  border: 1px solid black !important; /* Add border to the table */
+  border: 1px solid black !important;
   border-collapse: collapse;
 }
+
 .cmpInvTv_stickyHeader {
   position: sticky !important;
   top: 0 !important;
@@ -96,12 +92,14 @@
   background-color: #72509b !important;
   border-left: 1px solid black !important;
 }
+
 .sticky {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
 }
+
 .cmpInvTv_tableContainer th {
   border: 1px solid black;
   text-align: center !important;
@@ -109,16 +107,195 @@
   border-bottom: none !important;
   border-top: none !important;
 }
+
 .cmpInvTv_tableHeadCell.cmpInvTv_stickyHeader {
   color: white !important;
 }
-.cmpInvTv_container:fullscreen .cmpInvTv_tableContainer {
-  display: block;
-  height: auto;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
-}
+
 .cmpInvTv_tableContainer th.cmpInvTv_tableHeadCell,
 .cmpInvTv_tableContainer th.cmpInvTv_stickyHeader {
   border-left: 1px solid black !important;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid black;
+  background-color: rgba(0, 0, 0, 0.63);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: none;
+}
+
+.overlay-content {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  width: 80%;
+  height: 82vh;
+  position: relative;
+}
+
+.close-overlay {
+  position: absolute !important;
+  top: -35px !important;
+  right: -8px !important;
+  background-color: red !important;
+  color: white !important;
+  padding: 5px 8px !important;
+  border-radius: 20% !important;
+  cursor: pointer;
+  border: none !important;
+}
+
+.close-overlay:hover {
+  background-color: darkred !important;
+}
+.overlay-mode .cmpInvTv_tableContainer {
+  flex: 1;
+  max-height: 95% !important;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding-bottom: 18px;
+  border: 1px solid black !important;
+  border-collapse: collapse;
+}
+
+/* Responsive adjustments */
+@media (min-width: 1700px) {
+  .cmpInvTv_container {
+    width: 95% !important;
+    height: 45vh !important;
+    margin-left: 2rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .cmpInvTv_container {
+    width: 90% !important;
+  }
+}
+@media (max-width: 990px) {
+  .cmpInvTv_container {
+    width: 89% !important;
+    margin-left: 2rem;
+  }
+  .overlay-mode .cmpInvTv_tableContainer {
+    flex: 1;
+    height: 95% !important;
+  }
+  .overlay-content {
+    margin-top: 2rem;
+    margin-left: 2rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .cmpInvTv_container {
+    width: 87% !important;
+    margin-left: 2.2rem !important;
+    margin-top: 2.3rem;
+    margin-bottom: 0.3rem !important;
+  }
+  .cmpInvTv_tableContainer {
+    height: 62vh !important;
+  }
+  .overlay-mode .cmpInvTv_tableContainer {
+    flex: 1;
+    height: 95% !important;
+  }
+  .overlay-content {
+    margin-top: 1.8rem;
+    margin-left: 1.6rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .cmpInvTv_container {
+    width: 80% !important;
+  }
+  .overlay-mode .cmpInvTv_tableContainer {
+    flex: 1;
+    height: 95% !important;
+  }
+  .overlay-content {
+    width: 75% !important;
+    height: 45vh !important;
+    margin-left: 3rem !important;
+  }
+}
+
+@media (max-width: 850px) {
+  .cmpInvTv_tableContainer {
+    height: 60vh !important;
+  }
+  .overlay-mode .cmpInvTv_tableContainer {
+    flex: 1;
+    height: 95% !important;
+  }
+  .cmpInvTv_container {
+    margin-right: 2.3rem;
+  }
+}
+
+@media (max-width: 431px) {
+  .cmpInvTv_tableContainer {
+    height: 26vh !important;
+  }
+  .cmpInvTv_container {
+    margin-right: 2.5rem;
+    margin-left: 1.5rem;
+  }
+  .overlay-content {
+    margin-left: 1.7rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cmpInvTv_tableCell {
+    font-size: 8px !important;
+    padding: 10px !important;
+  }
+  .cmpInvTv_tableContainer th {
+    font-size: 8px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .cmpInvTv_tableCell {
+    font-size: 7px !important;
+    padding: 10px !important;
+  }
+  .cmpInvTv_tableContainer th {
+    font-size: 7px !important;
+  }
+  .headerClass-1 {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 863px) {
+  .cmpInvTv_tableContainer {
+    height: 60% !important;
+  }
+}
+
+@media (max-width: 855px) {
+  .headerClass {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cmpInvTv_title {
+    margin-bottom: -12px;
+  }
+
+  .cmpInvTv_customizeButton {
+    margin-left: -1.5rem !important;
+    height: 28px;
+  }
 }

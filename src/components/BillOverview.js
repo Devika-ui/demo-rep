@@ -8,8 +8,9 @@ import NavigationBar from "./NavigationBar";
 import ContainerForBillOverview from "./ContainerForBillOverview";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
-import "../css/Billoverview.scss"
- 
+import "../css/Billoverview.scss";
+import "../css/components/BillAllocation.css";
+
 const BillOverview = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [reportType, setReportType] = useState("");
@@ -28,9 +29,9 @@ const BillOverview = () => {
     useState([]);
   const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
   const [legendData, setLegendData] = useState([]);
- 
+
   const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
- 
+
   const additionalFilters = [
     {
       label: "Service Category(s)",
@@ -79,7 +80,7 @@ const BillOverview = () => {
       ],
     },
   ];
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -100,7 +101,7 @@ const BillOverview = () => {
           api.getSavings(),
           api.getNormalizedVariation(),
         ]);
- 
+
         //formatted bill application
         const billAllocationMap = billAllocation.billAllocation.reduce(
           (acc, item) => {
@@ -110,11 +111,11 @@ const BillOverview = () => {
             });
             const yearString = modifiedDate.getFullYear().toString().slice(-2);
             const formattedDate = `${monthString}-${yearString}`;
- 
+
             if (!acc[formattedDate]) {
               acc[formattedDate] = [];
             }
- 
+
             acc[formattedDate].push({
               name: item.tags_AppID_AppName || "null",
               ownerName: item.tags_owner || "null",
@@ -130,12 +131,12 @@ const BillOverview = () => {
                 ? `$${item.totalBill.toFixed(2)}`
                 : "$0.00",
             });
- 
+
             return acc;
           },
           {}
         );
- 
+
         const uniqueModifiedDatesForBillAllocation =
           Object.keys(billAllocationMap);
         const flattenedBillAllocationData =
@@ -162,7 +163,7 @@ const BillOverview = () => {
         });
         const uniqueNames = [...uniqueNamesSet];
         console.log("uniqueNames", uniqueNames);
- 
+
         const invoiceMap = invoiceResponse.invoiceView.reduce((acc, item) => {
           const modifiedDate = new Date(item.modifieddate);
           const monthString = modifiedDate.toLocaleString("en-US", {
@@ -170,11 +171,11 @@ const BillOverview = () => {
           });
           const yearString = modifiedDate.getFullYear().toString().slice(-2);
           const formattedDate = `${monthString}-${yearString}`;
- 
+
           if (!acc[formattedDate]) {
             acc[formattedDate] = [];
           }
- 
+
           acc[formattedDate].push({
             subscriptionName: item.subscriptionName,
             onDemandCost: `$${item.onDemandCost.toFixed(2)}`,
@@ -183,10 +184,10 @@ const BillOverview = () => {
             savings: `$${item.savings.toFixed(2)}`,
             totalBill: `$${item.totalBill.toFixed(2)}`,
           });
- 
+
           return acc;
         }, {});
- 
+
         const uniqueModifiedDatesForInvoice = Object.keys(invoiceMap);
         const flattenedInvoiceData = uniqueModifiedDatesForInvoice.reduce(
           (acc, date, dateIndex) => {
@@ -200,7 +201,7 @@ const BillOverview = () => {
           },
           []
         );
- 
+
         console.log("TotalBillVsSimulatedPaygo:", totalBillVsSimulatedPaygo);
         console.log("topApplicationData:", topApplicationData);
         const formattedChartData = totalBillVsSimulatedPaygo.costsPAYGO.map(
@@ -219,7 +220,7 @@ const BillOverview = () => {
             };
           }
         );
- 
+
         const formattedTrendData = totalBillVsSimulatedPaygo.simulatedpaygo.map(
           (item) => ({
             Date: item.Date.slice(0, 10), // Format the date to "YYYY-MM-DD"
@@ -243,7 +244,7 @@ const BillOverview = () => {
             color: colorPalette[index % colorPalette.length],
           })
         );
- 
+
         const totalSavings = savingsData.actualCost.toFixed(2);
         const simulatedBill = savingsData.simulatedCost.toFixed(2);
         const savings = savingsData.savings.toFixed(2);
@@ -255,7 +256,7 @@ const BillOverview = () => {
             : "0.00";
         const normalizedVariation =
           normalizedVariationData.Normalized_Variation_MoM || "0.00";
- 
+
         const dataSet1 = [
           { number: `$${totalSavings}`, text: "Total Bill" },
           { number: `$${simulatedBill}`, text: "Simulated Bill" },
@@ -270,7 +271,7 @@ const BillOverview = () => {
           },
           { number: `${normalizedVariation}%`, text: "Normalized Variation" },
         ];
- 
+
         setBillAllocationData(flattenedBillAllocationData);
         setFilteredBillAllocationData(flattenedBillAllocationData);
         setChartData(formattedChartData);
@@ -283,7 +284,7 @@ const BillOverview = () => {
         setHeaderLabelsForInvoice(uniqueModifiedDatesForInvoice);
         setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
         setUniqueBillAllocationData(uniqueNames);
- 
+
         const legendData = [
           {
             dataKey: "costsPAYGO",
@@ -309,10 +310,10 @@ const BillOverview = () => {
         console.error("Error fetching data:", error);
       }
     };
- 
+
     fetchData();
   }, []);
- 
+
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
     if (value === "Azure") {
@@ -321,11 +322,11 @@ const BillOverview = () => {
       setShowStackBars(true); // Show StackBars
     }
   };
- 
+
   const handleReportTypeChange = (event) => {
     const selectedReportType = event.target.value;
     setReportType(selectedReportType);
- 
+
     if (selectedReportType) {
       const filteredData = billAllocationData.filter((item) => {
         return Object.keys(item).some(
@@ -337,7 +338,7 @@ const BillOverview = () => {
       setFilteredBillAllocationData(billAllocationData);
     }
   };
- 
+
   const columns = [
     { key: "subscriptionName", label: "Subscription/Account Name" },
     { key: "onDemandCost", label: "On Demand Cost" },
@@ -346,7 +347,7 @@ const BillOverview = () => {
     { key: "savings", label: "Savings" },
     { key: "totalBill", label: "Total Bill" },
   ];
- 
+
   const columns1 = [
     { key: "name", label: "Application Name" },
     { key: "ownerName", label: "Owner Name" },
@@ -355,7 +356,7 @@ const BillOverview = () => {
     { key: "savings", label: "Savings" },
     { key: "totalBill", label: "Total Bill" },
   ];
- 
+
   const pieChartContainerStyle = {
     display: "flex",
     justifyContent: "space-around",
@@ -366,21 +367,21 @@ const BillOverview = () => {
     height: "47.3vh",
     // Adjusted margin to create space between components
   };
- 
+
   const pieChartStyle = {
     width: "100%",
     paddingTop: "25px",
     //  marginBottom: "160px", // Adjust individual chart width
     marginTop: "-1rem",
   };
- 
+
   const titleStyle1 = {
     fontSize: "1rem",
     marginLeft: "4.4rem",
     position: "absolute", // Changed to absolute positioning
-    marginTop: "-0.4rem"
+    marginTop: "-0.4rem",
   };
- 
+
   const titleStyle2 = {
     fontSize: "1rem",
     marginTop: "-0.4rem",
@@ -388,7 +389,7 @@ const BillOverview = () => {
     marginLeft: "6.2rem",
     position: "absolute",
   };
- 
+
   return (
     <div>
       <Header onButtonClick={handleButtonClick} />
@@ -404,7 +405,7 @@ const BillOverview = () => {
         additionalFilters={additionalFilters}
       />
       <NavigationBar />
- 
+
       {/* Boxes */}
       <div
         style={{
@@ -416,111 +417,91 @@ const BillOverview = () => {
       >
         <ContainerForBillOverview data={boxData} />
       </div>
- 
-<div
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "20px",
-    marginTop: "-30px",
-    flexWrap: "wrap",
-    // flexDirection: "row", // Default for larger screens
-  }}
-  className="chart-container"
->
-  <div
-    style={{
-      flex: 1,
-      marginLeft: "2.8rem",
-      maxWidth: "100%",
-      boxSizing: "border-box",
-    }}
-  >
-    <PieChartContainer
-      title1="Top 5 Applications"
-      data1={topApplications}
-      title2="Top 5 Services"
-      data2={topServices}
-      containerStyle={pieChartContainerStyle}
-      chartStyle={pieChartStyle}
-      pieChartHeight1={"100%"}
-      pieChartHeight2={"95%"}
-      titleStyle1={titleStyle1}
-      titleStyle2={titleStyle2}
-      legendWrapperStyle1={{ bottom: 5, fontSize: "10px" }}
-      legendWrapperStyle2={{ bottom: 5, fontSize: "10px" }}
-    />
-  </div>
 
-  <div style={{ flex: 1, marginRight: "-0.6rem", marginTop: "1.2rem" }}>
-    <BarChartContainer
-      chartData={chartData}
-      trendData={trendData}
-      showStackBars={showStackBars}
-      title="Total Bill vs. Simulated PAYGO"
-      legendData={legendData}
-    />
-  </div>
-</div>
- 
-      {/* First Row: Invoice View */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "20px",
+          marginTop: "-30px",
+          flexWrap: "wrap",
+          // flexDirection: "row", // Default for larger screens
+        }}
+        className="chart-container"
+      >
+        <div
+          style={{
+            flex: 1,
+            marginLeft: "2.8rem",
+            maxWidth: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <PieChartContainer
+            title1="Top 5 Applications"
+            data1={topApplications}
+            title2="Top 5 Services"
+            data2={topServices}
+            containerStyle={pieChartContainerStyle}
+            chartStyle={pieChartStyle}
+            pieChartHeight1={"100%"}
+            pieChartHeight2={"95%"}
+            titleStyle1={titleStyle1}
+            titleStyle2={titleStyle2}
+            legendWrapperStyle1={{ bottom: 5, fontSize: "10px" }}
+            legendWrapperStyle2={{ bottom: 5, fontSize: "10px" }}
+          />
+        </div>
+
+        <div style={{ flex: 1, marginRight: "-0.6rem", marginTop: "1.2rem" }}>
+          <BarChartContainer
+            chartData={chartData}
+            trendData={trendData}
+            showStackBars={showStackBars}
+            title="Total Bill vs. Simulated PAYGO"
+            legendData={legendData}
+          />
+        </div>
+      </div>
+
+      {/* Second Row: Invoice View */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
           padding: "33px",
+          marginLeft: "-8px",
           width: "100%",
-          marginTop: "-45px",
+          marginTop: "-78px",
         }}
       >
         <InvoiceTableView
           title="Invoice View"
           tableData={invoiceData}
-          tableHeight="348px"
-          tableWidth="90.8%"
+          tableHeight="90%"
+          tableWidth="92%"
           columns={columns}
           headerLabels={headerLabelsForInvoice}
+          headerClass="headerClass-1"
+          overlayHeight="55vh"
         />
       </div>
- 
-      {/* Second Row: Total Bill Allocation */}
+      {/* Third Row: Total Bill Allocation */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
           width: "100%",
           padding: "33px",
-          width: "100%",
-          marginTop: "-97px",
+          marginLeft: "-8px",
+          marginTop: "-95px",
         }}
       >
         <InvoiceTableView
           title="Total Bill Allocation across Application"
           dropdown={
-            <FormControl
-              variant="outlined"
-              style={{
-                minWidth: 170,
-                marginLeft: "-160px",
-                marginRight: "20px",
-                marginTop: "5px",
-                height: "33px",
-                position: "absolute",
-                border: "none",
-              }}
-            >
-              <InputLabel
-                id="report-type-label"
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "13px",
-                  fontWeight: "700",
-                  color: "#63666a",
-                  position: "absolute",
-                  top: "-10px",
-                  left: "-7px",
-                }}
-              >
+            <FormControl variant="outlined" className="formControl">
+              <InputLabel id="report-type-label" className="inputLabel">
                 Group by Application
               </InputLabel>
               <Select
@@ -529,12 +510,7 @@ const BillOverview = () => {
                 value={reportType}
                 onChange={handleReportTypeChange}
                 label="Group by Application"
-                style={{
-                  // width: reportType ? "80%" : "100%",
-                  width: "170px",
-                  height: "100%",
-                  padding: "10px",
-                }}
+                className="selectInput"
                 MenuProps={{
                   PaperProps: {
                     style: {
@@ -545,11 +521,7 @@ const BillOverview = () => {
               >
                 <MenuItem value="">All Applications</MenuItem>
                 {uniqueBillAllocationData.map((name, index) => (
-                  <MenuItem
-                    key={index}
-                    value={name}
-                    style={{ whiteSpace: "normal" }}
-                  >
+                  <MenuItem key={index} value={name} className="menuItem">
                     {name === "null" ? "null" : name}
                   </MenuItem>
                 ))}
@@ -558,17 +530,14 @@ const BillOverview = () => {
           }
           tableData={filteredBillAllocationData}
           tableHeight="390px"
-          tableWidth="90.8%"
+          tableWidth="92%"
           columns={columns1}
           headerLabels={headerLabelsForBillAllocation}
+          headerClass="headerClass"
         />
       </div>
- 
-      {/* Third Row: Pie Chart & Bar Chart */}
     </div>
   );
 };
- 
+
 export default BillOverview;
- 
- 

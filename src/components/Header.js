@@ -4,37 +4,37 @@ import OpticLogo from "../images/OpticsFinopslogo.png";
 import DXCLogo from "../images/DXCLogo.jpg";
 import api from "../api.js";
 import { Link } from "react-router-dom";
- 
+
 const Header = ({ onButtonClick }) => {
   const [isNavOpen, setNavOpen] = useState(false);
- 
+
   const siteIdentityStyle = {
     float: "right",
   };
- 
+
   const clientLogoStyle = {
     width: "13vh",
     height: "auto",
     marginTop: "8px",
   };
- 
+
   const lineStyle = {
     height: "34px",
     borderRight: "1px solid #5f249f",
     marginRight: "10px",
     marginTop: "8px",
   };
- 
+
   const logoImageStyle = {
     imageRendering: "auto", // Prevent image from appearing blurry
     width: "13vh",
     height: "auto",
   };
- 
+
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
   };
- 
+
   return (
     <header className="site-header">
       <div className="site-identity">
@@ -42,7 +42,7 @@ const Header = ({ onButtonClick }) => {
           <img src={OpticLogo} alt="Site Name" />
         </Link>
       </div>
- 
+
       <div>
         <nav className={`site-navigation ${isNavOpen ? "open" : ""}`}>
           <ul className="nav" style={{ display: "flex", alignItems: "center" }}>
@@ -63,5 +63,5 @@ const Header = ({ onButtonClick }) => {
     </header>
   );
 };
- 
+
 export default Header;

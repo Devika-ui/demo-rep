@@ -26,7 +26,7 @@ const Box = ({ number, text }) => {
       </Typography>
       <Typography
         className="cmp_box_text"
-        style={{ fontSize: "12px", color: "#63666A" }}
+        style={{ fontSize: "12 px", color: "#63666A" }}
         variant="body1"
       >
         {text}

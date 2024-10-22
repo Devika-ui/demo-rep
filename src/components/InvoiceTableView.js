@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import ShareIcon from "@mui/icons-material/Share";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import CloseIcon from "@mui/icons-material/Close";
 import "../css/components/InvoiceTableView.css";
 
 const InvoiceTableView = ({
@@ -20,97 +21,155 @@ const InvoiceTableView = ({
   tableWidth,
   columns,
   headerLabels,
+  headerClass,
+  overlayHeight,
 }) => {
-  const tableRef = useRef(null); // Create a separate ref for the table
+  const [isOverlayOpen, setOverlayOpen] = useState(false);
 
-  const handleFullScreen = () => {
-    if (tableRef.current.requestFullscreen) {
-      tableRef.current.requestFullscreen();
-    } else if (tableRef.current.webkitRequestFullscreen) {
-      /* Chrome, Safari, and Opera */
-      tableRef.current.webkitRequestFullscreen();
-    } else if (tableRef.current.msRequestFullscreen) {
-      /* IE/Edge */
-      tableRef.current.msRequestFullscreen();
-    }
+  const handleOverlayOpen = () => {
+    setOverlayOpen(true);
   };
 
+  const handleOverlayClose = () => {
+    setOverlayOpen(false);
+  };
+  const tableRef = useRef(null); // Create a separate ref for the table
+
   return (
-    <div
-      className="cmpInvTv_container"
-      style={{ width: tableWidth, height: tableHeight }}
-    >
-      <div className="cmpInvTv_header">
-        <h2 className="cmpInvTv_title">{title}</h2>
-        <div>
-          {dropdown}
-          <Button
-            variant="contained"
-            className="cmpInvTv_button"
-            color="inherit"
-          >
-            Customize Report
-          </Button>
-          <IconButton className="cmpInvTv_buttons">
-            <ShareIcon />
-          </IconButton>
-          <IconButton onClick={handleFullScreen} className="cmpInvTv_buttons">
-            <FullscreenIcon />
-          </IconButton>
-        </div>
-      </div>
-      <TableContainer
-        ref={tableRef}
-        className="cmpInvTv_tableContainer"
-        style={{
-          backgroundColor: "#fff",
-        }}
+    <>
+      <div
+        className="cmpInvTv_container"
+        style={{ width: tableWidth, height: tableHeight }}
       >
-        <Table id="mytable">
-          <TableHead>
-            <TableRow>
-              {headerLabels.map((label, labelIndex) => (
-                <TableCell
-                  key={labelIndex}
-                  className="cmpInvTv_tableHeadCell cmpInvTv_stickyHeader"
-                  colSpan={columns.length}
-                >
-                  {label}
-                </TableCell>
-              ))}
-            </TableRow>
-            <TableRow className="cmpInvTv_stickyFirstRow">
-              {headerLabels.flatMap((_, labelIndex) =>
-                columns.map((column, colIndex) => (
+        <div className={headerClass}>
+          <h2 className="cmpInvTv_title">{title}</h2>
+          <div>
+            {dropdown}
+            <Button
+              variant="contained"
+              className="cmpInvTv_customizeButton"
+              color="inherit"
+            >
+              Customize Report
+            </Button>
+            <IconButton className="cmpInvTv_shareButton">
+              <ShareIcon />
+            </IconButton>
+            <IconButton
+              onClick={handleOverlayOpen}
+              className="cmpInvTv_fullscreenButton"
+            >
+              <FullscreenIcon />
+            </IconButton>
+          </div>
+        </div>
+        <TableContainer
+          ref={tableRef}
+          className="cmpInvTv_tableContainer"
+          style={{
+            backgroundColor: "#fff",
+          }}
+        >
+          <Table id="mytable">
+            <TableHead>
+              <TableRow>
+                {headerLabels.map((label, labelIndex) => (
                   <TableCell
-                    key={`${labelIndex}-${colIndex}`}
-                    className={`$"cmpInvTv_tableHeadCell} $"cmpInvTv_stickyHeader}`}
+                    key={labelIndex}
+                    className="cmpInvTv_tableHeadCell cmpInvTv_stickyHeader"
+                    colSpan={columns.length}
                   >
-                    {column.label}
+                    {label}
                   </TableCell>
-                ))
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tableData.map((row, rowIndex) => (
-              <TableRow key={rowIndex} className="cmpInvTv_tableRow">
+                ))}
+              </TableRow>
+              <TableRow className="cmpInvTv_stickyFirstRow">
                 {headerLabels.flatMap((_, labelIndex) =>
                   columns.map((column, colIndex) => (
                     <TableCell
                       key={`${labelIndex}-${colIndex}`}
-                      className="cmpInvTv_tableCell"
+                      className={`$"cmpInvTv_tableHeadCell} $"cmpInvTv_stickyHeader}`}
                     >
-                      {row[`${column.key}_${labelIndex}`]}
+                      {column.label}
                     </TableCell>
                   ))
                 )}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+            </TableHead>
+            <TableBody>
+              {tableData.map((row, rowIndex) => (
+                <TableRow key={rowIndex} className="cmpInvTv_tableRow">
+                  {headerLabels.flatMap((_, labelIndex) =>
+                    columns.map((column, colIndex) => (
+                      <TableCell
+                        key={`${labelIndex}-${colIndex}`}
+                        className="cmpInvTv_tableCell"
+                      >
+                        {row[`${column.key}_${labelIndex}`]}
+                      </TableCell>
+                    ))
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+      {isOverlayOpen && (
+        <div className="overlay overlay-mode">
+          <div className="overlay-content" style={{ height: overlayHeight }}>
+            <IconButton className="close-overlay" onClick={handleOverlayClose}>
+              <CloseIcon />
+            </IconButton>
+            <TableContainer className="cmpInvTv_tableContainer">
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    {headerLabels.map((label, labelIndex) => (
+                      <TableCell
+                        key={labelIndex}
+                        className="cmpInvTv_tableHeadCell cmpInvTv_stickyHeader"
+                        colSpan={columns.length}
+                      >
+                        {label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  <TableRow>
+                    {headerLabels.flatMap((_, labelIndex) =>
+                      columns.map((column, colIndex) => (
+                        <TableCell
+                          key={`${labelIndex}-${colIndex}`}
+                          className={`$"cmpInvTv_tableHeadCell} $"cmpInvTv_stickyHeader}`}
+                        >
+                          {column.label}
+                        </TableCell>
+                      ))
+                    )}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {tableData.map((row, rowIndex) => (
+                    <TableRow key={rowIndex} className="cmpInvTv_tableRow">
+                      {headerLabels.flatMap((_, labelIndex) =>
+                        columns.map((column, colIndex) => (
+                          <TableCell
+                            key={`${labelIndex}-${colIndex}`}
+                            className="cmpInvTv_tableCell"
+                          >
+                            {row[`${column.key}_${labelIndex}`]}
+                          </TableCell>
+                        ))
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -127,12 +186,17 @@ InvoiceTableView.propTypes = {
     })
   ).isRequired,
   headerLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  headerClass: PropTypes.string,
 };
 
 InvoiceTableView.defaultProps = {
   tableHeight: "auto",
-  tableWidth: "94%",
+  tableWidth: "100%",
   headerLabels: ["April - 24"],
+};
+
+InvoiceTableView.defaultProps = {
+  overlayHeight: "82vh", // Default height for overlay
 };
 
 export default InvoiceTableView;

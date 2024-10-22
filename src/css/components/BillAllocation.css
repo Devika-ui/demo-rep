@@ -1,73 +1,40 @@
-.cmpBillAlloc_container {
-    width: 520px; 
-    height: 337px; 
-    background-color: white;
-    padding: 10px; 
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden; 
+.formControl {
+  min-width: 170px !important;
+  margin-left: -160px !important;
+  margin-right: 20px !important;
+  margin-top: 5px !important;
+  height: 33px !important;
+  position: absolute !important;
+  border: none !important;
+}
+/* InputLabel styles */
+.inputLabel {
+  font-family: "Inter, sans-serif" !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #63666a !important;
+  position: absolute !important;
+  top: -10px !important;
+  left: -7px !important;
+}
+
+/* Select styles */
+.selectInput {
+  width: 170px !important;
+  height: 100% !important;
+  padding: 10px !important;
+}
+
+/* MenuItem style */
+.menuItem {
+  white-space: normal;
+}
+
+@media (max-width: 854px) {
+  .formControl {
+    margin-left: 0px !important;
+    margin-right: 10px !important;
+    position: relative !important;
+    height: 30px !important;
   }
-  .cmpBillAlloc_header {
-    display: flex;
-    flex-direction: column; 
-    margin-bottom: 10px; 
-  }
-  .cmpBillAlloc_title {
-    font-family: Inter, sans-serif; 
-    font-size: 16px;
-    font-weight: 700; 
-    line-height: 19.36px; 
-    text-align: left; 
-    color: #63666A; 
-    margin-bottom: 19px; 
-  }
-  .cmpBillAlloc_buttons {
-    display: flex;
-    justify-content: flex-end; 
-    gap: 10px;
-  }
-  .cmpBillAlloc_button {
-    font-size: 0.7rem !important; 
-    padding: 4px 8px !important; 
-    color: #63666A !important;
-    border-color: #63666A !important; 
-  }
-  .cmpBillAlloc_tableContainer {
-    border: 1px solid #ddd; 
-    border-radius: 0; 
-    overflow: hidden; 
-  }
-  .cmpBillAlloc_tableHeader {
-    padding: 4px 8px; 
-    text-align: center;
-    color: #63666A; 
-  }
-  .cmpBillAlloc_table {
-    table-layout: fixed; 
-  }
-  .cmpBillAlloc_cell {
-    padding: 4px 8px !important;
-    overflow: hidden !important;
-    text-align: center !important;
-    color: #63666A !important;
-    border-right: 1px solid #ddd; 
-  }
-  .cmpBillAlloc_columnHeader {
-    text-align: center !important;
-    padding: 4px 8px !important; 
-    color: #63666A !important;
-    border-bottom: 2px solid #63666A !important; 
-  }
-  .cmpBillAlloc_select {
-    font-size: 0.7rem !important;
-    padding: 2px 4px;
-    color: #63666A !important;
-    border-color: #63666A;
-    min-width: auto;
-  }
-  .cmpBillAlloc_select .MuiSelect-select {
-    padding: 2px 4px;
-  }
-  .cmpBillAlloc_select .MuiOutlinedInput-input {
-    padding: 2px 4px; 
-  }
+}
