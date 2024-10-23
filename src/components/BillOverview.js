@@ -6,7 +6,14 @@ import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
 import ContainerForBillOverview from "./ContainerForBillOverview";
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Box,
+  Typography,
+} from "@mui/material";
 import api from "../api";
 import "../css/Billoverview.scss";
 import "../css/components/BillAllocation.css";
@@ -392,27 +399,39 @@ const BillOverview = () => {
 
   return (
     <div>
-      <Header onButtonClick={handleButtonClick} />
-      <Subheader
-        title={
-          <div>
-            <span style={{ fontSize: "18px" }}>Cost & Usage/</span>
-            <span style={{ color: "#5f249f", fontSize: "18px" }}>
-              Bill Overview
-            </span>
-          </div>
-        }
-        additionalFilters={additionalFilters}
-      />
-      <NavigationBar />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          paddingX: 9.5,
+          paddingRight: "10px",
+          maxWidth: "100%",
+        }}
+      >
+        <Header />
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{
+            color: "#5f249f",
+            marginTop: "-1rem", // Adjust this as needed
+            fontWeight: "bold",
+          }}
+        >
+          Bill Overview
+        </Typography>
+        <Subheader onButtonClick={handleButtonClick} />
+        <NavigationBar />
+      </Box>
 
       {/* Boxes */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "-25px",
-          marginRight: "10px",
+          marginLeft: "-33px",
+          marginRight: "2px",
+          marginTop: "-5px",
         }}
       >
         <ContainerForBillOverview data={boxData} />

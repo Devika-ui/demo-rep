@@ -1,6 +1,6 @@
 .cmp_box {
   width: 50px !important;
-  height: 75px;
+  height: 60px;
   padding: 16px;
   box-sizing: border-box;
   display: flex;
@@ -22,6 +22,10 @@
 .cmp_box:hover .cmp_box_text {
   color: white !important;
 }
+
+.cmp_box:hover .cmp_box_text1 {
+  color: white !important;
+}
 .cmp_containerBox {
   margin-left: 90px;
   padding: 16px;
@@ -30,4 +34,204 @@
   gap: 16px;
   justify-content: center;
   border: 1px solid #ccc;
+}
+
+.cmp_box_text {
+  font-size: 16px !important;
+  font-weight: normal;
+}
+.cmp_box_text1 {
+  font-size: 14px !important;
+  color: #63666a;
+}
+
+@media (max-width: 889px) {
+  .cmp_box {
+    font-size: 15px; /* Reduce font size for smaller screens */
+    width: 100%; /* Make boxes fill available space */
+  }
+
+  .cmp_box_text {
+    font-size: 17px !important; /* Further reduce font size for smaller screens */
+  }
+  .cmp_box_text1 {
+    font-size: 12px !important; /* Further reduce font size for smaller screens */
+  }
+}
+
+@media (max-width: 800px) {
+  .cmp_box {
+    font-size: 15px; /* Reduce font size for smaller screens */
+    width: 100%; /* Make boxes fill available space */
+  }
+
+  .cmp_box_text {
+    font-size: 13px !important; /* Further reduce font size for smaller screens */
+  }
+  .cmp_box_text1 {
+    font-size: 11px !important; /* Further reduce font size for smaller screens */
+  }
+}
+
+@media (max-width: 704px) {
+  .cmp_box {
+    font-size: 13px; /* Reduce font size for smaller screens */
+    width: 100%; /* Make boxes fill available space */
+  }
+
+  .cmp_box_text {
+    font-size: 13px !important; /* Further reduce font size for smaller screens */
+  }
+  .cmp_box_text1 {
+    font-size: 10px !important; /* Further reduce font size for smaller screens */
+  }
+
+  @media (max-width: 680px) {
+    .cmp_box {
+      font-size: 14px; /* Reduce font size for smaller screens */
+      width: 100%; /* Make boxes fill available space */
+    }
+
+    .cmp_box_text {
+      font-size: 11px !important; /* Further reduce font size for smaller screens */
+    }
+    .cmp_box_text1 {
+      font-size: 9px !important; /* Further reduce font size for smaller screens */
+    }
+    .cmp_containerBox {
+      padding: 8px;
+      gap: 6px;
+    }
+  }
+
+  @media (max-width: 517px) {
+    .cmp_box {
+      font-size: 14px; /* Reduce font size for smaller screens */
+      width: 100%; /* Make boxes fill available space */
+    }
+
+    .cmp_box_text {
+      font-size: 10px !important; /* Further reduce font size for smaller screens */
+    }
+    .cmp_box_text1 {
+      font-size: 9px !important; /* Further reduce font size for smaller screens */
+    }
+    .cmp_containerBox {
+      padding: 10px;
+      gap: 4px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    /* .cmp_containerBox {
+      height: 130px;
+    }
+
+    .cmp_box {
+      height: 65px;
+    } */
+
+    .cmp_containerBox {
+      display: flex;
+      flex-wrap: wrap; /* Allows the boxes to move onto the next row */
+      justify-content: space-between;
+      padding: 30px;
+      gap: 8px; /* Ensures boxes are spaced out evenly */
+    }
+
+    .cmp_box {
+      margin-top: -22px !important;
+      width: 102px !important; /* Each box takes up 50% of the row, minus a small margin */
+      height: 55px; /* Adjust height as necessary */
+      margin-bottom: 22px; /* Space between rows */
+      font-size: 25px; /* Reduce font size for smaller screens */
+      width: 120%;
+    }
+
+    .cmp_box_text {
+      font-size: 12px !important; /* Adjust font size for smaller screens */
+    }
+
+    .cmp_box_text1 {
+      font-size: 10px !important; /* Adjust font size for smaller screens */
+    }
+  }
+  @media (max-width: 455px) {
+    .cmp_containerBox {
+      height: 120px;
+      display: flex;
+      padding: 10px;
+      gap: 8px; /* Ensures boxes are spaced out evenly */
+    }
+
+    .cmp_box {
+      margin-top: -5px !important;
+      width: 80px !important; /* Each box takes up 50% of the row, minus a small margin */
+      height: 55px; /* Adjust height as necessary */
+      margin-bottom: 15px; /* Space between rows */
+      font-size: 25px; /* Reduce font size for smaller screens */
+      width: 120%;
+    }
+
+    .cmp_box_text {
+      font-size: 12px !important; /* Adjust font size for smaller screens */
+    }
+
+    .cmp_box_text1 {
+      font-size: 10px !important; /* Adjust font size for smaller screens */
+    }
+  }
+  @media (max-width: 405px) {
+    .cmp_containerBox {
+      height: 120px;
+      display: flex;
+
+      padding: 10px;
+      gap: 8px; /* Ensures boxes are spaced out evenly */
+    }
+
+    .cmp_box {
+      margin-top: -2px !important;
+      width: 80px !important; /* Each box takes up 50% of the row, minus a small margin */
+      height: 55px; /* Adjust height as necessary */
+      margin-bottom: 5px; /* Space between rows */
+      font-size: 25px; /* Reduce font size for smaller screens */
+    }
+
+    .cmp_box_text {
+      font-size: 12px !important; /* Adjust font size for smaller screens */
+    }
+
+    .cmp_box_text1 {
+      font-size: 10px !important; /* Adjust font size for smaller screens */
+    }
+  }
+
+  @media (max-width: 375px) {
+    .cmp_containerBox {
+      height: 120px;
+      display: flex;
+      flex-wrap: wrap; /* Allows the boxes to move onto the next row */
+      justify-content: space-between;
+      padding: 10px;
+      gap: 8px; /* Ensures boxes are spaced out evenly */
+    }
+
+    .cmp_box {
+      margin-top: -2px !important;
+      width: 60px !important; /* Each box takes up 50% of the row, minus a small margin */
+      height: 55px; /* Adjust height as necessary */
+      margin-bottom: 5px; /* Space between rows */
+      font-size: 25px; /* Reduce font size for smaller screens */
+      width: 120%;
+    }
+
+    .cmp_box_text {
+      font-size: 10px !important; /* Adjust font size for smaller screens */
+    }
+
+    .cmp_box_text1 {
+      font-size: 9px !important; /* Adjust font size for smaller screens */
+    }
+  }
 }

@@ -1,12 +1,10 @@
-import React from 'react';
-import Paper from '@mui/material/Paper';
+import React from "react";
+import Paper from "@mui/material/Paper";
 
-import Box from './Box';
-import "../css/components/ContainerBox.css"
-
+import Box from "./Box";
+import "../css/components/ContainerBox.css";
 
 const ContainerBox = ({ data }) => {
-
   return (
     <Paper className="cmp_containerBox">
       {data.map((item, index) => (
