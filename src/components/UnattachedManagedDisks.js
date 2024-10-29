@@ -12,222 +12,15 @@ import CostsAmortized from "./CostsAmortized.js";
 import Button from "@mui/material/Button";
 import ContainerBox from "./ContainerBox.js";
 import ServiceCategory from "./ServiceCategory.js";
-import "../css/components/UnattachedManagedDisks.css"
+import "../css/components/UnattachedManagedDisks.css";
 
-const additionalFilters = [
-  {
-    label: 'Service Category(s)',
-    name: 'Select Service Category',
-    options: [
-      { value: 'Service Category 1', label: 'Service Category 1' },
-      { value: 'Service Category 2', label: 'Service Category 2' },
-      { value: 'Service Category 3', label: 'Service Category 3' }
-    ]
-  },
-  {
-    label: 'Owner(s)',
-    name: 'Select Owner',
-    options: [
-      { value: 'Owner 1', label: 'Owner 1' },
-      { value: 'Owner 2', label: 'Owner 2' },
-      { value: 'Owner 3', label: 'Owner 3' }
-    ]
-  },
-  {
-    label: 'Environment(s)',
-    name: 'environments',
-    options: [
-      { value: 'Production', label: 'Production' },
-      { value: 'Staging', label: 'Staging' },
-      { value: 'Development', label: 'Development' }
-    ]
-  },
-  {
-    label:'Cost Center(s)',
-    name:'Select Cost Center',
-    options: [
-          { value: 'Cost Center1', label: 'Cost Center1' },
-          { value: 'Cost Center2', label: 'Cost Center2' },
-          { value: 'Cost Center3', label: 'Cost Center3' },
-        ]
-  },
-];
-
-const tableData = [
-  {
-    tableTitle: "On-Demand Cost Allocation for Unattached Managed Disks",
-    columnHead1: "Application/Project Name",
-    columnHead2: "Owner Name ",
-    columnHead3: "Total Cost",
-    columnHead4: "Count of Disks",
-    columnHead5: "Environment",
-  },
-];
-
-const dummyData = [
-  {
-    name: "Subscription 1",
-    ownerName: "A",
-    totalCost: "$1000",
-    countOfDisks: 50,
-    environment: "Production",
-    children: [
-      {
-        name: "Storage",
-        ownerName: "B",
-        totalCost: "$500",
-        countOfDisks: 30,
-        environment: "Production",
-        children: [
-          {
-            name: "Premium LRS",
-            ownerName: "C",
-            totalCost: "$300",
-            countOfDisks: 20,
-            environment: "Production",
-            children: [
-              {
-                name: "Resource Group 1",
-                ownerName: "D",
-                totalCost: "$200",
-                countOfDisks: 10,
-                environment: "Production",
-                children: [
-                  {
-                    name: "Resource 1",
-                    ownerName: "E",
-                    totalCost: "$100",
-                    countOfDisks: 5,
-                    environment: "Production",
-                  },
-                  {
-                    name: "Resource 2",
-                    totalCost: "$100",
-                    ownerName: "F",
-
-                    countOfDisks: 5,
-                    environment: "Production",
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  // Add more data here as needed
-  {
-    name: "Subscription 2",
-    ownerName: "A1",
-    totalCost: "$1500",
-    countOfDisks: 70,
-    environment: "Development",
-    children: [
-      {
-        name: "Storage",
-        ownerName: "A2",
-        totalCost: "$800",
-        countOfDisks: 40,
-        environment: "Development",
-        children: [
-          {
-            name: "Standard LRS",
-            ownerName: "A3",
-            totalCost: "$400",
-            countOfDisks: 25,
-            environment: "Development",
-            children: [
-              {
-                name: "Resource Group 2",
-                ownerName: "A4",
-                totalCost: "$250",
-                countOfDisks: 15,
-                environment: "Development",
-                children: [
-                  {
-                    name: "Resource 3",
-                    ownerName: "A5",
-                    totalCost: "$150",
-                    countOfDisks: 8,
-                    environment: "Development",
-                  },
-                  {
-                    name: "Resource 4",
-                    ownerName: "A6",
-                    totalCost: "$100",
-                    countOfDisks: 7,
-                    environment: "Development",
-                  },
-                ],
-              },
-              {
-                name: "Resource Group 3",
-                ownerName: "A7",
-                totalCost: "$150",
-                countOfDisks: 10,
-                environment: "Development",
-                children: [
-                  {
-                    name: "Resource 5",
-                    ownerName: "B1",
-                    totalCost: "$80",
-                    countOfDisks: 5,
-                    environment: "Development",
-                  },
-                  {
-                    name: "Resource 6",
-                    ownerName: "B2",
-                    totalCost: "$70",
-                    countOfDisks: 5,
-                    environment: "Development",
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
-
-const dataSet1 = [
-  { number: "$75.4K", text: "Total On Demand Cost" },
-  { number: "12", text: "Count Of Snapshots" },
-  { number: "10", text: "Impacted Applications" },
-];
-
-const data = [
-  { name: "Subscription 1", "On Demand Cost": 400000, "Consumed Meter": 50000 },
-  {
-    name: "Subscription 2",
-    "On Demand Cost": 250000,
-    "Consumed Meter": 80000,
-  },
-  {
-    name: "Subscription 3",
-    "On Demand Cost": 90000,
-    "Consumed Meter": 10000,
-  },
-  {
-    name: "Subscription 4",
-    "On Demand Cost": 50000,
-    "Consumed Meter": 115000,
-  },
-  {
-    name: "Subscription 5",
-    "On Demand Cost": 25000,
-    "Consumed Meter": 100000,
-  },
-  {
-    name: "Subscription 6",
-    "On Demand Cost": 15000,
-    "Consumed Meter": 75000,
-  },
-];
-
-const UnattachedManagedDisks = () => {
+const UnattachedManagedDisks = ({
+  additionalFilters,
+  tableData,
+  dummyData,
+  dataSet1,
+  data,
+}) => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
 
@@ -337,15 +130,15 @@ const UnattachedManagedDisks = () => {
   ];
   const bars = [
     {
-      dataKey: 'On Demand Cost',
-      fill: '#2CAFFE',
-      name: 'On Demand Cost',
+      dataKey: "On Demand Cost",
+      fill: "#2CAFFE",
+      name: "On Demand Cost",
       barSize: 20,
     },
     {
-      dataKey: 'Consumed Meter',
-      fill: '#330072',
-      name: 'Consumed Meter',
+      dataKey: "Consumed Meter",
+      fill: "#330072",
+      name: "Consumed Meter",
       barSize: 20,
     },
   ];
@@ -417,7 +210,11 @@ const UnattachedManagedDisks = () => {
         {/* Separate container for buttons */}
         <div className="cmpUAMD_buttonContainer">
           <CostsAmortized dialogPaperClass="cmpUAMD_dialogPaper" />
-          <Button variant="contained" className="cmpUAMD_button" color="inherit">
+          <Button
+            variant="contained"
+            className="cmpUAMD_button"
+            color="inherit"
+          >
             Customize Report
           </Button>
           <IconButton className="cmpUAMD_button">

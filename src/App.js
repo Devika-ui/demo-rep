@@ -14,6 +14,7 @@ import "./App.css";
 import { ReactKeycloakProvider, useKeycloak } from "@react-keycloak/web";
 import keycloak from "./components/Keycloak";
 import OnDemandCostStudy from "./components/OnDemandCostStudy";
+import RecommendationSPA from "./components/RecommendationSPA";
 
 const App = () => {
   const { keycloak, initialized } = useKeycloak();
@@ -33,6 +34,8 @@ const App = () => {
               path="/inventoryCostSplit"
               element={<InventoryCostSplit />}
             />
+
+            <Route path="/recommendations" element={<RecommendationSPA />} />
             <Route path="/orphanedSnapshots" element={<OrphanedSnapshots />} />
             <Route
               path="/unattachedManagedDisks"

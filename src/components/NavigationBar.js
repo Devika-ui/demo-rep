@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import api from "../api.js"; // Update the path as needed
- 
+
 const NavigationBar = () => {
   const [isNavOpen, setNavOpen] = useState(false);
   const [menuItems, setMenuItems] = useState([]);
@@ -9,7 +9,7 @@ const NavigationBar = () => {
   const [hoverIndex, setHoverIndex] = useState(null); // Track the index of the hovered item
   const [submenuHoverIndex, setSubmenuHoverIndex] = useState(null); // Track the index of the hovered submenu item
   const navRef = useRef(null);
- 
+
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
@@ -23,32 +23,32 @@ const NavigationBar = () => {
         console.error("Error fetching menu items:", error);
       }
     };
- 
+
     fetchMenuItems();
   }, []);
- 
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navRef.current && !navRef.current.contains(event.target)) {
         setNavOpen(false);
       }
     };
- 
+
     if (isNavOpen) {
       document.addEventListener("click", handleClickOutside);
     } else {
       document.removeEventListener("click", handleClickOutside);
     }
- 
+
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [isNavOpen]);
- 
+
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
   };
- 
+
   const defineSubItems = (label) => {
     switch (label) {
       case "Cost & Usage":
@@ -67,17 +67,31 @@ const NavigationBar = () => {
           { label: "Coverage Analysis", path: "/committments/subitem1" },
           { label: "Usage Analysis", path: "/committments/subitem2" },
         ];
+
       case "Recommendations":
         return [
           {
-            label: "Unattached Managed disks",
-            path: "/unattachedManagedDisks",
+            label: "Unattached Managed Disks",
+            path: "/recommendations#unattachedManagedDisks",
           },
-          { label: "Orphaned Screenshots", path: "/orphanedSnapshots" },
-          { label: "Hyper Scalar Advisor", path: "/hyperScalarAdvisor" },
-          { label: "VM & SQL Licenses", path: "/sqlVmLicenses" },
-          { label: "Orphaned RSV Backups", path: "/orphanedrsvbackups" },
+          {
+            label: "Orphaned Screenshots",
+            path: "/recommendations#orphanedSnapshots",
+          },
+          {
+            label: "Hyper Scalar Advisor",
+            path: "/recommendations#hyperScalarAdvisor",
+          },
+          {
+            label: "VM & SQL Licenses",
+            path: "/recommendations#sqlVmLicenses",
+          },
+          {
+            label: "Orphaned RSV Backups",
+            path: "/recommendations#orphanedRSVBackups",
+          },
         ];
+
       case "Monitoring":
         return [
           { label: "Action Tracker Follow Up", path: "/monitoring/subitem1" },
@@ -87,11 +101,11 @@ const NavigationBar = () => {
         return []; // No submenu items for other menu items
     }
   };
- 
+
   const handleToggleSubmenu = (index) => {
     setOpenSubmenuIndex((prevIndex) => (prevIndex === index ? null : index)); // Toggle the submenu only if it's not already open
   };
- 
+
   const getPathForItem = (label) => {
     switch (label) {
       case "Overview":
@@ -110,7 +124,7 @@ const NavigationBar = () => {
         return `/${label.toLowerCase().replace(/\s+/g, "-")}`;
     }
   };
- 
+
   return (
     <nav
       ref={navRef}
@@ -266,7 +280,12 @@ const NavigationBar = () => {
             <img
               src={item.icon}
               alt={item.label}
-              style={{ width: "25px",height: "25px",marginRight: "20px", margin: "0 -3px" }}
+              style={{
+                width: "25px",
+                height: "25px",
+                marginRight: "20px",
+                margin: "0 -3px",
+              }}
             />
           </Link>
         ))}
@@ -274,5 +293,5 @@ const NavigationBar = () => {
     </nav>
   );
 };
- 
+
 export default NavigationBar;
