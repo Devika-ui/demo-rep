@@ -234,7 +234,85 @@ const RecommendationSPA = () => {
       "Consumed Meter": 75000,
     },
   ];
+  // Sample data for PieChartContainer
 
+  const data1_UnattachedManagedDisks = [
+    {
+      name: "Disk 1",
+      value: Math.floor(Math.random() * 100),
+      color: "#0099C6",
+    },
+    {
+      name: "Disk 2",
+      value: Math.floor(Math.random() * 100),
+      color: "#BA741A",
+    },
+    {
+      name: "Disk 3",
+      value: Math.floor(Math.random() * 100),
+      color: "#FFCD00",
+    },
+    {
+      name: "Disk 4",
+      value: Math.floor(Math.random() * 100),
+      color: "#00968F",
+    },
+    {
+      name: "Disk 5",
+      value: Math.floor(Math.random() * 100),
+      color: "#5F249F",
+    },
+  ];
+
+  const data2_UnattachedManagedDisks = [
+    {
+      name: "Disk 1",
+      value: Math.floor(Math.random() * 100),
+      color: "#0099C6",
+    },
+    {
+      name: "Disk 2",
+      value: Math.floor(Math.random() * 100),
+      color: "#BA741A",
+    },
+    {
+      name: "Disk 3",
+      value: Math.floor(Math.random() * 100),
+      color: "#FFCD00",
+    },
+    {
+      name: "Disk 4",
+      value: Math.floor(Math.random() * 100),
+      color: "#00968F",
+    },
+    {
+      name: "Disk 5",
+      value: Math.floor(Math.random() * 100),
+      color: "#5F249F",
+    },
+  ];
+
+  const horizontaldata_UnattachedManagedDisks = [
+    { name: "North Europe", count: 100 },
+    { name: "East US 2", count: 150 },
+    { name: "South East Asia", count: 200 },
+    { name: "West Europe", count: 75 },
+    { name: "West US 2", count: 125 },
+  ];
+  const bars_UnattachedManagedDisks = [
+    {
+      dataKey: "On Demand Cost",
+      fill: "#2CAFFE",
+      name: "On Demand Cost",
+      barSize: 20,
+    },
+    {
+      dataKey: "Consumed Meter",
+      fill: "#330072",
+      name: "Consumed Meter",
+      barSize: 20,
+    },
+  ];
   //unattachedManagedDisks ends
 
   //orphanedSnapshots
@@ -1665,6 +1743,10 @@ const RecommendationSPA = () => {
           dummyData={dummyData_UnattachedManagedDisks}
           dataSet1={dataSet1_UnattachedManagedDisks}
           data={data_UnattachedManagedDisks}
+          data1={data1_UnattachedManagedDisks}
+          data2={data2_UnattachedManagedDisks}
+          horizontaldata={horizontaldata_UnattachedManagedDisks}
+          bars={bars_UnattachedManagedDisks}
         />
       )}
       {activeSection === "orphanedSnapshots" && (

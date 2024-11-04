@@ -20,6 +20,10 @@ const UnattachedManagedDisks = ({
   dummyData,
   dataSet1,
   data,
+  data1,
+  data2,
+  horizontaldata,
+  bars,
 }) => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
@@ -37,63 +41,6 @@ const UnattachedManagedDisks = ({
   const handleGroupByChange = (event) => {
     setGroupBy(event.target.value);
   };
-
-  // Sample data for PieChartContainer
-  const data1 = [
-    {
-      name: "Disk 1",
-      value: Math.floor(Math.random() * 100),
-      color: "#0099C6",
-    },
-    {
-      name: "Disk 2",
-      value: Math.floor(Math.random() * 100),
-      color: "#BA741A",
-    },
-    {
-      name: "Disk 3",
-      value: Math.floor(Math.random() * 100),
-      color: "#FFCD00",
-    },
-    {
-      name: "Disk 4",
-      value: Math.floor(Math.random() * 100),
-      color: "#00968F",
-    },
-    {
-      name: "Disk 5",
-      value: Math.floor(Math.random() * 100),
-      color: "#5F249F",
-    },
-  ];
-
-  const data2 = [
-    {
-      name: "Disk 1",
-      value: Math.floor(Math.random() * 100),
-      color: "#0099C6",
-    },
-    {
-      name: "Disk 2",
-      value: Math.floor(Math.random() * 100),
-      color: "#BA741A",
-    },
-    {
-      name: "Disk 3",
-      value: Math.floor(Math.random() * 100),
-      color: "#FFCD00",
-    },
-    {
-      name: "Disk 4",
-      value: Math.floor(Math.random() * 100),
-      color: "#00968F",
-    },
-    {
-      name: "Disk 5",
-      value: Math.floor(Math.random() * 100),
-      color: "#5F249F",
-    },
-  ];
 
   const formatData = (data) => {
     return data.map((item) => ({
@@ -121,27 +68,6 @@ const UnattachedManagedDisks = ({
     marginBottom: "110px", // Adjust individual chart width
   };
 
-  const horizontaldata = [
-    { name: "North Europe", count: 100 },
-    { name: "East US 2", count: 150 },
-    { name: "South East Asia", count: 200 },
-    { name: "West Europe", count: 75 },
-    { name: "West US 2", count: 125 },
-  ];
-  const bars = [
-    {
-      dataKey: "On Demand Cost",
-      fill: "#2CAFFE",
-      name: "On Demand Cost",
-      barSize: 20,
-    },
-    {
-      dataKey: "Consumed Meter",
-      fill: "#330072",
-      name: "Consumed Meter",
-      barSize: 20,
-    },
-  ];
   const formatYAxisSimple = (tickItem) => tickItem.toString();
   return (
     <div>
