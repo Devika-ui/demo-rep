@@ -6,6 +6,7 @@ import NavigationBar from "./NavigationBar";
 import ServiceCategory from "./ServiceCategory";
 import ContainerBox from "./ContainerBox";
 import InvoiceTableView from "./InvoiceTableView";
+import ContainerForBusinessCost from "./ContainerForBusinessCost";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
 
@@ -281,6 +282,7 @@ const BusinessCostSplit = () => {
         );
 
         setBoxData(formattedBoxData);
+        console.log("tatt", formattedServiceCategoryData);
         setServiceCategoryData(formattedServiceCategoryData);
         setBillAllocationData(flattenedBillAllocationData);
         setFilteredBillAllocationData(flattenedBillAllocationData);
@@ -357,12 +359,12 @@ const BusinessCostSplit = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "-21px",
-          paddingRight: "0px",
-          paddingLeft: "10px",
+          marginLeft: "-33px",
+          marginRight: "2px",
+          marginTop: "-5px",
         }}
       >
-        <ContainerBox data={boxData} />
+        <ContainerForBusinessCost data={boxData} />
       </div>
       <div
         style={{
