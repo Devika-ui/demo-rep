@@ -23,6 +23,11 @@ const TableRowComponent = ({
 }) => {
   const indentLevel = level * indentIncrement;
 
+  const hasNestedData = (item) => {
+    return Object.keys(item).some(
+      (key) => Array.isArray(item[key]) && item[key].length > 0
+    );
+  };
   return (
     <>
       {data.map((item, index) => (
@@ -32,7 +37,7 @@ const TableRowComponent = ({
               style={{ paddingLeft: indentLevel }}
               className="cmpSvcCat_tableCell"
             >
-              {item.services || item.resourceGroups || item.resources ? (
+              {hasNestedData(item) ? (
                 <IconButton
                   size="small"
                   onClick={() => toggleRow(rowKey, index)}
@@ -48,35 +53,22 @@ const TableRowComponent = ({
               {item.name}
             </TableCell>
             {Object.keys(item)
-              .filter(
-                (key) =>
-                  key !== "name" &&
-                  key !== "services" &&
-                  key !== "resourceGroups" &&
-                  key !== "resources"
-              )
+              .filter((key) => key !== "name" && !Array.isArray(item[key]))
               .map((key, cellIndex) => (
                 <TableCell key={cellIndex} className="cmpSvcCat_cell">
                   {item[key]}
                 </TableCell>
               ))}
-            {/*
-            <TableCell className="cmpSvcCat_cell">{item.totalBill}</TableCell>
-
-            <TableCell className="cmpSvcCat_cell">{item.onDemandCost}</TableCell>
-
-            <TableCell className="cmpSvcCat_cell">
-              {item.commitmentsCost}
-            </TableCell>
-
-            <TableCell className="cmpSvcCat_cell">{item.savings}</TableCell> */}
           </TableRow>
 
           {expandedRows[rowKey]?.[index] && (
             <TableRowComponent
-              data={
-                item.services || item.resourceGroups || item.resources || []
-              }
+              data={Object.keys(item).reduce((acc, key) => {
+                if (Array.isArray(item[key])) {
+                  return acc.concat(item[key]);
+                }
+                return acc;
+              }, [])}
               level={level + 1}
               toggleRow={toggleRow}
               expandedRows={expandedRows}
@@ -89,7 +81,6 @@ const TableRowComponent = ({
     </>
   );
 };
-
 const ServiceCategory = ({ dummyData, tableData, height, width }) => {
   const headers = Object.keys(tableData[0]).filter((key) =>
     key.startsWith("columnHead")
@@ -141,26 +132,26 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
           <Table>
             <TableHead>
               {/* <TableRow>
-                <TableCell className="cmpSvcCat_columnHeader">
-                  {tableData[0].columnHead1}
-                </TableCell>
+                  <TableCell className="cmpSvcCat_columnHeader">
+                    {tableData[0].columnHead1}
+                  </TableCell>
 
-                <TableCell className="cmpSvcCat_columnHeader">
-                  {tableData[0].columnHead2}
-                </TableCell>
+                  <TableCell className="cmpSvcCat_columnHeader">
+                    {tableData[0].columnHead2}
+                  </TableCell>
 
-                <TableCell className="cmpSvcCat_columnHeader">
-                  {tableData[0].columnHead3}
-                </TableCell>
+                  <TableCell className="cmpSvcCat_columnHeader">
+                    {tableData[0].columnHead3}
+                  </TableCell>
 
-                <TableCell className="cmpSvcCat_columnHeader">
-                  {tableData[0].columnHead4}
-                </TableCell>
+                  <TableCell className="cmpSvcCat_columnHeader">
+                    {tableData[0].columnHead4}
+                  </TableCell>
 
-                <TableCell className="cmpSvcCat_columnHeader">
-                  {tableData[0].columnHead5}
-                </TableCell>
-              </TableRow> */}
+                  <TableCell className="cmpSvcCat_columnHeader">
+                    {tableData[0].columnHead5}
+                  </TableCell>
+                </TableRow> */}
               <TableRow>
                 {headers.map((headerKey, index) => (
                   <TableCell key={index} className="cmpSvcCat_columnHeader">

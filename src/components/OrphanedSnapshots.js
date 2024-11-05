@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
@@ -27,6 +28,7 @@ const OrphanedSnapshots = ({
 }) => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
+  const navigate = useNavigate();
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
@@ -39,7 +41,21 @@ const OrphanedSnapshots = ({
 
   // Handle change for the dropdown
   const handleGroupByChange = (event) => {
-    setGroupBy(event.target.value);
+    const value = event.target.value;
+    setGroupBy(value);
+    switch (value) {
+      case "subscription":
+        navigate("/recommendations#unattachedManagedDisks");
+        break;
+      case "resourceGroup":
+        navigate("/recommendations#orphanedSnapshots");
+        break;
+      case "region":
+        navigate("/orphaned-attached-disks");
+        break;
+      default:
+        break;
+    }
   };
 
   // Sample data for PieChartContainer
@@ -108,27 +124,27 @@ const OrphanedSnapshots = ({
         }}
       >
         <div style={{ marginTop: "-20px", width: "50%" }}>
+          <Select
+            value={groupBy}
+            onChange={handleGroupByChange}
+            displayEmpty
+            className="cmpUAMD_select"
+            style={{ marginTop: "30px", marginBottom: "-30px" }}
+          >
+            <MenuItem value="">OrphanedSnapshots</MenuItem>
+            <MenuItem value="subscription">UnattachedManagedDisks</MenuItem>
+
+            <MenuItem value="region">
+              Orphaned Attached Disks for deallocated VMs
+            </MenuItem>
+          </Select>
           <div style={{ marginTop: "20px", paddingRight: "18px" }}>
             <GenericBarChart
               title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
               data={data}
               yAxisLabel="Cost (in thousands)"
               bars={bars}
-            >
-              <Select
-                value={groupBy}
-                onChange={handleGroupByChange}
-                displayEmpty
-                className="cmpOrphanSnap_select"
-              >
-                <MenuItem value="">Choose Recommendation</MenuItem>
-                <MenuItem value="subscription">UnattachedManagedDisks</MenuItem>
-                <MenuItem value="resourceGroup">OrphanedSnapshots</MenuItem>
-                <MenuItem value="region">
-                  Orphaned Attached Disks for De-allocated VMs
-                </MenuItem>
-              </Select>
-            </GenericBarChart>
+            ></GenericBarChart>
           </div>
         </div>
       </div>

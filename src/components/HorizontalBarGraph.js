@@ -12,7 +12,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import Typography from "@mui/material/Typography";
-import "../css/components/HorizontalBarGraph.css"
+import "../css/components/HorizontalBarGraph.css";
 
 // Custom Legend Component
 const CustomLegend = (props) => {
@@ -33,8 +33,15 @@ const CustomLegend = (props) => {
   );
 };
 
-const HorizontalBarGraph = ({ data, title, width, height, xAxisLabel, yAxisLabel, barName }) => {
-
+const HorizontalBarGraph = ({
+  data,
+  title,
+  width,
+  height,
+  xAxisLabel,
+  yAxisLabel,
+  barName,
+}) => {
   return (
     <Paper
       className="cmpHBgraph_container"
@@ -65,7 +72,7 @@ const HorizontalBarGraph = ({ data, title, width, height, xAxisLabel, yAxisLabel
           />
           <YAxis
             type="category"
-            dataKey="name"
+            dataKey="location"
             tick={{ fontSize: 12 }}
             label={{
               value: yAxisLabel,

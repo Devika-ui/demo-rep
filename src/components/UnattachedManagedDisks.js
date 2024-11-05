@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
@@ -27,6 +28,7 @@ const UnattachedManagedDisks = ({
 }) => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
+  const navigate = useNavigate();
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
@@ -37,29 +39,29 @@ const UnattachedManagedDisks = ({
     }
   };
 
-  // Handle change for the dropdown
   const handleGroupByChange = (event) => {
-    setGroupBy(event.target.value);
+    const value = event.target.value;
+    setGroupBy(value);
+    switch (value) {
+      case "subscription":
+        navigate("/recommendations#unattachedManagedDisks");
+        break;
+      case "resourceGroup":
+        navigate("/recommendations#orphanedSnapshots");
+        break;
+      case "region":
+        navigate("/orphaned-attached-disks");
+        break;
+      default:
+        break;
+    }
   };
-
-  const formatData = (data) => {
-    return data.map((item) => ({
-      name: item.name,
-      ownerName: item.ownerName,
-      totalCost: item.totalCost,
-      countOfDisks: item.countOfDisks,
-      environment: item.environment,
-      services: item.children ? formatData(item.children) : null,
-    }));
-  };
-
-  const formattedData = formatData(dummyData);
 
   // Define styles for the PieChartContainer
   const pieChartContainerStyle = {
     display: "flex",
     justifyContent: "space-around",
-    margin: "-308px 680px -260px",
+    margin: "-270px 680px -260px",
   };
 
   const pieChartStyle = {
@@ -107,26 +109,44 @@ const UnattachedManagedDisks = ({
         }}
       >
         <div style={{ marginTop: "-20px", width: "50%" }}>
-          <div style={{ marginTop: "20px", paddingRight: "18px" }}>
+          <Select
+            value={groupBy}
+            onChange={handleGroupByChange}
+            displayEmpty
+            className="cmpUAMD_select"
+            style={{
+              marginTop: "30px",
+              marginBottom: "-30px",
+            }}
+          >
+            <MenuItem value="">UnattachedManagedDisks</MenuItem>
+            <MenuItem value="resourceGroup">OrphanedSnapshots</MenuItem>
+
+            <MenuItem value="region">
+              Orphaned Attached Disks for deallocated VMs
+            </MenuItem>
+          </Select>
+          <div className="cmpUAMD_buttonContainer">
+            <CostsAmortized dialogPaperClass="cmpUAMD_dialogPaper" />
+            <Button
+              variant="contained"
+              className="cmpUAMD_button"
+              color="inherit"
+            >
+              Customize Report
+            </Button>
+            <IconButton className="cmpUAMD_button">
+              <ShareIcon />
+            </IconButton>
+          </div>
+          <div style={{ marginTop: "10px", paddingRight: "18px" }}>
             <GenericBarChart
               title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
               data={data}
               yAxisLabel="Cost (in thousands)"
               bars={bars}
               yAxisTickFormatter={formatYAxisSimple}
-            >
-              <Select
-                value={groupBy}
-                onChange={handleGroupByChange}
-                displayEmpty
-                className="cmpUAMD_select"
-              >
-                <MenuItem value="">Choose Recommendation</MenuItem>
-                <MenuItem value="subscription">Subscription</MenuItem>
-                <MenuItem value="resourceGroup">Resource Group</MenuItem>
-                <MenuItem value="region">Region</MenuItem>
-              </Select>
-            </GenericBarChart>
+            ></GenericBarChart>
           </div>
         </div>
       </div>
@@ -134,19 +154,7 @@ const UnattachedManagedDisks = ({
       {/* Include PieChartContainer */}
       <div>
         {/* Separate container for buttons */}
-        <div className="cmpUAMD_buttonContainer">
-          <CostsAmortized dialogPaperClass="cmpUAMD_dialogPaper" />
-          <Button
-            variant="contained"
-            className="cmpUAMD_button"
-            color="inherit"
-          >
-            Customize Report
-          </Button>
-          <IconButton className="cmpUAMD_button">
-            <ShareIcon />
-          </IconButton>
-        </div>
+
         {/* Container for the PieChartContainer */}
         <div>
           <PieChartContainer
@@ -172,7 +180,7 @@ const UnattachedManagedDisks = ({
         }}
       >
         <ServiceCategory
-          dummyData={formattedData}
+          dummyData={dummyData}
           height="400px"
           width="560px"
           tableData={tableData}

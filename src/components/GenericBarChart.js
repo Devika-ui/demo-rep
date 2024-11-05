@@ -34,12 +34,13 @@ const GenericBarChart = ({
   title,
   data,
   yAxisLabel,
-  yAxisTicks = [0, 100000, 200000, 300000, 400000, 500000],
-  yAxisDomain = [0, 500000],
+  yAxisTicks = [0, 1000, 2000, 3000],
+  yAxisDomain = [0, 1000],
   bars,
   children,
 }) => {
   // Custom tick formatter for YAxis
+
   const formatYAxis = (tickItem) => {
     if (yAxisTicks.some((tick) => tick >= 1000)) {
       return `${tickItem / 1000}k`;
@@ -57,7 +58,7 @@ const GenericBarChart = ({
           margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
           barGap={8} // Adjust the value to increase or decrease the gap between bars
         >
-          <XAxis dataKey="name" tick={{ fontSize: 8 }} />
+          <XAxis dataKey="subscriptionName" tick={{ fontSize: 8 }} />
           <YAxis
             tick={{ fontSize: 12 }}
             domain={yAxisDomain}

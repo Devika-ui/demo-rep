@@ -1,22 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import UnattachedManagedDisks from "./UnattachedManagedDisks";
 import OrphanedSnapshots from "./OrphanedSnapshots";
 import HyperScalarAdvisor from "./HyperScalarAdvisor";
 import SqlVmLicenses from "./SqlVmLicenses";
 import OrphanedRSVBackups from "./OrphanedRSVBackups";
+import api from "../api.js";
 
 const RecommendationSPA = () => {
   const location = useLocation();
   const [activeSection, setActiveSection] = useState("unattachedManagedDisks");
+  const navigate = useNavigate();
+  const [showStackBars, setShowStackBars] = useState(true);
+  const [groupBy, setGroupBy] = useState("");
+  const [containerData, setContainerData] = useState([]);
+  const [diskLocations, setDiskLocations] = useState([]);
+  const [onDemandConsumed, setOnDemandConsumed] = useState([]);
+  const [mangedDiskCost, setDiskCost] = useState([]);
+  const [unattachedDiskConsumed, setUnattachedDiskCOnsumed] = useState([]);
+  const [costAllocation, setCostAllocation] = useState([]);
+  const [serviceCategoryData, setServiceCategoryData] = useState([]);
+  const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
 
   useEffect(() => {
     const hash = location.hash.substring(1); // Removes the "#" from the hash
     //location.hash retrieves the part of the URL after #
     setActiveSection(hash);
   }, [location]);
-
-  //unattachedManagedDisks
 
   const additionalFilters_UnattachedManagedDisks = [
     {
@@ -68,254 +79,192 @@ const RecommendationSPA = () => {
     },
   ];
 
-  const dummyData_UnattachedManagedDisks = [
-    {
-      name: "Subscription 1",
-      ownerName: "A",
-      totalCost: "$1000",
-      countOfDisks: 50,
-      environment: "Production",
-      children: [
-        {
-          name: "Storage",
-          ownerName: "B",
-          totalCost: "$500",
-          countOfDisks: 30,
-          environment: "Production",
-          children: [
-            {
-              name: "Premium LRS",
-              ownerName: "C",
-              totalCost: "$300",
-              countOfDisks: 20,
-              environment: "Production",
-              children: [
-                {
-                  name: "Resource Group 1",
-                  ownerName: "D",
-                  totalCost: "$200",
-                  countOfDisks: 10,
-                  environment: "Production",
-                  children: [
-                    {
-                      name: "Resource 1",
-                      ownerName: "E",
-                      totalCost: "$100",
-                      countOfDisks: 5,
-                      environment: "Production",
-                    },
-                    {
-                      name: "Resource 2",
-                      totalCost: "$100",
-                      ownerName: "F",
-
-                      countOfDisks: 5,
-                      environment: "Production",
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    // Add more data here as needed
-    {
-      name: "Subscription 2",
-      ownerName: "A1",
-      totalCost: "$1500",
-      countOfDisks: 70,
-      environment: "Development",
-      children: [
-        {
-          name: "Storage",
-          ownerName: "A2",
-          totalCost: "$800",
-          countOfDisks: 40,
-          environment: "Development",
-          children: [
-            {
-              name: "Standard LRS",
-              ownerName: "A3",
-              totalCost: "$400",
-              countOfDisks: 25,
-              environment: "Development",
-              children: [
-                {
-                  name: "Resource Group 2",
-                  ownerName: "A4",
-                  totalCost: "$250",
-                  countOfDisks: 15,
-                  environment: "Development",
-                  children: [
-                    {
-                      name: "Resource 3",
-                      ownerName: "A5",
-                      totalCost: "$150",
-                      countOfDisks: 8,
-                      environment: "Development",
-                    },
-                    {
-                      name: "Resource 4",
-                      ownerName: "A6",
-                      totalCost: "$100",
-                      countOfDisks: 7,
-                      environment: "Development",
-                    },
-                  ],
-                },
-                {
-                  name: "Resource Group 3",
-                  ownerName: "A7",
-                  totalCost: "$150",
-                  countOfDisks: 10,
-                  environment: "Development",
-                  children: [
-                    {
-                      name: "Resource 5",
-                      ownerName: "B1",
-                      totalCost: "$80",
-                      countOfDisks: 5,
-                      environment: "Development",
-                    },
-                    {
-                      name: "Resource 6",
-                      ownerName: "B2",
-                      totalCost: "$70",
-                      countOfDisks: 5,
-                      environment: "Development",
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ];
-
-  const dataSet1_UnattachedManagedDisks = [
-    { number: "$75.4K", text: "Total On Demand Cost" },
-    { number: "12", text: "Count Of Snapshots" },
-    { number: "10", text: "Impacted Applications" },
-  ];
-
-  const data_UnattachedManagedDisks = [
-    {
-      name: "Subscription 1",
-      "On Demand Cost": 400000,
-      "Consumed Meter": 50000,
-    },
-    {
-      name: "Subscription 2",
-      "On Demand Cost": 250000,
-      "Consumed Meter": 80000,
-    },
-    {
-      name: "Subscription 3",
-      "On Demand Cost": 90000,
-      "Consumed Meter": 10000,
-    },
-    {
-      name: "Subscription 4",
-      "On Demand Cost": 50000,
-      "Consumed Meter": 115000,
-    },
-    {
-      name: "Subscription 5",
-      "On Demand Cost": 25000,
-      "Consumed Meter": 100000,
-    },
-    {
-      name: "Subscription 6",
-      "On Demand Cost": 15000,
-      "Consumed Meter": 75000,
-    },
-  ];
-  // Sample data for PieChartContainer
-
-  const data1_UnattachedManagedDisks = [
-    {
-      name: "Disk 1",
-      value: Math.floor(Math.random() * 100),
-      color: "#0099C6",
-    },
-    {
-      name: "Disk 2",
-      value: Math.floor(Math.random() * 100),
-      color: "#BA741A",
-    },
-    {
-      name: "Disk 3",
-      value: Math.floor(Math.random() * 100),
-      color: "#FFCD00",
-    },
-    {
-      name: "Disk 4",
-      value: Math.floor(Math.random() * 100),
-      color: "#00968F",
-    },
-    {
-      name: "Disk 5",
-      value: Math.floor(Math.random() * 100),
-      color: "#5F249F",
-    },
-  ];
-
-  const data2_UnattachedManagedDisks = [
-    {
-      name: "Disk 1",
-      value: Math.floor(Math.random() * 100),
-      color: "#0099C6",
-    },
-    {
-      name: "Disk 2",
-      value: Math.floor(Math.random() * 100),
-      color: "#BA741A",
-    },
-    {
-      name: "Disk 3",
-      value: Math.floor(Math.random() * 100),
-      color: "#FFCD00",
-    },
-    {
-      name: "Disk 4",
-      value: Math.floor(Math.random() * 100),
-      color: "#00968F",
-    },
-    {
-      name: "Disk 5",
-      value: Math.floor(Math.random() * 100),
-      color: "#5F249F",
-    },
-  ];
-
-  const horizontaldata_UnattachedManagedDisks = [
-    { name: "North Europe", count: 100 },
-    { name: "East US 2", count: 150 },
-    { name: "South East Asia", count: 200 },
-    { name: "West Europe", count: 75 },
-    { name: "West US 2", count: 125 },
-  ];
   const bars_UnattachedManagedDisks = [
     {
-      dataKey: "On Demand Cost",
+      dataKey: "OnDemand",
       fill: "#2CAFFE",
       name: "On Demand Cost",
       barSize: 20,
     },
     {
-      dataKey: "Consumed Meter",
+      dataKey: "ConsumedMeter",
       fill: "#330072",
       name: "Consumed Meter",
       barSize: 20,
     },
   ];
   //unattachedManagedDisks ends
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [
+          onDemand,
+          countUnattachedDisk,
+          impactedApplications,
+          onDemandConsumedSubscription,
+          diskCost,
+          diskCosumed,
+          diskLocations,
+          onDemandCostAllocations,
+        ] = await Promise.all([
+          api.getTotalOnDemandCost(),
+          api.getCountUnattachedDisk1(),
+          api.getImpactedApplications(),
+          api.getSubscriptionOnDemandConsumedMeter(),
+          api.getDisktypevsCost(),
+          api.getDisktypevsConsumedMeter(),
+          api.getDiskAcrossLocations(),
+          api.getCostAllocations(),
+        ]);
+        const onDemandCost = onDemand.cost.toFixed(2);
+        const diskCount = countUnattachedDisk.diskcount;
+        const impactedCount = impactedApplications.ImpcatedApplications;
 
-  //orphanedSnapshots
+        const dataSet1 = [
+          {
+            number:
+              onDemandCost > 1000
+                ? `$${(onDemandCost / 1000).toFixed(2)}K`
+                : `$${onDemandCost.toFixed(2)}`,
+            text: "Total On Demand Cost",
+          },
+          { number: `${diskCount}`, text: "Count Of Snapshots" },
+          { number: `${impactedCount}`, text: "Impacted Applications" },
+        ];
+
+        setContainerData(dataSet1);
+        setDiskLocations(diskLocations);
+        setUnattachedDiskCOnsumed(diskCosumed);
+        setDiskCost(diskCost);
+        setOnDemandConsumed(onDemandConsumedSubscription);
+
+        const aggregateData = (data) => {
+          return Object.entries(data).map(([subscription, storages]) => {
+            const formattedStorages = Object.entries(storages).flatMap(
+              ([storage, storageTypes]) => {
+                const formattedStorageTypes = Object.entries(storageTypes).map(
+                  ([storageType, resourceGroups]) => {
+                    const formattedResourceGroups = Object.entries(
+                      resourceGroups
+                    ).map(([resourceGroup, resources]) => {
+                      const formattedResources = Object.entries(resources).map(
+                        ([resource, resourceData]) => ({
+                          name: resource,
+                          ownername: resourceData.ownername || null,
+                          totalCost: resourceData.totalCost || 0,
+                          diskCount: resourceData.diskcount || 0,
+                          environment:
+                            resourceData.environment !== null
+                              ? resourceData.environment
+                              : "null",
+                        })
+                      );
+
+                      const groupTotalCost = formattedResources.reduce(
+                        (sum, resource) => sum + resource.totalCost,
+                        0
+                      );
+                      const groupDiskCount = formattedResources.reduce(
+                        (sum, resource) => sum + resource.diskCount,
+                        0
+                      );
+
+                      return {
+                        name: resourceGroup,
+                        ownername: null,
+                        totalCost: groupTotalCost,
+                        diskCount: groupDiskCount,
+                        environment: null,
+                        resources: formattedResources,
+                      };
+                    });
+
+                    const storageTypeTotalCost = formattedResourceGroups.reduce(
+                      (sum, resourceGroup) => sum + resourceGroup.totalCost,
+                      0
+                    );
+                    const storageTypeDiskCount = formattedResourceGroups.reduce(
+                      (sum, resourceGroup) => sum + resourceGroup.diskCount,
+                      0
+                    );
+
+                    return {
+                      name: storageType,
+                      ownername: null,
+                      totalCost: storageTypeTotalCost,
+                      diskCount: storageTypeDiskCount,
+                      environment: null,
+                      resourceGroups: formattedResourceGroups,
+                    };
+                  }
+                );
+
+                const storageTotalCost = formattedStorageTypes.reduce(
+                  (sum, storageType) => sum + storageType.totalCost,
+                  0
+                );
+                const storageDiskCount = formattedStorageTypes.reduce(
+                  (sum, storageType) => sum + storageType.diskCount,
+                  0
+                );
+
+                return {
+                  name: storage,
+                  ownername: null,
+                  totalCost: storageTotalCost,
+                  diskCount: storageDiskCount,
+                  environment: null,
+                  storageTypes: formattedStorageTypes,
+                };
+              }
+            );
+
+            const subscriptionTotalCost = formattedStorages.reduce(
+              (sum, storage) => sum + storage.totalCost,
+              0
+            );
+            const subscriptionDiskCount = formattedStorages.reduce(
+              (sum, storage) => sum + storage.diskCount,
+              0
+            );
+
+            return {
+              name: subscription,
+              ownername: null,
+              totalCost: subscriptionTotalCost,
+              diskCount: subscriptionDiskCount,
+              environment: null,
+              storages: formattedStorages,
+            };
+          });
+        };
+
+        const formattedData = aggregateData(onDemandCostAllocations);
+        console.log("Formatted Table Data:", formattedData);
+        console.log(
+          "Formatted Table Data JSON:",
+          JSON.stringify(formattedData, null, 2)
+        );
+        setServiceCategoryData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const pieChartData1 = mangedDiskCost.map((entry, index) => ({
+    name: entry.DiskType,
+    value: Math.floor(entry.totalcost), // Adjust value if necessary
+    color: colorPalette[index % colorPalette.length],
+  }));
+
+  const pieChartData2 = unattachedDiskConsumed.map((entry, index) => ({
+    name: entry.DiskType,
+    value: Math.floor(entry.totalcount), // Adjust value if necessary
+    color: colorPalette[index % colorPalette.length],
+  }));
+
   const additionalFilters_OrphanedSnapshots = [
     {
       label: "Service Category(s)",
@@ -1740,12 +1689,12 @@ const RecommendationSPA = () => {
         <UnattachedManagedDisks
           additionalFilters={additionalFilters_UnattachedManagedDisks}
           tableData={tableData_UnattachedManagedDisks}
-          dummyData={dummyData_UnattachedManagedDisks}
-          dataSet1={dataSet1_UnattachedManagedDisks}
-          data={data_UnattachedManagedDisks}
-          data1={data1_UnattachedManagedDisks}
-          data2={data2_UnattachedManagedDisks}
-          horizontaldata={horizontaldata_UnattachedManagedDisks}
+          dummyData={serviceCategoryData}
+          dataSet1={containerData}
+          data={onDemandConsumed}
+          data1={pieChartData1}
+          data2={pieChartData2}
+          horizontaldata={diskLocations}
           bars={bars_UnattachedManagedDisks}
         />
       )}

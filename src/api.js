@@ -464,7 +464,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+            BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
             Subscription: selectedFilters.subscriptions || [],
             BusinessUnit: selectedFilters.businessUnits || [],
             Location: selectedFilters.locations || [],
@@ -848,8 +848,8 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
-              Subscription: ["Subscription2"],
+              BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
+              Subscription: ["Subscription2", "Subscription1"],
             },
           }),
         }
@@ -961,6 +961,233 @@ const api = {
             },
             page: page.toString(),
             pageSize: "1000",
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getCountUnattachedDisk1: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/manageddisk/totalcount`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.accessToken,
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              Subscription: ["Subscription1"],
+              BusinessUnit: [],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch actual disk data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching actual spend data:", error);
+      throw error;
+    }
+  },
+
+  getTotalOnDemandCost: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/manageddisk/cost`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.accessToken,
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getImpactedApplications: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/manageddisk/impcatedapplications`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.accessToken,
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              Subscription: ["Subscription1"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getSubscriptionOnDemandConsumedMeter: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/manageddisk/ondemandvsconsumed`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.accessToken,
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              Subscription: ["Subscription2", "Subscription1"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getDisktypevsCost: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/manageddisk/disktypevscost`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.accessToken,
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              Subscription: ["Subscription2"],
+              // BusinessUnit: ["BU574862", "BU425929"],
+              // Application: ["Demo-Application199", "Demo-Application212"],
+              // Owner: [
+              //   "business.owner132@test.com",
+              //   "business.owner128@test.com",
+              // ],
+              // Service: ["Storage"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getDisktypevsConsumedMeter: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/manageddisk/diskvscosumedmeter`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.accessToken,
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getDiskAcrossLocations: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/manageddisk/locations`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.accessToken,
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              Subscription: ["Subscription2"],
+            },
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getCostAllocations: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/manageddisk/costallocation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.accessToken,
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              Subscription: ["Subscription2", "Subscription1"],
+            },
           }),
         }
       );
