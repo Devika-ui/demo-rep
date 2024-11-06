@@ -106,6 +106,9 @@
     gap: 15px;
     width: auto;
     margin-right: 5px;
+    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
   }
  
   .filter-option-inline {
