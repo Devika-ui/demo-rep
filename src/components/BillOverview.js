@@ -497,7 +497,7 @@ const BillOverview = () => {
         <InvoiceTableView
           title="Invoice View"
           tableData={invoiceData}
-          tableHeight="90%"
+          tableHeight="300px"
           tableWidth="92%"
           columns={columns}
           headerLabels={headerLabelsForInvoice}
@@ -548,7 +548,7 @@ const BillOverview = () => {
             </FormControl>
           }
           tableData={filteredBillAllocationData}
-          tableHeight="390px"
+          tableHeight="300px"
           tableWidth="92%"
           columns={columns1}
           headerLabels={headerLabelsForBillAllocation}

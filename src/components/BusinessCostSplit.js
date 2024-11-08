@@ -4,11 +4,11 @@ import Subheader from "./SubHeader";
 import Ondemand from "./Ondemand";
 import NavigationBar from "./NavigationBar";
 import ServiceCategory from "./ServiceCategory";
-import ContainerBox from "./ContainerBox";
 import InvoiceTableView from "./InvoiceTableView";
 import ContainerForBusinessCost from "./ContainerForBusinessCost";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
+import MonthlyCostTrends from "./MonthlyCostTrends";
 
 const BusinessCostSplit = () => {
   const [showStackBars, setShowStackBars] = useState(true);
@@ -366,55 +366,52 @@ const BusinessCostSplit = () => {
       >
         <ContainerForBusinessCost data={boxData} />
       </div>
-      <div
-        style={{
-          marginBottom: "29px",
-          textAlign: "left",
-          width: "100%",
-          marginLeft: "-272px",
-          marginRight: "30px",
-          marginTop: "-11px",
-        }}
-      >
-        <Ondemand />
-      </div>
+
+      {/* New Flex Container for Ondemand and MonthlyCostTrends */}
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "left",
-          marginLeft: "-542px",
-          marginRight: "3px",
-          marginTop: "-22px",
+          justifyContent: "space-between", // Align items to the ends
+          marginBottom: "29px",
+          width: "100%",
+          padding: "0 30px", // Adjust left and right padding
+          marginTop: "-11px",
+        }}
+      >
+        <div
+          style={{
+            marginBottom: "-35px",
+            textAlign: "left",
+            width: "100%",
+            marginLeft: "-300px",
+            marginRight: "30px",
+            marginTop: "0.5px",
+          }}
+        >
+          <Ondemand />
+        </div>
+        <div style={{ flex: 1 }}>
+          {" "}
+          {/* Space between components */}
+          <MonthlyCostTrends />
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+          padding: "33px",
+          marginTop: "-55px",
+          marginLeft: "-8px",
         }}
       >
         <InvoiceTableView
-          title={"Total Bill Allocation\nacross Application"}
+          title={"Total Bill Allocation across Application"}
           dropdown={
-            <FormControl
-              variant="outlined"
-              style={{
-                minWidth: 170,
-                marginLeft: "-160px",
-                marginRight: "20px",
-                marginTop: "5px",
-                height: "33px",
-                position: "absolute",
-                border: "none",
-              }}
-            >
-              <InputLabel
-                id="report-type-label"
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "13px",
-                  fontWeight: "700",
-                  color: "#63666a",
-                  position: "absolute",
-                  top: "-10px",
-                  left: "-7px",
-                }}
-              >
+            <FormControl variant="outlined" className="formControl">
+              <InputLabel id="report-type-label" className="inputLabel">
                 Group by Application
               </InputLabel>
               <Select
@@ -423,11 +420,7 @@ const BusinessCostSplit = () => {
                 value={reportType}
                 onChange={handleReportTypeChange}
                 label="Group by Application"
-                style={{
-                  width: reportType ? "80%" : "100%",
-                  height: "100%",
-                  padding: "10px",
-                }}
+                className="selectInput"
                 MenuProps={{
                   PaperProps: {
                     style: {
@@ -450,25 +443,26 @@ const BusinessCostSplit = () => {
             </FormControl>
           }
           tableData={filteredBillAllocationData}
-          tableHeight="auto"
-          tableWidth="537px"
+          tableHeight="300px"
+          tableWidth="92.5%"
           columns={columns1}
           headerLabels={headerLabelsForBillAllocation}
+          headerClass="headerClass"
         />
       </div>
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          marginLeft: "643px",
-          marginTop: "-794px",
+          marginLeft: "50px",
+          marginTop: "-38px",
           marginBottom: "30px",
         }}
       >
         <ServiceCategory
           dummyData={serviceCategoryData}
-          height="753px"
-          width="580px"
+          height="300px"
+          width="97.5%"
           tableData={tableData}
         />
       </div>

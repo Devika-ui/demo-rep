@@ -77,10 +77,10 @@
 }
 
 .cmpInvTv_tableContainer {
-  max-height: 76% !important;
+  max-height: 72% !important;
   overflow-y: auto !important;
   overflow-x: auto !important;
-  padding-bottom: 18px;
+  padding-bottom: 38px;
   border: 1px solid black !important;
   border-collapse: collapse;
 }
@@ -158,10 +158,11 @@
 }
 .overlay-mode .cmpInvTv_tableContainer {
   flex: 1;
-  max-height: 95% !important;
+  height: 95% !important;
+  max-height: calc(95% - 50px) !important;
   overflow-y: auto;
   overflow-x: auto;
-  padding-bottom: 18px;
+
   border: 1px solid black !important;
   border-collapse: collapse;
 }
@@ -204,6 +205,7 @@
   }
   .cmpInvTv_tableContainer {
     height: 62vh !important;
+    padding-bottom: 5px !important;
   }
   .overlay-mode .cmpInvTv_tableContainer {
     flex: 1;
@@ -228,11 +230,15 @@
     height: 45vh !important;
     margin-left: 3rem !important;
   }
+  .cmpInvTv_tableContainer th {
+    padding: 3px;
+  }
 }
 
 @media (max-width: 850px) {
   .cmpInvTv_tableContainer {
     height: 60vh !important;
+    padding-bottom: 5px !important;
   }
   .overlay-mode .cmpInvTv_tableContainer {
     flex: 1;
@@ -245,7 +251,8 @@
 
 @media (max-width: 431px) {
   .cmpInvTv_tableContainer {
-    height: 26vh !important;
+    height: 50% !important;
+    padding-bottom: 10px !important;
   }
   .cmpInvTv_container {
     margin-right: 2.5rem;
@@ -269,8 +276,9 @@
 @media (max-width: 480px) {
   .cmpInvTv_tableCell {
     font-size: 7px !important;
-    padding: 10px !important;
+    padding: 8px !important;
   }
+
   .cmpInvTv_tableContainer th {
     font-size: 7px !important;
   }
@@ -279,9 +287,9 @@
     align-items: flex-start;
   }
 }
-@media (max-width: 863px) {
+@media (min-width: 863px) {
   .cmpInvTv_tableContainer {
-    height: 60% !important;
+    height: 65% !important;
   }
 }
 

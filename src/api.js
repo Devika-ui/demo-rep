@@ -39,8 +39,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
+            BillingMonthStartDate: ["2024-08-01", "2024-09-01"],
             Subscription: ["Subscription2"],
           },
         }),
@@ -465,6 +464,7 @@ const api = {
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
+            BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
             Subscription: selectedFilters.subscriptions || [],
             BusinessUnit: selectedFilters.businessUnits || [],
             Location: selectedFilters.locations || [],
@@ -875,7 +875,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-04-01", "2024-05-01", "2024-06-01"],
+            BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
           },
         }),
       });
@@ -902,7 +902,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-04-01", "2024-05-01", "2024-06-01"],
+              BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
             },
           }),
         }

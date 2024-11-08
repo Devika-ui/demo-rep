@@ -1,31 +1,185 @@
+// .ondemand-container {
+//   width: 90%;
+//   max-width: 600px;
+//   height: auto;
+//   margin: 20px auto;
+//   background-color: white;
+//   position: relative;
+//   border-radius: 5px;
+//   border: 1px solid #ccc;
+//   padding: 20px;
+//   box-sizing: border-box;
+// }
+
+// .ondemand-title {
+//   font-family: Inter, sans-serif !important;
+//   font-size: 18px !important;
+//   font-weight: 700 !important;
+//   color: #5f249f !important;
+//   text-align: left !important;
+//   margin-top: -1rem !important;
+// }
+
+// .chart {
+//   width: 100% !important;
+//   height: 35vh;
+//   margin-top: -1rem;
+//   margin-bottom: -0.9rem;
+// }
+
+// @media (max-width: 992px) {
+//   .ondemand-container {
+//     width: 45%;
+//     margin-left: 20.5rem !important;
+//   }
+// }
+
+// @media (max-width: 768px) {
+//   .ondemand-container {
+//     width: 50%;
+//     margin-left: 20.5rem !important;
+//   }
+// }
+
+// @media (max-width: 576px) {
+//   .ondemand-container {
+//     width: 60% !important;
+//   }
+// }
+// @media (max-width: 1024px) {
+//   .ondemand-container {
+//     width: 50% !important;
+//     margin-left: 20.5rem !important;
+//   }
+// }
+// @media only screen and (width: 1024px) {
+//   .ondemand-container {
+//     width: 57% !important;
+//   }
+// }
+// @media only screen and (width: 1180px) {
+//   .ondemand-container {
+//     width: 55% !important;
+//   }
+// }
+// @media (max-width: 1500px) {
+//   .ondemand-container {
+//     margin-left: 20.5rem !important;
+//   }
+// }
+// @media only screen and (min-width: 1700px) {
+//   .ondemand-container {
+//     max-width: 50% !important;
+//     height: 42vh !important;
+//     margin-left: 20.5rem !important;
+//   }
+//   .chart {
+//     height: 40vh !important;
+//   }
+// }
+// @media (max-width: 450px) {
+//   .ondemand-container {
+//     width: 85% !important;
+//   }
+// }
+// @media (max-width: 400px) {
+//   .ondemand-container {
+//     width: 82% !important;
+//   }
+// }
+
 .ondemand-container {
-  width: 569px;
-  height: 347px;
-  margin: 0 auto;
-  top: 20px;
+  width: 90%;
+  max-width: 600px;
+  height: auto;
+  margin: 20px auto;
   background-color: white;
   position: relative;
   border-radius: 5px;
   border: 1px solid #ccc;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .ondemand-title {
-  font-family: Inter, sans-serif;
+  font-family: Inter, sans-serif !important;
   font-size: 18px !important;
-  font-weight: 700;
-  position: absolute;
+  font-weight: 700 !important;
   color: #5f249f !important;
-  top: 20px;
-  left: 34%; /* Centering horizontally */
-  transform: translateX(-50%);
-  margin: 0; /* Remove margin */
+  text-align: left !important;
+  margin-top: -1rem !important;
 }
 
 .chart {
-  position: absolute;
-  top: 60px; /* Adjust as needed */
-  left: 45%;
-  transform: translateX(-50%);
-  width: 500px;
-  height: 320px;
+  width: 100% !important;
+  height: 35vh;
+  margin-top: -1rem;
+  margin-bottom: -0.9rem;
+}
+
+@media (max-width: 992px) {
+  .ondemand-container {
+    width: 45%;
+    margin-left: 20.5rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .ondemand-container {
+    width: 50%;
+    margin-left: 20.5rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .ondemand-container {
+    width: 60% !important;
+  }
+}
+@media (max-width: 1024px) {
+  .ondemand-container {
+    width: 50% !important;
+    margin-left: 20.5rem !important;
+  }
+}
+@media only screen and (width: 1024px) {
+  .ondemand-container {
+    width: 57% !important;
+  }
+}
+@media only screen and (width: 1180px) {
+  .ondemand-container {
+    width: 55% !important;
+  }
+}
+@media (max-width: 1500px) {
+  .ondemand-container {
+    margin-left: 20.5rem !important;
+  }
+}
+@media only screen and (min-width: 1700px) {
+  .ondemand-container {
+    max-width: 50% !important;
+    height: 42vh !important;
+    margin-left: 20.5rem !important;
+  }
+  .chart {
+    height: 40vh !important;
+  }
+}
+@media (max-width: 450px) {
+  .ondemand-container {
+    min-width: 85% !important;
+  }
+}
+@media (max-width: 400px) {
+  .ondemand-container {
+    min-width: 82vw !important;
+  }
+}
+
+@media (max-width: 826px) {
+  .ondemand-container {
+    width: 44vw !important;
+  }
 }

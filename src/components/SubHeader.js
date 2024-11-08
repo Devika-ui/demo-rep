@@ -5,7 +5,7 @@ import HeaderButtons from "./HeaderButtons";
 import DateRangeDropdown from "./DateRangeDropdown";
 import "../css/Subheader.scss";
 import api from "../api";
- 
+
 const SubHeader = ({ onButtonClick }) => {
   const [selectedFilters, setSelectedFilters] = useState({
     subscriptions: [],
@@ -15,7 +15,7 @@ const SubHeader = ({ onButtonClick }) => {
     projects: [],
     environments: [],
   });
- 
+
   const [filterOptions, setFilterOptions] = useState({
     subscriptions: [],
     businessUnits: [],
@@ -24,11 +24,11 @@ const SubHeader = ({ onButtonClick }) => {
     projects: [],
     environments: [],
   });
- 
+
   useEffect(() => {
     fetchInitialFilters();
   }, []);
- 
+
   const fetchInitialFilters = async () => {
     try {
       const initialData = await api.getFilterBasedOnSelection({});
@@ -44,7 +44,7 @@ const SubHeader = ({ onButtonClick }) => {
       console.error("Error fetching initial filters:", error);
     }
   };
- 
+
   const fetchFiltersBasedOnSelection = async (filters) => {
     try {
       const updatedData = await api.getFilterBasedOnSelection(filters);
@@ -60,7 +60,7 @@ const SubHeader = ({ onButtonClick }) => {
       console.error("Error fetching filters based on selection:", error);
     }
   };
- 
+
   const transformToOptions = (data) => {
     if (!data) return [];
     return data.map((item) => ({
@@ -68,12 +68,12 @@ const SubHeader = ({ onButtonClick }) => {
       label: item === null ? "null" : item,
     }));
   };
- 
+
   // Handle change in dropdown selections
   const handleFilterChange = async (filterType, values) => {
     const newSelectedFilters = { ...selectedFilters, [filterType]: values };
     setSelectedFilters(newSelectedFilters);
- 
+
     const filterParams = {
       subscriptions: newSelectedFilters.subscriptions.map((sub) => sub.value),
       businessUnits: newSelectedFilters.businessUnits.map((bu) => bu.value),
@@ -82,10 +82,10 @@ const SubHeader = ({ onButtonClick }) => {
       projects: newSelectedFilters.projects.map((proj) => proj.value),
       environments: newSelectedFilters.environments.map((env) => env.value),
     };
- 
+
     await fetchFiltersBasedOnSelection(filterParams); // Fetch updated filter options based on selections
   };
- 
+
   return (
     <div className="Subheader-Container">
       <div className="Subheader-ButtonsContainer">
@@ -104,7 +104,7 @@ const SubHeader = ({ onButtonClick }) => {
               labelledBy="Select"
             />
           </div>
- 
+
           {/* Business Unit dropdown */}
           <div className="filter-option-inline">
             <label>Business Unit(s)</label>
@@ -115,7 +115,7 @@ const SubHeader = ({ onButtonClick }) => {
               labelledBy="Select"
             />
           </div>
- 
+
           {/* Location dropdown */}
           <div className="filter-option-inline">
             <label>Location(s)</label>
@@ -126,7 +126,7 @@ const SubHeader = ({ onButtonClick }) => {
               labelledBy="Select"
             />
           </div>
- 
+
           {/* Application dropdown */}
           <div className="filter-option-inline">
             <label>Application(s)</label>
@@ -137,7 +137,7 @@ const SubHeader = ({ onButtonClick }) => {
               labelledBy="Select"
             />
           </div>
- 
+
           {/* Project dropdown */}
           <div className="filter-option-inline">
             <label>Project(s)</label>
@@ -148,7 +148,7 @@ const SubHeader = ({ onButtonClick }) => {
               labelledBy="Select"
             />
           </div>
- 
+
           {/* Environment dropdown */}
           <div className="filter-option-inline">
             <label>Environment(s)</label>
@@ -160,7 +160,7 @@ const SubHeader = ({ onButtonClick }) => {
             />
           </div>
         </div>
- 
+
         <div className="Subheader-Buttons">
           <button className="apply-button">Apply</button>
           <button className="reset-button">Reset</button>
@@ -169,13 +169,13 @@ const SubHeader = ({ onButtonClick }) => {
     </div>
   );
 };
- 
+
 SubHeader.propTypes = {
   onButtonClick: PropTypes.func,
 };
- 
+
 SubHeader.defaultProps = {
   onButtonClick: () => {},
 };
- 
+
 export default SubHeader;

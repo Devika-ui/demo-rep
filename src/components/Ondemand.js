@@ -16,8 +16,10 @@ const Ondemand = () => {
         console.log("anamoly:", data);
 
         // Parse the date and sort the data by month
-        const sortedData = data.sort((a, b) => new Date(a.Month) - new Date(b.Month));
-        
+        const sortedData = data.sort(
+          (a, b) => new Date(a.Month) - new Date(b.Month)
+        );
+
         const labels = sortedData.map((item) =>
           new Date(item.Month).toLocaleString("default", { month: "short" })
         );
@@ -148,15 +150,7 @@ const Ondemand = () => {
         Anomalies Detection for On-Demand Cost
       </Typography>
 
-      <div
-        className="chart"
-        style={{
-          width: "550px",
-          height: "320px",
-          marginBottom: "10px",
-          marginTop: "-20px",
-        }}
-      >
+      <div className="chart">
         <canvas ref={chartContainer} />
       </div>
     </div>

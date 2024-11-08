@@ -3,7 +3,7 @@
   padding: 10px;
   border: 1px solid #ccc;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: auto;
+  overflow: hidden;
   margin-top: -4px !important;
   border-radius: 5px;
 }
@@ -33,48 +33,139 @@
   font-weight: 700 !important;
   color: #63666a !important;
   padding: 4px 8px !important;
-  border-color: #63666a !important;
   margin-top: -35px !important;
 }
 .cmpSvcCat_tableContainer {
-  border: 1px solid #ddd;
+  border: 1px solid black;
   border-radius: 0;
-  overflow: hidden;
+  overflow: auto;
+  max-height: 210px !important;
 }
 .cmpSvcCat_tableHeader {
-  padding: 4px 8px !important;
+  padding: 8px 8px !important;
   text-align: center !important;
   color: white !important;
   background-color: #72509b;
-  border-bottom: 1px solid black !important;
-  border-top: 1px solid black !important;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
+
+.cmpSvcCat_columnHeader {
+  text-align: center !important;
+  padding: 20px 10px !important;
+  border: 1px solid black !important;
+  color: black;
+  background-color: white;
+}
+
 .cmpSvcCat_table {
   table-layout: fixed;
+  width: 100%;
 }
+
 .cmpSvcCat_nestedRow {
   background-color: #f9f9f9;
+}
+.overlay-mode .cmpSvcCat_tableContainer {
+  max-height: 95% !important;
+  flex-grow: 1 !important;
 }
 .cmpSvcCat_cell {
   padding: 4px 8px !important;
   overflow: hidden;
   text-align: center !important;
   color: rgb(82, 32, 134) !important;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid black;
+  border-right: 1px solid #ccc;
 }
-.cmpSvcCat_columnHeader {
-  text-align: center;
-  padding: 4px 8px;
-  border-bottom: 1px solid black !important;
-  border-left: 1px solid black !important;
-  border-top: 1px solid black !important;
-  border-right: 1px solid black !important;
-  color: black;
+.cmpSvcCat_tableCell {
+  border-right: 1px solid #ccc;
 }
 .cmpSvcCat_indentedCell {
   font-size: 0.8rem;
 }
 .cmpSvcCat_nestedRow > .cmpSvcCat_tableCell {
   color: rgb(82, 32, 134) !important;
+}
+
+@media (max-width: 630px) {
+  .cmpSvcCat_header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cmpSvcCat_buttons {
+    margin-top: 2.2rem;
+  }
+}
+@media (min-width: 1700px) {
+  .cmpSvcCat_container {
+    width: 98.2% !important;
+    height: 45vh !important;
+    margin-left: 0.3rem;
+  }
+  .cmpSvcCat_tableContainer {
+    min-height: 75% !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .cmpSvcCat_container {
+    width: 95.5% !important;
+  }
+}
+@media (max-width: 990px) {
+  .cmpSvcCat_container {
+    width: 95.5% !important;
+    margin-left: 0.2rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .cmpSvcCat_container {
+    margin-top: 0.5rem !important;
+  }
+  .cmpSvcCat_tableContainer {
+    max-height: 60% !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .cmpSvcCat_container {
+    width: 80% !important;
+  }
+}
+
+@media (max-width: 850px) {
+  .cmpSvcCat_container {
+    width: 95% !important;
+    margin-left: 0.2rem !important;
+  }
+}
+
+@media (max-width: 431px) {
+  .cmpSvcCat_container {
+    margin-left: 0.1rem !important;
+    width: 88% !important;
+    margin-top: 0.5rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .cmpSvcCat_columnHeader,
+  .cmpSvcCat_tableCell,
+  .cmpSvcCat_cell,
+  .cmpSvcCat_tableHeader {
+    font-size: 9px !important;
+  }
+}
+
+@media (max-width: 863px) {
+  .cmpSvcCat_tableContainer {
+    height: 85vh !important;
+  }
+}
+@media (max-width: 361px) {
+  .cmpSvcCat_tableContainer {
+    height: 60% !important;
+  }
 }

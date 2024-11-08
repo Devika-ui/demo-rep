@@ -17,14 +17,16 @@ const MonthlyForecastComponent = () => {
         const forecastData = await api.getMonthlyForecastSpend();
         if (forecastData.length > 0) {
           const lastMonth = forecastData[0].lastMonthCost;
-          const future = forecastData[0].futureCost;
+          const latestFutureCostData = forecastData[0].futureCosts.at(-1); // Get the latest month data
+
           setLastMonthCost(lastMonth);
-          setFutureCost(future);
-          setPercentageIncrease(forecastData[0].percentageIncrease);
-          setTotalCost(lastMonth + future);
+          setFutureCost(latestFutureCostData.futureCost);
+          console.log(lastMonth, latestFutureCostData.futureCost);
+          setPercentageIncrease(latestFutureCostData.percentageIncrease);
+          setTotalCost(lastMonth + latestFutureCostData.futureCost);
         }
       } catch (error) {
-        // Handle error
+        console.error("Error fetching forecast data:", error);
       }
     };
     fetchData();
@@ -44,15 +46,27 @@ const MonthlyForecastComponent = () => {
       imageSrc = null;
       altText = "No Change";
     }
+
     return (
       <div className="right">
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", width: "90%" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            width: "90%",
+          }}
+        >
           {imageSrc && (
             <span className="icon" style={{ marginLeft: "8px" }}>
-              <img src={imageSrc} alt={altText} style={{ width: "27px", height: "20px" }} />
+              <img
+                src={imageSrc}
+                alt={altText}
+                style={{ width: "27px", height: "20px" }}
+              />
             </span>
           )}
-          {percentageIncrease !== null ? (
+          {typeof percentageIncrease === "number" ? (
             <strong>{percentageIncrease.toFixed(2)}%</strong>
           ) : (
             <strong>N/A</strong>
@@ -71,7 +85,11 @@ const MonthlyForecastComponent = () => {
       <div className="content-wrapper">
         <div className="container-1">
           <div className="number">
-            {totalCost !== null ? <strong>${totalCost.toFixed(2)}</strong> : <strong>Loading...</strong>}
+            {totalCost !== null ? (
+              <strong>${totalCost.toFixed(2)}</strong>
+            ) : (
+              <strong>Loading...</strong>
+            )}
           </div>
         </div>
         <div className="container-2">

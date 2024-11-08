@@ -13,7 +13,7 @@
   box-sizing: border-box;
   margin-top: 5px;
 }
- 
+
 .Subheader-ButtonsContainer {
   display: flex;
   align-items: center;
@@ -24,7 +24,7 @@
   margin-right: 20px; /* Adjusted margin to fit within container */
   gap: 25px;
 }
- 
+
 .Subheader-Boxes {
   display: flex;
   align-items: center;
@@ -33,7 +33,7 @@
   padding: 0;
   box-sizing: border-box;
 }
- 
+
 .Filter-Options-Row {
   display: flex;
   flex-wrap: nowrap;
@@ -42,13 +42,13 @@
   flex: 1; /* Allow row to expand */
   margin-left: -15px;
 }
- 
+
 .filter-option-inline {
   flex: 1; /* Make each filter option take an equal amount of space */
   min-width: 10%; /* Minimum width to prevent it from getting too small */
   max-width: 50%; /* Maximum width to prevent it from getting too large */
 }
- 
+
 .filter-option-inline label {
   display: flex;
   justify-content: center;
@@ -56,7 +56,7 @@
   margin-bottom: 5px;
   font-weight: bold;
 }
- 
+
 .Subheader-Buttons {
   display: flex;
   flex-direction: column;
@@ -65,14 +65,14 @@
   width: 120px; /* Adjust width to fit buttons */
   box-sizing: border-box;
 }
- 
+
 .Subheader-Buttons .apply-button,
 .Subheader-Buttons .reset-button {
   width: 100%; /* Make buttons fit within the container */
   box-sizing: border-box;
   margin-right: 30px;
 }
- 
+
 .Subheader-Buttons .apply-button {
   background-color: #5f249f;
   color: white;
@@ -83,7 +83,7 @@
   min-width: 70px;
   margin-bottom: 5px; /* Space between Apply and Reset */
 }
- 
+
 .Subheader-Buttons .reset-button {
   background-color: #ccc;
   color: black;
@@ -93,7 +93,7 @@
   cursor: pointer;
   min-width: 70px;
 }
- 
+
 @media (max-width: 1802px) {
   .Subheader-Container {
     width: 102%;
@@ -101,7 +101,7 @@
     margin-left: -20px;
     margin-top: 0;
   }
- 
+
   .Filter-Options-Row {
     gap: 15px;
     width: auto;
@@ -110,14 +110,14 @@
     display: flex;
     flex-wrap: wrap;
   }
- 
+
   .filter-option-inline {
     flex: 1;
     min-width: unset;
     max-width: 15%;
     white-space: nowrap;
   }
- 
+
   .Subheader-Buttons {
     margin-left: 40px; /* Adjust space for smaller screens */
     width: 100px; /* Adjust width for smaller screens */
@@ -127,14 +127,14 @@
     margin-right: 15px;
   }
 }
- 
+
 @media (max-width: 1262px) {
   .Subheader-Container {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
   }
- 
+
   .Subheader-Boxes {
     display: flex;
     flex-wrap: wrap;
@@ -142,7 +142,7 @@
     width: 100%;
     align-items: center;
   }
- 
+
   .Filter-Options-Row {
     display: flex;
     flex-wrap: wrap;
@@ -150,13 +150,13 @@
     width: 100%;
     margin-left: 10px;
   }
- 
+
   .filter-option-inline {
     flex: 1;
     min-width: 150px;
     max-width: calc(100% / 3 - 20px);
   }
- 
+
   .Subheader-Buttons {
     display: flex;
     flex-direction: column;
@@ -165,14 +165,12 @@
     margin: 10px 15px; /* Adjust spacing to fit within container */
     box-sizing: border-box;
   }
- 
+
   .Subheader-Buttons .apply-button,
   .Subheader-Buttons .reset-button {
     margin-bottom: 5px;
   }
 }
-
-
 
 .subscription-title {
   font-size: 16px;
@@ -183,13 +181,10 @@
   font-family: sans-serif;
   position: relative;
   top: -17px;
-  
- 
 
   @media (max-width: 600px) {
     margin-left: 20px;
     font-size: 14px;
     text-align: center; /* Center the title on smaller screens */
-  
   }
 }

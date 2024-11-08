@@ -8,6 +8,8 @@ import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import ShareIcon from "@mui/icons-material/Share";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Box from "@mui/material/Box";
@@ -87,6 +89,7 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
   );
 
   const [expandedRows, setExpandedRows] = useState({});
+  const [isOverlayOpen, setOverlayOpen] = useState(false);
 
   const toggleRow = (rowKey, index) => {
     setExpandedRows((prev) => ({
@@ -102,34 +105,48 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
 
   const indentIncrement = 30;
 
+  const handleOverlayOpen = () => {
+    setOverlayOpen(true);
+  };
+
+  const handleOverlayClose = () => {
+    setOverlayOpen(false);
+  };
+
   return (
-    <div
-      className="cmpSvcCat_container"
-      style={{ height: height, width: width }}
-    >
-      <div className="cmpSvcCat_header">
-        <h2 className="cmpSvcCat_title">{tableData[0].tableTitle}</h2>
+    <>
+      <div
+        className="cmpSvcCat_container"
+        style={{ height: height, width: width }}
+      >
+        <div className="cmpSvcCat_header">
+          <h2 className="cmpSvcCat_title">{tableData[0].tableTitle}</h2>
 
-        <div className="cmpSvcCat_buttons">
-          <Button
-            variant="contained"
-            className="cmpSvcCat_button"
-            color="inherit"
-          >
-            Customize Report
-          </Button>
+          <div className="cmpSvcCat_buttons">
+            <Button
+              variant="contained"
+              className="cmpSvcCat_button"
+              color="inherit"
+            >
+              Customize Report
+            </Button>
 
-          <IconButton className="cmpSvcCat_button">
-            <ShareIcon />
-          </IconButton>
+            <IconButton className="cmpSvcCat_button">
+              <ShareIcon />
+            </IconButton>
+
+            <IconButton
+              onClick={handleOverlayOpen}
+              className="cmpSvcCat_button"
+            >
+              <FullscreenIcon />
+            </IconButton>
+          </div>
         </div>
-      </div>
 
-      <Box className="cmpSvcCat_tableContainer">
         <div className="cmpSvcCat_tableHeader">April - 24</div>
-
-        <TableContainer>
-          <Table>
+        <TableContainer className="cmpSvcCat_tableContainer">
+          <Table stickyHeader>
             <TableHead>
               {/* <TableRow>
                   <TableCell className="cmpSvcCat_columnHeader">
@@ -173,8 +190,42 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Box>
-    </div>
+      </div>
+
+      {isOverlayOpen && (
+        <div className="overlay overlay-mode">
+          <div className="overlay-content">
+            <IconButton className="close-overlay" onClick={handleOverlayClose}>
+              <CloseIcon />
+            </IconButton>
+            <div className="cmpSvcCat_tableHeader">April - 24</div>
+            <TableContainer className="cmpSvcCat_tableContainer">
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    {headers.map((headerKey, index) => (
+                      <TableCell key={index} className="cmpSvcCat_columnHeader">
+                        {tableData[0][headerKey]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRowComponent
+                    data={dummyData}
+                    level={0}
+                    toggleRow={toggleRow}
+                    expandedRows={expandedRows}
+                    rowKey="category"
+                    indentIncrement={indentIncrement}
+                  />
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
