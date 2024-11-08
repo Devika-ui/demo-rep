@@ -9,6 +9,7 @@ import ContainerForBusinessCost from "./ContainerForBusinessCost";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
 import MonthlyCostTrends from "./MonthlyCostTrends";
+import { Box, Typography } from "@mui/material";
 
 const BusinessCostSplit = () => {
   const [showStackBars, setShowStackBars] = useState(true);
@@ -342,18 +343,30 @@ const BusinessCostSplit = () => {
 
   return (
     <div>
-      <Header onButtonClick={handleButtonClick} />
-      <Subheader
-        title={
-          <div>
-            <span style={{ fontSize: "18px" }}>Cost & Usage/</span>
-            <span style={{ color: "#5f249f", fontSize: "18px" }}>
-              Business Cost Split
-            </span>
-          </div>
-        }
-        additionalFilters={additionalFilters}
-      />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          paddingX: 9.5,
+          paddingRight: "10px",
+          maxWidth: "100%",
+        }}
+      >
+        <Header />
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{
+            color: "#5f249f",
+            marginTop: "-1rem", // Adjust this as needed
+            fontWeight: "bold",
+          }}
+        >
+          Business Cost Split
+        </Typography>
+        <Subheader onButtonClick={handleButtonClick} />
+        <NavigationBar />
+      </Box>
       <NavigationBar />
       <div
         style={{
