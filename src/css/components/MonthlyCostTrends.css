@@ -54,9 +54,9 @@
 @media (min-width:667px) and (max-width:668px){
     .container{
         margin-left: -1.6rem ;
-        height: 40.8vh;
+        height: 40.8vh !important;
         width: 40vw;
-        margin-bottom: -1rem;
+        margin-bottom: -1rem !important;
     }
     .chart-wrapper{
         height: 42vh !important;
@@ -75,7 +75,7 @@
     .container{
         margin-left: -5rem; 
         margin-right: 2.5rem;
-        height: 40.2vh;
+        height: 40.2vh !important;
     }
     .chart-wrapper{
         height: 42vh !important;
@@ -98,7 +98,7 @@
     .container{
         margin-left: -5rem; 
         margin-right: 2.5rem;
-        height: 40.2vh;
+        height: 40.2vh !important;
         width: 40vw;
     }
     .chart-wrapper{
