@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
+import React, { useEffect, useState } from 'react';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   LineElement,
@@ -9,47 +9,39 @@ import {
   Tooltip,
   Legend,
   Filler,
-} from "chart.js";
-import api from "../api.js";
-import "../css/components/MonthlyCostTrends.css";
+} from 'chart.js';
+import api from '../api.js';
+import '../css/components/MonthlyCostTrends.css';
 
-ChartJS.register(
-  LineElement,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-  Tooltip,
-  Legend,
-  Filler
-);
+ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Filler);
 
 const MonthlyCostTrends = () => {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
       {
-        label: "Consumption Cost",
+        label: 'Consumption Cost',
         data: [],
-        borderColor: "#00bfa5",
+        borderColor: '#00bfa5',
         borderWidth: 2,
-        pointBackgroundColor: "#00bfa5",
-        pointBorderColor: "#fff",
+        pointBackgroundColor: '#00bfa5',
+        pointBorderColor: '#fff',
         pointRadius: 4,
         tension: 0,
         fill: false,
       },
       {
-        label: "Projected Cost",
+        label: 'Projected Cost',
         data: [],
-        borderColor: "#9c27b0",
+        borderColor: '#9c27b0',
         borderWidth: 2,
-        pointBackgroundColor: "#9c27b0",
-        pointBorderColor: "#fff",
+        pointBackgroundColor: '#9c27b0',
+        pointBorderColor: '#fff',
         pointRadius: 4,
         fill: {
-          target: "origin",
-          above: "rgba(156, 39, 176, 0.1)",
-          below: "rgba(156, 39, 176, 0.1)",
+          target: 'origin',
+          above: 'rgba(156, 39, 176, 0.1)',
+          below: 'rgba(156, 39, 176, 0.1)',
         },
         tension: 0,
       },
@@ -71,8 +63,7 @@ const MonthlyCostTrends = () => {
         const consumptionCostData = pastCosts.map((cost) => cost.pastCost);
 
         // Get the last known consumption cost
-        const lastConsumptionCost =
-          consumptionCostData[consumptionCostData.length - 1];
+        const lastConsumptionCost = consumptionCostData[consumptionCostData.length - 1];
 
         // Prepare data for projected cost
         const projectedCostData = [
@@ -95,7 +86,7 @@ const MonthlyCostTrends = () => {
           ],
         });
       } catch (error) {
-        console.error("Error fetching forecast spend data:", error);
+        console.error('Error fetching forecast spend data:', error);
       }
     };
 
@@ -108,7 +99,7 @@ const MonthlyCostTrends = () => {
     plugins: {
       legend: {
         display: true,
-        position: "bottom",
+        position: 'bottom',
         labels: {
           usePointStyle: true,
         },
@@ -128,7 +119,7 @@ const MonthlyCostTrends = () => {
           font: {
             size: 12,
           },
-          color: "#666",
+          color: '#666',
         },
       },
       y: {

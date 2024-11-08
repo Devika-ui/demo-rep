@@ -9,17 +9,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Typography } from "@mui/material";
+import { Typography, Switch, FormControlLabel } from "@mui/material";
 import api from "../api.js";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const options = {
   responsive: true,
@@ -30,9 +23,8 @@ const options = {
       labels: {
         color: "#000",
         font: {
-          family: "Roboto", // Set the font family to Roboto
-          size: 16,
-          weight: "none",
+          family: "Roboto",
+          size: 12,
         },
       },
     },
@@ -59,18 +51,20 @@ const options = {
       ticks: {
         autoSkip: false,
         maxRotation: 0,
-        minRotation: 0,
-
         callback: function (value, index, values) {
-          const date = new Date(this.getLabelForValue(value));
-          const midMonthDay =
-            new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() / 2;
-          if (date.getDate() === Math.ceil(midMonthDay)) {
-            return date.toLocaleString("default", {
-              month: "long",
-              year: "numeric",
-            });
+          const label = this.getLabelForValue(value);
+          // Convert label to date object
+          const date = new Date(label);
+
+          // Only show the first day of each month (e.g. 2024-09-01)
+          if (date.getDate() === 1) {
+            let month = date.toLocaleString("default", { month: "short" });
+            if (month === "Sep") month = "Sept"; // Adjust 'Sep' to 'Sept'
+            const year = date.getFullYear().toString().slice(-2);
+            return `${month}'${year}`;
           }
+
+          // Return an empty string for other days to avoid repeated month/year labels
           return "";
         },
       },
@@ -79,29 +73,21 @@ const options = {
       stacked: true,
       beginAtZero: true,
       grid: {
-        display: true,
+        display: false,
       },
       ticks: {
         stepSize: 4000,
         max: 6000,
       },
-      padding: 0,
-    },
-  },
-  layout: {
-    padding: {
-      top: 0,
-      bottom: -5,
     },
   },
 };
 
 const AzureBars = () => {
-  const [data, setData] = useState({
-    labels: [],
-    datasets: [],
-  });
+  const [data, setData] = useState({ labels: [], datasets: [] });
+  const [forecastData, setForecastData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showForecast, setShowForecast] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,15 +103,9 @@ const AzureBars = () => {
           labelsSet.add(dateString);
 
           if (RIDTYPE === "PAY GO") {
-            if (!payAsYouGoData[dateString]) {
-              payAsYouGoData[dateString] = 0;
-            }
-            payAsYouGoData[dateString] += totalcost;
+            payAsYouGoData[dateString] = (payAsYouGoData[dateString] || 0) + totalcost;
           } else if (RIDTYPE === "RI") {
-            if (!reservationsData[dateString]) {
-              reservationsData[dateString] = 0;
-            }
-            reservationsData[dateString] += totalcost;
+            reservationsData[dateString] = (reservationsData[dateString] || 0) + totalcost;
           }
         });
 
@@ -151,30 +131,90 @@ const AzureBars = () => {
         ];
 
         setData({ labels, datasets });
-        setLoading(false); // Data fetching is complete
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch data", error);
-        setLoading(false); // Data fetching failed
+        setLoading(false);
       }
     };
+
+    const fetchForecastData = async () => {
+      try {
+        const forecastResponse = await api.getMonthlyForecastSpend();
+
+        const pastMonths = forecastResponse[0].pastCosts.map(item => item.month);
+        const pastCosts = forecastResponse[0].pastCosts.map(item => item.pastCost);
+
+        const futureMonths = forecastResponse[0].futureCosts.map(item => item.month);
+        const futureCosts = forecastResponse[0].futureCosts.map(item => item.futureCost);
+
+        const combinedLabels = [...pastMonths, ...futureMonths];
+
+        const pastCostsDataset = {
+          label: "Prev Months Cost",
+          backgroundColor: "#00A3E1",
+          barThickness: 25,
+          data: pastCosts,
+          stack: "total",
+        };
+
+        const futureCostsDataset = {
+          label: "Future Forecast",
+          backgroundColor: "rgba(255, 255, 255, 0.8)", // White with slight transparency
+          barThickness: 25,
+          borderColor: "#00A3E1", // Blue outline
+          borderWidth: 2, // Thickness of the blue border
+          data: [...Array(pastCosts.length).fill(null), ...futureCosts],
+          stack: "total",
+        };
+        
+        setForecastData({
+          labels: combinedLabels,
+          datasets: [pastCostsDataset, futureCostsDataset],
+        });
+      } catch (error) {
+        console.error("Failed to fetch forecast data", error);
+      }
+    };
+
     fetchData();
+    fetchForecastData();
   }, []);
 
+  const handleToggleChange = () => {
+    setShowForecast(!showForecast);
+  };
+
   if (loading) {
-    return null; // Show nothing while loading
+    return null;
   }
 
   return (
-    <div>
+    <div style={{ position: "relative", padding: "10px" }}>
       <div
         style={{
-          // margin: "10px auto",
           position: "relative",
           margin: "0px 10px 0 5px",
           height: "210px",
         }}
       >
-        <Bar style={{ paddingTop: "5px" }} options={options} data={data} />
+        <Bar
+          style={{ paddingTop: "5px"}}
+          options={options}
+          data={showForecast && forecastData ? forecastData : data}
+        />
+      </div>
+      <div style={{ position: "absolute", top: "13px", right: "-5px" }}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showForecast}
+              onChange={handleToggleChange}
+              color="primary"
+            />
+          }
+          labelPlacement="start"
+        />
       </div>
     </div>
   );

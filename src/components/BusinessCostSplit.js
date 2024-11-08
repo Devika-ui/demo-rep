@@ -10,7 +10,7 @@ import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
 import MonthlyCostTrends from "./MonthlyCostTrends";
 import { Box, Typography } from "@mui/material";
-
+ 
 const BusinessCostSplit = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [reportType, setReportType] = useState("");
@@ -23,7 +23,7 @@ const BusinessCostSplit = () => {
   const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] =
     useState([]);
   const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
-
+ 
   const additionalFilters = [
     {
       label: "Service Category(s)",
@@ -72,7 +72,7 @@ const BusinessCostSplit = () => {
       ],
     },
   ];
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -91,7 +91,7 @@ const BusinessCostSplit = () => {
           api.getServiceCategoryCost(),
           api.getBillAllocation(),
         ]);
-
+ 
         const formattedBoxData = [
           {
             number:
@@ -127,23 +127,23 @@ const BusinessCostSplit = () => {
             text: "Project without Tags",
           },
         ];
-
+ 
         const aggregateData = (data) => {
           let totalBill = 0;
           let onDemandCost = 0;
           let commitmentsCost = 0;
           let savings = 0;
-
+ 
           data.forEach((item) => {
             totalBill += item.totalBill || 0;
             onDemandCost += item.onDemandCost || 0;
             commitmentsCost += item.commitmentsCost || 0;
             savings += item.savings || 0;
           });
-
+ 
           return { totalBill, onDemandCost, commitmentsCost, savings };
         };
-
+ 
         const formattedServiceCategoryData = Object.keys(
           serviceCategoryCost
         ).map((serviceCategory) => {
@@ -174,10 +174,10 @@ const BusinessCostSplit = () => {
                     resource
                   ].Savings || 0,
               }));
-
+ 
               const { totalBill, onDemandCost, commitmentsCost, savings } =
                 aggregateData(resources);
-
+ 
               return {
                 name: resourceGroup,
                 totalBill,
@@ -187,10 +187,10 @@ const BusinessCostSplit = () => {
                 resources,
               };
             });
-
+ 
             const { totalBill, onDemandCost, commitmentsCost, savings } =
               aggregateData(resourceGroups);
-
+ 
             return {
               name: service,
               totalBill,
@@ -200,10 +200,10 @@ const BusinessCostSplit = () => {
               resourceGroups,
             };
           });
-
+ 
           const { totalBill, onDemandCost, commitmentsCost, savings } =
             aggregateData(services);
-
+ 
           return {
             name: serviceCategory,
             totalBill,
@@ -213,7 +213,7 @@ const BusinessCostSplit = () => {
             services,
           };
         });
-
+ 
         const billAllocationMap = billAllocation.billAllocation.reduce(
           (acc, item) => {
             const modifiedDate = new Date(item.modifieddate);
@@ -222,11 +222,11 @@ const BusinessCostSplit = () => {
             });
             const yearString = modifiedDate.getFullYear().toString().slice(-2);
             const formattedDate = `${monthString}-${yearString}`;
-
+ 
             if (!acc[formattedDate]) {
               acc[formattedDate] = [];
             }
-
+ 
             acc[formattedDate].push({
               name: item.tags_AppID_AppName || "null",
               ownerName: item.tags_owner || "null",
@@ -241,12 +241,12 @@ const BusinessCostSplit = () => {
                 item.rawVariation !== null ? `${item.rawVariation}%` : "null",
               savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
             });
-
+ 
             return acc;
           },
           {}
         );
-
+ 
         const uniqueModifiedDatesForBillAllocation =
           Object.keys(billAllocationMap);
         const flattenedBillAllocationData =
@@ -272,16 +272,16 @@ const BusinessCostSplit = () => {
           });
         });
         const uniqueNames = [...uniqueNamesSet];
-
+ 
         console.log("uniqueNames", uniqueNames);
-
+ 
         console.log("formattedBoxData", formattedBoxData);
         console.log("flattenedBillAllocationData", flattenedBillAllocationData);
         console.log(
           "formattedServiceCategoryData",
           formattedServiceCategoryData
         );
-
+ 
         setBoxData(formattedBoxData);
         console.log("tatt", formattedServiceCategoryData);
         setServiceCategoryData(formattedServiceCategoryData);
@@ -293,10 +293,10 @@ const BusinessCostSplit = () => {
         console.error("Error fetching data:", error);
       }
     };
-
+ 
     fetchData();
   }, []);
-
+ 
   const handleButtonClick = (value) => {
     if (value === "Azure") {
       setShowStackBars(false); // Hide StackBars and show AzureBars
@@ -304,11 +304,11 @@ const BusinessCostSplit = () => {
       setShowStackBars(true); // Show StackBars
     }
   };
-
+ 
   const handleReportTypeChange = (event) => {
     const selectedReportType = event.target.value;
     setReportType(selectedReportType);
-
+ 
     if (selectedReportType) {
       const filteredData = billAllocationData.filter((item) => {
         return Object.keys(item).some(
@@ -320,7 +320,7 @@ const BusinessCostSplit = () => {
       setFilteredBillAllocationData(billAllocationData);
     }
   };
-
+ 
   const columns1 = [
     { key: "name", label: "Application Name" },
     { key: "ownerName", label: "Owner Name" },
@@ -329,7 +329,7 @@ const BusinessCostSplit = () => {
     { key: "rawVariation", label: "%Raw Variation" },
     { key: "savings", label: "Savings" },
   ];
-
+ 
   const tableData = [
     {
       tableTitle: "Service Category Cost Allocation",
@@ -340,7 +340,7 @@ const BusinessCostSplit = () => {
       columnHead5: "Savings",
     },
   ];
-
+ 
   return (
     <div>
       <Box
@@ -379,7 +379,7 @@ const BusinessCostSplit = () => {
       >
         <ContainerForBusinessCost data={boxData} />
       </div>
-
+ 
       {/* New Flex Container for Ondemand and MonthlyCostTrends */}
       <div
         style={{
@@ -409,14 +409,14 @@ const BusinessCostSplit = () => {
           <MonthlyCostTrends />
         </div>
       </div>
-
+ 
       <div
         style={{
           display: "flex",
           justifyContent: "center",
           width: "100%",
           padding: "33px",
-          marginTop: "-55px",
+          marginTop: "-70px",
           marginLeft: "-8px",
         }}
       >
@@ -469,7 +469,7 @@ const BusinessCostSplit = () => {
           justifyContent: "center",
           marginLeft: "50px",
           marginTop: "-38px",
-          marginBottom: "30px",
+          marginBottom: "15px",
         }}
       >
         <ServiceCategory
@@ -482,5 +482,5 @@ const BusinessCostSplit = () => {
     </div>
   );
 };
-
+ 
 export default BusinessCostSplit;
