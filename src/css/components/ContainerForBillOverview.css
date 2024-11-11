@@ -26,7 +26,8 @@
 .cmp_box:hover .cmp_box_text1 {
   color: white !important;
 }
-.cmp_containerBox {
+.cmp_containerBox1 {
+  margin-top: 15px;
   margin-left: 90px;
   padding: 16px;
   display: flex;
@@ -98,7 +99,7 @@
     .cmp_box_text1 {
       font-size: 9px !important; /* Further reduce font size for smaller screens */
     }
-    .cmp_containerBox {
+    .cmp_containerBox1 {
       padding: 8px;
       gap: 6px;
     }
@@ -116,14 +117,14 @@
     .cmp_box_text1 {
       font-size: 9px !important; /* Further reduce font size for smaller screens */
     }
-    .cmp_containerBox {
+    .cmp_containerBox1 {
       padding: 10px;
       gap: 4px;
     }
   }
 
   @media (max-width: 500px) {
-    /* .cmp_containerBox {
+    /* .cmp_containerBox1 {
       height: 130px;
     }
 
@@ -131,7 +132,7 @@
       height: 65px;
     } */
 
-    .cmp_containerBox {
+    .cmp_containerBox1 {
       display: flex;
       flex-wrap: wrap; /* Allows the boxes to move onto the next row */
       justify-content: space-between;
@@ -157,8 +158,8 @@
     }
   }
   @media (max-width: 455px) {
-    .cmp_containerBox {
-      height: 120px;
+    .cmp_containerBox1 {
+      height: 200px;
       display: flex;
       padding: 10px;
       gap: 8px; /* Ensures boxes are spaced out evenly */
@@ -182,8 +183,8 @@
     }
   }
   @media (max-width: 405px) {
-    .cmp_containerBox {
-      height: 120px;
+    .cmp_containerBox1 {
+      height: 200px;
       display: flex;
 
       padding: 10px;
@@ -208,8 +209,8 @@
   }
 
   @media (max-width: 375px) {
-    .cmp_containerBox {
-      height: 120px;
+    .cmp_containerBox1 {
+      height: 200px;
       display: flex;
       flex-wrap: wrap; /* Allows the boxes to move onto the next row */
       justify-content: space-between;

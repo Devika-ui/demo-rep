@@ -442,8 +442,9 @@ const BillOverview = () => {
           display: "flex",
           justifyContent: "space-between",
           padding: "20px",
-          marginTop: "-30px",
+          marginTop: "-27px",
           flexWrap: "wrap",
+          gap: "5px",
           // flexDirection: "row", // Default for larger screens
         }}
         className="chart-container"
@@ -491,7 +492,7 @@ const BillOverview = () => {
           padding: "33px",
           marginLeft: "-8px",
           width: "100%",
-          marginTop: "-78px",
+          marginTop: "-80px",
         }}
       >
         <InvoiceTableView
