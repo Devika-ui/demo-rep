@@ -63,3 +63,36 @@
     height: 6.5vh;
   }
 }
+
+@media (min-width:414px) and (max-width:415px){
+  .progress-bar-graph{
+    height:9vh ;
+    margin-top: 4.2rem;
+  }
+  .progress-bar-title{
+   position: absolute;
+   margin-top: 2rem;
+  }
+}
+
+@media (min-width:389px) and (max-width:390px){
+  .progress-bar-graph{
+    height:9vh ;
+    margin-top: 4.2rem;
+  }
+  .progress-bar-title{
+   position: absolute;
+   margin-top: 2rem;
+  }
+}
+
+@media (min-width:429px) and (max-width:430px){
+  .progress-bar-graph{
+    height:9vh ;
+    margin-top: 4.2rem;
+  }
+  .progress-bar-title{
+   position: absolute;
+   margin-top: 2rem;
+  }
+}
