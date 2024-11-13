@@ -5,7 +5,7 @@ import "../css/components/ContainerForBillOverview.css";
 
 const ContainerForBillOverview = ({ data }) => {
   return (
-    <Paper className="cmp_containerBox" style={{ width: "100%" }}>
+    <Paper className="cmp_containerBox1" style={{ width: "100%" }}>
       {data.map((item, index) => (
         <Box key={index} number={item.number} text={item.text} />
       ))}

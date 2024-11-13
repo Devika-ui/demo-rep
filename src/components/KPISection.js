@@ -3,24 +3,26 @@ import CustomProgressBar from "./CustomProgressBar";
 import "../css/kpiSection.scss";
 import api from "../api.js";
 
-const KPISection = () => {
+const KPISection = ({ subscriptionsData }) => {
   const [percentCoverage, setPercentCoverage] = useState(0);
   const [percentUsage, setPercentUsage] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const coverageData = await api.getDiscountKPICoverage();
+        const coverageData = await api.getDiscountKPICoverage(
+          subscriptionsData
+        );
         setPercentCoverage(coverageData.coverage);
 
-        const usageData = await api.getDiscountKPIUsage();
+        const usageData = await api.getDiscountKPIUsage(subscriptionsData);
         setPercentUsage(usageData.usage);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [subscriptionsData]);
 
   return (
     <div className="kpi-section">

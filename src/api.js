@@ -2,7 +2,7 @@ const domainUrl = process.env.REACT_APP_API_DOMAIN;
 const apiUrl = `${domainUrl}/api/v1`;
 
 const api = {
-  getMonthlyActualSpend: async () => {
+  getMonthlyActualSpend: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/monthly/spend/actual`, {
         method: "POST",
@@ -14,13 +14,14 @@ const api = {
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
-            Subscription: ["Subscription1"],
+            Subscription: subscriptionsData,
           },
         }),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch actual spend data");
       }
+
       return await response.json();
     } catch (error) {
       console.error("Error fetching actual spend data:", error);
@@ -28,7 +29,7 @@ const api = {
     }
   },
 
-  getMonthlyForecastSpend: async () => {
+  getMonthlyForecastSpend: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/monthly/forecast`, {
         method: "POST",
@@ -40,7 +41,7 @@ const api = {
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: ["2024-08-01", "2024-09-01"],
-            Subscription: ["Subscription2"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -90,7 +91,7 @@ const api = {
     }
   },
 
-  getDiscountKPICoverage: async () => {
+  getDiscountKPICoverage: async (subscriptionsData) => {
     try {
       const response = await fetch(
         `${apiUrl}/overview/KPI/discounts/comittmentbased/coverage`,
@@ -104,8 +105,7 @@ const api = {
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
-              Subscription: ["Subscription2"],
+              Subscription: subscriptionsData,
             },
           }),
         }
@@ -149,7 +149,7 @@ const api = {
     }
   },
 
-  getOverallSavingsRI: async () => {
+  getOverallSavingsRI: async (subscriptionsData) => {
     try {
       const response = await fetch(
         `${apiUrl}/overview/monthly/realized/savings`,
@@ -163,8 +163,7 @@ const api = {
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
-              Subscription: ["Subscription2"],
+              Subscription: subscriptionsData,
             },
           }),
         }
@@ -179,7 +178,7 @@ const api = {
     }
   },
 
-  getOverallSavingsStimulated: async () => {
+  getOverallSavingsStimulated: async (subscriptionsData) => {
     try {
       const response = await fetch(
         `${apiUrl}/overview/monthly/realized/simulatedri`,
@@ -193,8 +192,7 @@ const api = {
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
-              Subscription: ["Subscription2"],
+              Subscription: subscriptionsData,
             },
           }),
         }
@@ -250,7 +248,7 @@ const api = {
     }
   },
 
-  getMapData: async () => {
+  getMapData: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/locations/`, {
         method: "POST",
@@ -263,7 +261,7 @@ const api = {
           filters: {
             BillingMonthStartDate: ["2024-08-01"],
             BillingMonthStartDate: ["2024-08-01"],
-            Location: [],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -299,7 +297,7 @@ const api = {
     }
   },
 
-  getBillingCostEachDay: async () => {
+  getBillingCostEachDay: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/billcost/total`, {
         method: "POST",
@@ -312,7 +310,7 @@ const api = {
           filters: {
             StartDate: ["2024-09-01"],
             EndDate: ["2024-09-30"],
-            Subscription: ["Subscription2"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -326,7 +324,7 @@ const api = {
     }
   },
 
-  getOverallConsumptionForSubscription: async () => {
+  getOverallConsumptionForSubscription: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/subscriptions/top/2`, {
         method: "POST",
@@ -337,7 +335,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: ["Subscription2"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -355,7 +353,7 @@ const api = {
       throw error;
     }
   },
-  getOverallConsumptionForApplication: async () => {
+  getOverallConsumptionForApplication: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/common/topapplications/2`, {
         method: "POST",
@@ -366,7 +364,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: ["Subscription2"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -382,7 +380,7 @@ const api = {
       throw error;
     }
   },
-  getOverallConsumptionForServies: async () => {
+  getOverallConsumptionForServies: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/common/topservices/2`, {
         method: "POST",
@@ -393,7 +391,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: ["Subscription2"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -406,7 +404,7 @@ const api = {
       throw error;
     }
   },
-  getOverallConsumptionForTagCompliance: async () => {
+  getOverallConsumptionForTagCompliance: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/compliance/tag`, {
         method: "POST",
@@ -417,7 +415,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: ["Subscription2"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -510,7 +508,7 @@ const api = {
 
   /* with bill overview page  */
 
-  getSavings: async () => {
+  getSavings: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/billoverview/header`, {
         method: "POST",
@@ -522,6 +520,7 @@ const api = {
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -535,7 +534,7 @@ const api = {
     }
   },
 
-  getNormalizedVariation: async () => {
+  getNormalizedVariation: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/normalized-variation`, {
         method: "POST",
@@ -547,6 +546,7 @@ const api = {
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -560,7 +560,7 @@ const api = {
     }
   },
 
-  getInvoiceView: async () => {
+  getInvoiceView: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/billoverview/invoice_view`, {
         method: "POST",
@@ -572,6 +572,7 @@ const api = {
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -585,7 +586,7 @@ const api = {
     }
   },
 
-  getTotalBillVsSimulatedPaygo: async () => {
+  getTotalBillVsSimulatedPaygo: async (subscriptionsData) => {
     try {
       const response = await fetch(
         `${apiUrl}/billoverview/total_bill_vs_simulated_paygo`,
@@ -599,6 +600,7 @@ const api = {
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+              Subscription: subscriptionsData,
             },
           }),
         }
@@ -612,7 +614,7 @@ const api = {
       throw error;
     }
   },
-  getTopServies: async () => {
+  getTopServies: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/common/topservices/5`, {
         method: "POST",
@@ -624,6 +626,7 @@ const api = {
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -636,7 +639,7 @@ const api = {
       throw error;
     }
   },
-  getTopApplications: async () => {
+  getTopApplications: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/common/topapplications/5`, {
         method: "POST",
@@ -648,6 +651,7 @@ const api = {
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            Subscription: subscriptionsData,
           },
         }),
       });
@@ -779,7 +783,7 @@ const api = {
     }
   },
 
-  getBillAllocation: async () => {
+  getBillAllocation: async (subscriptionsData) => {
     try {
       const response = await fetch(
         `${apiUrl}/billoverview/billallocationapplication`,
@@ -793,6 +797,7 @@ const api = {
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+              Subscription: subscriptionsData,
             },
           }),
         }

@@ -4,24 +4,28 @@ import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
 import api from "../api.js";
 
-const MonthlySpendComponent = () => {
+const MonthlySpendComponent = ({ subscriptionsData }) => {
   const [totalCost, setTotalCost] = useState(null);
   const [growthPercentage, setGrowthPercentage] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const subscriptionsData = await api.getMonthlyActualSpend();
-        if (subscriptionsData.length > 0) {
-          setTotalCost(subscriptionsData[0].totalCost);
-          setGrowthPercentage(subscriptionsData[0].growthPercentage);
+    if (subscriptionsData && subscriptionsData.length > 0) {
+      const fetchData = async () => {
+        // const selectedSubscription = [subscriptionsData[0]]; // Select only "subscription1"
+        try {
+          const data = await api.getMonthlyActualSpend(subscriptionsData);
+          console.log("API response:", data);
+          if (data.length > 0) {
+            setTotalCost(data[0].totalCost);
+            setGrowthPercentage(data[0].growthPercentage);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
+      };
+      fetchData();
+    }
+  }, [subscriptionsData]); // Add subscriptionsData here
 
   const GrowthIndicator = ({ growthPercentage }) => {
     let imageSrc;
@@ -40,10 +44,21 @@ const MonthlySpendComponent = () => {
 
     return (
       <div className="right">
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", width: "90%" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            width: "90%",
+          }}
+        >
           {imageSrc && (
             <span className="icon" style={{ marginLeft: "3px" }}>
-              <img src={imageSrc} alt={altText} style={{ width: "27px", height: "20px" }} />
+              <img
+                src={imageSrc}
+                alt={altText}
+                style={{ width: "27px", height: "20px" }}
+              />
             </span>
           )}
           {growthPercentage !== null ? (
@@ -60,12 +75,18 @@ const MonthlySpendComponent = () => {
   return (
     <div className="monthly-spend-container">
       <div className="title">
-        <strong style={{ fontFamily: "sans-serif"}}>Monthly Actual Spend</strong>
+        <strong style={{ fontFamily: "sans-serif" }}>
+          Monthly Actual Spend
+        </strong>
       </div>
       <div className="content-wrapper">
         <div className="first">
           <div className="number">
-            {totalCost !== null ? <strong>${totalCost.toFixed(2)}</strong> : <strong>Loading...</strong>}
+            {totalCost !== null ? (
+              <strong>${totalCost.toFixed(2)}</strong>
+            ) : (
+              <strong>Loading...</strong>
+            )}
           </div>
         </div>
         <div className="second">

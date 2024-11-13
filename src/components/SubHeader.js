@@ -6,7 +6,8 @@ import DateRangeDropdown from "./DateRangeDropdown";
 import "../css/Subheader.scss";
 import api from "../api";
 
-const SubHeader = ({ onButtonClick }) => {
+const SubHeader = ({ onButtonClick, onSubscriptionsFetch }) => {
+  const [subscriptionOptions, setSubscriptionOptions] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({
     subscriptions: [],
     businessUnits: [],
@@ -32,6 +33,9 @@ const SubHeader = ({ onButtonClick }) => {
   const fetchInitialFilters = async () => {
     try {
       const initialData = await api.getFilterBasedOnSelection({});
+      const subscriptionsData = initialData.subscriptionName;
+
+      onSubscriptionsFetch(subscriptionsData);
       setFilterOptions({
         subscriptions: transformToOptions(initialData.subscriptionName),
         businessUnits: transformToOptions(initialData.tags_BU_company),
@@ -172,6 +176,7 @@ const SubHeader = ({ onButtonClick }) => {
 
 SubHeader.propTypes = {
   onButtonClick: PropTypes.func,
+  onSubscriptionsFetch: PropTypes.func.isRequired,
 };
 
 SubHeader.defaultProps = {

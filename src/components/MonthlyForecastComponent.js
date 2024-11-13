@@ -5,7 +5,7 @@ import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
 import api from "../api.js";
 
-const MonthlyForecastComponent = () => {
+const MonthlyForecastComponent = ({ subscriptionsData }) => {
   const [lastMonthCost, setLastMonthCost] = useState(null);
   const [futureCost, setFutureCost] = useState(null);
   const [percentageIncrease, setPercentageIncrease] = useState(null);
@@ -14,7 +14,9 @@ const MonthlyForecastComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const forecastData = await api.getMonthlyForecastSpend();
+        const forecastData = await api.getMonthlyForecastSpend(
+          subscriptionsData
+        );
         if (forecastData.length > 0) {
           const lastMonth = forecastData[0].lastMonthCost;
           const latestFutureCostData = forecastData[0].futureCosts.at(-1); // Get the latest month data

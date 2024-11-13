@@ -11,7 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import api from "../api.js";
-import { Typography } from '@mui/material';
+import { Typography } from "@mui/material";
 
 ChartJS.register(
   BarElement,
@@ -23,52 +23,60 @@ ChartJS.register(
   Legend
 );
 
-const OverallTotalRealizedSavings = () => {
+const OverallTotalRealizedSavings = ({ subscriptionsData }) => {
   const [reservations, setReservations] = useState([]);
   const [simulatedSavings, setSimulatedSavings] = useState([]);
   const [labels, setLabels] = useState([]);
 
   useEffect(() => {
-    const fetchReservationsData = async () => {
-      try {
-        const reservationsData = await api.getOverallSavingsRI();
-        setReservations(reservationsData.map((entry) => entry.savings));
-        setLabels(
-          reservationsData.map((entry) =>
-            new Date(entry.modifieddate).toLocaleDateString("en-US", {
-              month: "long",
-              year: "numeric",
-            })
-          )
-        );
-      } catch (error) {
-        console.error("Error fetching reservations data:", error);
-      }
-    };
-    fetchReservationsData();
-  }, []);
+    if (subscriptionsData && subscriptionsData.length > 0) {
+      const fetchReservationsData = async () => {
+        try {
+          const reservationsData = await api.getOverallSavingsRI(
+            subscriptionsData
+          );
+          setReservations(reservationsData.map((entry) => entry.savings));
+          setLabels(
+            reservationsData.map((entry) =>
+              new Date(entry.modifieddate).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })
+            )
+          );
+        } catch (error) {
+          console.error("Error fetching reservations data:", error);
+        }
+      };
+      fetchReservationsData();
+    }
+  }, [subscriptionsData]);
 
   useEffect(() => {
-    const fetchSimulatedSavingsData = async () => {
-      try {
-        const simulatedSavingsData = await api.getOverallSavingsStimulated();
-        setSimulatedSavings(
-          simulatedSavingsData.map((entry) => entry.simulated)
-        );
-        setLabels(
-          simulatedSavingsData.map((entry) =>
-            new Date(entry.Date).toLocaleDateString("en-US", {
-              month: "long",
-              year: "numeric",
-            })
-          )
-        );
-      } catch (error) {
-        console.error("Error fetching simulated savings data:", error);
-      }
-    };
-    fetchSimulatedSavingsData();
-  }, []);
+    if (subscriptionsData && subscriptionsData.length > 0) {
+      const fetchSimulatedSavingsData = async () => {
+        try {
+          const simulatedSavingsData = await api.getOverallSavingsStimulated(
+            subscriptionsData
+          );
+          setSimulatedSavings(
+            simulatedSavingsData.map((entry) => entry.simulated)
+          );
+          setLabels(
+            simulatedSavingsData.map((entry) =>
+              new Date(entry.Date).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })
+            )
+          );
+        } catch (error) {
+          console.error("Error fetching simulated savings data:", error);
+        }
+      };
+      fetchSimulatedSavingsData();
+    }
+  }, [subscriptionsData]);
 
   const data = {
     labels,
@@ -202,12 +210,20 @@ const OverallTotalRealizedSavings = () => {
           top: "-2.6rem",
           whiteSpace: "nowrap", // Ensures heading stays in one line
           overflow: "hidden",
-          
         }}
       >
         <strong>Overall Total Realized Savings</strong>
       </Typography>
-      <div style={{ height: '30vh', position: 'relative', marginTop: '-45px', width: '100%' }}> {/* Adjusted position and width */}
+      <div
+        style={{
+          height: "30vh",
+          position: "relative",
+          marginTop: "-45px",
+          width: "100%",
+        }}
+      >
+        {" "}
+        {/* Adjusted position and width */}
         <Bar data={combinedData} options={options} />
       </div>
     </>

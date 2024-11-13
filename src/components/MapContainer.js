@@ -5,13 +5,13 @@ import fallbackMarkerIcon from "../images/location.png";
 import "../css/MapContainer.scss";
 import api from "../api.js";
 
-const MapContainer = () => {
+const MapContainer = ({ subscriptionsData }) => {
   const mapRef = useRef(null);
   const [mapData, setMapData] = useState([]);
 
   useEffect(() => {
     const fetchMapLocations = async () => {
-      const data = await api.getMapData();
+      const data = await api.getMapData(subscriptionsData);
       setMapData(data);
     };
 
@@ -26,7 +26,8 @@ const MapContainer = () => {
         L.tileLayer(
           "https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=h45ALe3FWSTc6f08j9daEyl98fINF4L8",
           {
-            attribution: '&copy; <a href="https://www.tomtom.com/">TomTom</a> contributors',
+            attribution:
+              '&copy; <a href="https://www.tomtom.com/">TomTom</a> contributors',
           }
         ),
       ],
@@ -55,7 +56,7 @@ const MapContainer = () => {
     return () => {
       map.remove();
     };
-  }, [mapData]);
+  }, [mapData, subscriptionsData]);
 
   return (
     <div className="map-container">

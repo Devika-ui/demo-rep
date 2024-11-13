@@ -3,22 +3,26 @@ import { Typography, Box } from "@mui/material";
 import Chart from "chart.js/auto";
 import api from "../api.js";
 
-const StackBars = () => {
+const StackBars = ({ subscriptionsData }) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const subscriptionsData = await api.getBillingCostEachDay();
-        setSubscriptions(subscriptionsData);
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-      }
-    };
-    fetchData();
-  }, []);
+    if (subscriptionsData && subscriptionsData.length > 0) {
+      const fetchData = async () => {
+        try {
+          const subscriptionsData1 = await api.getBillingCostEachDay(
+            subscriptionsData
+          );
+          setSubscriptions(subscriptionsData1);
+        } catch (error) {
+          console.error("Failed to fetch data", error);
+        }
+      };
+      fetchData();
+    }
+  }, [subscriptionsData]);
 
   useEffect(() => {
     if (subscriptions.length === 0) return;
@@ -141,7 +145,7 @@ const StackBars = () => {
   }, [subscriptions]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       {/* <Typography variant="h6" align="center" sx={{ color: "#5f249f", mb: 2 }}>
         Total Bill Cost by Providers
       </Typography> */}

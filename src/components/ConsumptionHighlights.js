@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 import "../css/consumptionHighlights.scss";
 import api from "../api.js"; // Import API function
 
-const ConsumptionHighlights = () => {
+const ConsumptionHighlights = ({ subscriptionsData }) => {
   const [topSubscriptions, setTopSubscriptions] = useState([]);
   const [topApplications, setTopApplications] = useState([]);
   const [topServices, setTopServices] = useState([]);
@@ -16,46 +16,54 @@ const ConsumptionHighlights = () => {
   });
 
   useEffect(() => {
-    const fetchConsumptionData = async () => {
-      try {
-        const subscriptionsData =
-          await api.getOverallConsumptionForSubscription();
-        setTopSubscriptions(subscriptionsData.topsubscriptions || []);
+    if (subscriptionsData && subscriptionsData.length > 0) {
+      const fetchConsumptionData = async () => {
+        try {
+          const subscriptionsData1 =
+            await api.getOverallConsumptionForSubscription(subscriptionsData);
+          setTopSubscriptions(subscriptionsData1.topsubscriptions || []);
 
-        const applicationsData =
-          await api.getOverallConsumptionForApplication();
-        setTopApplications(applicationsData.topApplications || []);
+          const applicationsData =
+            await api.getOverallConsumptionForApplication(subscriptionsData);
 
-        const servicesData = await api.getOverallConsumptionForServies();
-        setTopServices(servicesData.topServices || []);
+          setTopApplications(applicationsData.topApplications || []);
 
-        const tagComplianceData =
-          await api.getOverallConsumptionForTagCompliance();
-        setTagCompliance(tagComplianceData || {
-          applicationpercentage: 0,
-          ownerpercentage: 0,
-          projectpercentage: 0,
-          bupercentage: 0,
-          environmentpercentage: 0,
-        });
-      } catch (error) {
-        console.error("Error fetching overall consumption data:", error);
-      }
-    };
+          const servicesData = await api.getOverallConsumptionForServies(
+            subscriptionsData
+          );
+          setTopServices(servicesData.topServices || []);
 
-    fetchConsumptionData();
-  }, []);
+          const tagComplianceData =
+            await api.getOverallConsumptionForTagCompliance(subscriptionsData);
+          setTagCompliance(
+            tagComplianceData || {
+              applicationpercentage: 0,
+              ownerpercentage: 0,
+              projectpercentage: 0,
+              bupercentage: 0,
+              environmentpercentage: 0,
+            }
+          );
+        } catch (error) {
+          console.error("Error fetching overall consumption data:", error);
+        }
+      };
+
+      fetchConsumptionData();
+    }
+  }, [subscriptionsData]);
 
   // Get costs with fallback to default
-  const topSubscriptionCost = topSubscriptions.length > 0
-    ? topSubscriptions[0].totalcost.toFixed(2)
-    : "0.00";
-  const topServiceCost = topServices.length > 0
-    ? topServices[0].totalcost.toFixed(2)
-    : "0.00";
-  const topApplicationCost = topApplications.length > 0
-    ? topApplications[0].totalcost.toFixed(2)
-    : "0.00";
+  const topSubscriptionCost =
+    topSubscriptions.length > 0
+      ? topSubscriptions[0].totalcost.toFixed(2)
+      : "0.00";
+  const topServiceCost =
+    topServices.length > 0 ? topServices[0].totalcost.toFixed(2) : "0.00";
+  const topApplicationCost =
+    topApplications.length > 0
+      ? topApplications[0].totalcost.toFixed(2)
+      : "0.00";
 
   // Chart options
   const options = {
@@ -101,7 +109,13 @@ const ConsumptionHighlights = () => {
 
         <div className="tag-compliance">
           <h4>% Tag Compliance</h4>
-          <Chart options={options} series={options.series} type="radialBar" height="200px" width="200px" />
+          <Chart
+            options={options}
+            series={options.series}
+            type="radialBar"
+            height="200px"
+            width="200px"
+          />
         </div>
       </div>
     </div>
