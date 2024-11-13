@@ -103,7 +103,7 @@ const SubHeader = ({ onButtonClick, onSubscriptionsFetch }) => {
         <div className="Filter-Options-Row">
           <div className="filter-option-inline">
             {/* Subscriptions dropdown */}
-            <label>Subscriptions(s)</label>
+            <label>Subscription(s)</label>
             <MultiSelect
               options={filterOptions.subscriptions}
               value={selectedFilters.subscriptions}
