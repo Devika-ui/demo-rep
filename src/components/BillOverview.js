@@ -36,9 +36,12 @@ const BillOverview = () => {
     useState([]);
   const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
   const [legendData, setLegendData] = useState([]);
-
+  const [subscriptionsData, setSubscriptionsData] = useState([]);
   const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
 
+  const handleSubscriptionsFetch = (data) => {
+    setSubscriptionsData(data);
+  };
   const additionalFilters = [
     {
       label: "Service Category(s)",
@@ -100,13 +103,13 @@ const BillOverview = () => {
           savingsData,
           normalizedVariationData,
         ] = await Promise.all([
-          api.getBillAllocation(),
-          api.getInvoiceView(),
-          api.getTotalBillVsSimulatedPaygo(),
-          api.getTopServies(),
-          api.getTopApplications(),
-          api.getSavings(),
-          api.getNormalizedVariation(),
+          api.getBillAllocation(subscriptionsData),
+          api.getInvoiceView(subscriptionsData),
+          api.getTotalBillVsSimulatedPaygo(subscriptionsData),
+          api.getTopServies(subscriptionsData),
+          api.getTopApplications(subscriptionsData),
+          api.getSavings(subscriptionsData),
+          api.getNormalizedVariation(subscriptionsData),
         ]);
 
         //formatted bill application
@@ -319,7 +322,7 @@ const BillOverview = () => {
     };
 
     fetchData();
-  }, []);
+  }, [subscriptionsData]);
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
@@ -420,7 +423,10 @@ const BillOverview = () => {
         >
           Bill Overview
         </Typography>
-        <Subheader onButtonClick={handleButtonClick} />
+        <Subheader
+          onButtonClick={handleButtonClick}
+          onSubscriptionsFetch={handleSubscriptionsFetch}
+        />
         <NavigationBar />
       </Box>
 
