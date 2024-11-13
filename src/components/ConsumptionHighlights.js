@@ -95,15 +95,15 @@ const ConsumptionHighlights = ({ subscriptionsData }) => {
         <div className="tiles">
           <div className="tile">
             <div className="tilename">Top Subscription</div>
-            <div className="price">${topSubscriptionCost}</div>
+            <div className="price">{topSubscriptionCost}</div>
           </div>
           <div className="tile">
             <div className="tilename">Top Service</div>
-            <div className="price">${topServiceCost}</div>
+            <div className="price">{topServiceCost}</div>
           </div>
           <div className="tile">
             <div className="tilename">Top Application</div>
-            <div className="price">${topApplicationCost}</div>
+            <div className="price">{topApplicationCost}</div>
           </div>
         </div>
 

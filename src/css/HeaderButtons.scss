@@ -25,6 +25,12 @@
   align-items: center;
 }
 
+.selected {
+  background-color: grey; /* Light gray to indicate selection */
+  border-color: black; /* Azure blue for border color */
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+
 .logo-button img {
   object-fit: contain;
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
 import HeaderButtons from "./HeaderButtons";
 import DateRangeDropdown from "./DateRangeDropdown";
@@ -7,6 +8,8 @@ import "../css/Subheader.scss";
 import api from "../api";
 
 const SubHeader = ({ onButtonClick, onSubscriptionsFetch }) => {
+  const location = useLocation();
+  const isLandingPage = location.pathname === "/dashboard"; 
   const [subscriptionOptions, setSubscriptionOptions] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({
     subscriptions: [],
@@ -93,7 +96,7 @@ const SubHeader = ({ onButtonClick, onSubscriptionsFetch }) => {
   return (
     <div className="Subheader-Container">
       <div className="Subheader-ButtonsContainer">
-        <HeaderButtons onButtonClick={onButtonClick} />
+      <HeaderButtons onButtonClick={onButtonClick} isLandingPage={isLandingPage} />
         <DateRangeDropdown />
       </div>
       <div className="Subheader-Boxes">

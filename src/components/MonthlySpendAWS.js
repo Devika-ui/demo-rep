@@ -50,7 +50,7 @@ const MonthlySpendAWSComponent = () => {
       <div className="bottom-part">
         <div className="left">
           {monthlyActualChange !== null ? (
-            <strong>$112</strong>
+            <strong>112</strong>
           ) : (
             <strong>Loading...</strong>
           )}

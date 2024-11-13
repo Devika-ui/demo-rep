@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/HeaderButtons.scss";
 import NewAzurelogo from "../images/azure-logo-svg.svg";
 import Awslogo from "../images/aws logo1.png";
 
-const HeaderButtons = ({ onButtonClick }) => {
+const HeaderButtons = ({ onButtonClick, isLandingPage }) => {
   const [previousState, setPreviousState] = useState(null);
-  const [currentState, setCurrentState] = useState(null);
+  const [currentState, setCurrentState] = useState(isLandingPage ? null : "Azure");
+
+  useEffect(() => {
+    if (!isLandingPage && currentState === "Azure") {
+      onButtonClick("Azure");
+    }
+  }, [isLandingPage, currentState, onButtonClick]);
 
   const handleClick = (value) => {
     if (currentState === value) {
@@ -26,7 +32,7 @@ const HeaderButtons = ({ onButtonClick }) => {
         <button
           id="cut-btn"
           onClick={() => handleClick("Azure")}
-          className="logo-button"
+          className={`logo-button ${currentState === "Azure" ? "selected" : ""}`}
         >
           <img src={NewAzurelogo} alt="Azure Logo" />
         </button>
@@ -34,7 +40,7 @@ const HeaderButtons = ({ onButtonClick }) => {
         <button
           id="paste-btn"
           onClick={() => handleClick("AWS")}
-          className="logo-button"
+          className={`logo-button ${currentState === "AWS" ? "selected" : ""}`}
         >
           <img src={Awslogo} alt="AWS Logo" />
         </button>

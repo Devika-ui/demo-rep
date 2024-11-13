@@ -231,15 +231,15 @@ const BusinessCostSplit = () => {
               name: item.tags_AppID_AppName || "null",
               ownerName: item.tags_owner || "null",
               totalBill: item.totalBill
-                ? `$${item.totalBill.toFixed(2)}`
-                : "$0.00",
+                ? `${item.totalBill.toFixed(2)}`
+                : "0.00",
               normalizedVariation:
                 item.Normalized_Variation_MoM !== null
                   ? `${item.Normalized_Variation_MoM}%`
                   : "null",
               rawVariation:
                 item.rawVariation !== null ? `${item.rawVariation}%` : "null",
-              savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
+              savings: item.savings ? `${item.savings.toFixed(2)}` : "0.00",
             });
  
             return acc;
@@ -405,7 +405,7 @@ const BusinessCostSplit = () => {
         </div>
         <div style={{ flex: 1 }}>
           {" "}
-          {/* Space between components */}
+          
           <MonthlyCostTrends />
         </div>
       </div>

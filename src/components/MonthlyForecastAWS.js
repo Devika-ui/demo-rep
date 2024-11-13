@@ -50,7 +50,7 @@ const MonthlyForecastAWSComponent = () => {
       <div className="bottom-part">
         <div className="left">
           {monthlyForecast !== null ? (
-            <strong>$155</strong>
+            <strong>155</strong>
           ) : (
             <strong>Loading...</strong>
           )}

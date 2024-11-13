@@ -130,16 +130,16 @@ const BillOverview = () => {
               name: item.tags_AppID_AppName || "null",
               ownerName: item.tags_owner || "null",
               onDemandCost: item.onDemandCost
-                ? `$${item.onDemandCost.toFixed(2)}`
-                : "$0.00",
+                ? `${item.onDemandCost.toFixed(2)}`
+                : "0.00",
               reservedInstanceCost:
                 item.reservedInstanceCost !== null
-                  ? `$${item.reservedInstanceCost.toFixed(2)}`
-                  : "$0.00",
-              savings: item.savings ? `$${item.savings.toFixed(2)}` : "$0.00",
+                  ? `${item.reservedInstanceCost.toFixed(2)}`
+                  : "0.00",
+              savings: item.savings ? `${item.savings.toFixed(2)}` : "0.00",
               totalBill: item.totalBill
-                ? `$${item.totalBill.toFixed(2)}`
-                : "$0.00",
+                ? `${item.totalBill.toFixed(2)}`
+                : "0.00",
             });
 
             return acc;
@@ -188,11 +188,11 @@ const BillOverview = () => {
 
           acc[formattedDate].push({
             subscriptionName: item.subscriptionName,
-            onDemandCost: `$${item.onDemandCost.toFixed(2)}`,
-            reservedInstanceCost: `$${item.reservedInstanceCost.toFixed(2)}`,
-            simulatedPayGoCost: `$${item.simulatedPayGoCost.toFixed(2)}`,
-            savings: `$${item.savings.toFixed(2)}`,
-            totalBill: `$${item.totalBill.toFixed(2)}`,
+            onDemandCost: `${item.onDemandCost.toFixed(2)}`,
+            reservedInstanceCost: `${item.reservedInstanceCost.toFixed(2)}`,
+            simulatedPayGoCost: `${item.simulatedPayGoCost.toFixed(2)}`,
+            savings: `${item.savings.toFixed(2)}`,
+            totalBill: `${item.totalBill.toFixed(2)}`,
           });
 
           return acc;
@@ -268,9 +268,9 @@ const BillOverview = () => {
           normalizedVariationData.Normalized_Variation_MoM || "0.00";
 
         const dataSet1 = [
-          { number: `$${totalSavings}`, text: "Total Bill" },
-          { number: `$${simulatedBill}`, text: "Simulated Bill" },
-          { number: `$${savings}`, text: "Total Savings" },
+          { number: `${totalSavings}`, text: "Total Bill" },
+          { number: `${simulatedBill}`, text: "Simulated Bill" },
+          { number: `${savings}`, text: "Total Savings" },
           {
             number: `${percentageSavingsOverBill}%`,
             text: "% Savings over Bill",

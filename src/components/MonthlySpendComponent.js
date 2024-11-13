@@ -82,11 +82,7 @@ const MonthlySpendComponent = ({ subscriptionsData }) => {
       <div className="content-wrapper">
         <div className="first">
           <div className="number">
-            {totalCost !== null ? (
-              <strong>${totalCost.toFixed(2)}</strong>
-            ) : (
-              <strong>Loading...</strong>
-            )}
+            {totalCost !== null ? <strong>{totalCost.toFixed(2)}</strong> : <strong>Loading...</strong>}
           </div>
         </div>
         <div className="second">

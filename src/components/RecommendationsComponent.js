@@ -35,7 +35,7 @@ const RecommendationsComponent = () => {
             <div key={index} className="tile1">
               <div className="titlename">{rec.name}</div>
               <div className="content">
-                <div className="price1">${rec.value.toFixed(2)}</div>
+                <div className="price1">{rec.value.toFixed(2)}</div>
                 <div className="savings">Savings Potential</div>
               </div>
             </div>
@@ -43,7 +43,7 @@ const RecommendationsComponent = () => {
         </div>
         <div className="total-savings">
           <div className="total-savings-text">Total Savings Potential</div>
-          <div className="total-savings-amount">${totalSavings}</div>
+          <div className="total-savings-amount">{totalSavings}</div>
         </div>
       </div>
     </>

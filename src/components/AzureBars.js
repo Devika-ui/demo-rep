@@ -6,10 +6,12 @@ import {
   LinearScale,
   BarElement,
   Title,
-  Tooltip,
+  Tooltip as ChartTooltip,
   Legend,
 } from "chart.js";
-import { Typography, Switch, FormControlLabel } from "@mui/material";
+import { Typography, Switch, FormControlLabel, IconButton, Dialog, Tooltip } from "@mui/material";
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import CloseIcon from '@mui/icons-material/Close';
 import api from "../api.js";
 
 ChartJS.register(
@@ -17,7 +19,7 @@ ChartJS.register(
   LinearScale,
   BarElement,
   Title,
-  Tooltip,
+  ChartTooltip,
   Legend
 );
 
@@ -58,20 +60,15 @@ const options = {
       ticks: {
         autoSkip: false,
         maxRotation: 0,
-        callback: function (value, index, values) {
+        callback: function (value) {
           const label = this.getLabelForValue(value);
-          // Convert label to date object
           const date = new Date(label);
-
-          // Only show the first day of each month (e.g. 2024-09-01)
           if (date.getDate() === 1) {
             let month = date.toLocaleString("default", { month: "short" });
-            if (month === "Sep") month = "Sept"; // Adjust 'Sep' to 'Sept'
+            if (month === "Sep") month = "Sept";
             const year = date.getFullYear().toString().slice(-2);
             return `${month}'${year}`;
           }
-
-          // Return an empty string for other days to avoid repeated month/year labels
           return "";
         },
       },
@@ -95,6 +92,7 @@ const AzureBars = ({ subscriptionsData }) => {
   const [forecastData, setForecastData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showForecast, setShowForecast] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (subscriptionsData && subscriptionsData.length > 0) {
@@ -182,10 +180,10 @@ const AzureBars = ({ subscriptionsData }) => {
 
           const futureCostsDataset = {
             label: "Future Forecast",
-            backgroundColor: "rgba(255, 255, 255, 0.8)", // White with slight transparency
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
             barThickness: 25,
-            borderColor: "#00A3E1", // Blue outline
-            borderWidth: 2, // Thickness of the blue border
+            borderColor: "#00A3E1",
+            borderWidth: 2,
             data: [...Array(pastCosts.length).fill(null), ...futureCosts],
             stack: "total",
           };
@@ -208,37 +206,70 @@ const AzureBars = ({ subscriptionsData }) => {
     setShowForecast(!showForecast);
   };
 
+  const handleExpandClick = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   if (loading) {
     return null;
   }
 
   return (
-    <div style={{ position: "relative", padding: "10px" }}>
-      <div
-        style={{
-          position: "relative",
-          margin: "0px 10px 0 5px",
-          height: "210px",
+    <div style={{ position: "relative", padding: "10px"}}>
+      <Dialog 
+        open={isExpanded} 
+        onClose={handleExpandClick} 
+        maxWidth="lg" 
+        fullWidth={false} 
+        PaperProps={{
+          style: {
+            width: "60%", 
+            maxWidth: "80%",
+            margin: "auto", 
+          },
         }}
       >
-        <Bar
-          style={{ paddingTop: "5px" }}
-          options={options}
-          data={showForecast && forecastData ? forecastData : data}
-        />
-      </div>
+        <div style={{ padding: "10px", height: "60vh" }}>
+          <IconButton onClick={handleExpandClick} style={{ color: "#000", position: "absolute", top: 10, right: 10 }}>
+            <CloseIcon />
+          </IconButton>
+          <Bar
+            style={{ paddingTop: "5px" }}
+            options={options}
+            data={showForecast && forecastData ? forecastData : data}
+          />
+        </div>
+      </Dialog>
+      {!isExpanded && (
+        <div style={{ position: "relative", margin: "0px 10px 0 5px", height: "210px" }}>
+          <Bar
+            style={{ paddingTop: "5px" }}
+            options={options}
+            data={showForecast && forecastData ? forecastData : data}
+          />
+        </div>
+      )}
       <div style={{ position: "absolute", top: "13px", right: "-5px" }}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={showForecast}
-              onChange={handleToggleChange}
-              color="primary"
-            />
-          }
-          labelPlacement="start"
-        />
+        <Tooltip title={<span style={{ color: 'white', fontSize: '16px' }}>Forecast</span>} arrow>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={showForecast}
+                onChange={handleToggleChange}
+                color="primary"
+              />
+            }
+            labelPlacement="start"
+          />
+        </Tooltip>
       </div>
+      {!isExpanded && (
+        <div style={{ position: "absolute", top: "13px", left: "-5px" }}>
+          <IconButton onClick={handleExpandClick} style={{ color: "#000" }}>
+            <FullscreenIcon />
+          </IconButton>
+        </div>
+      )}
     </div>
   );
 };

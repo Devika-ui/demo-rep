@@ -88,7 +88,7 @@ const MonthlyForecastComponent = ({ subscriptionsData }) => {
         <div className="container-1">
           <div className="number">
             {totalCost !== null ? (
-              <strong>${totalCost.toFixed(2)}</strong>
+              <strong>{totalCost.toFixed(2)}</strong>
             ) : (
               <strong>Loading...</strong>
             )}
