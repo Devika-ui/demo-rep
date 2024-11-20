@@ -1,5 +1,23 @@
+import moment from "moment";
+
 const domainUrl = process.env.REACT_APP_API_DOMAIN;
 const apiUrl = `${domainUrl}/api/v1`;
+
+// Get the start date of the current previous and next months
+const previousMonthStart = moment()
+  .subtract(4, "month")
+  .startOf("month")
+  .format("YYYY-MM-DD");
+
+const currentMonthStart = moment()
+  .subtract(3, "month")
+  .startOf("month")
+  .format("YYYY-MM-DD");
+
+const nextMonthStart = moment()
+  .subtract(2, "month")
+  .startOf("month")
+  .format("YYYY-MM-DD");
 
 const api = {
   getMonthlyActualSpend: async (subscriptionsData) => {
@@ -13,7 +31,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
+            BillingMonthStartDate: [previousMonthStart, currentMonthStart],
             Subscription: subscriptionsData,
           },
         }),
@@ -40,7 +58,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-08-01", "2024-09-01"],
+            BillingMonthStartDate: [previousMonthStart, currentMonthStart],
             Subscription: subscriptionsData,
           },
         }),
@@ -104,7 +122,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
               Subscription: subscriptionsData,
             },
           }),
@@ -133,8 +151,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Startdate: "2024-06-01",
-              Enddate: "2024-08-31",
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
             },
           }),
         }
@@ -162,7 +179,8 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+
               Subscription: subscriptionsData,
             },
           }),
@@ -191,7 +209,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
               Subscription: subscriptionsData,
             },
           }),
@@ -259,8 +277,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-08-01"],
-            BillingMonthStartDate: ["2024-08-01"],
+            BillingMonthStartDate: [currentMonthStart],
             Subscription: subscriptionsData,
           },
         }),
@@ -308,8 +325,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            StartDate: ["2024-09-01"],
-            EndDate: ["2024-09-30"],
+            BillingMonthStartDate: [previousMonthStart, currentMonthStart],
             Subscription: subscriptionsData,
           },
         }),
@@ -461,8 +477,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
+            BillingMonthStartDate: [previousMonthStart, currentMonthStart],
             Subscription: selectedFilters.subscriptions || [],
             BusinessUnit: selectedFilters.businessUnits || [],
             Location: selectedFilters.locations || [],
@@ -481,6 +496,7 @@ const api = {
       throw error;
     }
   },
+
   getFilterForDropDown: async (selectedSubscriptions) => {
     try {
       const response = await fetch(`${apiUrl}/filters`, {
@@ -492,7 +508,11 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-03-01", "2024-04-01", "2024-05-01"],
+            BillingMonthStartDate: [
+              previousMonthStart,
+              currentMonthStart,
+              nextMonthStart,
+            ],
           },
         }),
       });
@@ -519,7 +539,11 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            BillingMonthStartDate: [
+              previousMonthStart,
+              currentMonthStart,
+              nextMonthStart,
+            ],
             Subscription: subscriptionsData,
           },
         }),
@@ -545,7 +569,11 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            BillingMonthStartDate: [
+              previousMonthStart,
+              currentMonthStart,
+              nextMonthStart,
+            ],
             Subscription: subscriptionsData,
           },
         }),
@@ -571,7 +599,11 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            BillingMonthStartDate: [
+              previousMonthStart,
+              currentMonthStart,
+              nextMonthStart,
+            ],
             Subscription: subscriptionsData,
           },
         }),
@@ -599,7 +631,11 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+              BillingMonthStartDate: [
+                previousMonthStart,
+                currentMonthStart,
+                nextMonthStart,
+              ],
               Subscription: subscriptionsData,
             },
           }),
@@ -625,7 +661,11 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            BillingMonthStartDate: [
+              previousMonthStart,
+              currentMonthStart,
+              nextMonthStart,
+            ],
             Subscription: subscriptionsData,
           },
         }),
@@ -650,7 +690,11 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            BillingMonthStartDate: [
+              previousMonthStart,
+              currentMonthStart,
+              nextMonthStart,
+            ],
             Subscription: subscriptionsData,
           },
         }),
@@ -680,7 +724,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
               Subscription: ["Subscription2"],
             },
           }),
@@ -709,7 +753,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
               Subscription: ["Subscription2"],
             },
           }),
@@ -738,7 +782,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
               Subscription: ["Subscription2"],
             },
           }),
@@ -767,7 +811,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-04-01", "2024-05-01"],
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
               Subscription: ["Subscription2"],
             },
           }),
@@ -796,7 +840,11 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+              BillingMonthStartDate: [
+                previousMonthStart,
+                currentMonthStart,
+                nextMonthStart,
+              ],
               Subscription: subscriptionsData,
             },
           }),
@@ -822,7 +870,11 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-04-01", "2024-05-01", "2024-06-01"],
+            BillingMonthStartDate: [
+              previousMonthStart,
+              currentMonthStart,
+              nextMonthStart,
+            ],
             Subscription: ["Subscription2"],
           },
         }),
@@ -853,7 +905,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01"],
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
               Subscription: ["Subscription2", "Subscription1"],
             },
           }),
@@ -880,7 +932,11 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+            BillingMonthStartDate: [
+              previousMonthStart,
+              currentMonthStart,
+              nextMonthStart,
+            ],
           },
         }),
       });
@@ -907,7 +963,11 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-07-01", "2024-08-01", "2024-09-01"],
+              BillingMonthStartDate: [
+                previousMonthStart,
+                currentMonthStart,
+                nextMonthStart,
+              ],
             },
           }),
         }
@@ -961,7 +1021,8 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: ["2024-08-01"], // Example date; you might want to make this dynamic
+              BillingMonthStartDate: [currentMonthStart],
+              // Example date; you might want to make this dynamic
               Subscription: [subscription],
             },
             page: page.toString(),
