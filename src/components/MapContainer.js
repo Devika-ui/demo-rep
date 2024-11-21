@@ -5,18 +5,52 @@ import fallbackMarkerIcon from "../images/location.png";
 import "../css/MapContainer.scss";
 import api from "../api.js";
 
-const MapContainer = ({ subscriptionsData }) => {
+const MapContainer = ({ subscriptionsData, selectedFilters }) => {
   const mapRef = useRef(null);
   const [mapData, setMapData] = useState([]);
 
   useEffect(() => {
+    const hasFilters =
+      selectedFilters &&
+      (selectedFilters.subscriptions?.length > 0 ||
+        selectedFilters.businessUnits?.length > 0 ||
+        selectedFilters.locations?.length > 0 ||
+        selectedFilters.applications?.length > 0 ||
+        selectedFilters.projects?.length > 0 ||
+        selectedFilters.environments?.length > 0);
+
     const fetchMapLocations = async () => {
-      const data = await api.getMapData(subscriptionsData);
-      setMapData(data);
+      try {
+        const inputData = hasFilters
+          ? {
+              Subscriptions: selectedFilters.subscriptions.map(
+                (sub) => sub.value
+              ),
+              BusinessUnits:
+                selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+              Locations:
+                selectedFilters.locations?.map((loc) => loc.value) || [],
+              Applications:
+                selectedFilters.applications?.map((app) => app.value) || [],
+              Projects:
+                selectedFilters.projects?.map((proj) => proj.value) || [],
+              Environments:
+                selectedFilters.environments?.map((env) => env.value) || [],
+            }
+          : subscriptionsData;
+
+        const data = await api.getMapData(inputData);
+
+        setMapData(data);
+      } catch (error) {
+        console.error("Error fetching map data:", error);
+      }
     };
 
-    fetchMapLocations();
-  }, []);
+    if (hasFilters || subscriptionsData?.length > 0) {
+      fetchMapLocations();
+    }
+  }, [subscriptionsData, selectedFilters]);
 
   useEffect(() => {
     if (!mapRef.current || !mapData.length) return;

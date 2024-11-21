@@ -5,25 +5,85 @@ import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
 import api from "../api.js";
 
-const MonthlyForecastComponent = ({ subscriptionsData }) => {
+// const MonthlyForecastComponent = ({ subscriptionsData }) => {
+//   const [lastMonthCost, setLastMonthCost] = useState(null);
+//   const [futureCost, setFutureCost] = useState(null);
+//   const [percentageIncrease, setPercentageIncrease] = useState(null);
+//   const [totalCost, setTotalCost] = useState(null);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const forecastData = await api.getMonthlyForecastSpend(
+//           subscriptionsData
+//         );
+//         if (forecastData.length > 0) {
+//           const lastMonth = forecastData[0].lastMonthCost;
+//           const latestFutureCostData = forecastData[0].futureCosts.at(-1); // Get the latest month data
+
+//           setLastMonthCost(lastMonth);
+//           setFutureCost(latestFutureCostData.futureCost);
+//           console.log(lastMonth, latestFutureCostData.futureCost);
+//           setPercentageIncrease(latestFutureCostData.percentageIncrease);
+//           setTotalCost(lastMonth + latestFutureCostData.futureCost);
+//         }
+//       } catch (error) {
+//         console.error("Error fetching forecast data:", error);
+//       }
+//     };
+//     fetchData();
+//   }, []);
+
+const MonthlyForecastComponent = ({ subscriptionsData, selectedFilters }) => {
   const [lastMonthCost, setLastMonthCost] = useState(null);
   const [futureCost, setFutureCost] = useState(null);
   const [percentageIncrease, setPercentageIncrease] = useState(null);
   const [totalCost, setTotalCost] = useState(null);
 
   useEffect(() => {
+    const hasFilters =
+      selectedFilters &&
+      (selectedFilters.subscriptions?.length > 0 ||
+        selectedFilters.businessUnits?.length > 0 ||
+        selectedFilters.locations?.length > 0 ||
+        selectedFilters.applications?.length > 0 ||
+        selectedFilters.projects?.length > 0 ||
+        selectedFilters.environments?.length > 0);
+
+    setLastMonthCost(null);
+    setFutureCost(null);
+    setPercentageIncrease(null);
+    setTotalCost(null);
+
     const fetchData = async () => {
       try {
-        const forecastData = await api.getMonthlyForecastSpend(
-          subscriptionsData
-        );
+        // Determine whether to use selected filters or subscriptionsData
+        const inputData = hasFilters
+          ? {
+              Subscriptions: selectedFilters.subscriptions.map(
+                (sub) => sub.value
+              ),
+              BusinessUnits:
+                selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+              Locations:
+                selectedFilters.locations?.map((loc) => loc.value) || [],
+              Applications:
+                selectedFilters.applications?.map((app) => app.value) || [],
+              Projects:
+                selectedFilters.projects?.map((proj) => proj.value) || [],
+              Environments:
+                selectedFilters.environments?.map((env) => env.value) || [],
+            }
+          : subscriptionsData;
+
+        const forecastData = await api.getMonthlyForecastSpend(inputData);
+
         if (forecastData.length > 0) {
           const lastMonth = forecastData[0].lastMonthCost;
           const latestFutureCostData = forecastData[0].futureCosts.at(-1); // Get the latest month data
 
           setLastMonthCost(lastMonth);
           setFutureCost(latestFutureCostData.futureCost);
-          console.log(lastMonth, latestFutureCostData.futureCost);
           setPercentageIncrease(latestFutureCostData.percentageIncrease);
           setTotalCost(lastMonth + latestFutureCostData.futureCost);
         }
@@ -31,8 +91,11 @@ const MonthlyForecastComponent = ({ subscriptionsData }) => {
         console.error("Error fetching forecast data:", error);
       }
     };
-    fetchData();
-  }, []);
+
+    if (hasFilters || subscriptionsData.length > 0) {
+      fetchData();
+    }
+  }, [subscriptionsData, selectedFilters]);
 
   const GrowthIndicator = ({ percentageIncrease }) => {
     let imageSrc;
