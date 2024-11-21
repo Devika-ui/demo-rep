@@ -23,25 +23,10 @@ const currentMonthEnd = moment()
   .subtract(3, "months")
   .endOf("month")
   .format("YYYY-MM-DD");
+console.log("1,2", previousMonthStart, currentMonthEnd);
 
 const api = {
-  getMonthlyActualSpend: async (inputData) => {
-    // Check if inputData is an array (initial data) or an object (filters)
-    const isInitialData = Array.isArray(inputData);
-
-    // Construct requestBody based on the type of input data
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
+  getMonthlyActualSpend: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/monthly/spend/actual`, {
         method: "POST",
@@ -49,32 +34,26 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+            Subscription: subscriptionsData,
+          },
+        }),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch actual spend data");
       }
-      const responseData = await response.json();
-      return responseData;
+
+      return await response.json();
     } catch (error) {
+      console.error("Error fetching actual spend data:", error);
       throw error;
     }
   },
 
-  getMonthlyForecastSpend: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
+  getMonthlyForecastSpend: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/monthly/forecast`, {
         method: "POST",
@@ -82,14 +61,20 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+            Subscription: subscriptionsData,
+          },
+        }),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch forecast data");
+        throw new Error("Failed to fetch actual spend data");
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
+      console.error("Error fetching actual spend data:", error);
       throw error;
     }
   },
@@ -130,20 +115,7 @@ const api = {
     }
   },
 
-  getDiscountKPICoverage: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
+  getDiscountKPICoverage: async (subscriptionsData) => {
     try {
       const response = await fetch(
         `${apiUrl}/overview/KPI/discounts/comittmentbased/coverage`,
@@ -153,15 +125,21 @@ const api = {
             "Content-Type": "application/json",
             Authorization: "Bearer " + window.accessToken,
           },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+              Subscription: subscriptionsData,
+            },
+          }),
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to kpi coverage data");
+        throw new Error("Failed to fetch data");
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
@@ -186,28 +164,16 @@ const api = {
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch kpi usage data");
+        throw new Error("Failed to fetch data");
       }
       return await response.json();
     } catch (error) {
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
 
-  getOverallSavingsRI: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
+  getOverallSavingsRI: async (subscriptionsData) => {
     try {
       const response = await fetch(
         `${apiUrl}/overview/monthly/realized/savings`,
@@ -217,33 +183,27 @@ const api = {
             "Content-Type": "application/json",
             Authorization: "Bearer " + window.accessToken,
           },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+
+              Subscription: subscriptionsData,
+            },
+          }),
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch savings ri data");
+        throw new Error("Failed to fetch data");
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
 
-  getOverallSavingsStimulated: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
+  getOverallSavingsStimulated: async (subscriptionsData) => {
     try {
       const response = await fetch(
         `${apiUrl}/overview/monthly/realized/simulatedri`,
@@ -253,15 +213,21 @@ const api = {
             "Content-Type": "application/json",
             Authorization: "Bearer " + window.accessToken,
           },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({
+            CloudServiceProvider: "1",
+            filters: {
+              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+              Subscription: subscriptionsData,
+            },
+          }),
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch savings stimulated data");
+        throw new Error("Failed to fetch data");
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
+      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
@@ -307,20 +273,7 @@ const api = {
     }
   },
 
-  getMapData: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
+  getMapData: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/locations/`, {
         method: "POST",
@@ -328,18 +281,24 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            BillingMonthStartDate: [currentMonthStart],
+            Subscription: subscriptionsData,
+          },
+        }),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch get map data");
+        throw new Error("Failed to fetch data");
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
     }
   },
+
   getClientData: async (customerId) => {
     try {
       const response = await fetch(`${apiUrl}/client`, {
@@ -362,22 +321,7 @@ const api = {
     }
   },
 
-  getBillingCostEachDay: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        StartDate: [previousMonthStart],
-        EndDate: [currentMonthEnd],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
-    console.log("bill", requestBody);
+  getBillingCostEachDay: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/billcost/total`, {
         method: "POST",
@@ -385,32 +329,26 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            StartDate: [previousMonthStart],
+            EndDate: [currentMonthEnd],
+            Subscription: subscriptionsData,
+          },
+        }),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch billing cost each day data");
+        throw new Error("Failed to fetch data");
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
       console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
-  getOverallConsumptionForSubscription: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
+
+  getOverallConsumptionForSubscription: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/subscriptions/top/2`, {
         method: "POST",
@@ -418,33 +356,28 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            Subscription: subscriptionsData,
+          },
+        }),
       });
-
       if (!response.ok) {
-        throw new Error("Failed to fetch consumption for subscription data");
+        throw new Error(
+          "Failed to fetch overall  consumption subscription data"
+        );
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
+      console.error(
+        "Error fetching overall consumption subscription data:",
+        error
+      );
       throw error;
     }
   },
-
-  getOverallConsumptionForApplication: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
+  getOverallConsumptionForApplication: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/common/topapplications/2`, {
         method: "POST",
@@ -452,32 +385,26 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            Subscription: subscriptionsData,
+          },
+        }),
       });
-
       if (!response.ok) {
-        throw new Error("Failed to fetch consumption for application data");
+        throw new Error("Failed to fetch overall consumption application data");
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
+      console.error(
+        "Error fetching overall consumption application data:",
+        error
+      );
       throw error;
     }
   },
-  getOverallConsumptionForServies: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
+  getOverallConsumptionForServies: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/common/topservices/2`, {
         method: "POST",
@@ -485,34 +412,23 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            Subscription: subscriptionsData,
+          },
+        }),
       });
-
       if (!response.ok) {
-        throw new Error("Failed to fetch consumptio for service data");
+        throw new Error("Failed to fetch overall consumption services data");
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
+      console.error("Error fetching overall consumption services data:", error);
       throw error;
     }
   },
-
-  getOverallConsumptionForTagCompliance: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
-    const requestBody = {
-      CloudServiceProvider: "1",
-      filters: {
-        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
-      },
-    };
-
+  getOverallConsumptionForTagCompliance: async (subscriptionsData) => {
     try {
       const response = await fetch(`${apiUrl}/overview/compliance/tag`, {
         method: "POST",
@@ -520,19 +436,27 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          CloudServiceProvider: "1",
+          filters: {
+            Subscription: subscriptionsData,
+          },
+        }),
       });
-
       if (!response.ok) {
-        throw new Error("Failed to fetch consumption for tagCompliancedata");
+        throw new Error(
+          "Failed to fetch overall consumption tag compliance data"
+        );
       }
-      const responseData = await response.json();
-      return responseData;
+      return await response.json();
     } catch (error) {
+      console.error(
+        "Error fetching overall consumption tag compliance data:",
+        error
+      );
       throw error;
     }
   },
-
   getAllFilters: async () => {
     try {
       const response = await fetch(`${apiUrl}/filters`, {
@@ -580,7 +504,8 @@ const api = {
       throw error;
     }
   },
-  getFilterForDropDown: async () => {
+
+  getFilterForDropDown: async (selectedSubscriptions) => {
     try {
       const response = await fetch(`${apiUrl}/filters`, {
         method: "POST",

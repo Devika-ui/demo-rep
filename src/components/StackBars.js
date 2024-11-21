@@ -1,79 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Button } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import Chart from "chart.js/auto";
 import api from "../api.js";
 
-const StackBars = ({ subscriptionsData, selectedFilters }) => {
+const StackBars = ({ subscriptionsData }) => {
   const [subscriptions, setSubscriptions] = useState([]);
-  const [showAWS, setShowAWS] = useState(true);
-  const [showAzure, setShowAzure] = useState(true);
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
 
-  // useEffect(() => {
-  //   if (subscriptionsData && subscriptionsData.length > 0) {
-  //     const fetchData = async () => {
-  //       try {
-  //         const subscriptionsData1 = await api.getBillingCostEachDay(
-  //           subscriptionsData
-  //         );
-  //         setSubscriptions(subscriptionsData1);
-  //       } catch (error) {
-  //         console.error("Failed to fetch data", error);
-  //       }
-  //     };
-  //     fetchData();
-  //   }
-  // }, [subscriptionsData]);
-
   useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
-
-    const fetchData = async () => {
-      try {
-        const inputData = hasFilters
-          ? {
-              Subscriptions: selectedFilters.subscriptions.map(
-                (sub) => sub.value
-              ),
-              BusinessUnits:
-                selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-              Locations:
-                selectedFilters.locations?.map((loc) => loc.value) || [],
-              Applications:
-                selectedFilters.applications?.map((app) => app.value) || [],
-              Projects:
-                selectedFilters.projects?.map((proj) => proj.value) || [],
-              Environments:
-                selectedFilters.environments?.map((env) => env.value) || [],
-            }
-          : subscriptionsData;
-
-        const subscriptionsData1 = await api.getBillingCostEachDay(inputData);
-        console.log("API response:", subscriptionsData1);
-
-        // Update state
-        setSubscriptions(subscriptionsData1);
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-      }
-    };
-
-    // Trigger fetch if filters or subscription data are available
-    if (hasFilters || (subscriptionsData && subscriptionsData.length > 0)) {
-      console.log("Triggering data fetch...");
+    if (subscriptionsData && subscriptionsData.length > 0) {
+      const fetchData = async () => {
+        try {
+          const subscriptionsData1 = await api.getBillingCostEachDay(
+            subscriptionsData
+          );
+          setSubscriptions(subscriptionsData1);
+        } catch (error) {
+          console.error("Failed to fetch data", error);
+        }
+      };
       fetchData();
-    } else {
-      console.log("No filters or subscriptions data available.");
     }
-  }, [subscriptionsData, selectedFilters]);
+  }, [subscriptionsData]);
 
   useEffect(() => {
     if (subscriptions.length === 0) return;
@@ -111,14 +60,12 @@ const StackBars = ({ subscriptionsData, selectedFilters }) => {
             data: sortedDates.map((date) => awsData[date].toFixed(2)),
             backgroundColor: "rgba(255, 153, 10, 0.7)",
             stack: "01",
-            hidden: !showAWS, // Hide AWS data if showAWS is false
           },
           {
             label: "Azure",
             data: sortedDates.map((date) => azureData[date].toFixed(2)),
             backgroundColor: "rgba(10, 163, 225, 0.7)",
             stack: "01",
-            hidden: !showAzure, // Hide Azure data if showAzure is false
           },
         ],
       },
@@ -166,8 +113,25 @@ const StackBars = ({ subscriptionsData, selectedFilters }) => {
           },
         },
         plugins: {
+          title: {
+            display: false, // Disable Chart.js title
+          },
           legend: {
-            display: false, // Hide default legend to use custom toggle buttons
+            position: "top",
+            align: "end",
+            labels: {
+              padding: 10,
+              font: {
+                size: 12,
+              },
+            },
+          },
+          layout: {
+            padding: {
+              top: 50,
+              bottom: 10,
+              right: 100,
+            },
           },
         },
       },
@@ -178,69 +142,13 @@ const StackBars = ({ subscriptionsData, selectedFilters }) => {
         chartInstance.current.destroy();
       }
     };
-  }, [subscriptions, showAWS, showAzure]);
+  }, [subscriptions]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: 0,
-        }}
-      >
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: showAWS
-              ? "rgba(255, 153, 10, 0.7)"
-              : "rgba(200, 200, 200, 0.7)",
-            color: showAWS ? "#fff" : "#000",
-            "&:hover": {
-              backgroundColor: showAWS
-                ? "rgba(255, 153, 10, 1)"
-                : "rgba(180, 180, 180, 0.7)",
-            },
-            fontSize: "12px",
-            height: "20px",
-          }}
-          onClick={() => {
-            setShowAWS((prev) => {
-              const newState = !prev;
-              setShowAzure(newState ? showAzure : true); // Ensure Azure remains visible when AWS is toggled
-              return newState;
-            });
-          }}
-        >
-          AWS
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            ml: 1,
-            backgroundColor: showAzure
-              ? "rgba(10, 163, 225, 0.7)"
-              : "rgba(200, 200, 200, 0.7)",
-            color: showAzure ? "#fff" : "#000",
-            "&:hover": {
-              backgroundColor: showAzure
-                ? "rgba(10, 163, 225, 1)"
-                : "rgba(180, 180, 180, 0.7)",
-            },
-            fontSize: "12px",
-            height: "20px",
-          }}
-          onClick={() => {
-            setShowAzure((prev) => {
-              const newState = !prev;
-              setShowAWS(newState ? showAWS : true); // Ensure AWS remains visible when Azure is toggled
-              return newState;
-            });
-          }}
-        >
-          Azure
-        </Button>
-      </Box>
+      {/* <Typography variant="h6" align="center" sx={{ color: "#5f249f", mb: 2 }}>
+        Total Bill Cost by Providers
+      </Typography> */}
       <canvas ref={chartContainer} style={{ flexGrow: 1 }}></canvas>
     </Box>
   );

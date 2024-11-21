@@ -9,16 +9,9 @@ import {
   Tooltip as ChartTooltip,
   Legend,
 } from "chart.js";
-import {
-  Typography,
-  Switch,
-  FormControlLabel,
-  IconButton,
-  Dialog,
-  Tooltip,
-} from "@mui/material";
-import FullscreenIcon from "@mui/icons-material/Fullscreen";
-import CloseIcon from "@mui/icons-material/Close";
+import { Typography, Switch, FormControlLabel, IconButton, Dialog, Tooltip } from "@mui/material";
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import CloseIcon from '@mui/icons-material/Close';
 import api from "../api.js";
 
 ChartJS.register(
@@ -67,7 +60,6 @@ const options = {
       ticks: {
         autoSkip: false,
         maxRotation: 0,
-        disply: "center",
         callback: function (value) {
           const label = this.getLabelForValue(value);
           const date = new Date(label);
@@ -95,272 +87,120 @@ const options = {
   },
 };
 
-const AzureBars = ({ subscriptionsData, selectedFilters }) => {
+const AzureBars = ({ subscriptionsData }) => {
   const [data, setData] = useState({ labels: [], datasets: [] });
   const [forecastData, setForecastData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showForecast, setShowForecast] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  //   useEffect(() => {
-  //     if (subscriptionsData && subscriptionsData.length > 0) {
-  //       const fetchData = async () => {
-  //         try {
-  //           const response = await api.getBillingCostEachDay(subscriptionsData);
-  //           console.log("respose", response);
-  //           const labelsSet = new Set();
-  //           const payAsYouGoData = {};
-  //           const reservationsData = {};
-
-  //           response.forEach(({ dailydate, totalcost, RIDTYPE }) => {
-  //             const date = new Date(dailydate);
-  //             const dateString = date.toISOString().split("T")[0];
-  //             labelsSet.add(dateString);
-
-  //             if (RIDTYPE === "PAY GO") {
-  //               payAsYouGoData[dateString] =
-  //                 (payAsYouGoData[dateString] || 0) + totalcost;
-  //             } else if (RIDTYPE === "RI") {
-  //               reservationsData[dateString] =
-  //                 (reservationsData[dateString] || 0) + totalcost;
-  //             }
-  //           });
-
-  //           const labels = Array.from(labelsSet).sort();
-  //           const payAsYouGo = labels.map((date) => payAsYouGoData[date] || 0);
-  //           const reservations = labels.map(
-  //             (date) => reservationsData[date] || 0
-  //           );
-
-  //           const datasets = [
-  //             {
-  //               type: "bar",
-  //               label: "Pay-as-you-go",
-  //               backgroundColor: "#00A3E1",
-  //               data: payAsYouGo,
-  //               stack: "total",
-  //             },
-  //             {
-  //               type: "bar",
-  //               label: "Reservations",
-  //               backgroundColor: "#ED9B33",
-  //               data: reservations,
-  //               stack: "total",
-  //             },
-  //           ];
-
-  //           setData({ labels, datasets });
-  //           setLoading(false);
-  //         } catch (error) {
-  //           console.error("Failed to fetch data", error);
-  //           setLoading(false);
-  //         }
-  //       };
-
-  //       const fetchForecastData = async () => {
-  //         try {
-  //           const forecastResponse = await api.getMonthlyForecastSpend(
-  //             subscriptionsData
-  //           );
-
-  //           const pastMonths = forecastResponse[0].pastCosts.map(
-  //             (item) => item.month
-  //           );
-  //           const pastCosts = forecastResponse[0].pastCosts.map(
-  //             (item) => item.pastCost
-  //           );
-
-  //           const futureMonths = forecastResponse[0].futureCosts.map(
-  //             (item) => item.month
-  //           );
-  //           const futureCosts = forecastResponse[0].futureCosts.map(
-  //             (item) => item.futureCost
-  //           );
-
-  //           const combinedLabels = [...pastMonths, ...futureMonths];
-
-  //           const pastCostsDataset = {
-  //             label: "Prev Months Cost",
-  //             backgroundColor: "#00A3E1",
-  //             barThickness: 25,
-  //             data: pastCosts,
-  //             stack: "total",
-  //           };
-
-  //           const futureCostsDataset = {
-  //             label: "Future Forecast",
-  //             backgroundColor: "rgba(255, 255, 255, 0.8)",
-  //             barThickness: 25,
-  //             borderColor: "#00A3E1",
-  //             borderWidth: 2,
-  //             data: [...Array(pastCosts.length).fill(null), ...futureCosts],
-  //             stack: "total",
-  //           };
-
-  //           setForecastData({
-  //             labels: combinedLabels,
-  //             datasets: [pastCostsDataset, futureCostsDataset],
-  //           });
-  //         } catch (error) {
-  //           console.error("Failed to fetch forecast data", error);
-  //         }
-  //       };
-
-  //       fetchData();
-  //       fetchForecastData();
-  //     }
-  //   }, [subscriptionsData]);
-
   useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
+    if (subscriptionsData && subscriptionsData.length > 0) {
+      const fetchData = async () => {
+        try {
+          const response = await api.getBillingCostEachDay(subscriptionsData);
+          const labelsSet = new Set();
+          const payAsYouGoData = {};
+          const reservationsData = {};
 
-    const fetchData = async () => {
-      try {
-        // Construct input data based on selected filters or subscriptionsData
-        const inputData = hasFilters
-          ? {
-              Subscriptions: selectedFilters.subscriptions.map(
-                (sub) => sub.value
-              ),
-              BusinessUnits:
-                selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-              Locations:
-                selectedFilters.locations?.map((loc) => loc.value) || [],
-              Applications:
-                selectedFilters.applications?.map((app) => app.value) || [],
-              Projects:
-                selectedFilters.projects?.map((proj) => proj.value) || [],
-              Environments:
-                selectedFilters.environments?.map((env) => env.value) || [],
+          response.forEach(({ dailydate, totalcost, RIDTYPE }) => {
+            const date = new Date(dailydate);
+            const dateString = date.toISOString().split("T")[0];
+            labelsSet.add(dateString);
+
+            if (RIDTYPE === "PAY GO") {
+              payAsYouGoData[dateString] =
+                (payAsYouGoData[dateString] || 0) + totalcost;
+            } else if (RIDTYPE === "RI") {
+              reservationsData[dateString] =
+                (reservationsData[dateString] || 0) + totalcost;
             }
-          : subscriptionsData;
+          });
 
-        const response = await api.getBillingCostEachDay(inputData);
-        const labelsSet = new Set();
-        const payAsYouGoData = {};
-        const reservationsData = {};
+          const labels = Array.from(labelsSet).sort();
+          const payAsYouGo = labels.map((date) => payAsYouGoData[date] || 0);
+          const reservations = labels.map(
+            (date) => reservationsData[date] || 0
+          );
 
-        response.forEach(({ dailydate, totalcost, RIDTYPE }) => {
-          const date = new Date(dailydate);
-          const dateString = date.toISOString().split("T")[0];
-          labelsSet.add(dateString);
+          const datasets = [
+            {
+              type: "bar",
+              label: "Pay-as-you-go",
+              backgroundColor: "#00A3E1",
+              data: payAsYouGo,
+              stack: "total",
+            },
+            {
+              type: "bar",
+              label: "Reservations",
+              backgroundColor: "#ED9B33",
+              data: reservations,
+              stack: "total",
+            },
+          ];
 
-          if (RIDTYPE === "PAY GO") {
-            payAsYouGoData[dateString] =
-              (payAsYouGoData[dateString] || 0) + totalcost;
-          } else if (RIDTYPE === "RI") {
-            reservationsData[dateString] =
-              (reservationsData[dateString] || 0) + totalcost;
-          }
-        });
+          setData({ labels, datasets });
+          setLoading(false);
+        } catch (error) {
+          console.error("Failed to fetch data", error);
+          setLoading(false);
+        }
+      };
 
-        const labels = Array.from(labelsSet).sort();
-        const payAsYouGo = labels.map((date) => payAsYouGoData[date] || 0);
-        const reservations = labels.map((date) => reservationsData[date] || 0);
+      const fetchForecastData = async () => {
+        try {
+          const forecastResponse = await api.getMonthlyForecastSpend(
+            subscriptionsData
+          );
 
-        const datasets = [
-          {
-            type: "bar",
-            label: "Pay-as-you-go",
+          const pastMonths = forecastResponse[0].pastCosts.map(
+            (item) => item.month
+          );
+          const pastCosts = forecastResponse[0].pastCosts.map(
+            (item) => item.pastCost
+          );
+
+          const futureMonths = forecastResponse[0].futureCosts.map(
+            (item) => item.month
+          );
+          const futureCosts = forecastResponse[0].futureCosts.map(
+            (item) => item.futureCost
+          );
+
+          const combinedLabels = [...pastMonths, ...futureMonths];
+
+          const pastCostsDataset = {
+            label: "Prev Months Cost",
             backgroundColor: "#00A3E1",
-            data: payAsYouGo,
+            barThickness: 25,
+            data: pastCosts,
             stack: "total",
-          },
-          {
-            type: "bar",
-            label: "Reservations",
-            backgroundColor: "#ED9B33",
-            data: reservations,
+          };
+
+          const futureCostsDataset = {
+            label: "Future Forecast",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            barThickness: 25,
+            borderColor: "#00A3E1",
+            borderWidth: 2,
+            data: [...Array(pastCosts.length).fill(null), ...futureCosts],
             stack: "total",
-          },
-        ];
+          };
 
-        setData({ labels, datasets });
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-        setLoading(false);
-      }
-    };
+          setForecastData({
+            labels: combinedLabels,
+            datasets: [pastCostsDataset, futureCostsDataset],
+          });
+        } catch (error) {
+          console.error("Failed to fetch forecast data", error);
+        }
+      };
 
-    const fetchForecastData = async () => {
-      try {
-        // Construct input data for the forecast API
-        const inputData = hasFilters
-          ? {
-              Subscriptions: selectedFilters.subscriptions.map(
-                (sub) => sub.value
-              ),
-              BusinessUnits:
-                selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-              Locations:
-                selectedFilters.locations?.map((loc) => loc.value) || [],
-              Applications:
-                selectedFilters.applications?.map((app) => app.value) || [],
-              Projects:
-                selectedFilters.projects?.map((proj) => proj.value) || [],
-              Environments:
-                selectedFilters.environments?.map((env) => env.value) || [],
-            }
-          : subscriptionsData;
-
-        const forecastResponse = await api.getMonthlyForecastSpend(inputData);
-
-        const pastMonths = forecastResponse[0].pastCosts.map(
-          (item) => item.month
-        );
-        const pastCosts = forecastResponse[0].pastCosts.map(
-          (item) => item.pastCost
-        );
-
-        const futureMonths = forecastResponse[0].futureCosts.map(
-          (item) => item.month
-        );
-        const futureCosts = forecastResponse[0].futureCosts.map(
-          (item) => item.futureCost
-        );
-
-        const combinedLabels = [...pastMonths, ...futureMonths];
-
-        const pastCostsDataset = {
-          label: "Prev Months Cost",
-          backgroundColor: "#00A3E1",
-          barThickness: 25,
-          data: pastCosts,
-          stack: "total",
-        };
-
-        const futureCostsDataset = {
-          label: "Future Forecast",
-          backgroundColor: "rgba(255, 255, 255, 0.8)",
-          barThickness: 25,
-          borderColor: "#00A3E1",
-          borderWidth: 2,
-          data: [...Array(pastCosts.length).fill(null), ...futureCosts],
-          stack: "total",
-        };
-
-        setForecastData({
-          labels: combinedLabels,
-          datasets: [pastCostsDataset, futureCostsDataset],
-        });
-      } catch (error) {
-        console.error("Failed to fetch forecast data", error);
-      }
-    };
-
-    if (hasFilters || subscriptionsData.length > 0) {
       fetchData();
       fetchForecastData();
     }
-  }, [subscriptionsData, selectedFilters]);
+  }, [subscriptionsData]);
 
   const handleToggleChange = () => {
     setShowForecast(!showForecast);
@@ -375,25 +215,22 @@ const AzureBars = ({ subscriptionsData, selectedFilters }) => {
   }
 
   return (
-    <div style={{ position: "relative", padding: "10px" }}>
-      <Dialog
-        open={isExpanded}
-        onClose={handleExpandClick}
-        maxWidth="lg"
-        fullWidth={false}
+    <div style={{ position: "relative", padding: "10px"}}>
+      <Dialog 
+        open={isExpanded} 
+        onClose={handleExpandClick} 
+        maxWidth="lg" 
+        fullWidth={false} 
         PaperProps={{
           style: {
-            width: "60%",
+            width: "60%", 
             maxWidth: "80%",
-            margin: "auto",
+            margin: "auto", 
           },
         }}
       >
         <div style={{ padding: "10px", height: "60vh" }}>
-          <IconButton
-            onClick={handleExpandClick}
-            style={{ color: "#000", position: "absolute", top: 10, right: 10 }}
-          >
+          <IconButton onClick={handleExpandClick} style={{ color: "#000", position: "absolute", top: 10, right: 10 }}>
             <CloseIcon />
           </IconButton>
           <Bar
@@ -404,13 +241,7 @@ const AzureBars = ({ subscriptionsData, selectedFilters }) => {
         </div>
       </Dialog>
       {!isExpanded && (
-        <div
-          style={{
-            position: "relative",
-            margin: "0px 10px 0 5px",
-            height: "210px",
-          }}
-        >
+        <div style={{ position: "relative", margin: "0px 10px 0 5px", height: "210px" }}>
           <Bar
             style={{ paddingTop: "5px" }}
             options={options}
@@ -419,12 +250,7 @@ const AzureBars = ({ subscriptionsData, selectedFilters }) => {
         </div>
       )}
       <div style={{ position: "absolute", top: "13px", right: "-5px" }}>
-        <Tooltip
-          title={
-            <span style={{ color: "white", fontSize: "16px" }}>Forecast</span>
-          }
-          arrow
-        >
+        <Tooltip title={<span style={{ color: 'white', fontSize: '16px' }}>Forecast</span>} arrow>
           <FormControlLabel
             control={
               <Switch
@@ -438,7 +264,7 @@ const AzureBars = ({ subscriptionsData, selectedFilters }) => {
         </Tooltip>
       </div>
       {!isExpanded && (
-        <div style={{ position: "absolute", top: "13px", left: "-18px" }}>
+        <div style={{ position: "absolute", top: "13px", left: "-5px" }}>
           <IconButton onClick={handleExpandClick} style={{ color: "#000" }}>
             <FullscreenIcon />
           </IconButton>
