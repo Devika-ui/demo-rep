@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import BillOverview from "./components/BillOverview";
@@ -15,13 +15,33 @@ import { ReactKeycloakProvider, useKeycloak } from "@react-keycloak/web";
 import keycloak from "./components/Keycloak";
 import OnDemandCostStudy from "./components/OnDemandCostStudy";
 import RecommendationSPA from "./components/RecommendationSPA";
+import api from "./api";
+import componentUtil from "./componentUtil";
 
 const App = () => {
   const { keycloak, initialized } = useKeycloak();
 
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          if(initialized)
+          {
+            const data = await api.getAssignedCustomerIds();
+            console.log("API response:", data);
+            if (data.length > 0) {
+              componentUtil.setSelectedCustomerID(data[0].customerId);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      fetchData();
+  }, [keycloak.authenticated]); 
+
   if (initialized) {
     if (keycloak.authenticated) {
-      window.accessToken = keycloak.token;
+      componentUtil.setAccessToken(keycloak.token);
       return (
         <BrowserRouter>
           <Routes>

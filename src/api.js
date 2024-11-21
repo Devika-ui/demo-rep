@@ -1,4 +1,5 @@
 import moment from "moment";
+import componentUtil from "./componentUtil";
 
 const domainUrl = process.env.REACT_APP_API_DOMAIN;
 const apiUrl = `${domainUrl}/api/v1`;
@@ -32,14 +33,15 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -59,14 +61,15 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -82,10 +85,11 @@ const api = {
   getTotalSubscription: async () => {
     try {
       const response = await fetch(`${apiUrl}/overview/suboraccount/count`, {
-        method: "GET",
+        method: "POST",
         headers: {
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
+        body: JSON.stringify({ customerId: window.selectedCustomerId })
       });
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
@@ -102,7 +106,7 @@ const api = {
       const response = await fetch(`${apiUrl}/recommendations/top3`, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
       });
       if (!response.ok) {
@@ -123,14 +127,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: subscriptionsData,
+              Subscription: subscriptionsData
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -152,14 +157,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               Startdate: [previousMonthStart],
-              Enddate: [currentMonthEnd],
+              Enddate: [currentMonthEnd]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -181,15 +187,16 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
 
-              Subscription: subscriptionsData,
+              Subscription: subscriptionsData
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -211,14 +218,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: subscriptionsData,
+              Subscription: subscriptionsData
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -237,7 +245,7 @@ const api = {
       const response = await fetch(`${apiUrl}/subscription/${customerId}`, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
       });
       if (!response.ok) {
@@ -258,9 +266,9 @@ const api = {
   getMenuItems: async () => {
     try {
       const response = await fetch(`${apiUrl}/overview/menuitems/`, {
-        method: "GET",
+        method: "POST",
         headers: {
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
       });
       if (!response.ok) {
@@ -279,14 +287,15 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
             BillingMonthStartDate: [currentMonthStart],
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -305,9 +314,9 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
-        body: JSON.stringify({ customerId }),
+        body: JSON.stringify({ customerId: window.selectedCustomerId }),
       });
 
       if (!response.ok) {
@@ -327,15 +336,16 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
             StartDate: [previousMonthStart],
             EndDate: [currentMonthEnd],
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -354,13 +364,14 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -383,13 +394,14 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -410,13 +422,14 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -434,13 +447,14 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -462,7 +476,7 @@ const api = {
       const response = await fetch(`${apiUrl}/filters`, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
       });
       if (!response.ok) {
@@ -480,7 +494,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -491,8 +505,9 @@ const api = {
             Location: selectedFilters.locations || [],
             Application: selectedFilters.applications || [],
             Project: selectedFilters.projects || [],
-            Environment: selectedFilters.environments || [],
+            Environment: selectedFilters.environments || []
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -511,7 +526,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -522,6 +537,7 @@ const api = {
               nextMonthStart,
             ],
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -542,7 +558,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -550,10 +566,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart,
+              nextMonthStart
             ],
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -572,7 +589,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -582,8 +599,9 @@ const api = {
               currentMonthStart,
               nextMonthStart,
             ],
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -602,7 +620,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -610,10 +628,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart,
+              nextMonthStart
             ],
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -634,7 +653,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -642,10 +661,11 @@ const api = {
               BillingMonthStartDate: [
                 previousMonthStart,
                 currentMonthStart,
-                nextMonthStart,
+                nextMonthStart
               ],
-              Subscription: subscriptionsData,
+              Subscription: subscriptionsData
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -664,7 +684,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -672,10 +692,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart,
+              nextMonthStart
             ],
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -693,7 +714,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -701,10 +722,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart,
+              nextMonthStart
             ],
-            Subscription: subscriptionsData,
+            Subscription: subscriptionsData
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -727,14 +749,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2"],
+              Subscription: ["Subscription2"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -756,14 +779,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2"],
+              Subscription: ["Subscription2"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -785,14 +809,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2"],
+              Subscription: ["Subscription2"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -814,14 +839,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2"],
+              Subscription: ["Subscription2"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -843,7 +869,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -851,10 +877,11 @@ const api = {
               BillingMonthStartDate: [
                 previousMonthStart,
                 currentMonthStart,
-                nextMonthStart,
+                nextMonthStart
               ],
-              Subscription: subscriptionsData,
+              Subscription: subscriptionsData
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -873,7 +900,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -881,10 +908,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart,
+              nextMonthStart
             ],
-            Subscription: ["Subscription2"],
+            Subscription: ["Subscription2"]
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -908,14 +936,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2", "Subscription1"],
+              Subscription: ["Subscription2", "Subscription1"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -935,7 +964,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken,
+          Authorization: "Bearer " + window.accessToken
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -943,9 +972,10 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart,
+              nextMonthStart
             ],
           },
+          customerId: window.selectedCustomerId
         }),
       });
       if (!response.ok) {
@@ -966,7 +996,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -974,9 +1004,10 @@ const api = {
               BillingMonthStartDate: [
                 previousMonthStart,
                 currentMonthStart,
-                nextMonthStart,
+                nextMonthStart
               ],
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -998,11 +1029,12 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {},
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -1024,15 +1056,16 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [currentMonthStart],
               // Example date; you might want to make this dynamic
-              Subscription: [subscription],
+              Subscription: [subscription]
             },
+            customerId: window.selectedCustomerId,
             page: page.toString(),
             pageSize: "1000",
           }),
@@ -1056,14 +1089,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               Subscription: ["Subscription1"],
-              BusinessUnit: [],
+              BusinessUnit: []
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -1085,13 +1119,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription2"],
+              Subscription: ["Subscription2"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -1112,13 +1147,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription1"],
+              Subscription: ["Subscription1"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -1140,13 +1176,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               Subscription: ["Subscription2", "Subscription1"],
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -1167,7 +1204,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -1181,6 +1218,7 @@ const api = {
               // ],
               // Service: ["Storage"],
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -1201,13 +1239,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription2"],
+              Subscription: ["Subscription2"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -1228,13 +1267,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription2"],
+              Subscription: ["Subscription2"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -1255,13 +1295,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken,
+            Authorization: "Bearer " + window.accessToken
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription2", "Subscription1"],
+              Subscription: ["Subscription2", "Subscription1"]
             },
+            customerId: window.selectedCustomerId
           }),
         }
       );
@@ -1274,6 +1315,27 @@ const api = {
       throw error;
     }
   },
+  getAssignedCustomerIds: async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/csp_customers/customerIdList`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + window.accessToken
+          }
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  }
 };
 
 export default api;
