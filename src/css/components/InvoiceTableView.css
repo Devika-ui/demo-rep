@@ -70,7 +70,7 @@
 .cmpInvTv_stickyFirstRow {
   position: sticky !important;
   top: 40px;
-  z-index: 0 !important;
+  z-index: 10 !important;
   background-color: #ffffff;
   border-bottom: 1px solid black !important;
   border-left: 1px solid black !important;
@@ -97,15 +97,18 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 100;
 }
 
 .cmpInvTv_tableContainer th {
   border: 1px solid black;
   text-align: center !important;
   border-left: none !important;
-  border-bottom: none !important;
-  border-top: none !important;
+  position: sticky !important;
+  top: 40px;
+  z-index: 10 !important;
+  /* border-bottom: 1px solid black !important;
+  border-top: 1px solid black !important; */
 }
 
 .cmpInvTv_tableHeadCell.cmpInvTv_stickyHeader {
@@ -114,7 +117,10 @@
 
 .cmpInvTv_tableContainer th.cmpInvTv_tableHeadCell,
 .cmpInvTv_tableContainer th.cmpInvTv_stickyHeader {
-  border-left: 1px solid black !important;
+  /* border-left: 1px solid black !important; */
+  position: sticky !important;
+  top: 40px;
+  z-index: 10 !important;
 }
 
 .overlay {
