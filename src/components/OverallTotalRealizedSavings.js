@@ -23,18 +23,46 @@ ChartJS.register(
   Legend
 );
 
-const OverallTotalRealizedSavings = ({ subscriptionsData }) => {
+const OverallTotalRealizedSavings = ({
+  subscriptionsData,
+  selectedFilters,
+}) => {
   const [reservations, setReservations] = useState([]);
   const [simulatedSavings, setSimulatedSavings] = useState([]);
   const [labels, setLabels] = useState([]);
 
   useEffect(() => {
-    if (subscriptionsData && subscriptionsData.length > 0) {
+    const hasFilters =
+      selectedFilters &&
+      (selectedFilters.subscriptions?.length > 0 ||
+        selectedFilters.businessUnits?.length > 0 ||
+        selectedFilters.locations?.length > 0 ||
+        selectedFilters.applications?.length > 0 ||
+        selectedFilters.projects?.length > 0 ||
+        selectedFilters.environments?.length > 0);
+
+    if (hasFilters || subscriptionsData.length > 0) {
       const fetchReservationsData = async () => {
         try {
-          const reservationsData = await api.getOverallSavingsRI(
-            subscriptionsData
-          );
+          const inputData = hasFilters
+            ? {
+                Subscriptions: selectedFilters.subscriptions.map(
+                  (sub) => sub.value
+                ),
+                BusinessUnits:
+                  selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+                Locations:
+                  selectedFilters.locations?.map((loc) => loc.value) || [],
+                Applications:
+                  selectedFilters.applications?.map((app) => app.value) || [],
+                Projects:
+                  selectedFilters.projects?.map((proj) => proj.value) || [],
+                Environments:
+                  selectedFilters.environments?.map((env) => env.value) || [],
+              }
+            : subscriptionsData;
+
+          const reservationsData = await api.getOverallSavingsRI(inputData);
           setReservations(reservationsData.map((entry) => entry.savings));
           setLabels(
             reservationsData.map((entry) =>
@@ -48,16 +76,44 @@ const OverallTotalRealizedSavings = ({ subscriptionsData }) => {
           console.error("Error fetching reservations data:", error);
         }
       };
+
       fetchReservationsData();
     }
-  }, [subscriptionsData]);
+  }, [subscriptionsData, selectedFilters]);
 
   useEffect(() => {
-    if (subscriptionsData && subscriptionsData.length > 0) {
+    const hasFilters =
+      selectedFilters &&
+      (selectedFilters.subscriptions?.length > 0 ||
+        selectedFilters.businessUnits?.length > 0 ||
+        selectedFilters.locations?.length > 0 ||
+        selectedFilters.applications?.length > 0 ||
+        selectedFilters.projects?.length > 0 ||
+        selectedFilters.environments?.length > 0);
+
+    if (hasFilters || subscriptionsData.length > 0) {
       const fetchSimulatedSavingsData = async () => {
         try {
+          const inputData = hasFilters
+            ? {
+                Subscriptions: selectedFilters.subscriptions.map(
+                  (sub) => sub.value
+                ),
+                BusinessUnits:
+                  selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+                Locations:
+                  selectedFilters.locations?.map((loc) => loc.value) || [],
+                Applications:
+                  selectedFilters.applications?.map((app) => app.value) || [],
+                Projects:
+                  selectedFilters.projects?.map((proj) => proj.value) || [],
+                Environments:
+                  selectedFilters.environments?.map((env) => env.value) || [],
+              }
+            : subscriptionsData;
+
           const simulatedSavingsData = await api.getOverallSavingsStimulated(
-            subscriptionsData
+            inputData
           );
           setSimulatedSavings(
             simulatedSavingsData.map((entry) => entry.simulated)
@@ -74,9 +130,10 @@ const OverallTotalRealizedSavings = ({ subscriptionsData }) => {
           console.error("Error fetching simulated savings data:", error);
         }
       };
+
       fetchSimulatedSavingsData();
     }
-  }, [subscriptionsData]);
+  }, [subscriptionsData, selectedFilters]);
 
   const data = {
     labels,

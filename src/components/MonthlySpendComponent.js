@@ -4,17 +4,46 @@ import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
 import api from "../api.js";
 
-const MonthlySpendComponent = ({ subscriptionsData }) => {
+const MonthlySpendComponent = ({ subscriptionsData, selectedFilters }) => {
   const [totalCost, setTotalCost] = useState(null);
   const [growthPercentage, setGrowthPercentage] = useState(null);
 
   useEffect(() => {
-    if (subscriptionsData && subscriptionsData.length > 0) {
+    const hasFilters =
+      selectedFilters &&
+      (selectedFilters.subscriptions?.length > 0 ||
+        selectedFilters.businessUnits?.length > 0 ||
+        selectedFilters.locations?.length > 0 ||
+        selectedFilters.applications?.length > 0 ||
+        selectedFilters.projects?.length > 0 ||
+        selectedFilters.environments?.length > 0);
+
+    setTotalCost(null);
+    setGrowthPercentage(null);
+
+    if (hasFilters || subscriptionsData.length > 0) {
       const fetchData = async () => {
-        // const selectedSubscription = [subscriptionsData[0]]; // Select only "subscription1"
         try {
-          const data = await api.getMonthlyActualSpend(subscriptionsData);
-          console.log("API response:", data);
+          const inputData = hasFilters
+            ? {
+                Subscriptions: selectedFilters.subscriptions.map(
+                  (sub) => sub.value
+                ),
+                BusinessUnits:
+                  selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+                Locations:
+                  selectedFilters.locations?.map((loc) => loc.value) || [],
+                Applications:
+                  selectedFilters.applications?.map((app) => app.value) || [],
+                Projects:
+                  selectedFilters.projects?.map((proj) => proj.value) || [],
+                Environments:
+                  selectedFilters.environments?.map((env) => env.value) || [],
+              }
+            : subscriptionsData;
+
+          const data = await api.getMonthlyActualSpend(inputData);
+
           if (data.length > 0) {
             setTotalCost(data[0].totalCost);
             setGrowthPercentage(data[0].growthPercentage);
@@ -23,9 +52,10 @@ const MonthlySpendComponent = ({ subscriptionsData }) => {
           console.error("Error fetching data:", error);
         }
       };
+
       fetchData();
     }
-  }, [subscriptionsData]); // Add subscriptionsData here
+  }, [subscriptionsData, selectedFilters]);
 
   const GrowthIndicator = ({ growthPercentage }) => {
     let imageSrc;
@@ -82,7 +112,11 @@ const MonthlySpendComponent = ({ subscriptionsData }) => {
       <div className="content-wrapper">
         <div className="first">
           <div className="number">
-            {totalCost !== null ? <strong>{totalCost.toFixed(2)}</strong> : <strong>Loading...</strong>}
+            {totalCost !== null ? (
+              <strong>{totalCost.toFixed(2)}</strong>
+            ) : (
+              <strong>Loading...</strong>
+            )}
           </div>
         </div>
         <div className="second">

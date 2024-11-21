@@ -27,57 +27,73 @@ const currentMonthEnd = moment()
 console.log("1,2", previousMonthStart, currentMonthEnd);
 
 const api = {
-  getMonthlyActualSpend: async (subscriptionsData) => {
+  getMonthlyActualSpend: async (inputData) => {
+    // Check if inputData is an array (initial data) or an object (filters)
+    const isInitialData = Array.isArray(inputData);
+    // Construct requestBody based on the type of input data
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/overview/monthly/spend/actual`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-            Subscription: subscriptionsData
-          },
-          customerId: window.selectedCustomerId
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch actual spend data");
       }
-
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
       console.error("Error fetching actual spend data:", error);
       throw error;
     }
   },
 
-  getMonthlyForecastSpend: async (subscriptionsData) => {
+  getMonthlyForecastSpend: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/overview/monthly/forecast`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-            Subscription: subscriptionsData
-          },
-          customerId: window.selectedCustomerId
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch actual spend data");
+        throw new Error("Failed to fetch forecast data");
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
-      console.error("Error fetching actual spend data:", error);
       throw error;
     }
   },
@@ -87,9 +103,9 @@ const api = {
       const response = await fetch(`${apiUrl}/overview/suboraccount/count`, {
         method: "POST",
         headers: {
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({ customerId: window.selectedCustomerId })
+        body: JSON.stringify({ customerId: window.selectedCustomerId }),
       });
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
@@ -106,7 +122,7 @@ const api = {
       const response = await fetch(`${apiUrl}/recommendations/top3`, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
       });
       if (!response.ok) {
@@ -119,7 +135,22 @@ const api = {
     }
   },
 
-  getDiscountKPICoverage: async (subscriptionsData) => {
+  getDiscountKPICoverage: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
+
     try {
       const response = await fetch(
         `${apiUrl}/overview/KPI/discounts/comittmentbased/coverage`,
@@ -127,24 +158,17 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
-          body: JSON.stringify({
-            CloudServiceProvider: "1",
-            filters: {
-              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: subscriptionsData
-            },
-            customerId: window.selectedCustomerId
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to kpi coverage data");
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
-      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
@@ -157,15 +181,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               Startdate: [previousMonthStart],
-              Enddate: [currentMonthEnd]
+              Enddate: [currentMonthEnd],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -179,7 +203,21 @@ const api = {
     }
   },
 
-  getOverallSavingsRI: async (subscriptionsData) => {
+  getOverallSavingsRI: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(
         `${apiUrl}/overview/monthly/realized/savings`,
@@ -187,30 +225,36 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
-          body: JSON.stringify({
-            CloudServiceProvider: "1",
-            filters: {
-              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-
-              Subscription: subscriptionsData
-            },
-            customerId: window.selectedCustomerId
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to fetch savings ri data");
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
-      console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
 
-  getOverallSavingsStimulated: async (subscriptionsData) => {
+  getOverallSavingsStimulated: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(
         `${apiUrl}/overview/monthly/realized/simulatedri`,
@@ -218,22 +262,16 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
-          body: JSON.stringify({
-            CloudServiceProvider: "1",
-            filters: {
-              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: subscriptionsData
-            },
-            customerId: window.selectedCustomerId
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to fetch savings stimulated data");
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
       console.error("Error fetching subscriptions:", error);
       throw error;
@@ -245,7 +283,7 @@ const api = {
       const response = await fetch(`${apiUrl}/subscription/${customerId}`, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
       });
       if (!response.ok) {
@@ -268,7 +306,7 @@ const api = {
       const response = await fetch(`${apiUrl}/overview/menuitems/`, {
         method: "POST",
         headers: {
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
       });
       if (!response.ok) {
@@ -281,27 +319,35 @@ const api = {
     }
   },
 
-  getMapData: async (subscriptionsData) => {
+  getMapData: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/overview/locations/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: [currentMonthStart],
-            Subscription: subscriptionsData
-          },
-          customerId: window.selectedCustomerId
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to fetch get map data");
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
@@ -314,7 +360,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({ customerId: window.selectedCustomerId }),
       });
@@ -330,84 +376,104 @@ const api = {
     }
   },
 
-  getBillingCostEachDay: async (subscriptionsData) => {
+  getBillingCostEachDay: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        StartDate: [previousMonthStart],
+        EndDate: [currentMonthEnd],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
+
     try {
       const response = await fetch(`${apiUrl}/overview/billcost/total`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            StartDate: [previousMonthStart],
-            EndDate: [currentMonthEnd],
-            Subscription: subscriptionsData
-          },
-          customerId: window.selectedCustomerId
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to fetch billing cost each day data");
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
       console.error("Error fetching subscriptions:", error);
       throw error;
     }
   },
-
-  getOverallConsumptionForSubscription: async (subscriptionsData) => {
+  getOverallConsumptionForSubscription: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/overview/subscriptions/top/2`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            Subscription: subscriptionsData
-          },
-          customerId: window.selectedCustomerId
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        throw new Error(
-          "Failed to fetch overall  consumption subscription data"
-        );
+        throw new Error("Failed to fetch consumption for subscription data");
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
-      console.error(
-        "Error fetching overall consumption subscription data:",
-        error
-      );
       throw error;
     }
   },
-  getOverallConsumptionForApplication: async (subscriptionsData) => {
+  getOverallConsumptionForApplication: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/common/topapplications/2`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            Subscription: subscriptionsData
-          },
-          customerId: window.selectedCustomerId
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch overall consumption application data");
+        throw new Error("Failed to fetch consumption for application data");
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
       console.error(
         "Error fetching overall consumption application data:",
@@ -416,58 +482,73 @@ const api = {
       throw error;
     }
   },
-  getOverallConsumptionForServies: async (subscriptionsData) => {
+  getOverallConsumptionForServies: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/common/topservices/2`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            Subscription: subscriptionsData
-          },
-          customerId: window.selectedCustomerId
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch overall consumption services data");
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
       console.error("Error fetching overall consumption services data:", error);
       throw error;
     }
   },
-  getOverallConsumptionForTagCompliance: async (subscriptionsData) => {
+
+  getOverallConsumptionForTagCompliance: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/overview/compliance/tag`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            Subscription: subscriptionsData
-          },
-          customerId: window.selectedCustomerId
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
         throw new Error(
           "Failed to fetch overall consumption tag compliance data"
         );
       }
-      return await response.json();
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
-      console.error(
-        "Error fetching overall consumption tag compliance data:",
-        error
-      );
       throw error;
     }
   },
@@ -476,7 +557,7 @@ const api = {
       const response = await fetch(`${apiUrl}/filters`, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
       });
       if (!response.ok) {
@@ -494,7 +575,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -505,9 +586,9 @@ const api = {
             Location: selectedFilters.locations || [],
             Application: selectedFilters.applications || [],
             Project: selectedFilters.projects || [],
-            Environment: selectedFilters.environments || []
+            Environment: selectedFilters.environments || [],
           },
-          customerId: window.selectedCustomerId
+          customerId: window.selectedCustomerId,
         }),
       });
       if (!response.ok) {
@@ -520,13 +601,13 @@ const api = {
     }
   },
 
-  getFilterForDropDown: async (selectedSubscriptions) => {
+  getFilterForDropDown: async () => {
     try {
       const response = await fetch(`${apiUrl}/filters`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -537,7 +618,7 @@ const api = {
               nextMonthStart,
             ],
           },
-          customerId: window.selectedCustomerId
+          customerId: window.selectedCustomerId,
         }),
       });
       if (!response.ok) {
@@ -558,7 +639,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -566,11 +647,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart
+              nextMonthStart,
             ],
-            Subscription: subscriptionsData
+            Subscription: subscriptionsData,
           },
-          customerId: window.selectedCustomerId
+          customerId: window.selectedCustomerId,
         }),
       });
       if (!response.ok) {
@@ -589,7 +670,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -599,9 +680,9 @@ const api = {
               currentMonthStart,
               nextMonthStart,
             ],
-            Subscription: subscriptionsData
+            Subscription: subscriptionsData,
           },
-          customerId: window.selectedCustomerId
+          customerId: window.selectedCustomerId,
         }),
       });
       if (!response.ok) {
@@ -620,7 +701,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -628,11 +709,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart
+              nextMonthStart,
             ],
-            Subscription: subscriptionsData
+            Subscription: subscriptionsData,
           },
-          customerId: window.selectedCustomerId
+          customerId: window.selectedCustomerId,
         }),
       });
       if (!response.ok) {
@@ -653,7 +734,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -661,11 +742,11 @@ const api = {
               BillingMonthStartDate: [
                 previousMonthStart,
                 currentMonthStart,
-                nextMonthStart
+                nextMonthStart,
               ],
-              Subscription: subscriptionsData
+              Subscription: subscriptionsData,
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -684,7 +765,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -692,11 +773,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart
+              nextMonthStart,
             ],
-            Subscription: subscriptionsData
+            Subscription: subscriptionsData,
           },
-          customerId: window.selectedCustomerId
+          customerId: window.selectedCustomerId,
         }),
       });
       if (!response.ok) {
@@ -714,7 +795,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -722,11 +803,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart
+              nextMonthStart,
             ],
-            Subscription: subscriptionsData
+            Subscription: subscriptionsData,
           },
-          customerId: window.selectedCustomerId
+          customerId: window.selectedCustomerId,
         }),
       });
       if (!response.ok) {
@@ -749,15 +830,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2"]
+              Subscription: ["Subscription2"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -779,15 +860,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2"]
+              Subscription: ["Subscription2"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -809,15 +890,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2"]
+              Subscription: ["Subscription2"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -839,15 +920,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2"]
+              Subscription: ["Subscription2"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -869,7 +950,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -877,11 +958,11 @@ const api = {
               BillingMonthStartDate: [
                 previousMonthStart,
                 currentMonthStart,
-                nextMonthStart
+                nextMonthStart,
               ],
-              Subscription: subscriptionsData
+              Subscription: subscriptionsData,
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -900,7 +981,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -908,11 +989,11 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart
+              nextMonthStart,
             ],
-            Subscription: ["Subscription2"]
+            Subscription: ["Subscription2"],
           },
-          customerId: window.selectedCustomerId
+          customerId: window.selectedCustomerId,
         }),
       });
       if (!response.ok) {
@@ -936,15 +1017,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-              Subscription: ["Subscription2", "Subscription1"]
+              Subscription: ["Subscription2", "Subscription1"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -964,7 +1045,7 @@ const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + window.accessToken
+          Authorization: "Bearer " + window.accessToken,
         },
         body: JSON.stringify({
           CloudServiceProvider: "1",
@@ -972,10 +1053,10 @@ const api = {
             BillingMonthStartDate: [
               previousMonthStart,
               currentMonthStart,
-              nextMonthStart
+              nextMonthStart,
             ],
           },
-          customerId: window.selectedCustomerId
+          customerId: window.selectedCustomerId,
         }),
       });
       if (!response.ok) {
@@ -996,7 +1077,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -1004,10 +1085,10 @@ const api = {
               BillingMonthStartDate: [
                 previousMonthStart,
                 currentMonthStart,
-                nextMonthStart
+                nextMonthStart,
               ],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1029,12 +1110,12 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {},
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1056,14 +1137,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               BillingMonthStartDate: [currentMonthStart],
               // Example date; you might want to make this dynamic
-              Subscription: [subscription]
+              Subscription: [subscription],
             },
             customerId: window.selectedCustomerId,
             page: page.toString(),
@@ -1089,15 +1170,15 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               Subscription: ["Subscription1"],
-              BusinessUnit: []
+              BusinessUnit: [],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1119,14 +1200,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription2"]
+              Subscription: ["Subscription2"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1147,14 +1228,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription1"]
+              Subscription: ["Subscription1"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1176,14 +1257,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
               Subscription: ["Subscription2", "Subscription1"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1204,7 +1285,7 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
@@ -1218,7 +1299,7 @@ const api = {
               // ],
               // Service: ["Storage"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1239,14 +1320,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription2"]
+              Subscription: ["Subscription2"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1267,14 +1348,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription2"]
+              Subscription: ["Subscription2"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1295,14 +1376,14 @@ const api = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
+            Authorization: "Bearer " + window.accessToken,
           },
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              Subscription: ["Subscription2", "Subscription1"]
+              Subscription: ["Subscription2", "Subscription1"],
             },
-            customerId: window.selectedCustomerId
+            customerId: window.selectedCustomerId,
           }),
         }
       );
@@ -1317,16 +1398,13 @@ const api = {
   },
   getAssignedCustomerIds: async () => {
     try {
-      const response = await fetch(
-        `${apiUrl}/csp_customers/customerIdList`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + window.accessToken
-          }
-        }
-      );
+      const response = await fetch(`${apiUrl}/csp_customers/customerIdList`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + window.accessToken,
+        },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
@@ -1335,7 +1413,7 @@ const api = {
       console.error("Error fetching data:", error);
       throw error;
     }
-  }
+  },
 };
 
 export default api;

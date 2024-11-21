@@ -28,6 +28,20 @@ const Dashboard = () => {
   const handleSubscriptionsFetch = (data) => {
     setSubscriptionsData(data);
   };
+  const [selectedFilters, setSelectedFilters] = useState({
+    subscriptions: [],
+    businessUnits: [],
+    locations: [],
+    applications: [],
+    projects: [],
+    environments: [],
+  });
+
+  // Function to update filters
+  const handleFiltersChange = (newFilters) => {
+    setSelectedFilters(newFilters); // Update selected filters
+  };
+
   const navigate = useNavigate();
 
   return (
@@ -56,6 +70,7 @@ const Dashboard = () => {
       <Subheader
         onButtonClick={handleButtonClick}
         onSubscriptionsFetch={handleSubscriptionsFetch}
+        onFiltersChange={handleFiltersChange}
       />
       <NavigationBar />
 
@@ -70,11 +85,17 @@ const Dashboard = () => {
         <Grid container spacing={2} sx={{ mt: 2 }}>
           {/* First Row: Monthly Spend, Forecast, Subscriptions */}
           <Grid item xs={12} sm={6} md={4}>
-            <MonthlySpendComponent subscriptionsData={subscriptionsData} />
+            <MonthlySpendComponent
+              subscriptionsData={subscriptionsData}
+              selectedFilters={selectedFilters}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4}>
-            <MonthlyForecastComponent subscriptionsData={subscriptionsData} />
+            <MonthlyForecastComponent
+              subscriptionsData={subscriptionsData}
+              selectedFilters={selectedFilters}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4}>
@@ -115,9 +136,15 @@ const Dashboard = () => {
                 </Box>
                 <Box sx={{ flexGrow: 1 }}>
                   {showStackBars ? (
-                    <StackBars subscriptionsData={subscriptionsData} />
+                    <StackBars
+                      subscriptionsData={subscriptionsData}
+                      selectedFilters={selectedFilters}
+                    />
                   ) : (
-                    <AzureBars subscriptionsData={subscriptionsData} />
+                    <AzureBars
+                      subscriptionsData={subscriptionsData}
+                      selectedFilters={selectedFilters}
+                    />
                   )}
                 </Box>
               </Paper>
@@ -147,7 +174,10 @@ const Dashboard = () => {
               sx={{ position: "relative", top: "-10px" }}
             >
               {/* <Paper sx={{ p: 2, height: '30vh', display: 'flex', flexDirection: 'column' }}> */}
-              <KPISection subscriptionsData={subscriptionsData} />
+              <KPISection
+                subscriptionsData={subscriptionsData}
+                selectedFilters={selectedFilters}
+              />
               {/* </Paper> */}
             </Grid>
 
@@ -162,7 +192,10 @@ const Dashboard = () => {
                   boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
                 }}
               >
-                <ConsumptionHighlights subscriptionsData={subscriptionsData} />
+                <ConsumptionHighlights
+                  subscriptionsData={subscriptionsData}
+                  selectedFilters={selectedFilters}
+                />
               </Paper>
             </Grid>
 
@@ -175,7 +208,10 @@ const Dashboard = () => {
                   boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
                 }}
               >
-                <MapContainer subscriptionsData={subscriptionsData} />
+                <MapContainer
+                  subscriptionsData={subscriptionsData}
+                  selectedFilters={selectedFilters}
+                />
               </Paper>
             </Grid>
 
@@ -190,6 +226,7 @@ const Dashboard = () => {
               >
                 <OverallTotalRealizedSavings
                   subscriptionsData={subscriptionsData}
+                  selectedFilters={selectedFilters}
                 />
               </Paper>
             </Grid>
