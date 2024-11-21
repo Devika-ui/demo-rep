@@ -19,6 +19,12 @@ const nextMonthStart = moment()
   .startOf("month")
   .format("YYYY-MM-DD");
 
+const currentMonthEnd = moment()
+  .subtract(3, "months")
+  .endOf("month")
+  .format("YYYY-MM-DD");
+console.log("1,2", previousMonthStart, currentMonthEnd);
+
 const api = {
   getMonthlyActualSpend: async (subscriptionsData) => {
     try {
@@ -151,7 +157,8 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+              Startdate: [previousMonthStart],
+              Enddate: [currentMonthEnd],
             },
           }),
         }
@@ -325,7 +332,8 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: [previousMonthStart, currentMonthStart],
+            StartDate: [previousMonthStart],
+            EndDate: [currentMonthEnd],
             Subscription: subscriptionsData,
           },
         }),
