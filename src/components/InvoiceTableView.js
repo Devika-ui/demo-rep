@@ -70,7 +70,7 @@ const InvoiceTableView = ({
             backgroundColor: "#fff",
           }}
         >
-          <Table id="mytable" stickyHeader>
+          <Table id="mytable">
             <TableHead>
               <TableRow>
                 {headerLabels.map((label, labelIndex) => (
