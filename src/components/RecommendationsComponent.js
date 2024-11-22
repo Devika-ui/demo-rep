@@ -1,22 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../css/RecommendationsComponent.scss";
-import api from "../api.js";
 
-const RecommendationsComponent = () => {
-  const [recommendations, setRecommendations] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.getRecommendations();
-        setRecommendations(response);
-      } catch (error) {
-        // Handle error
-      }
-    };
-    fetchData();
-  }, []);
-
+const RecommendationsComponent = ({ recommendations = [] }) => {
   const totalSavings = recommendations
     .reduce((total, rec) => total + rec.value, 0)
     .toFixed(2);

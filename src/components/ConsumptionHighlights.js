@@ -3,83 +3,83 @@ import Chart from "react-apexcharts";
 import "../css/consumptionHighlights.scss";
 import api from "../api.js"; // Import API function
 
-const ConsumptionHighlights = ({ subscriptionsData, selectedFilters }) => {
-  const [topSubscriptions, setTopSubscriptions] = useState([]);
-  const [topApplications, setTopApplications] = useState([]);
-  const [topServices, setTopServices] = useState([]);
-  const [tagCompliance, setTagCompliance] = useState({
-    applicationpercentage: 0,
-    ownerpercentage: 0,
-    projectpercentage: 0,
-    bupercentage: 0,
-    environmentpercentage: 0,
-  });
+const ConsumptionHighlights = ({ subscriptionsData, selectedFilters,topSubscriptions,topApplications,topServices,tagCompliance }) => {
+  // const [topSubscriptions, setTopSubscriptions] = useState([]);
+  // const [topApplications, setTopApplications] = useState([]);
+  // const [topServices, setTopServices] = useState([]);
+  // const [tagCompliance, setTagCompliance] = useState({
+  //   applicationpercentage: 0,
+  //   ownerpercentage: 0,
+  //   projectpercentage: 0,
+  //   bupercentage: 0,
+  //   environmentpercentage: 0,
+  // });
 
-  useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
+  // useEffect(() => {
+  //   const hasFilters =
+  //     selectedFilters &&
+  //     (selectedFilters.subscriptions?.length > 0 ||
+  //       selectedFilters.businessUnits?.length > 0 ||
+  //       selectedFilters.locations?.length > 0 ||
+  //       selectedFilters.applications?.length > 0 ||
+  //       selectedFilters.projects?.length > 0 ||
+  //       selectedFilters.environments?.length > 0);
 
-    const fetchConsumptionData = async () => {
-      try {
-        // Decide whether to use selected filters or subscriptionsData
-        const inputData = hasFilters
-          ? {
-              Subscriptions: selectedFilters.subscriptions.map(
-                (sub) => sub.value
-              ),
-              BusinessUnits:
-                selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-              Locations:
-                selectedFilters.locations?.map((loc) => loc.value) || [],
-              Applications:
-                selectedFilters.applications?.map((app) => app.value) || [],
-              Projects:
-                selectedFilters.projects?.map((proj) => proj.value) || [],
-              Environments:
-                selectedFilters.environments?.map((env) => env.value) || [],
-            }
-          : subscriptionsData;
+  //   const fetchConsumptionData = async () => {
+  //     try {
+  //       // Decide whether to use selected filters or subscriptionsData
+  //       const inputData = hasFilters
+  //         ? {
+  //             Subscriptions: selectedFilters.subscriptions.map(
+  //               (sub) => sub.value
+  //             ),
+  //             BusinessUnits:
+  //               selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+  //             Locations:
+  //               selectedFilters.locations?.map((loc) => loc.value) || [],
+  //             Applications:
+  //               selectedFilters.applications?.map((app) => app.value) || [],
+  //             Projects:
+  //               selectedFilters.projects?.map((proj) => proj.value) || [],
+  //             Environments:
+  //               selectedFilters.environments?.map((env) => env.value) || [],
+  //           }
+  //         : subscriptionsData;
 
-        const subscriptionsData1 =
-          await api.getOverallConsumptionForSubscription(inputData);
-        setTopSubscriptions(subscriptionsData1.topsubscriptions || []);
+  //       const subscriptionsData1 =
+  //         await api.getOverallConsumptionForSubscription(inputData);
+  //       setTopSubscriptions(subscriptionsData1.topsubscriptions || []);
 
-        const applicationsData = await api.getOverallConsumptionForApplication(
-          inputData
-        );
-        setTopApplications(applicationsData.topApplications || []);
+  //       const applicationsData = await api.getOverallConsumptionForApplication(
+  //         inputData
+  //       );
+  //       setTopApplications(applicationsData.topApplications || []);
 
-        const servicesData = await api.getOverallConsumptionForServies(
-          inputData
-        );
-        setTopServices(servicesData.topServices || []);
+  //       const servicesData = await api.getOverallConsumptionForServies(
+  //         inputData
+  //       );
+  //       setTopServices(servicesData.topServices || []);
 
-        const tagComplianceData =
-          await api.getOverallConsumptionForTagCompliance(inputData);
-        setTagCompliance(
-          tagComplianceData || {
-            applicationpercentage: 0,
-            ownerpercentage: 0,
-            projectpercentage: 0,
-            bupercentage: 0,
-            environmentpercentage: 0,
-          }
-        );
-      } catch (error) {
-        console.error("Error fetching overall consumption data:", error);
-      }
-    };
+  //       const tagComplianceData =
+  //         await api.getOverallConsumptionForTagCompliance(inputData);
+  //       setTagCompliance(
+  //         tagComplianceData || {
+  //           applicationpercentage: 0,
+  //           ownerpercentage: 0,
+  //           projectpercentage: 0,
+  //           bupercentage: 0,
+  //           environmentpercentage: 0,
+  //         }
+  //       );
+  //     } catch (error) {
+  //       console.error("Error fetching overall consumption data:", error);
+  //     }
+  //   };
 
-    if (hasFilters || subscriptionsData.length > 0) {
-      fetchConsumptionData();
-    }
-  }, [subscriptionsData, selectedFilters]);
+  //   if (hasFilters || subscriptionsData.length > 0) {
+  //     fetchConsumptionData();
+  //   }
+  // }, [subscriptionsData, selectedFilters]);
 
   // Get costs with fallback to default
   const topSubscriptionCost =

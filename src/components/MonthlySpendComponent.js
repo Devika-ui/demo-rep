@@ -1,62 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../css/MonthlySpendComponent.scss";
 import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
-import api from "../api.js";
 
-const MonthlySpendComponent = ({ subscriptionsData, selectedFilters }) => {
-  const [totalCost, setTotalCost] = useState(null);
-  const [growthPercentage, setGrowthPercentage] = useState(null);
-
-  useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
-
-    setTotalCost(null);
-    setGrowthPercentage(null);
-
-    if (hasFilters || subscriptionsData.length > 0) {
-      const fetchData = async () => {
-        try {
-          const inputData = hasFilters
-            ? {
-                Subscriptions: selectedFilters.subscriptions.map(
-                  (sub) => sub.value
-                ),
-                BusinessUnits:
-                  selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-                Locations:
-                  selectedFilters.locations?.map((loc) => loc.value) || [],
-                Applications:
-                  selectedFilters.applications?.map((app) => app.value) || [],
-                Projects:
-                  selectedFilters.projects?.map((proj) => proj.value) || [],
-                Environments:
-                  selectedFilters.environments?.map((env) => env.value) || [],
-              }
-            : subscriptionsData;
-
-          const data = await api.getMonthlyActualSpend(inputData);
-
-          if (data.length > 0) {
-            setTotalCost(data[0].totalCost);
-            setGrowthPercentage(data[0].growthPercentage);
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
-      fetchData();
-    }
-  }, [subscriptionsData, selectedFilters]);
-
+const MonthlySpendComponent = ({ subscriptionsData, selectedFilters, totalCost, growthPercentage }) => {
   const GrowthIndicator = ({ growthPercentage }) => {
     let imageSrc;
     let altText;
@@ -91,7 +38,7 @@ const MonthlySpendComponent = ({ subscriptionsData, selectedFilters }) => {
               />
             </span>
           )}
-          {growthPercentage !== null ? (
+          {growthPercentage !== null && growthPercentage !== undefined ? (
             <strong>{growthPercentage.toFixed(2)}%</strong>
           ) : (
             <strong>N/A</strong>
@@ -112,7 +59,7 @@ const MonthlySpendComponent = ({ subscriptionsData, selectedFilters }) => {
       <div className="content-wrapper">
         <div className="first">
           <div className="number">
-            {totalCost !== null ? (
+            {totalCost !== null && totalCost !== undefined ? (
               <strong>{totalCost.toFixed(2)}</strong>
             ) : (
               <strong>Loading...</strong>
@@ -127,6 +74,11 @@ const MonthlySpendComponent = ({ subscriptionsData, selectedFilters }) => {
       </div>
     </div>
   );
+};
+
+MonthlySpendComponent.defaultProps = {
+  totalCost: 0,
+  growthPercentage: 0,
 };
 
 export default MonthlySpendComponent;

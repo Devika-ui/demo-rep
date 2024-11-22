@@ -25,115 +25,115 @@ ChartJS.register(
 
 const OverallTotalRealizedSavings = ({
   subscriptionsData,
-  selectedFilters,
+  selectedFilters,reservations,simulatedSavings,labels
 }) => {
-  const [reservations, setReservations] = useState([]);
-  const [simulatedSavings, setSimulatedSavings] = useState([]);
-  const [labels, setLabels] = useState([]);
+  // const [reservations, setReservations] = useState([]);
+  // const [simulatedSavings, setSimulatedSavings] = useState([]);
+  // const [labels, setLabels] = useState([]);
 
-  useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
+  // useEffect(() => {
+  //   const hasFilters =
+  //     selectedFilters &&
+  //     (selectedFilters.subscriptions?.length > 0 ||
+  //       selectedFilters.businessUnits?.length > 0 ||
+  //       selectedFilters.locations?.length > 0 ||
+  //       selectedFilters.applications?.length > 0 ||
+  //       selectedFilters.projects?.length > 0 ||
+  //       selectedFilters.environments?.length > 0);
 
-    if (hasFilters || subscriptionsData.length > 0) {
-      const fetchReservationsData = async () => {
-        try {
-          const inputData = hasFilters
-            ? {
-                Subscriptions: selectedFilters.subscriptions.map(
-                  (sub) => sub.value
-                ),
-                BusinessUnits:
-                  selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-                Locations:
-                  selectedFilters.locations?.map((loc) => loc.value) || [],
-                Applications:
-                  selectedFilters.applications?.map((app) => app.value) || [],
-                Projects:
-                  selectedFilters.projects?.map((proj) => proj.value) || [],
-                Environments:
-                  selectedFilters.environments?.map((env) => env.value) || [],
-              }
-            : subscriptionsData;
+  //   if (hasFilters || subscriptionsData.length > 0) {
+  //     const fetchReservationsData = async () => {
+  //       try {
+  //         const inputData = hasFilters
+  //           ? {
+  //               Subscriptions: selectedFilters.subscriptions.map(
+  //                 (sub) => sub.value
+  //               ),
+  //               BusinessUnits:
+  //                 selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+  //               Locations:
+  //                 selectedFilters.locations?.map((loc) => loc.value) || [],
+  //               Applications:
+  //                 selectedFilters.applications?.map((app) => app.value) || [],
+  //               Projects:
+  //                 selectedFilters.projects?.map((proj) => proj.value) || [],
+  //               Environments:
+  //                 selectedFilters.environments?.map((env) => env.value) || [],
+  //             }
+  //           : subscriptionsData;
 
-          const reservationsData = await api.getOverallSavingsRI(inputData);
-          setReservations(reservationsData.map((entry) => entry.savings));
-          setLabels(
-            reservationsData.map((entry) =>
-              new Date(entry.modifieddate).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })
-            )
-          );
-        } catch (error) {
-          console.error("Error fetching reservations data:", error);
-        }
-      };
+  //         const reservationsData = await api.getOverallSavingsRI(inputData);
+  //         setReservations(reservationsData.map((entry) => entry.savings));
+  //         setLabels(
+  //           reservationsData.map((entry) =>
+  //             new Date(entry.modifieddate).toLocaleDateString("en-US", {
+  //               month: "long",
+  //               year: "numeric",
+  //             })
+  //           )
+  //         );
+  //       } catch (error) {
+  //         console.error("Error fetching reservations data:", error);
+  //       }
+  //     };
 
-      fetchReservationsData();
-    }
-  }, [subscriptionsData, selectedFilters]);
+  //     fetchReservationsData();
+  //   }
+  // }, [subscriptionsData, selectedFilters]);
 
-  useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
+  // useEffect(() => {
+  //   const hasFilters =
+  //     selectedFilters &&
+  //     (selectedFilters.subscriptions?.length > 0 ||
+  //       selectedFilters.businessUnits?.length > 0 ||
+  //       selectedFilters.locations?.length > 0 ||
+  //       selectedFilters.applications?.length > 0 ||
+  //       selectedFilters.projects?.length > 0 ||
+  //       selectedFilters.environments?.length > 0);
 
-    if (hasFilters || subscriptionsData.length > 0) {
-      const fetchSimulatedSavingsData = async () => {
-        try {
-          const inputData = hasFilters
-            ? {
-                Subscriptions: selectedFilters.subscriptions.map(
-                  (sub) => sub.value
-                ),
-                BusinessUnits:
-                  selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-                Locations:
-                  selectedFilters.locations?.map((loc) => loc.value) || [],
-                Applications:
-                  selectedFilters.applications?.map((app) => app.value) || [],
-                Projects:
-                  selectedFilters.projects?.map((proj) => proj.value) || [],
-                Environments:
-                  selectedFilters.environments?.map((env) => env.value) || [],
-              }
-            : subscriptionsData;
+  //   if (hasFilters || subscriptionsData.length > 0) {
+  //     const fetchSimulatedSavingsData = async () => {
+  //       try {
+  //         const inputData = hasFilters
+  //           ? {
+  //               Subscriptions: selectedFilters.subscriptions.map(
+  //                 (sub) => sub.value
+  //               ),
+  //               BusinessUnits:
+  //                 selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+  //               Locations:
+  //                 selectedFilters.locations?.map((loc) => loc.value) || [],
+  //               Applications:
+  //                 selectedFilters.applications?.map((app) => app.value) || [],
+  //               Projects:
+  //                 selectedFilters.projects?.map((proj) => proj.value) || [],
+  //               Environments:
+  //                 selectedFilters.environments?.map((env) => env.value) || [],
+  //             }
+  //           : subscriptionsData;
 
-          const simulatedSavingsData = await api.getOverallSavingsStimulated(
-            inputData
-          );
-          setSimulatedSavings(
-            simulatedSavingsData.map((entry) => entry.simulated)
-          );
-          setLabels(
-            simulatedSavingsData.map((entry) =>
-              new Date(entry.Date).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })
-            )
-          );
-        } catch (error) {
-          console.error("Error fetching simulated savings data:", error);
-        }
-      };
+  //         const simulatedSavingsData = await api.getOverallSavingsStimulated(
+  //           inputData
+  //         );
+  //         setSimulatedSavings(
+  //           simulatedSavingsData.map((entry) => entry.simulated)
+  //         );
+  //         setLabels(
+  //           simulatedSavingsData.map((entry) =>
+  //             new Date(entry.Date).toLocaleDateString("en-US", {
+  //               month: "long",
+  //               year: "numeric",
+  //             })
+  //           )
+  //         );
+  //       } catch (error) {
+  //         console.error("Error fetching simulated savings data:", error);
+  //       }
+  //     };
 
-      fetchSimulatedSavingsData();
-    }
-  }, [subscriptionsData, selectedFilters]);
+  //     fetchSimulatedSavingsData();
+  //   }
+  // }, [subscriptionsData, selectedFilters]);
 
   const data = {
     labels,
@@ -141,7 +141,9 @@ const OverallTotalRealizedSavings = ({
       {
         label: "Reservations",
         backgroundColor: "rgba(255, 140, 0, 0.7)",
-        data: reservations.map((entry) => parseFloat(entry.toFixed(2))),
+        data: reservations
+        .filter((entry) => typeof entry === "number" && !isNaN(entry))
+        .map((entry) => parseFloat(entry.toFixed(2))),
       },
     ],
   };
@@ -152,7 +154,9 @@ const OverallTotalRealizedSavings = ({
       {
         label: "Simulated PAYGO",
         borderColor: "#0079B9",
-        data: simulatedSavings.map((entry) => parseFloat(entry.toFixed(2))),
+        data: simulatedSavings
+        .filter((entry) => typeof entry === "number" && !isNaN(entry))
+        .map((entry) => parseFloat(entry.toFixed(2))),
         fill: false,
         type: "line",
         pointRadius: 0,
