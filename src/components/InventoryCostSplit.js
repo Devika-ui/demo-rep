@@ -4,6 +4,7 @@ import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
 import CostInventory from "./CostInventory";
 import ContainerBox from "./ContainerBox";
+import { Box, Typography } from "@mui/material";
 import api from "../api";
 
 const InventoryCostSplit = () => {
@@ -87,25 +88,37 @@ const InventoryCostSplit = () => {
 
   return (
     <div>
-      <Header onButtonClick={handleButtonClick} />
-      <Subheader
-        title={
-          <div>
-            <span style={{ fontSize: "18px" }}>Cost & Usage/</span>
-            <span style={{ color: "#5f249f", fontSize: "18px" }}>
-              Inventory Cost Split
-            </span>
-          </div>
-        }
-        additionalFilters={additionalFilters}
-      />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          paddingX: 9.5,
+          paddingRight: "10px",
+          maxWidth: "100%",
+        }}
+      >
+        <Header />
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{
+            color: "#5f249f",
+            marginTop: "-1rem", // Adjust this as needed
+            fontWeight: "bold",
+          }}
+        >
+          Inventory Cost Split
+        </Typography>
+        <Subheader onButtonClick={handleButtonClick} />
+        <NavigationBar />
+      </Box>
       <NavigationBar />
       {/* ContainerBoxForInventory */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          marginRight: "14px",
+          marginLeft: "-35px",
         }}
       >
         <ContainerBox data={dataSet1} />
