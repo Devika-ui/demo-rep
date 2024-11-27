@@ -10,7 +10,6 @@ const SubHeader = ({
   onButtonClick,
   onSubscriptionsFetch,
   onFiltersChange,
-  isLandingPage
 }) => {
   const [subscriptionOptions, setSubscriptionOptions] = useState([]);
   const initialFilters = {
@@ -244,7 +243,7 @@ const SubHeader = ({
   return (
     <div className="Subheader-Container">
       <div className="Subheader-ButtonsContainer">
-      <HeaderButtons onButtonClick={onButtonClick} isLandingPage={isLandingPage} />
+        <HeaderButtons onButtonClick={onButtonClick} />
         <DateRangeDropdown />
       </div>
       <div className="Subheader-Boxes">

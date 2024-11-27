@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../css/RecommendationsComponent.scss";
+import api from "../api.js";
 
-const RecommendationsComponent = ({ recommendations = [] }) => {
+const RecommendationsComponent = ({selectedCSP}) => {
+  const [recommendations, setRecommendations] = useState([]);
   const totalSavings = recommendations
     .reduce((total, rec) => total + rec.value, 0)
     .toFixed(2);
 
+  useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await api.getRecommendations();
+            setRecommendations(response);
+          } catch (error) {
+            console.error("Error fetching Azure recommendations:", error);
+          }
+        };
+        fetchData();
+    }, [selectedCSP]);
   return (
     <>
       <div className="heading">

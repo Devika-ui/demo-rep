@@ -3,7 +3,7 @@ import { Typography, Box, Button } from "@mui/material";
 import Chart from "chart.js/auto";
 import api from "../api.js";
 
-const StackBars = ({ subscriptionsData, selectedFilters }) => {
+const StackBars = ({ inputData, selectedCSP }) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [showAWS, setShowAWS] = useState(true);
   const [showAzure, setShowAzure] = useState(true);
@@ -11,35 +11,8 @@ const StackBars = ({ subscriptionsData, selectedFilters }) => {
   const chartInstance = useRef(null);
 
   useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
-
     const fetchData = async () => {
       try {
-        const inputData = hasFilters
-          ? {
-              Subscriptions: selectedFilters.subscriptions.map(
-                (sub) => sub.value
-              ),
-              BusinessUnits:
-                selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-              Locations:
-                selectedFilters.locations?.map((loc) => loc.value) || [],
-              Applications:
-                selectedFilters.applications?.map((app) => app.value) || [],
-              Projects:
-                selectedFilters.projects?.map((proj) => proj.value) || [],
-              Environments:
-                selectedFilters.environments?.map((env) => env.value) || [],
-            }
-          : subscriptionsData;
-
         const subscriptionsData1 = await api.getBillingCostEachDay(inputData);
         console.log("API response:", subscriptionsData1);
 
@@ -50,11 +23,9 @@ const StackBars = ({ subscriptionsData, selectedFilters }) => {
       }
     };
 
-    // Trigger fetch if filters or subscription data are available
-    if (hasFilters || (subscriptionsData && subscriptionsData.length > 0)) {
+    
       fetchData();
-    }
-  }, [subscriptionsData, selectedFilters]);
+  }, [selectedCSP, inputData]);
 
   useEffect(() => {
     if (subscriptions.length === 0) return;
@@ -87,14 +58,14 @@ const StackBars = ({ subscriptionsData, selectedFilters }) => {
         labels: sortedDates,
         datasets: [
           {
-            label: "AWS",
+            label: 2,
             data: sortedDates.map((date) => awsData[date].toFixed(2)),
             backgroundColor: "rgba(255, 153, 10, 0.7)",
             stack: "01",
             hidden: !showAWS, // Hide AWS data if showAWS is false
           },
           {
-            label: "Azure",
+            label: 1,
             data: sortedDates.map((date) => azureData[date].toFixed(2)),
             backgroundColor: "rgba(10, 163, 225, 0.7)",
             stack: "01",

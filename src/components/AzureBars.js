@@ -99,7 +99,7 @@ const options = {
   },
 };
 
-const AzureBars = ({ subscriptionsData, selectedFilters }) => {
+const AzureBars = ({ inputData, selectedCSP }) => {
   const [data, setData] = useState({ labels: [], datasets: [] });
   const [forecastData, setForecastData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -107,36 +107,9 @@ const AzureBars = ({ subscriptionsData, selectedFilters }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
-
     const fetchData = async () => {
       try {
         // Construct input data based on selected filters or subscriptionsData
-        const inputData = hasFilters
-          ? {
-              Subscriptions: selectedFilters.subscriptions.map(
-                (sub) => sub.value
-              ),
-              BusinessUnits:
-                selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-              Locations:
-                selectedFilters.locations?.map((loc) => loc.value) || [],
-              Applications:
-                selectedFilters.applications?.map((app) => app.value) || [],
-              Projects:
-                selectedFilters.projects?.map((proj) => proj.value) || [],
-              Environments:
-                selectedFilters.environments?.map((env) => env.value) || [],
-            }
-          : subscriptionsData;
-
         const response = await api.getBillingCostEachDay(inputData);
         const labelsSet = new Set();
         const payAsYouGoData = {};
@@ -187,24 +160,6 @@ const AzureBars = ({ subscriptionsData, selectedFilters }) => {
     const fetchForecastData = async () => {
       try {
         // Construct input data for the forecast API
-        const inputData = hasFilters
-          ? {
-              Subscriptions: selectedFilters.subscriptions.map(
-                (sub) => sub.value
-              ),
-              BusinessUnits:
-                selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-              Locations:
-                selectedFilters.locations?.map((loc) => loc.value) || [],
-              Applications:
-                selectedFilters.applications?.map((app) => app.value) || [],
-              Projects:
-                selectedFilters.projects?.map((proj) => proj.value) || [],
-              Environments:
-                selectedFilters.environments?.map((env) => env.value) || [],
-            }
-          : subscriptionsData;
-
         const forecastResponse = await api.getMonthlyForecastSpend(inputData);
 
         const pastMonths = forecastResponse[0].pastCosts.map(
@@ -249,12 +204,9 @@ const AzureBars = ({ subscriptionsData, selectedFilters }) => {
         console.error("Failed to fetch forecast data", error);
       }
     };
-
-    if (hasFilters || subscriptionsData.length > 0) {
       fetchData();
       fetchForecastData();
-    }
-  }, [subscriptionsData, selectedFilters]);
+  }, [selectedCSP, inputData]);
 
   const handleToggleChange = () => {
     setShowForecast(!showForecast);

@@ -28,7 +28,7 @@ const HyperScalarAdvisor = ({
   const [groupBy, setGroupBy] = useState("");
 
   const handleButtonClick = (value) => {
-    if (value === "Azure") {
+    if (value === 1) {
       setShowStackBars(false);
     } else {
       setShowStackBars(true);

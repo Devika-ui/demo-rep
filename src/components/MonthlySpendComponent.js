@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/MonthlySpendComponent.scss";
 import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import api from "../api.js";
 
-const MonthlySpendComponent = ({
-  subscriptionsData,
-  selectedFilters,
-  totalCost,
-  growthPercentage,
-}) => {
+const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false); // Track overlay visibility
   const [billSummary, setBillSummary] = useState({
     Payasyougocost: 0,
@@ -84,6 +80,18 @@ const MonthlySpendComponent = ({
       </div>
     );
   };
+  const [totalCost, setTotalCost] = useState(null);
+  const [growthPercentage, setGrowthPercentage] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => { 
+      const data = await api.getMonthlyActualSpend(inputData);
+          if (data.length > 0) {
+            setTotalCost(data[0].totalCost);
+            setGrowthPercentage(data[0].growthPercentage);
+          }
+    };
+      fetchData();
+  }, [selectedProvider,inputData]);
 
   return (
     <div className="monthly-spend-container">

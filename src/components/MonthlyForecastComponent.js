@@ -5,12 +5,38 @@ import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
 import api from "../api.js";
 
-const MonthlyForecastComponent = ({ subscriptionsData, selectedFilters,lastMonthCost,futureCost,percentageIncrease,totalCost1 }) => {
-  // const [lastMonthCost, setLastMonthCost] = useState(null);
-  // const [futureCost, setFutureCost] = useState(null);
-  // const [percentageIncrease, setPercentageIncrease] = useState(null);
-  // const [totalCost, setTotalCost] = useState(null);
-
+const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
+  const [lastMonthCost, setLastMonthCost] = useState(null);
+  const [futureCost, setFutureCost] = useState(null);
+  const [percentageIncrease, setPercentageIncrease] = useState(null);
+  const [totalCost1, setTotalCost1] = useState(null);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const forecastData = await api.getMonthlyForecastSpend(inputData);
+  
+        if (forecastData.length > 0) {
+          const lastMonth = forecastData[0].lastMonthCost;
+          const latestFutureCostData = forecastData[0].futureCosts.at(-1); // Get the latest month data
+  
+          setLastMonthCost(lastMonth);
+          setFutureCost(latestFutureCostData.futureCost);
+          setPercentageIncrease(latestFutureCostData.percentageIncrease);
+          setTotalCost1(lastMonth + latestFutureCostData.futureCost);
+        }
+        else {
+          setLastMonthCost(0);
+          setFutureCost(0);
+          setTotalCost1(0);
+          setPercentageIncrease(0);
+        }
+      } catch (error) {
+        console.error("Error fetching forecast data:", error);
+      }
+    };
+    fetchData();
+  }, [selectedCSP, inputData]);
   
 
   const GrowthIndicator = ({ percentageIncrease }) => {

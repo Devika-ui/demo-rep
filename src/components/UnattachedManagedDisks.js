@@ -32,7 +32,7 @@ const UnattachedManagedDisks = ({
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
-    if (value === "Azure") {
+    if (value === 1) {
       setShowStackBars(false); // Hide StackBars and show AzureBars
     } else {
       setShowStackBars(true); // Show StackBars

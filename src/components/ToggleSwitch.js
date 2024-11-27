@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../css/ToggleSwitch.scss';
 
 const ToggleSwitch = () => {
-  const [selectedState, setSelectedState] = useState('AWS');
+  const [selectedState, setSelectedState] = useState(2);
 
   const handleStateChange = (value) => {
     setSelectedState(value);
@@ -11,14 +11,14 @@ const ToggleSwitch = () => {
   return (
     <fieldset>
       <div>
-        <label className={selectedState === 'AWS' ? 'selected' : ''}>
+        <label className={selectedState === 2 ? 'selected' : ''}>
           AWS
           <input
             name="state"
             type="radio"
-            value="AWS"
-            checked={selectedState === 'AWS'}
-            onChange={() => handleStateChange('AWS')}
+            value=2
+            checked={selectedState === 2}
+            onChange={() => handleStateChange(2)}
           />
         </label>
         <label className={selectedState === 'Common View' ? '' : ''}>
@@ -31,14 +31,14 @@ const ToggleSwitch = () => {
             onChange={() => handleStateChange('Common View')}
           />
         </label>
-        <label className={selectedState === 'Azure' ? 'warning' : ''}>
+        <label className={selectedState === 1 ? 'warning' : ''}>
           Azure
           <input
             name="state"
             type="radio"
-            value="Azure"
-            checked={selectedState === 'Azure'}
-            onChange={() => handleStateChange('Azure')}
+            value=1
+            checked={selectedState === 1}
+            onChange={() => handleStateChange(1)}
           />
         </label>
       </div>

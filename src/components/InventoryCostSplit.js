@@ -11,7 +11,7 @@ const InventoryCostSplit = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [dataSet1, setDataSet1] = useState([]);
   const handleButtonClick = (value) => {
-    if (value === "Azure") {
+    if (value === 1) {
       setShowStackBars(false); // Hide StackBars and show AzureBars
     } else {
       setShowStackBars(true); // Show StackBars
