@@ -20,10 +20,13 @@ const InvoiceTableView = ({
   tableHeight,
   tableWidth,
   columns,
+  columnTitle,
   headerLabels,
   headerClass,
   overlayHeight,
+  columnData,
 }) => {
+  console.log("table", columnData);
   const [isOverlayOpen, setOverlayOpen] = useState(false);
 
   const handleOverlayOpen = () => {
@@ -73,6 +76,12 @@ const InvoiceTableView = ({
           <Table id="mytable" stickyHeader>
             <TableHead>
               <TableRow>
+                <TableCell
+                  rowSpan={2}
+                  className="cmpInvTv_stickyFirstRow1 cmpInvTv_stickyColumn"
+                >
+                  {columnTitle}
+                </TableCell>
                 {headerLabels.map((label, labelIndex) => (
                   <TableCell
                     key={labelIndex}
@@ -83,12 +92,12 @@ const InvoiceTableView = ({
                   </TableCell>
                 ))}
               </TableRow>
-              <TableRow className="cmpInvTv_stickyFirstRow">
+              <TableRow>
                 {headerLabels.flatMap((_, labelIndex) =>
                   columns.map((column, colIndex) => (
                     <TableCell
                       key={`${labelIndex}-${colIndex}`}
-                      className={`$"cmpInvTv_tableHeadCell} $"cmpInvTv_stickyHeader}`}
+                      className="cmpInvTv_tableHeadCell"
                     >
                       {column.label}
                     </TableCell>
@@ -99,11 +108,36 @@ const InvoiceTableView = ({
             <TableBody>
               {tableData.map((row, rowIndex) => (
                 <TableRow key={rowIndex} className="cmpInvTv_tableRow">
+                  {/* <TableCell className="cmpInvTv_tableCell cmpInvTv_stickyColumn">
+                    {Array.isArray(columnData) && columnData.length > 0 ? (
+                      columnData.map((value, index) => (
+                        <div key={index}>{value || "No Data Available"}</div>
+                      ))
+                    ) : (
+                      <span>No Data Available</span>
+                    )}
+                  </TableCell> */}
+                  <TableCell className="cmpInvTv_tableCell cmpInvTv_stickyColumn">
+                    {Array.isArray(columnData) && columnData.length > 0 ? (
+                      <div>{columnData[rowIndex] || "No Data Available"}</div> // Only display the 0th index
+                    ) : (
+                      <span>No Data Available</span>
+                    )}
+                  </TableCell>
                   {headerLabels.flatMap((_, labelIndex) =>
                     columns.map((column, colIndex) => (
                       <TableCell
                         key={`${labelIndex}-${colIndex}`}
-                        className="cmpInvTv_tableCell"
+                        className={`cmpInvTv_tableCell ${
+                          column.key === "ownerName"
+                            ? "cmpInvTv_smallColumn"
+                            : ""
+                        }`}
+                        title={
+                          column.key === "ownerName"
+                            ? row[`${column.key}_${labelIndex}`]
+                            : ""
+                        }
                       >
                         {row[`${column.key}_${labelIndex}`]}
                       </TableCell>
@@ -125,6 +159,12 @@ const InvoiceTableView = ({
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
+                    <TableCell
+                      rowSpan={2}
+                      className="cmpInvTv_stickyFirstRow1 cmpInvTv_stickyColumn"
+                    >
+                      Subscription Name
+                    </TableCell>
                     {headerLabels.map((label, labelIndex) => (
                       <TableCell
                         key={labelIndex}
@@ -140,7 +180,7 @@ const InvoiceTableView = ({
                       columns.map((column, colIndex) => (
                         <TableCell
                           key={`${labelIndex}-${colIndex}`}
-                          className={`$"cmpInvTv_tableHeadCell} $"cmpInvTv_stickyHeader}`}
+                          className="cmpInvTv_tableHeadCell"
                         >
                           {column.label}
                         </TableCell>
@@ -151,11 +191,29 @@ const InvoiceTableView = ({
                 <TableBody>
                   {tableData.map((row, rowIndex) => (
                     <TableRow key={rowIndex} className="cmpInvTv_tableRow">
+                      <TableCell className="cmpInvTv_tableCell cmpInvTv_stickyColumn">
+                        {Array.isArray(columnData) && columnData.length > 0 ? (
+                          <div>
+                            {columnData[rowIndex] || "No Data Available"}
+                          </div> // Only display the 0th index
+                        ) : (
+                          <span>No Data Available</span>
+                        )}
+                      </TableCell>
                       {headerLabels.flatMap((_, labelIndex) =>
                         columns.map((column, colIndex) => (
                           <TableCell
                             key={`${labelIndex}-${colIndex}`}
-                            className="cmpInvTv_tableCell"
+                            className={`cmpInvTv_tableCell ${
+                              column.key === "ownerName"
+                                ? "cmpInvTv_smallColumn"
+                                : ""
+                            }`}
+                            title={
+                              column.key === "ownerName"
+                                ? row[`${column.key}_${labelIndex}`]
+                                : ""
+                            }
                           >
                             {row[`${column.key}_${labelIndex}`]}
                           </TableCell>

@@ -106,12 +106,18 @@ const Ondemand = () => {
         plugins: [
           {
             id: "customCrosshair",
-            afterDraw: (chart, _) => {
+
+            afterDraw: (chart) => {
               const ctx = chart.ctx;
               const xScale = chart.scales["x"];
               const yScale = chart.scales["y"];
 
-              if (chart.tooltip._active && chart.tooltip._active.length) {
+              // Ensure tooltip and _active are defined
+              if (
+                chart.tooltip &&
+                chart.tooltip._active &&
+                chart.tooltip._active.length
+              ) {
                 const activePoint = chart.tooltip._active[0];
                 const x = activePoint.element.x;
                 const y = activePoint.element.y;

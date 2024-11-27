@@ -173,7 +173,7 @@ ChartJS.register(
   Filler
 );
 
-const MonthlyCostTrends = () => {
+const MonthlyCostTrends = ({ subscriptionsData, selectedFilters }) => {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -208,9 +208,33 @@ const MonthlyCostTrends = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
   useEffect(() => {
+    const hasFilters =
+      selectedFilters &&
+      (selectedFilters.subscriptions?.length > 0 ||
+        selectedFilters.businessUnits?.length > 0 ||
+        selectedFilters.locations?.length > 0 ||
+        selectedFilters.applications?.length > 0 ||
+        selectedFilters.projects?.length > 0 ||
+        selectedFilters.environments?.length > 0);
+
+    const inputData = hasFilters
+      ? {
+          Subscriptions: selectedFilters.subscriptions.map((sub) => sub.value),
+          BusinessUnits:
+            selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+          Locations: selectedFilters.locations?.map((loc) => loc.value) || [],
+          Applications:
+            selectedFilters.applications?.map((app) => app.value) || [],
+          Projects: selectedFilters.projects?.map((proj) => proj.value) || [],
+          Environments:
+            selectedFilters.environments?.map((env) => env.value) || [],
+        }
+      : subscriptionsData;
+
     const fetchData = async () => {
       try {
-        const response = await api.getMonthlyForecastSpend();
+        const response = await api.getMonthlyForecastSpend(inputData);
+        console.log("data", response);
         const { pastCosts, futureCosts } = response[0];
         const labels = [
           ...pastCosts.map((cost) => cost.month),
@@ -241,8 +265,10 @@ const MonthlyCostTrends = () => {
         console.error("Error fetching forecast spend data:", error);
       }
     };
-    fetchData();
-  }, []);
+    if (hasFilters || subscriptionsData.length > 0) {
+      fetchData();
+    }
+  }, [subscriptionsData, selectedFilters]);
 
   const options = {
     responsive: true,

@@ -633,7 +633,25 @@ const api = {
 
   /* with bill overview page  */
 
-  getSavings: async (subscriptionsData) => {
+  getSavings: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        billingStartDate: [
+          previousMonthStart,
+          currentMonthStart,
+          nextMonthStart,
+        ],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/billoverview/header`, {
         method: "POST",
@@ -641,18 +659,7 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: [
-              previousMonthStart,
-              currentMonthStart,
-              nextMonthStart,
-            ],
-            Subscription: subscriptionsData,
-          },
-          customerId: window.selectedCustomerId,
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
         throw new Error("Failed to savings data");
@@ -664,7 +671,21 @@ const api = {
     }
   },
 
-  getNormalizedVariation: async (subscriptionsData) => {
+  getNormalizedVariation: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        billingStartDate: [currentMonthStart],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/normalized-variation`, {
         method: "POST",
@@ -672,18 +693,7 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: [
-              previousMonthStart,
-              currentMonthStart,
-              nextMonthStart,
-            ],
-            Subscription: subscriptionsData,
-          },
-          customerId: window.selectedCustomerId,
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
         throw new Error("Failed to normalized-variation data");
@@ -695,7 +705,25 @@ const api = {
     }
   },
 
-  getInvoiceView: async (subscriptionsData) => {
+  getInvoiceView: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [
+          previousMonthStart,
+          currentMonthStart,
+          nextMonthStart,
+        ],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/billoverview/invoice_view`, {
         method: "POST",
@@ -703,18 +731,7 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: [
-              previousMonthStart,
-              currentMonthStart,
-              nextMonthStart,
-            ],
-            Subscription: subscriptionsData,
-          },
-          customerId: window.selectedCustomerId,
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
         throw new Error("Failed to data");
@@ -726,7 +743,25 @@ const api = {
     }
   },
 
-  getTotalBillVsSimulatedPaygo: async (subscriptionsData) => {
+  getTotalBillVsSimulatedPaygo: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [
+          previousMonthStart,
+          currentMonthStart,
+          nextMonthStart,
+        ],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(
         `${apiUrl}/billoverview/total_bill_vs_simulated_paygo`,
@@ -736,18 +771,7 @@ const api = {
             "Content-Type": "application/json",
             Authorization: "Bearer " + window.accessToken,
           },
-          body: JSON.stringify({
-            CloudServiceProvider: "1",
-            filters: {
-              BillingMonthStartDate: [
-                previousMonthStart,
-                currentMonthStart,
-                nextMonthStart,
-              ],
-              Subscription: subscriptionsData,
-            },
-            customerId: window.selectedCustomerId,
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
       if (!response.ok) {
@@ -759,7 +783,25 @@ const api = {
       throw error;
     }
   },
-  getTopServies: async (subscriptionsData) => {
+  getTopServies: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [
+          previousMonthStart,
+          currentMonthStart,
+          nextMonthStart,
+        ],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/common/topservices/5`, {
         method: "POST",
@@ -767,18 +809,7 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: [
-              previousMonthStart,
-              currentMonthStart,
-              nextMonthStart,
-            ],
-            Subscription: subscriptionsData,
-          },
-          customerId: window.selectedCustomerId,
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch  services data");
@@ -789,7 +820,25 @@ const api = {
       throw error;
     }
   },
-  getTopApplications: async (subscriptionsData) => {
+  getTopApplications: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [
+          previousMonthStart,
+          currentMonthStart,
+          nextMonthStart,
+        ],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(`${apiUrl}/common/topapplications/5`, {
         method: "POST",
@@ -797,18 +846,7 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + window.accessToken,
         },
-        body: JSON.stringify({
-          CloudServiceProvider: "1",
-          filters: {
-            BillingMonthStartDate: [
-              previousMonthStart,
-              currentMonthStart,
-              nextMonthStart,
-            ],
-            Subscription: subscriptionsData,
-          },
-          customerId: window.selectedCustomerId,
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch  application data");
@@ -942,7 +980,25 @@ const api = {
     }
   },
 
-  getBillAllocation: async (subscriptionsData) => {
+  getBillAllocation: async (inputData) => {
+    const isInitialData = Array.isArray(inputData);
+    const requestBody = {
+      CloudServiceProvider: "1",
+      filters: {
+        BillingMonthStartDate: [
+          previousMonthStart,
+          currentMonthStart,
+          nextMonthStart,
+        ],
+        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+        Location: isInitialData ? [] : inputData.Locations || [],
+        Application: isInitialData ? [] : inputData.Applications || [],
+        Project: isInitialData ? [] : inputData.Projects || [],
+        Environment: isInitialData ? [] : inputData.Environments || [],
+      },
+      customerId: window.selectedCustomerId,
+    };
     try {
       const response = await fetch(
         `${apiUrl}/billoverview/billallocationapplication`,
@@ -952,18 +1008,7 @@ const api = {
             "Content-Type": "application/json",
             Authorization: "Bearer " + window.accessToken,
           },
-          body: JSON.stringify({
-            CloudServiceProvider: "1",
-            filters: {
-              BillingMonthStartDate: [
-                previousMonthStart,
-                currentMonthStart,
-                nextMonthStart,
-              ],
-              Subscription: subscriptionsData,
-            },
-            customerId: window.selectedCustomerId,
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
       if (!response.ok) {
@@ -975,6 +1020,48 @@ const api = {
       throw error;
     }
   },
+
+  // getBillAllocation: async (inputData) => {
+  //   const isInitialData = Array.isArray(inputData);
+  //   const requestBody = {
+  //     CloudServiceProvider: "1",
+  //     filters: {
+  //       BillingMonthStartDate: [
+  //         previousMonthStart,
+  //         currentMonthStart,
+  //         nextMonthStart,
+  //       ],
+  //       Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
+  //       BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
+  //       Location: isInitialData ? [] : inputData.Locations || [],
+  //       Application: isInitialData ? [] : inputData.Applications || [],
+  //       Project: isInitialData ? [] : inputData.Projects || [],
+  //       Environment: isInitialData ? [] : inputData.Environments || [],
+  //     },
+  //     customerId: window.selectedCustomerId,
+  //   };
+  //   try {
+  //     const response = await fetch(
+  //       `${apiUrl}/billoverview/billallocationapplication`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: "Bearer " + window.accessToken,
+  //         },
+  //         body: JSON.stringify(requestBody),
+  //       }
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Failed to data");
+  //     }
+  //     return await response.json();
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     throw error;
+  //   }
+  // },
+
   getDataForAnomaly: async () => {
     try {
       const response = await fetch(`${apiUrl}/businesscostsplit/anomaly`, {
@@ -986,11 +1073,7 @@ const api = {
         body: JSON.stringify({
           CloudServiceProvider: "1",
           filters: {
-            BillingMonthStartDate: [
-              previousMonthStart,
-              currentMonthStart,
-              nextMonthStart,
-            ],
+            BillingMonthStartDate: ["2024-04-01", "2024-05-01", "2024-06-01"],
             Subscription: ["Subscription2"],
           },
           customerId: window.selectedCustomerId,
@@ -1142,8 +1225,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: "1",
             filters: {
-              BillingMonthStartDate: [currentMonthStart],
-              // Example date; you might want to make this dynamic
+              BillingMonthStartDate: ["2024-09-01"],
               Subscription: [subscription],
             },
             customerId: window.selectedCustomerId,

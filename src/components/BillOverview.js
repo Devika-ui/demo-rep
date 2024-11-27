@@ -38,83 +38,72 @@ const BillOverview = () => {
   const [legendData, setLegendData] = useState([]);
   const [subscriptionsData, setSubscriptionsData] = useState([]);
   const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
+  const [inputData, setInputData] = useState({});
+  const [subscriptions, setSubscriptions] = useState({});
+  const [applicationData, setApplicationData] = useState({});
 
   const handleSubscriptionsFetch = (data) => {
     setSubscriptionsData(data);
   };
-  const additionalFilters = [
-    {
-      label: "Service Category(s)",
-      name: "Select Service Category",
-      options: [
-        { value: "Service Category 1", label: "Service Category 1" },
-        { value: "Service Category 2", label: "Service Category 2" },
-        { value: "Service Category 3", label: "Service Category 3" },
-      ],
-    },
-    {
-      label: "Owner(s)",
-      name: "Select Owner",
-      options: [
-        { value: "Owner 1", label: "Owner 1" },
-        { value: "Owner 2", label: "Owner 2" },
-        { value: "Owner 3", label: "Owner 3" },
-      ],
-    },
-    {
-      label: "Select Cost",
-      name: "Select Cost",
-      options: [
-        { value: "Actual Cost", label: "Actual Cost" },
-        { value: "Amortized Cost", label: "Amortized Cost" },
-        { value: "Cost Unblended", label: "Cost Unblended" },
-        { value: "Cost Blended", label: "Cost Blended" },
-      ],
-    },
-    {
-      label: "Environment(s)",
-      name: "environments",
-      options: [
-        { value: "Production", label: "Production" },
-        { value: "Staging", label: "Staging" },
-        { value: "Development", label: "Development" },
-      ],
-    },
-    {
-      label: "Cost Center(s)",
-      name: "Select Cost Center",
-      options: [
-        { value: "Cost Center1", label: "Cost Center1" },
-        { value: "Cost Center2", label: "Cost Center2" },
-        { value: "Cost Center3", label: "Cost Center3" },
-      ],
-    },
-  ];
+  const [selectedFilters, setSelectedFilters] = useState({
+    subscriptions: [],
+    businessUnits: [],
+    locations: [],
+    applications: [],
+    projects: [],
+    environments: [],
+  });
+
+  const handleFiltersChange = (newFilters) => {
+    setSelectedFilters(newFilters);
+  };
+
+  const hasFilters =
+    selectedFilters &&
+    (selectedFilters.subscriptions?.length > 0 ||
+      selectedFilters.businessUnits?.length > 0 ||
+      selectedFilters.locations?.length > 0 ||
+      selectedFilters.applications?.length > 0 ||
+      selectedFilters.projects?.length > 0 ||
+      selectedFilters.environments?.length > 0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [
-          billAllocation,
-          invoiceResponse,
-          totalBillVsSimulatedPaygo,
-          topServicesData,
-          topApplicationData,
-          savingsData,
-          normalizedVariationData,
-        ] = await Promise.all([
-          api.getBillAllocation(subscriptionsData),
-          api.getInvoiceView(subscriptionsData),
-          api.getTotalBillVsSimulatedPaygo(subscriptionsData),
-          api.getTopServies(subscriptionsData),
-          api.getTopApplications(subscriptionsData),
-          api.getSavings(subscriptionsData),
-          api.getNormalizedVariation(subscriptionsData),
-        ]);
+    if (hasFilters || subscriptionsData.length > 0) {
+      const inputData = hasFilters
+        ? {
+            Subscriptions: selectedFilters.subscriptions.map(
+              (sub) => sub.value
+            ),
+            BusinessUnits:
+              selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+            Locations: selectedFilters.locations?.map((loc) => loc.value) || [],
+            Applications:
+              selectedFilters.applications?.map((app) => app.value) || [],
+            Projects: selectedFilters.projects?.map((proj) => proj.value) || [],
+            Environments:
+              selectedFilters.environments?.map((env) => env.value) || [],
+          }
+        : subscriptionsData;
 
-        //formatted bill application
-        const billAllocationMap = billAllocation.billAllocation.reduce(
-          (acc, item) => {
+      setInputData(inputData); // Store inputData for reuse in other useEffects
+    }
+  }, [selectedFilters, subscriptionsData]);
+
+  useEffect(() => {
+    const fetchBillAllocationData = async () => {
+      try {
+        if (!inputData) {
+          console.log("No input data, skipping API calls.");
+          return;
+        }
+        const billAllocation = await api.getBillAllocation(inputData);
+
+        // Process and format the bill allocation data
+        const billAllocationMap = Object.keys(
+          billAllocation.billAllocation
+        ).reduce((acc, appName) => {
+          const appData = billAllocation.billAllocation[appName];
+          appData.forEach((item) => {
             const modifiedDate = new Date(item.modifieddate);
             const monthString = modifiedDate.toLocaleString("en-US", {
               month: "long",
@@ -127,41 +116,79 @@ const BillOverview = () => {
             }
 
             acc[formattedDate].push({
-              name: item.tags_AppID_AppName || "null",
+              name: appName,
               ownerName: item.tags_owner || "null",
               onDemandCost: item.onDemandCost
                 ? `${item.onDemandCost.toFixed(2)}`
-                : "0.00",
-              reservedInstanceCost:
-                item.reservedInstanceCost !== null
-                  ? `${item.reservedInstanceCost.toFixed(2)}`
-                  : "0.00",
-              savings: item.savings ? `${item.savings.toFixed(2)}` : "0.00",
-              totalBill: item.totalBill
-                ? `${item.totalBill.toFixed(2)}`
-                : "0.00",
+                : "",
+              reservedInstanceCost: item.reservedInstanceCost
+                ? `${item.reservedInstanceCost.toFixed(2)}`
+                : "",
+              savings: item.savings ? `${item.savings.toFixed(2)}` : "",
+              totalBill: item.totalBill ? `${item.totalBill.toFixed(2)}` : "",
             });
+          });
 
-            return acc;
-          },
-          {}
-        );
+          return acc;
+        }, {});
 
+        // Get unique modified dates for table headers
         const uniqueModifiedDatesForBillAllocation =
           Object.keys(billAllocationMap);
-        const flattenedBillAllocationData =
-          uniqueModifiedDatesForBillAllocation.reduce(
-            (acc, date, dateIndex) => {
-              billAllocationMap[date].forEach((item, itemIndex) => {
-                if (!acc[itemIndex]) acc[itemIndex] = {};
-                columns1.forEach((col) => {
-                  acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
-                });
-              });
+
+        // Group data by application name and owner name
+        const groupedData = {};
+        uniqueModifiedDatesForBillAllocation.forEach((date, dateIndex) => {
+          billAllocationMap[date].forEach((item) => {
+            const key = `${item.name}_${item.ownerName}`;
+            if (!groupedData[key]) {
+              groupedData[key] = Array(
+                uniqueModifiedDatesForBillAllocation.length
+              )
+                .fill(null)
+                .map(() => ({
+                  name: "",
+                  ownerName: "",
+                  onDemandCost: "",
+                  reservedInstanceCost: "",
+                  savings: "",
+                  totalBill: "",
+                }));
+            }
+            groupedData[key][dateIndex] = {
+              name: item.name,
+              ownerName: item.ownerName,
+              onDemandCost: item.onDemandCost ? item.onDemandCost : "0.00",
+              reservedInstanceCost: item.reservedInstanceCost
+                ? item.reservedInstanceCost
+                : "0.00",
+              savings: item.savings ? item.savings : "0.00",
+              totalBill: item.totalBill ? item.totalBill : "0.00",
+            };
+          });
+        });
+        // console.log("app", applicationData);
+        const applicationData = Object.values(groupedData).map((entries) => {
+          return entries[0]?.name || null; // Access the 0th index and handle undefined
+        });
+        setApplicationData(applicationData);
+        const flattenedBillAllocationData = Object.values(groupedData).map(
+          (entries) => {
+            return entries.reduce((acc, entry, index) => {
+              // Include the name only for the first index (index 0)
+              if (index === 0) {
+                acc[`name_${index}`] = entry.name;
+              }
+              acc[`ownerName_${index}`] = entry.ownerName;
+              acc[`onDemandCost_${index}`] = entry.onDemandCost;
+              acc[`reservedInstanceCost_${index}`] = entry.reservedInstanceCost;
+              acc[`savings_${index}`] = entry.savings;
+              acc[`totalBill_${index}`] = entry.totalBill;
+
               return acc;
-            },
-            []
-          );
+            }, {});
+          }
+        );
         // Extract unique application names from flattenedBillAllocationData
         const uniqueNamesSet = new Set();
         flattenedBillAllocationData.forEach((item) => {
@@ -172,48 +199,122 @@ const BillOverview = () => {
           });
         });
         const uniqueNames = [...uniqueNamesSet];
-        console.log("uniqueNames", uniqueNames);
 
-        const invoiceMap = invoiceResponse.invoiceView.reduce((acc, item) => {
-          const modifiedDate = new Date(item.modifieddate);
-          const monthString = modifiedDate.toLocaleString("en-US", {
-            month: "long",
-          });
-          const yearString = modifiedDate.getFullYear().toString().slice(-2);
-          const formattedDate = `${monthString}-${yearString}`;
+        // Set the required state for your application
+        setBillAllocationData(flattenedBillAllocationData);
+        setFilteredBillAllocationData(flattenedBillAllocationData);
+        setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
+        setUniqueBillAllocationData(uniqueNames);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (hasFilters || subscriptionsData.length > 0) {
+      fetchBillAllocationData();
+    }
+  }, [inputData]);
 
-          if (!acc[formattedDate]) {
-            acc[formattedDate] = [];
-          }
+  useEffect(() => {
+    const fetchInvoiceViewData = async () => {
+      try {
+        if (!inputData) {
+          console.log("No input data, skipping API calls.");
+          return;
+        }
+        const invoiceResponse = await api.getInvoiceView(inputData);
 
-          acc[formattedDate].push({
-            subscriptionName: item.subscriptionName,
-            onDemandCost: `${item.onDemandCost.toFixed(2)}`,
-            reservedInstanceCost: `${item.reservedInstanceCost.toFixed(2)}`,
-            simulatedPayGoCost: `${item.simulatedPayGoCost.toFixed(2)}`,
-            savings: `${item.savings.toFixed(2)}`,
-            totalBill: `${item.totalBill.toFixed(2)}`,
-          });
+        const invoiceMap = Object.entries(invoiceResponse.invoiceView).reduce(
+          (acc, [subscriptionName, data]) => {
+            // Loop over each subscription data
+            data.forEach((item) => {
+              const modifiedDate = new Date(item.modifieddate);
+              const monthString = modifiedDate.toLocaleString("en-US", {
+                month: "long",
+              });
+              const yearString = modifiedDate
+                .getFullYear()
+                .toString()
+                .slice(-2);
+              const formattedDate = `${monthString}-${yearString}`;
 
-          return acc;
-        }, {});
+              // Create the map for unique months
+              if (!acc[formattedDate]) {
+                acc[formattedDate] = [];
+              }
 
+              // Add data for each subscription and formatted date
+              acc[formattedDate].push({
+                subscriptionName: subscriptionName,
+                onDemandCost: `${item.onDemandCost.toFixed(2)}`,
+                reservedInstanceCost: `${item.reservedInstanceCost.toFixed(2)}`,
+                simulatedPayGoCost: `${item.simulatedPayGoCost.toFixed(2)}`,
+                savings: `${item.savings.toFixed(2)}`,
+                totalBill: `${item.totalBill.toFixed(2)}`,
+              });
+            });
+
+            return acc;
+          },
+          {}
+        );
+
+        // Extract unique months from the invoiceMap
         const uniqueModifiedDatesForInvoice = Object.keys(invoiceMap);
         const flattenedInvoiceData = uniqueModifiedDatesForInvoice.reduce(
           (acc, date, dateIndex) => {
             invoiceMap[date].forEach((item, itemIndex) => {
-              if (!acc[itemIndex]) acc[itemIndex] = {};
+              // Check if the subscription already exists in the accumulator
+              let existingEntry = acc.find(
+                (entry) => entry.subscriptionName === item.subscriptionName
+              );
+
+              if (!existingEntry) {
+                // Create a new entry if it doesn't exist
+                existingEntry = { subscriptionName: item.subscriptionName };
+                acc.push(existingEntry);
+              }
+
+              // Add each column's data for the current month under a separate key
               columns.forEach((col) => {
-                acc[itemIndex][`${col.key}_${dateIndex}`] = item[col.key];
+                if (col.key !== "subscriptionName") {
+                  existingEntry[`${col.key}_${dateIndex}`] = item[col.key];
+                }
               });
             });
+
             return acc;
           },
           []
         );
 
+        // Set state for the table data and the unique month labels
+        console.log("data", flattenedInvoiceData);
+        const subscriptionNames = flattenedInvoiceData.map(
+          (item) => item.subscriptionName
+        );
+        setSubscriptions(subscriptionNames);
+        setInvoiceData(flattenedInvoiceData);
+        setHeaderLabelsForInvoice(uniqueModifiedDatesForInvoice);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (hasFilters || subscriptionsData.length > 0) {
+      fetchInvoiceViewData();
+    }
+  }, [inputData]);
+
+  useEffect(() => {
+    const fetchTotalBillVsSimulatedPaygoData = async () => {
+      try {
+        if (!inputData) {
+          console.log("No input data, skipping API calls.");
+          return;
+        }
+        const totalBillVsSimulatedPaygo =
+          await api.getTotalBillVsSimulatedPaygo(inputData);
+
         console.log("TotalBillVsSimulatedPaygo:", totalBillVsSimulatedPaygo);
-        console.log("topApplicationData:", topApplicationData);
         const formattedChartData = totalBillVsSimulatedPaygo.costsPAYGO.map(
           (item) => {
             const savingsItem = totalBillVsSimulatedPaygo.savingsRI.find(
@@ -237,63 +338,9 @@ const BillOverview = () => {
             simulated: item.simulated,
           })
         );
-        const formattedTopServices = topServicesData.topServices.map(
-          (service, index) => ({
-            name: service.Service !== null ? service.Service : "null",
-            value: parseFloat(service.totalcost.toFixed(2)),
-            color: colorPalette[index % colorPalette.length],
-          })
-        );
-        const formattedTopApplications = topApplicationData.topApplications.map(
-          (application, index) => ({
-            name:
-              application.Application !== null
-                ? application.Application
-                : "null",
-            value: parseFloat(application.totalcost.toFixed(2)),
-            color: colorPalette[index % colorPalette.length],
-          })
-        );
 
-        const totalSavings = savingsData.actualCost.toFixed(2);
-        const simulatedBill = savingsData.simulatedCost.toFixed(2);
-        const savings = savingsData.savings.toFixed(2);
-        const percentageSavingsOverBill = savingsData.percentageSavings;
-        const savingsOverPayGo = savingsData.savingsPayGo.toFixed(2); // Updated property name
-        const percentageSavingsOverPayGo =
-          savingsData.percentageSavingsOverPayGo !== null
-            ? savingsData.percentageSavingsOverPayGo
-            : "0.00";
-        const normalizedVariation =
-          normalizedVariationData.Normalized_Variation_MoM || "0.00";
-
-        const dataSet1 = [
-          { number: `${totalSavings}`, text: "Total Bill" },
-          { number: `${simulatedBill}`, text: "Simulated Bill" },
-          { number: `${savings}`, text: "Total Savings" },
-          {
-            number: `${percentageSavingsOverBill}%`,
-            text: "% Savings over Bill",
-          },
-          {
-            number: `${percentageSavingsOverPayGo}%`,
-            text: "% Savings over Pay-Go",
-          },
-          { number: `${normalizedVariation}%`, text: "Normalized Variation" },
-        ];
-
-        setBillAllocationData(flattenedBillAllocationData);
-        setFilteredBillAllocationData(flattenedBillAllocationData);
         setChartData(formattedChartData);
         setTrendData(formattedTrendData);
-        setTopServices(formattedTopServices);
-        setTopApplications(formattedTopApplications);
-        setBoxData(dataSet1);
-        console.log("formatedtopApplications:", formattedTopApplications);
-        setInvoiceData(flattenedInvoiceData);
-        setHeaderLabelsForInvoice(uniqueModifiedDatesForInvoice);
-        setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
-        setUniqueBillAllocationData(uniqueNames);
 
         const legendData = [
           {
@@ -320,9 +367,100 @@ const BillOverview = () => {
         console.error("Error fetching data:", error);
       }
     };
+    if (hasFilters || subscriptionsData.length > 0) {
+      fetchTotalBillVsSimulatedPaygoData();
+    }
+  }, [inputData]);
 
-    fetchData();
-  }, [subscriptionsData]);
+  useEffect(() => {
+    const fetchTopServiesApplicationsData = async () => {
+      try {
+        if (!inputData) {
+          console.log("No input data, skipping API calls.");
+          return;
+        }
+        const [topServicesData, topApplicationData] = await Promise.all([
+          api.getTopServies(inputData),
+          api.getTopApplications(inputData),
+        ]);
+
+        const formattedTopServices = topServicesData.topServices.map(
+          (service, index) => ({
+            name: service.Service !== null ? service.Service : "null",
+            value: parseFloat(service.totalcost.toFixed(2)),
+            color: colorPalette[index % colorPalette.length],
+          })
+        );
+        const formattedTopApplications = topApplicationData.topApplications.map(
+          (application, index) => ({
+            name:
+              application.Application !== null
+                ? application.Application
+                : "null",
+            value: parseFloat(application.totalcost.toFixed(2)),
+            color: colorPalette[index % colorPalette.length],
+          })
+        );
+
+        setTopServices(formattedTopServices);
+        setTopApplications(formattedTopApplications);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (hasFilters || subscriptionsData.length > 0) {
+      fetchTopServiesApplicationsData();
+    }
+  }, [inputData]);
+
+  useEffect(() => {
+    const fetchSavingsNormalizedVariationData = async () => {
+      try {
+        if (!inputData) {
+          console.log("No input data, skipping API calls.");
+          return;
+        }
+        const [savingsData, normalizedVariationData] = await Promise.all([
+          api.getSavings(inputData),
+          api.getNormalizedVariation(inputData),
+        ]);
+
+        const totalSavings = savingsData.actualCost.toFixed(2);
+        const simulatedBill = savingsData.simulatedCost.toFixed(2);
+        const savings = savingsData.savings.toFixed(2);
+        const percentageSavingsOverBill = savingsData.percentageSavings;
+        const savingsOverPayGo = savingsData.savingsPayGo.toFixed(2);
+        const percentageSavingsOverPayGo =
+          savingsData.percentageSavingsOverPayGo !== null
+            ? savingsData.percentageSavingsOverPayGo
+            : "0.00";
+        const normalizedVariation =
+          normalizedVariationData.Normalized_Variation_MoM || "0.00";
+
+        const dataSet1 = [
+          { number: `${totalSavings}`, text: "Total Bill" },
+          { number: `${simulatedBill}`, text: "Simulated Bill" },
+          { number: `${savings}`, text: "Total Savings" },
+          {
+            number: `${percentageSavingsOverBill}%`,
+            text: "% Savings over Bill",
+          },
+          {
+            number: `${percentageSavingsOverPayGo}%`,
+            text: "% Savings over Pay-Go",
+          },
+          { number: `${normalizedVariation}%`, text: "Normalized Variation" },
+        ];
+        setBoxData(dataSet1);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (hasFilters || subscriptionsData.length > 0) {
+      fetchSavingsNormalizedVariationData();
+    }
+  }, [inputData]);
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
@@ -343,14 +481,21 @@ const BillOverview = () => {
           (key) => key.startsWith("name_") && item[key] === selectedReportType
         );
       });
+      const selectedApplication = filteredData.map((item) => item.name_0);
+      console.log("variable:", selectedApplication);
+      setApplicationData(selectedApplication);
       setFilteredBillAllocationData(filteredData);
+      console.log("filter", filteredData);
     } else {
+      const selectedApplication = billAllocationData.map((item) => item.name_0);
+      console.log("variable1:", selectedApplication);
+      setApplicationData(selectedApplication);
       setFilteredBillAllocationData(billAllocationData);
+      console.log("filter1", billAllocationData);
     }
   };
 
   const columns = [
-    { key: "subscriptionName", label: "Subscription/Account Name" },
     { key: "onDemandCost", label: "On Demand Cost" },
     { key: "reservedInstanceCost", label: "Reserved Instances Cost" },
     { key: "simulatedPayGoCost", label: "Simulated PAYGO" },
@@ -359,7 +504,7 @@ const BillOverview = () => {
   ];
 
   const columns1 = [
-    { key: "name", label: "Application Name" },
+    // { key: "name", label: "Application Name" },
     { key: "ownerName", label: "Owner Name" },
     { key: "onDemandCost", label: "On Demand Cost" },
     { key: "reservedInstanceCost", label: "Reserved Instances Cost" },
@@ -426,6 +571,7 @@ const BillOverview = () => {
         <Subheader
           onButtonClick={handleButtonClick}
           onSubscriptionsFetch={handleSubscriptionsFetch}
+          onFiltersChange={handleFiltersChange}
         />
         <NavigationBar />
       </Box>
@@ -508,6 +654,8 @@ const BillOverview = () => {
           tableWidth="92%"
           columns={columns}
           headerLabels={headerLabelsForInvoice}
+          columnData={subscriptions}
+          columnTitle="Subscription Name"
           headerClass="headerClass-1"
           overlayHeight="55vh"
         />
@@ -559,6 +707,8 @@ const BillOverview = () => {
           tableWidth="92%"
           columns={columns1}
           headerLabels={headerLabelsForBillAllocation}
+          columnData={applicationData}
+          columnTitle="Application Name"
           headerClass="headerClass"
         />
       </div>

@@ -4,12 +4,32 @@
   height: auto;
   background-color: white;
   padding: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
   overflow-x: hidden;
   overflow-y: hidden;
+}
+
+.cmpInvTv_stickyColumn {
+  position: sticky;
+  left: 0; /* Keeps it at the left edge while scrolling */
+  z-index: 3; /* Ensure it stays above other rows/columns */
+  background-color: #fff; /* Match the table header background */
+  border-right: 1px solid #ddd; /* Optional: adds a dividing line */
+}
+
+.cmpInvTv_tableHeadCell.cmpInvTv_stickyColumn1 {
+  position: sticky;
+  left: 100;
+  background-color: black; /* Ensure the background color matches */
+  top: 40px;
+  z-index: 10 !important;
+}
+.cmpInvTv_tableHeadCell.cmpInvTv_stickyColumn {
+  padding-top: 0; /* Remove top padding */
+  margin-top: 0; /* Remove margin if necessary */
 }
 
 .headerClass,
@@ -54,17 +74,27 @@
   text-align: center !important;
   padding: 13px 16px !important;
   vertical-align: top !important;
-  border-top: 1px solid Black;
-  border-left: 1px solid #ccc;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
 }
 
 .cmpInvTv_tableHeadCell,
 .cmpInvTv_tableFirstRow {
   background-color: #f0f0f0 !important;
   text-align: center !important;
-  border-bottom: 1px solid black !important;
-  border-left: 1px solid black !important;
+  border-bottom: 1px solid #ddd !important;
+  border-left: 1px solid #ddd !important;
   padding: 8px 16px !important;
+}
+.cmpInvTv_stickyFirstRow1 {
+  position: sticky !important;
+  z-index: 100 !important;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd !important;
+  border-left: 1px solid #ddd !important;
+  border: 1px solid #ddd;
+  text-align: center !important;
+  border-left: none !important;
 }
 
 .cmpInvTv_stickyFirstRow {
@@ -72,8 +102,8 @@
   top: 40px;
   z-index: 10 !important;
   background-color: #ffffff;
-  border-bottom: 1px solid black !important;
-  border-left: 1px solid black !important;
+  border-bottom: 1px solid #ddd !important;
+  border-left: 1px solid #ddd !important;
 }
 
 .cmpInvTv_tableContainer {
@@ -81,16 +111,16 @@
   overflow-y: auto !important;
   overflow-x: auto !important;
   padding-bottom: 38px;
-  border: 1px solid black !important;
+  border: 1px solid #ddd !important;
   border-collapse: collapse;
 }
 
 .cmpInvTv_stickyHeader {
   position: sticky !important;
   top: 0 !important;
-  z-index: 1 !important;
+  z-index: 0 !important;
   background-color: #72509b !important;
-  border-left: 1px solid black !important;
+  border-left: 1px solid #ddd !important;
 }
 
 .sticky {
@@ -100,22 +130,49 @@
   z-index: 100;
 }
 
-.cmpInvTv_tableContainer th {
+.cmpInvTv_stickyColumn,
+.cmpInvTv_stickyFirstRow1 {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+}
+
+/* Header-specific styling for the sticky column */
+.cmpInvTv_stickyFirstRow1 {
+  font-weight: bold;
+  z-index: 3;
+  background-color: #f0f0f0 !important;
+}
+
+/* Ensure table row backgrounds are consistent */
+.cmpInvTv_tableRow {
+  background-color: #fff;
+}
+
+/* .cmpInvTv_tableContainer th {
   border: 1px solid black;
   text-align: center !important;
   border-left: none !important;
   position: sticky !important;
-  top: 40px;
+  z-index: 10 !important;
+} */
+
+.cmpInvTv_tableContainer th:not(.cmpInvTv_stickyFirstRow1) {
+  border: 1px solid #ddd;
+  text-align: center !important;
+  border-left: none !important;
+  position: sticky !important;
   z-index: 10 !important;
 }
-
 .cmpInvTv_tableHeadCell.cmpInvTv_stickyHeader {
   color: white !important;
 }
 
 .cmpInvTv_tableContainer th.cmpInvTv_tableHeadCell,
 .cmpInvTv_tableContainer th.cmpInvTv_stickyHeader {
-  border-left: 1px solid black !important;
+  border-left: 1px solid #ddd !important;
   position: sticky !important;
   top: 40px;
   z-index: 10 !important;
@@ -127,7 +184,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  border: 1px solid black;
+  border: 1px solid #ddd;
   background-color: rgba(0, 0, 0, 0.63);
   display: flex;
   justify-content: center;
@@ -136,12 +193,14 @@
   box-shadow: none;
 }
 
-.overlay-content {
+.overlay-contentbox {
   background-color: #fff;
   padding: 15px;
   border-radius: 5px;
-  width: 80%;
-  height: 82vh;
+  /* width: 80% !important; */
+  /* height: 60vh !important; */
+  max-width: 900px !important;
+  max-height: 400px !important;
   position: relative;
 }
 
@@ -167,8 +226,26 @@
   overflow-y: auto;
   overflow-x: auto;
 
-  border: 1px solid black !important;
+  border: 1px solid #ddd !important;
   border-collapse: collapse;
+}
+
+.cmpInvTv_smallColumn {
+  width: 100px;
+  max-width: 80px;
+  text-overflow: ellipsis;
+  /* word-wrap: break-word; */
+  overflow: hidden;
+  white-space: nowrap;
+  /* white-space: normal; */
+}
+
+.cmpInvTv_smallColumn:hover {
+  color: rgb(82, 32, 134) !important;
+  background-color: #f0f8ff;
+  text-decoration: underline;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 /* Responsive adjustments */
