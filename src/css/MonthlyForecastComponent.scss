@@ -30,7 +30,7 @@
   font-family: sans-serif;
   background-color: white;
   margin: 10px;
-  margin-top: -0.4rem;
+  margin-top: -0.2rem;
   border-radius: 5px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   font-size: 16px;
@@ -47,7 +47,7 @@
   justify-content: space-between;
   height: 77%;
   padding: 20px;
-  margin-left: 12px;
+  margin-left: 16px;
   margin-top: -0.1rem;
   color: #00968f;
 }
@@ -57,7 +57,8 @@
   justify-content: space-between;
   height: 77%;
   padding: 20px;
-  margin-left: 12px;
+  position: relative;
+  margin-left: 1rem;
   margin-top: -15px;
   color: #00968f;
 }
@@ -67,7 +68,8 @@
   font-size: 14px;
   color: black;
   margin-top: 0px;
-  margin-left: -10px;
+  position: absolute;
+  margin-left: -12px;
   text-align: center;
   white-space: nowrap; /* Prevents the text from wrapping */
   overflow: hidden; /* Ensures the heading doesn't overflow */

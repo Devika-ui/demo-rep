@@ -18,7 +18,7 @@ import OverallTotalRealizedSavings from "./OverallTotalRealizedSavings";
 import api from "../api.js";
 
 const Dashboard = () => {
-  const [showStackBars, setShowStackBars] = useState(true);
+  const [showStackBars, setShowStackBars] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState("Azure");
   const [subscriptionsData, setSubscriptionsData] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
@@ -43,6 +43,8 @@ const Dashboard = () => {
   const [futureCost, setFutureCost] = useState(null);
   const [percentageIncrease, setPercentageIncrease] = useState(null);
   const [totalCost1, setTotalCost1] = useState(null);
+  const [azureCount, setAzureCount] = useState(null);
+  const AWSAccount = [{ "Account": 4 }];
 
   const dummyAWSRecommendations = [
     {
@@ -181,6 +183,8 @@ const dummyForecast = [
     setShowStackBars(value !== "Azure");
   };
 
+  const isLandingPage = true;
+
   const handleSubscriptionsFetch = (data) => {
     setSubscriptionsData(data);
   };
@@ -199,6 +203,24 @@ const dummyForecast = [
   };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (selectedProvider === "Azure") {
+          // Fetch Azure subscription count
+          const azureSubscriptionData = await api.getTotalSubscription();
+          const azureCountFromAPI = azureSubscriptionData[0]?.Subscription;
+          setAzureCount(azureCountFromAPI);
+        } else if (selectedProvider === "AWS") {
+          setAzureCount(AWSAccount[0].Account); // Dummy AWS data
+        }
+      } catch (error) {
+        console.error("Error fetching Azure or AWS data:", error);
+      }
+    };
+    fetchData();
+  }, [selectedProvider]);
 
   useEffect(() => {
     if (selectedProvider === "Azure") {
@@ -345,63 +367,53 @@ useEffect(() => {
 }, [selectedProvider, subscriptionsData, selectedFilters]);
 
 useEffect(() => {
-  if (selectedProvider === "Azure"){
-  const hasFilters =
-    selectedFilters &&
-    (selectedFilters.subscriptions?.length > 0 ||
-      selectedFilters.businessUnits?.length > 0 ||
-      selectedFilters.locations?.length > 0 ||
-      selectedFilters.applications?.length > 0 ||
-      selectedFilters.projects?.length > 0 ||
-      selectedFilters.environments?.length > 0);
-
   const fetchData = async () => {
     try {
+      // Check if there are filters applied
+      const hasFilters =
+        selectedFilters &&
+        (selectedFilters.subscriptions?.length > 0 ||
+          selectedFilters.businessUnits?.length > 0 ||
+          selectedFilters.locations?.length > 0 ||
+          selectedFilters.applications?.length > 0 ||
+          selectedFilters.projects?.length > 0 ||
+          selectedFilters.environments?.length > 0);
+
+      // If filters are applied, create input data
       const inputData = hasFilters
         ? {
-            Subscriptions: selectedFilters.subscriptions.map(
-              (sub) => sub.value
-            ),
-            BusinessUnits:
-              selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-            Locations:
-              selectedFilters.locations?.map((loc) => loc.value) || [],
-            Applications:
-              selectedFilters.applications?.map((app) => app.value) || [],
-            Projects:
-              selectedFilters.projects?.map((proj) => proj.value) || [],
-            Environments:
-              selectedFilters.environments?.map((env) => env.value) || [],
+            Subscriptions: selectedFilters.subscriptions.map((sub) => sub.value),
+            BusinessUnits: selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+            Locations: selectedFilters.locations?.map((loc) => loc.value) || [],
+            Applications: selectedFilters.applications?.map((app) => app.value) || [],
+            Projects: selectedFilters.projects?.map((proj) => proj.value) || [],
+            Environments: selectedFilters.environments?.map((env) => env.value) || [],
           }
         : subscriptionsData;
 
-      const coverageData = await api.getDiscountKPICoverage(inputData);
-      setPercentCoverage(coverageData.coverage);
+      if (selectedProvider === "Azure" && (hasFilters || subscriptionsData.length > 0)) {
+        const coverageData = await api.getDiscountKPICoverage(inputData);
+        setPercentCoverage(coverageData.coverage);
+      }
+
+      if (selectedProvider === "Azure") {
+        const usageData = await api.getDiscountKPIUsage();
+        setPercentUsage(usageData.usage);
+      }
+
+      if (selectedProvider === "AWS") {
+        setPercentCoverage(dummyKPIData.coverage);
+        setPercentUsage(dummyKPIData.usage);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  if (hasFilters || subscriptionsData.length > 0) {
-    fetchData();
-  }
-}  else if (selectedProvider === "AWS") {
-  setPercentCoverage(dummyKPIData.coverage);
-  setPercentUsage(dummyKPIData.usage);
-}
-}, [selectedProvider, subscriptionsData, selectedFilters]);
+  fetchData(); 
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const usageData = await api.getDiscountKPIUsage();
-      setPercentUsage(usageData.usage);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  fetchData();
-}, []);
+}, [selectedProvider, subscriptionsData, selectedFilters]); 
+
 
 useEffect(() => {
   if (selectedProvider === "Azure") {
@@ -619,8 +631,7 @@ useEffect(() => {
       >
         Overview
       </Typography>
-      <Subheader
-        onButtonClick={handleButtonClick}
+      <Subheader onButtonClick={handleButtonClick} isLandingPage={isLandingPage}
         onSubscriptionsFetch={handleSubscriptionsFetch}
         onFiltersChange={handleFiltersChange}
       />
@@ -658,7 +669,9 @@ useEffect(() => {
           </Grid>
  
           <Grid item xs={12} sm={6} md={4}>
-            <TotalSubscriptionsComponent />
+            <TotalSubscriptionsComponent 
+            azureCount = {azureCount}
+            selectedProvider={selectedProvider}/>
           </Grid>
  
           {/* Second Row: StackBars (or AzureBars), Recommendations, KPI */}
@@ -760,6 +773,7 @@ useEffect(() => {
                   topApplications={topApplications}
                   topServices={topServices}
                   tagCompliance={tagCompliance}
+                  selectedProvider={selectedProvider}
                 />
               </Paper>
             </Grid>

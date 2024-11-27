@@ -10,6 +10,7 @@ const SubHeader = ({
   onButtonClick,
   onSubscriptionsFetch,
   onFiltersChange,
+  isLandingPage
 }) => {
   const [subscriptionOptions, setSubscriptionOptions] = useState([]);
   const initialFilters = {
@@ -243,14 +244,14 @@ const SubHeader = ({
   return (
     <div className="Subheader-Container">
       <div className="Subheader-ButtonsContainer">
-        <HeaderButtons onButtonClick={onButtonClick} />
+      <HeaderButtons onButtonClick={onButtonClick} isLandingPage={isLandingPage} />
         <DateRangeDropdown />
       </div>
       <div className="Subheader-Boxes">
         <div className="Filter-Options-Row">
           <div className="filter-option-inline">
             {/* Subscriptions dropdown */}
-            <label>Subscriptions(s)</label>
+            <label>Subscription(s)</label>
             <MultiSelect
               options={filterOptions.subscriptions}
               value={selectedFilters.subscriptions}

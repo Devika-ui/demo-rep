@@ -61,7 +61,7 @@ const BarChartContainer = ({ chartData, trendData, legendData }) => {
       <Typography className="cmpBarChart_heading">
         Total Bill Cost Vs Simulated PayGO
       </Typography>
-      <div className="chart-wrapper">
+      <div className="chart-wrapper1">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={data}

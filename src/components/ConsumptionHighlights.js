@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 import "../css/consumptionHighlights.scss";
 import api from "../api.js"; // Import API function
 
-const ConsumptionHighlights = ({ subscriptionsData, selectedFilters,topSubscriptions,topApplications,topServices,tagCompliance }) => {
+const ConsumptionHighlights = ({ subscriptionsData, selectedFilters,topSubscriptions,topApplications,topServices,tagCompliance,selectedProvider }) => {
   // const [topSubscriptions, setTopSubscriptions] = useState([]);
   // const [topApplications, setTopApplications] = useState([]);
   // const [topServices, setTopServices] = useState([]);
@@ -129,7 +129,7 @@ const ConsumptionHighlights = ({ subscriptionsData, selectedFilters,topSubscript
       <div className="consumption-highlights-wrapper">
         <div className="tiles">
           <div className="tile">
-            <div className="tilename">Top Subscription</div>
+            <div className="tilename">{selectedProvider === "Azure" ? "Top Subscriptions" : "Top Accounts"}</div>
             <div className="price">{topSubscriptionCost}</div>
           </div>
           <div className="tile">

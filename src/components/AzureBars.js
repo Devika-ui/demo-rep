@@ -78,6 +78,11 @@ const options = {
           }
           return "";
         },
+        padding: 6, 
+        font: {
+          size: 12, 
+          family: "Roboto",
+        },
       },
     },
     y: {

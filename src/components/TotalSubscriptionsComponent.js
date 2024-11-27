@@ -1,29 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../css/TotalSubscriptionsComponent.scss";
-import api from "../api.js";
 
-const TotalSubscriptionsComponent = () => {
-  const [azureCount, setAzureCount] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch Azure subscription count
-        const azureSubscriptionData = await api.getTotalSubscription();
-        // Assuming the API returns an array with a single object containing the count
-        const azureCountFromAPI = azureSubscriptionData[0]?.Subscription;
-
-        // Set Azure count
-        setAzureCount(azureCountFromAPI);
-      } catch (error) {
-        // Handle error
-      }
-    };
-    fetchData();
-  }, []);
-
+const TotalSubscriptionsComponent = ({ azureCount, selectedProvider }) => {
   // Hardcoded AWS count
-  const awsCount = 2;
+  const AWSAccount = [{ "Account": 4 }];
 
   return (
     <div>
@@ -35,10 +15,12 @@ const TotalSubscriptionsComponent = () => {
         <div className="bottom-part">
           <div className="subscription">
             <div>
-              <span className="number">{azureCount}</span>
+              <span className="number">
+                {selectedProvider === "Azure" ? azureCount : AWSAccount[0].Account}
+              </span>
             </div>
             <div className="subscription-text" style={{ fontWeight: "bold" }}>
-              Azure Subscriptions
+              {selectedProvider === "Azure" ? "Azure Subscriptions" : "AWS Accounts"}
             </div>
           </div>
         </div>
