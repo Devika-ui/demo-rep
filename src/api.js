@@ -8,24 +8,26 @@ const apiUrl = `${domainUrl}/api/v1`;
 // FinOps - Current month is previous month and previous month is older than current month
 // on Nov-24 - Current Month - Oct, Previous Month - Sept
 const previousMonthStart = moment()
+  .subtract(3, "month")
+  .startOf("month")
+  .format("YYYY-MM-DD");
+ 
+const currentMonthStart = moment()
   .subtract(2, "month")
   .startOf("month")
   .format("YYYY-MM-DD");
-
-const currentMonthStart = moment()
-  .subtract(1, "month")
-  .startOf("month")
-  .format("YYYY-MM-DD");
-
+ 
 const nextMonthStart = moment()
   .add(1, "month")
   .startOf("month")
   .format("YYYY-MM-DD");
-
+ 
 const currentMonthEnd = moment()
-  .subtract(1, "months")
+  .subtract(2, "months")
   .endOf("month")
   .format("YYYY-MM-DD");
+
+ 
 console.log("Moment JS Date", previousMonthStart, currentMonthStart);
 const selectedCSP = await componentUtil.getSelectedCSP();
 const api = {

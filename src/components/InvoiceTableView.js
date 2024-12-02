@@ -26,7 +26,6 @@ const InvoiceTableView = ({
   overlayHeight,
   columnData,
 }) => {
-  console.log("table", columnData);
   const [isOverlayOpen, setOverlayOpen] = useState(false);
 
   const handleOverlayOpen = () => {
@@ -36,7 +35,7 @@ const InvoiceTableView = ({
   const handleOverlayClose = () => {
     setOverlayOpen(false);
   };
-  const tableRef = useRef(null); // Create a separate ref for the table
+  const tableRef = useRef(null);
 
   return (
     <>
@@ -108,18 +107,9 @@ const InvoiceTableView = ({
             <TableBody>
               {tableData.map((row, rowIndex) => (
                 <TableRow key={rowIndex} className="cmpInvTv_tableRow">
-                  {/* <TableCell className="cmpInvTv_tableCell cmpInvTv_stickyColumn">
-                    {Array.isArray(columnData) && columnData.length > 0 ? (
-                      columnData.map((value, index) => (
-                        <div key={index}>{value || "No Data Available"}</div>
-                      ))
-                    ) : (
-                      <span>No Data Available</span>
-                    )}
-                  </TableCell> */}
                   <TableCell className="cmpInvTv_tableCell cmpInvTv_stickyColumn">
                     {Array.isArray(columnData) && columnData.length > 0 ? (
-                      <div>{columnData[rowIndex] || "No Data Available"}</div> // Only display the 0th index
+                      <div>{columnData[rowIndex] || "No Data Available"}</div>
                     ) : (
                       <span>No Data Available</span>
                     )}
@@ -129,9 +119,7 @@ const InvoiceTableView = ({
                       <TableCell
                         key={`${labelIndex}-${colIndex}`}
                         className={`cmpInvTv_tableCell ${
-                          column.key === "ownerName"
-                            ? "cmpInvTv_smallColumn"
-                            : ""
+                          column.key === "ownerName" ? "cmpInvTv_smallColumn" : ""
                         }`}
                         title={
                           column.key === "ownerName"
@@ -195,7 +183,7 @@ const InvoiceTableView = ({
                         {Array.isArray(columnData) && columnData.length > 0 ? (
                           <div>
                             {columnData[rowIndex] || "No Data Available"}
-                          </div> // Only display the 0th index
+                          </div>
                         ) : (
                           <span>No Data Available</span>
                         )}
@@ -233,28 +221,23 @@ const InvoiceTableView = ({
 
 InvoiceTableView.propTypes = {
   title: PropTypes.string.isRequired,
-  dropdown: PropTypes.element,
-  tableData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dropdown: PropTypes.element.isRequired,
+  tableData: PropTypes.array.isRequired,
   tableHeight: PropTypes.string,
   tableWidth: PropTypes.string,
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  headerLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
-  headerClass: PropTypes.string,
+  columns: PropTypes.array.isRequired,
+  columnTitle: PropTypes.string,
+  headerLabels: PropTypes.array,
+  headerClass: PropTypes.string.isRequired,
+  overlayHeight: PropTypes.string,
+  columnData: PropTypes.array,
 };
 
 InvoiceTableView.defaultProps = {
   tableHeight: "auto",
   tableWidth: "100%",
   headerLabels: ["April - 24"],
-};
-
-InvoiceTableView.defaultProps = {
-  overlayHeight: "82vh", // Default height for overlay
+  overlayHeight: "82vh",
 };
 
 export default InvoiceTableView;

@@ -1,7 +1,7 @@
 .cmpSvcCat_container {
   background-color: white;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   margin-top: -4px !important;
@@ -36,7 +36,7 @@
   margin-top: -35px !important;
 }
 .cmpSvcCat_tableContainer {
-  border: 1px solid black;
+  border: 1px solid #ddd;
   border-radius: 0;
   overflow: auto;
   max-height: 210px !important;
@@ -54,9 +54,9 @@
 .cmpSvcCat_columnHeader {
   text-align: center !important;
   padding: 20px 10px !important;
-  border: 1px solid black !important;
+  border: 1px solid #ddd!important;
   color: black;
-  background-color: white;
+  background-color: #f0f0f0 !important;
 }
 
 .cmpSvcCat_table {
@@ -76,10 +76,10 @@
   overflow: hidden;
   text-align: center !important;
   color: rgb(82, 32, 134) !important;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #ddd;
 }
 .cmpSvcCat_tableCell {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #ddd;
 }
 .cmpSvcCat_indentedCell {
   font-size: 0.8rem;

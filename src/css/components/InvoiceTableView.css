@@ -76,6 +76,16 @@
   vertical-align: top !important;
   border-top: 1px solid #ddd;
   border-left: 1px solid #ddd;
+  width: 150px; /* Define a consistent width for columns */
+}
+
+.cmpInvTv_tableHeadCell {
+  background-color: #f0f0f0 !important;
+  text-align: center !important;
+  border-bottom: 1px solid #ddd !important;
+  border-left: 1px solid #ddd !important;
+  padding: 8px 16px !important;
+  width: 150px; /* Match width to maintain alignment */
 }
 
 .cmpInvTv_tableHeadCell,
