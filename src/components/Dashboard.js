@@ -32,11 +32,7 @@ const Dashboard = () => {
   });
 
   /*Filter Changes*/
-  let inputData = [];
-  const invokeInputData = async() => {
-    inputData =  await componentUtil.populateFilterData(selectedFilters,subscriptionsData);
-  };
-  invokeInputData();
+  let inputData = componentUtil.populateFilterData(selectedFilters,subscriptionsData);
   const handleButtonClick = (value) => {
     componentUtil.setSelectedCSP(value);
     setSelectedProvider(value);
@@ -45,14 +41,12 @@ const Dashboard = () => {
 
   const handleSubscriptionsFetch = async(data) => {
     setSubscriptionsData(data);
-    inputData =  await componentUtil.populateFilterData(selectedFilters,data);
   };
   
 
   // Function to update filters
   const handleFiltersChange = async(newFilters) => {
     setSelectedFilters(newFilters); // Update selected filters
-    inputData =  await componentUtil.populateFilterData(newFilters,subscriptionsData);
   };
 
   const navigate = useNavigate();

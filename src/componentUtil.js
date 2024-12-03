@@ -30,13 +30,13 @@ const componentUtil = {
         return Number(sessionStorage["cspId"] !== undefined ? sessionStorage.getItem("cspId") : 1);
     },
     populateFilterData: (selectedFilters, subscriptionsData) => {
+        let inputData ='';
         const hasFilters =  selectedFilters &&   (selectedFilters.subscriptions?.length > 0 ||
             selectedFilters.businessUnits?.length > 0 ||
             selectedFilters.locations?.length > 0 ||
             selectedFilters.applications?.length > 0 ||
             selectedFilters.projects?.length > 0 ||
             selectedFilters.environments?.length > 0);
-          let inputData ='';
           if (hasFilters || subscriptionsData.length > 0) {
             inputData = hasFilters
                   ? {
@@ -56,6 +56,7 @@ const componentUtil = {
                     }
                   : subscriptionsData;
           }
+          return inputData;
     }
 };
 
