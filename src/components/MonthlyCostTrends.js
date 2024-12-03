@@ -87,7 +87,7 @@ const MonthlyCostTrends = ({ subscriptionsData, selectedFilters }) => {
     const fetchData = async () => {
       try {
         const response = await api.getMonthlyForecastSpend(inputData);
-        console.log("data", response);
+
         const { pastCosts, futureCosts } = response[0];
         const labels = [
           ...pastCosts.map((cost) => cost.month),

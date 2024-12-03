@@ -14,7 +14,6 @@ const Box = ({ number, text }) => {
   };
 
   const boxWidth = getTextWidth(text);
-  console.log("boxwidth", boxWidth);
 
   return (
     <Paper className="cmp_box" style={{ width: boxWidth }}>

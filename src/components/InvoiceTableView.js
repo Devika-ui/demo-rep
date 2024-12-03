@@ -109,9 +109,9 @@ const InvoiceTableView = ({
                 <TableRow key={rowIndex} className="cmpInvTv_tableRow">
                   <TableCell className="cmpInvTv_tableCell cmpInvTv_stickyColumn">
                     {Array.isArray(columnData) && columnData.length > 0 ? (
-                      <div>{columnData[rowIndex] || "No Data Available"}</div>
+                      <div>{columnData[rowIndex] || ""}</div>
                     ) : (
-                      <span>No Data Available</span>
+                      <span></span>
                     )}
                   </TableCell>
                   {headerLabels.flatMap((_, labelIndex) =>
@@ -119,7 +119,9 @@ const InvoiceTableView = ({
                       <TableCell
                         key={`${labelIndex}-${colIndex}`}
                         className={`cmpInvTv_tableCell ${
-                          column.key === "ownerName" ? "cmpInvTv_smallColumn" : ""
+                          column.key === "ownerName"
+                            ? "cmpInvTv_smallColumn"
+                            : ""
                         }`}
                         title={
                           column.key === "ownerName"
@@ -181,11 +183,9 @@ const InvoiceTableView = ({
                     <TableRow key={rowIndex} className="cmpInvTv_tableRow">
                       <TableCell className="cmpInvTv_tableCell cmpInvTv_stickyColumn">
                         {Array.isArray(columnData) && columnData.length > 0 ? (
-                          <div>
-                            {columnData[rowIndex] || "No Data Available"}
-                          </div>
+                          <div>{columnData[rowIndex] || " "}</div>
                         ) : (
-                          <span>No Data Available</span>
+                          <span> ""</span>
                         )}
                       </TableCell>
                       {headerLabels.flatMap((_, labelIndex) =>

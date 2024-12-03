@@ -4,16 +4,37 @@ import { Typography } from "@mui/material";
 import "../css/Ondemand.scss";
 import api from "../api"; // Adjust the import path as needed
 
-const Ondemand = () => {
+const Ondemand = ({ subscriptionsData, selectedFilters }) => {
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {
+    const hasFilters =
+      selectedFilters &&
+      (selectedFilters.subscriptions?.length > 0 ||
+        selectedFilters.businessUnits?.length > 0 ||
+        selectedFilters.locations?.length > 0 ||
+        selectedFilters.applications?.length > 0 ||
+        selectedFilters.projects?.length > 0 ||
+        selectedFilters.environments?.length > 0);
+
+    const inputData = hasFilters
+      ? {
+          Subscriptions: selectedFilters.subscriptions.map((sub) => sub.value),
+          BusinessUnits:
+            selectedFilters.businessUnits?.map((bu) => bu.value) || [],
+          Locations: selectedFilters.locations?.map((loc) => loc.value) || [],
+          Applications:
+            selectedFilters.applications?.map((app) => app.value) || [],
+          Projects: selectedFilters.projects?.map((proj) => proj.value) || [],
+          Environments:
+            selectedFilters.environments?.map((env) => env.value) || [],
+        }
+      : subscriptionsData;
     const loadData = async () => {
       try {
-        const data = await api.getDataForAnomaly();
-        console.log("anamoly:", data);
+        const data = await api.getDataForAnomaly(inputData);
 
         // Parse the date and sort the data by month
         const sortedData = data.sort(
@@ -46,8 +67,10 @@ const Ondemand = () => {
       }
     };
 
-    loadData();
-  }, []);
+    if (hasFilters || subscriptionsData.length > 0) {
+      loadData();
+    }
+  }, [subscriptionsData, selectedFilters]);
 
   useEffect(() => {
     if (chartContainer.current && chartData.labels.length) {

@@ -167,28 +167,41 @@ const BillOverview = () => {
             };
           });
         });
-        // console.log("app", applicationData);
+
         const applicationData = Object.values(groupedData).map((entries) => {
-          return entries[0]?.name || null; // Access the 0th index and handle undefined
+          // Check each entry in the array and return the first valid name found.
+          for (let i = 0; i < entries.length; i++) {
+            if (entries[i]?.name) {
+              return entries[i].name;
+            }
+          }
+          return null; // Return null if no valid name is found
         });
+
         setApplicationData(applicationData);
+        console.log("app", groupedData);
         const flattenedBillAllocationData = Object.values(groupedData).map(
           (entries) => {
+            let hasNameBeenSet = false;
             return entries.reduce((acc, entry, index) => {
               // Include the name only for the first index (index 0)
-              if (index === 0) {
+              // if (index === 0) {
+              //   acc[`name_${index}`] = entry.name;
+              // }
+              if (!acc.name && entry.name && entry.name.trim()) {
                 acc[`name_${index}`] = entry.name;
+                hasNameBeenSet = true; // Store the first non-empty name
               }
               acc[`ownerName_${index}`] = entry.ownerName;
               acc[`onDemandCost_${index}`] = entry.onDemandCost;
               acc[`reservedInstanceCost_${index}`] = entry.reservedInstanceCost;
               acc[`savings_${index}`] = entry.savings;
               acc[`totalBill_${index}`] = entry.totalBill;
-
               return acc;
             }, {});
           }
         );
+
         // Extract unique application names from flattenedBillAllocationData
         const uniqueNamesSet = new Set();
         flattenedBillAllocationData.forEach((item) => {
@@ -199,9 +212,10 @@ const BillOverview = () => {
           });
         });
         const uniqueNames = [...uniqueNamesSet];
-
+        console.log("flattenedBillAllocationData", flattenedBillAllocationData);
         // Set the required state for your application
         setBillAllocationData(flattenedBillAllocationData);
+        console.log("billAL", billAllocationData);
         setFilteredBillAllocationData(flattenedBillAllocationData);
         setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
         setUniqueBillAllocationData(uniqueNames);
@@ -474,20 +488,39 @@ const BillOverview = () => {
   const handleReportTypeChange = (event) => {
     const selectedReportType = event.target.value;
     setReportType(selectedReportType);
-
+    console.log("billAllocationData", billAllocationData);
     if (selectedReportType) {
       const filteredData = billAllocationData.filter((item) => {
         return Object.keys(item).some(
           (key) => key.startsWith("name_") && item[key] === selectedReportType
         );
       });
-      const selectedApplication = filteredData.map((item) => item.name_0);
+      console.log("fltered", filteredData);
+      // const selectedApplication = filteredData.map((item) => item.name_0);
+      const selectedApplication = filteredData.map((item) => {
+        // Find the first available non-empty name among name_0, name_1, name_2
+        return (
+          item.name_0?.trim() ||
+          item.name_1?.trim() ||
+          item.name_2?.trim() ||
+          "No Name Found"
+        );
+      });
       console.log("variable:", selectedApplication);
       setApplicationData(selectedApplication);
       setFilteredBillAllocationData(filteredData);
       console.log("filter", filteredData);
     } else {
-      const selectedApplication = billAllocationData.map((item) => item.name_0);
+      // const selectedApplication = billAllocationData.map((item) => item.name_0);
+      const selectedApplication = billAllocationData.map((item) => {
+        // Find the first available non-empty name among name_0, name_1, name_2
+        return (
+          item.name_0?.trim() ||
+          item.name_1?.trim() ||
+          item.name_2?.trim() ||
+          "No Name Found"
+        );
+      });
       console.log("variable1:", selectedApplication);
       setApplicationData(selectedApplication);
       setFilteredBillAllocationData(billAllocationData);
