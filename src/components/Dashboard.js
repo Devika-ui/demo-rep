@@ -8,7 +8,7 @@ import MonthlySpendComponent from "./MonthlySpendComponent";
 import MonthlyForecastComponent from "./MonthlyForecastComponent";
 import TotalSubscriptionsComponent from "./TotalSubscriptionsComponent";
 import StackBars from "./StackBars";
-import AzureBars from "./AzureBars";
+import DetailedCSPBars from "./DetailedCSPBars.js";
 import NavigationBar from "./NavigationBar.js";
 import RecommendationsComponent from "./RecommendationsComponent";
 import KPISection from "./KPISection";
@@ -43,14 +43,16 @@ const Dashboard = () => {
     setShowStackBars(value !== 1);
   };
 
-  const handleSubscriptionsFetch = (data) => {
+  const handleSubscriptionsFetch = async(data) => {
     setSubscriptionsData(data);
+    inputData =  await componentUtil.populateFilterData(selectedFilters,data);
   };
   
 
   // Function to update filters
-  const handleFiltersChange = (newFilters) => {
+  const handleFiltersChange = async(newFilters) => {
     setSelectedFilters(newFilters); // Update selected filters
+    inputData =  await componentUtil.populateFilterData(newFilters,subscriptionsData);
   };
 
   const navigate = useNavigate();
@@ -148,7 +150,7 @@ const Dashboard = () => {
                       inputData={inputData} selectedCSP={selectedProvider}
                     />
                   ) : (
-                    <AzureBars
+                    <DetailedCSPBars
                       inputData={inputData} selectedCSP={selectedProvider}
                     />
                   )}
@@ -209,9 +211,7 @@ const Dashboard = () => {
                 }}
               >
                 <MapContainer
-                  subscriptionsData={subscriptionsData}
-                  selectedFilters={selectedFilters}
-                />
+                  selectedCSP = {selectedProvider} inputData= {inputData} />
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>

@@ -14,6 +14,18 @@ const componentUtil = {
     setSelectedCSP: async (cps_id) => {
         sessionStorage.setItem("cspId", cps_id);
     },
+    getCurrencySymbol: async () => {
+        return sessionStorage["currencySymbol"] !== undefined ? sessionStorage.getItem("currencySymbol") : "$";
+    },
+    setCurrencySymbol: async (symbol) => {
+      sessionStorage.setItem("currencySymbol", symbol);
+    },
+    getCurrencyPreference: async () => {
+        return sessionStorage["currencyPreference"] !== undefined ? sessionStorage.getItem("currencyPreference") : "start";
+    },
+    setCurrencyPreference: async (loc) => {
+      sessionStorage.setItem("currencyPreference", loc);
+    },
     getSelectedCSP: async () => {
         return Number(sessionStorage["cspId"] !== undefined ? sessionStorage.getItem("cspId") : 1);
     },

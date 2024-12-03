@@ -42,6 +42,9 @@ const StackBars = ({ inputData, selectedCSP }) => {
       const date = new Date(dailydate).toISOString().split("T")[0];
 
       if (!awsData[date]) {
+        if(selectedCSP == 2 ){
+          awsData[date] += totalcost;
+        }
         awsData[date] = Math.random() * 10000; // Random data for AWS
       }
       if (!azureData[date]) {

@@ -22,7 +22,8 @@ import componentUtil from "./componentUtil";
 const UserWrappedApp = ({token}) => {
     const [dataPreload, setDataPreload] = useState(false);
     const setUserData = async() => {
-        sessionStorage.removeItem("cspId"); 
+        if(!dataPreload)
+          sessionStorage.clear();
         let accessToken = await componentUtil.getAccessToken(token);
         if(accessToken !== token ) {
             await componentUtil.setAccessToken(token);
@@ -33,12 +34,13 @@ const UserWrappedApp = ({token}) => {
             const data =  await api.getAssignedCustomerIds();
             if (data.length > 0) {
                 await componentUtil.setSelectedCustomerID(data[0].customerId);
+                await componentUtil.setCurrencySymbol(data[0].currencySymbol);
+                await componentUtil.setCurrencyPreference(data[0].currencyPreference);
                 console.log("customerId:::", await componentUtil.getSelectedCustomerID())
                 setDataPreload(true);
             }
         }
         else {
-            sessionStorage.removeItem("cspId");
             setDataPreload(true);
         } 
         

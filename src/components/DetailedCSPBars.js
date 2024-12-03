@@ -99,7 +99,7 @@ const options = {
   },
 };
 
-const AzureBars = ({ inputData, selectedCSP }) => {
+const DetailedCSPBars = ({ inputData, selectedCSP }) => {
   const [data, setData] = useState({ labels: [], datasets: [] });
   const [forecastData, setForecastData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -294,4 +294,4 @@ const AzureBars = ({ inputData, selectedCSP }) => {
   );
 };
 
-export default AzureBars;
+export default DetailedCSPBars;
