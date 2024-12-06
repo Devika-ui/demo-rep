@@ -3,6 +3,7 @@ import { Tooltip } from "@mui/material";
 import "../css/MonthlyForecastComponent.scss";
 import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
+import componentUtil from "../componentUtil.js";
 import api from "../api.js";
 
 const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
@@ -10,22 +11,23 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
   const [futureCost, setFutureCost] = useState(null);
   const [percentageIncrease, setPercentageIncrease] = useState(null);
   const [totalCost1, setTotalCost1] = useState(null);
-  
+  const [currencySymbol, setCurrencySymbol] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const forecastData = await api.getMonthlyForecastSpend(inputData);
-  
+        const currencySymbol = await componentUtil.getCurrencySymbol();
         if (forecastData.length > 0) {
           const lastMonth = forecastData[0].lastMonthCost;
           const latestFutureCostData = forecastData[0].futureCosts.at(-1); // Get the latest month data
-  
+
           setLastMonthCost(lastMonth);
           setFutureCost(latestFutureCostData.futureCost);
           setPercentageIncrease(latestFutureCostData.percentageIncrease);
           setTotalCost1(lastMonth + latestFutureCostData.futureCost);
-        }
-        else {
+          setCurrencySymbol(currencySymbol);
+        } else {
           setLastMonthCost(0);
           setFutureCost(0);
           setTotalCost1(0);
@@ -37,7 +39,6 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
     };
     fetchData();
   }, [selectedCSP, inputData]);
-  
 
   const GrowthIndicator = ({ percentageIncrease }) => {
     let imageSrc;
@@ -93,7 +94,10 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
         <div className="container-1">
           <div className="number">
             {totalCost1 !== null ? (
-              <strong>{totalCost1.toFixed(2)}</strong>
+              <strong>
+                {currencySymbol}
+                {totalCost1.toFixed(2)}
+              </strong>
             ) : (
               <strong>Loading...</strong>
             )}

@@ -2,9 +2,9 @@ import React, { useRef, useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 import { Typography } from "@mui/material";
 import "../css/Ondemand.scss";
-import api from "../api"; // Adjust the import path as needed
+import api from "../api";
 
-const Ondemand = ({ subscriptionsData, selectedFilters }) => {
+const Ondemand = ({ subscriptionsData, selectedFilters, currencySymbol }) => {
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
@@ -111,6 +111,12 @@ const Ondemand = ({ subscriptionsData, selectedFilters }) => {
               enabled: true,
               mode: "index",
               intersect: false,
+              callbacks: {
+                label: (context) => {
+                  const value = context.raw; // Access the raw data value
+                  return `${currencySymbol}${value.toFixed(2)}`; // Format with the currency symbol and two decimal places
+                },
+              },
             },
             crosshair: {
               line: {
@@ -167,7 +173,7 @@ const Ondemand = ({ subscriptionsData, selectedFilters }) => {
         chartInstance.current.destroy();
       }
     };
-  }, [chartData]);
+  }, [chartData, currencySymbol]);
 
   return (
     <div className="ondemand-container">

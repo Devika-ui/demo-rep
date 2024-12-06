@@ -26,7 +26,11 @@ ChartJS.register(
   Filler
 );
 
-const MonthlyCostTrends = ({ subscriptionsData, selectedFilters }) => {
+const MonthlyCostTrends = ({
+  subscriptionsData,
+  selectedFilters,
+  currencySymbol,
+}) => {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -132,6 +136,14 @@ const MonthlyCostTrends = ({ subscriptionsData, selectedFilters }) => {
         position: "bottom",
         labels: {
           usePointStyle: true,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const value = context.raw; // Get the raw data value
+            return `${currencySymbol}${value?.toFixed(2)}`; // Format with currency symbol and two decimal places
+          },
         },
       },
     },

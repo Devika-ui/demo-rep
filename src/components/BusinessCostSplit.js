@@ -10,6 +10,8 @@ import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
 import MonthlyCostTrends from "./MonthlyCostTrends";
 import { Box, Typography } from "@mui/material";
+import componentUtil from "../componentUtil.js";
+import { json } from "react-router-dom";
 
 const BusinessCostSplit = () => {
   const [showStackBars, setShowStackBars] = useState(true);
@@ -26,6 +28,7 @@ const BusinessCostSplit = () => {
   const [subscriptionsData, setSubscriptionsData] = useState([]);
   const [inputData, setInputData] = useState({});
   const [applicationData, setApplicationData] = useState({});
+  const [currencySymbol, setCurrencySymbol] = useState(null);
 
   const handleButtonClick = (value) => {
     if (value === "1") {
@@ -200,7 +203,6 @@ const BusinessCostSplit = () => {
                 resources,
               };
             });
-
             const { totalBill, onDemandCost, commitmentsCost, savings } =
               aggregateData(resourceGroups);
 
@@ -226,6 +228,7 @@ const BusinessCostSplit = () => {
             services,
           };
         });
+
         setServiceCategoryData(formattedServiceCategoryData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -250,13 +253,13 @@ const BusinessCostSplit = () => {
           api.getProjectWithTags(inputData),
           api.getProjectWithoutTags(inputData),
         ]);
-
+        const currencySymbol = await componentUtil.getCurrencySymbol();
         const formattedBoxData = [
           {
             number:
               applicationsWithTags?.Applicationswithtags?.[0] !== undefined &&
               applicationsWithTags.Applicationswithtags[0] !== null
-                ? applicationsWithTags.Applicationswithtags[0]
+                ? `${currencySymbol}${applicationsWithTags.Applicationswithtags[0]}`
                 : "NA",
             text: "Applications with Tags",
           },
@@ -265,7 +268,7 @@ const BusinessCostSplit = () => {
               applicationsWithoutTags?.Applicationswithouttags?.[0] !==
                 undefined &&
               applicationsWithoutTags.Applicationswithouttags[0] !== null
-                ? applicationsWithoutTags.Applicationswithouttags[0]
+                ? `${currencySymbol}${applicationsWithoutTags.Applicationswithouttags[0]}`
                 : "NA",
             text: "Applications without Tags",
           },
@@ -273,7 +276,7 @@ const BusinessCostSplit = () => {
             number:
               projectsWithTags?.projectwithtags?.[0] !== undefined &&
               projectsWithTags.projectwithtags[0] !== null
-                ? projectsWithTags.projectwithtags[0]
+                ? ` ${currencySymbol}${projectsWithTags.projectwithtags[0]}`
                 : "NA",
             text: "Project with Tags",
           },
@@ -281,13 +284,14 @@ const BusinessCostSplit = () => {
             number:
               projectsWithoutTags?.Projectwithouttags?.[0] !== undefined &&
               projectsWithoutTags.Projectwithouttags[0] !== null
-                ? projectsWithoutTags.Projectwithouttags[0]
+                ? `${currencySymbol}${projectsWithoutTags.Projectwithouttags[0]}`
                 : "NA",
             text: "Project without Tags",
           },
         ];
 
         setBoxData(formattedBoxData);
+        setCurrencySymbol(currencySymbol);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -419,6 +423,7 @@ const BusinessCostSplit = () => {
         setFilteredBillAllocationData(flattenedBillAllocationData);
         setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
         setUniqueBillAllocationData(uniqueNames);
+        console.log("flattenedBillAllocationData", flattenedBillAllocationData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -430,20 +435,20 @@ const BusinessCostSplit = () => {
 
   const columns1 = [
     { key: "ownerName", label: "Owner Name" },
-    { key: "totalBill", label: "Total Bill" },
+    { key: "totalBill", label: `Total Bill (${currencySymbol})` },
     { key: "normalizedVariation", label: "%Normalized Variation" },
     { key: "rawVariation", label: "%Raw Variation" },
-    { key: "savings", label: "Savings" },
+    { key: "savings", label: `Savings (${currencySymbol})` },
   ];
 
   const tableData = [
     {
       tableTitle: "Service Category Cost Allocation",
       columnHead1: "Service Category",
-      columnHead2: "Total Bill",
-      columnHead3: "On Demand Cost",
-      columnHead4: "Commitments Cost",
-      columnHead5: "Savings",
+      columnHead2: `Total Bill (${currencySymbol})`,
+      columnHead3: `On Demand Cost (${currencySymbol})`,
+      columnHead4: `Commitments Cost (${currencySymbol})`,
+      columnHead5: `Savings (${currencySymbol})`,
     },
   ];
 
@@ -514,6 +519,7 @@ const BusinessCostSplit = () => {
           <Ondemand
             subscriptionsData={subscriptionsData}
             selectedFilters={selectedFilters}
+            currencySymbol={currencySymbol}
           />
         </div>
         <div style={{ flex: 1 }}>
@@ -521,6 +527,7 @@ const BusinessCostSplit = () => {
           <MonthlyCostTrends
             subscriptionsData={subscriptionsData}
             selectedFilters={selectedFilters}
+            currencySymbol={currencySymbol}
           />
         </div>
       </div>

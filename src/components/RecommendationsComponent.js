@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from "react";
 import "../css/RecommendationsComponent.scss";
 import api from "../api.js";
+import componentUtil from "../componentUtil.js";
 
-const RecommendationsComponent = ({selectedCSP}) => {
+const RecommendationsComponent = ({ selectedCSP }) => {
   const [recommendations, setRecommendations] = useState([]);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
   const totalSavings = recommendations
     .reduce((total, rec) => total + rec.value, 0)
     .toFixed(2);
 
   useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await api.getRecommendations();
-            setRecommendations(response);
-          } catch (error) {
-            console.error("Error fetching Azure recommendations:", error);
-          }
-        };
-        fetchData();
-    }, [selectedCSP]);
+    const fetchData = async () => {
+      try {
+        const response = await api.getRecommendations();
+        const currencySymbol = await componentUtil.getCurrencySymbol();
+        setRecommendations(response);
+        setCurrencySymbol(currencySymbol);
+      } catch (error) {
+        console.error("Error fetching Azure recommendations:", error);
+      }
+    };
+    fetchData();
+  }, [selectedCSP]);
   return (
     <>
       <div className="heading">
@@ -26,14 +30,19 @@ const RecommendationsComponent = ({selectedCSP}) => {
       </div>
       <div className="recommendations-container">
         <div className="filter-section">
-          <strong><div className="subheading">Show Recommendations by</div></strong>
+          <strong>
+            <div className="subheading">Show Recommendations by</div>
+          </strong>
         </div>
         <div className="tiles">
           {recommendations.slice(0, 3).map((rec, index) => (
             <div key={index} className="tile1">
               <div className="titlename">{rec.name}</div>
               <div className="content">
-                <div className="price1">{rec.value.toFixed(2)}</div>
+                <div className="price1">
+                  {currencySymbol}
+                  {rec.value.toFixed(2)}
+                </div>
                 <div className="savings">Savings Potential</div>
               </div>
             </div>
@@ -41,7 +50,10 @@ const RecommendationsComponent = ({selectedCSP}) => {
         </div>
         <div className="total-savings">
           <div className="total-savings-text">Total Savings Potential</div>
-          <div className="total-savings-amount">{totalSavings}</div>
+          <div className="total-savings-amount">
+            {currencySymbol}
+            {totalSavings}
+          </div>
         </div>
       </div>
     </>

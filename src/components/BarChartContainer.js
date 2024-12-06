@@ -15,7 +15,12 @@ import Typography from "@mui/material/Typography";
 import { format, parseISO } from "date-fns";
 import "../css/components/BarChartContainer.css";
 
-const BarChartContainer = ({ chartData, trendData, legendData }) => {
+const BarChartContainer = ({
+  chartData,
+  trendData,
+  legendData,
+  currencySymbol,
+}) => {
   const [data, setData] = useState([]);
   const [legendFontSize, setLegendFontSize] = useState(12); // Default legend font size
 
@@ -32,19 +37,28 @@ const BarChartContainer = ({ chartData, trendData, legendData }) => {
   };
 
   useEffect(() => {
-    // Combine chartData and trendData into a single array
     const combinedData = chartData.map((item) => {
       const trendItem = trendData.find(
         (trend) =>
           format(parseISO(trend.Date), "yyyy-MM") ===
           format(parseISO(item.modifieddate), "yyyy-MM")
       );
+
       return {
         ...item,
         simulated: trendItem ? trendItem.simulated : 0,
       };
     });
-    setData(combinedData);
+
+    // Format the data by adding the currency symbol and rounding the numbers
+    const formattedData = combinedData.map((item) => ({
+      ...item,
+      costsPAYGO: item.costsPAYGO.toFixed(2),
+      savingsRI: item.savingsRI.toFixed(2),
+      simulated: item.simulated.toFixed(2),
+    }));
+
+    setData(formattedData);
 
     // Call the function initially and add an event listener for window resize
     updateLegendFontSize();
@@ -55,6 +69,42 @@ const BarChartContainer = ({ chartData, trendData, legendData }) => {
       window.removeEventListener("resize", updateLegendFontSize);
     };
   }, [chartData, trendData]);
+
+  const CustomTooltip = ({ payload, label }) => {
+    if (payload && payload.length) {
+      const { costsPAYGO, savingsRI, simulated, dataKey } = payload[0].payload;
+
+      // Get the color dynamically based on dataKey from legendData
+      const colorMap = {
+        costsPAYGO: "rgba(95, 36, 159, 0.8)",
+        savingsRI: "rgba(0, 150, 143, 0.8)",
+        simulated: "rgba(0, 153, 198, 0.8)",
+      };
+
+      const tooltipTextStyle = {
+        color: colorMap[dataKey] || "#000000", // Default to black if no color is available
+      };
+
+      return (
+        <div
+          className="custom-tooltip"
+          style={{ ...tooltipTextStyle, backgroundColor: "white" }}
+        >
+          <p>{`Date: ${label}`}</p>
+          <p
+            style={{ color: colorMap.costsPAYGO }}
+          >{`Pay as you go: ${currencySymbol}${costsPAYGO}`}</p>
+          <p
+            style={{ color: colorMap.savingsRI }}
+          >{`Reservations: ${currencySymbol}${savingsRI}`}</p>
+          <p
+            style={{ color: colorMap.simulated }}
+          >{`Simulated PAYGO: ${currencySymbol}${simulated}`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <Paper className="cmpBarChart_container">
@@ -78,7 +128,7 @@ const BarChartContainer = ({ chartData, trendData, legendData }) => {
               tickFormatter={(tick) => format(parseISO(tick), "yyyy-MM")}
             />
             <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Legend
               layout="vertical"
               verticalAlign="middle"

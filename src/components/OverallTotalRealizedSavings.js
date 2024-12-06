@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import api from "../api.js";
+import componentUtil from "../componentUtil.js";
 import { Typography } from "@mui/material";
 
 ChartJS.register(
@@ -23,47 +24,46 @@ ChartJS.register(
   Legend
 );
 
-const OverallTotalRealizedSavings = ({selectedCSP , inputData}) => {
+const OverallTotalRealizedSavings = ({ selectedCSP, inputData }) => {
   const [reservations, setReservations] = useState([]);
   const [simulatedSavings, setSimulatedSavings] = useState([]);
   const [labels, setLabels] = useState([]);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
   useEffect(() => {
+    const fetchReservationsData = async () => {
+      const reservationsData = await api.getOverallSavingsRI(inputData);
+      const currencySymbol = await componentUtil.getCurrencySymbol();
+      setReservations(reservationsData.map((entry) => entry.savings));
+      setLabels(
+        reservationsData.map((entry) =>
+          new Date(entry.modifieddate).toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric",
+          })
+        )
+      );
+      setCurrencySymbol(currencySymbol);
+    };
+    fetchReservationsData();
+  }, [selectedCSP, inputData]);
 
-      const fetchReservationsData = async () => {
-          const reservationsData = await api.getOverallSavingsRI(inputData);
-          setReservations(reservationsData.map((entry) => entry.savings));
-          setLabels(
-            reservationsData.map((entry) =>
-              new Date(entry.modifieddate).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })
-            )
-          );
-      };
-      fetchReservationsData();
-}, [selectedCSP,inputData]);
-
-useEffect(() => {
-     
-      const fetchSimulatedSavingsData = async () => {
-          const simulatedSavingsData =
-            await api.getOverallSavingsStimulated(inputData);
-          setSimulatedSavings(
-            simulatedSavingsData.map((entry) => entry.simulated)
-          );
-          setLabels(
-            simulatedSavingsData.map((entry) =>
-              new Date(entry.Date).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })
-            )
-          );
-        
-      };
-      fetchSimulatedSavingsData();
-}, [selectedCSP,inputData]);
+  useEffect(() => {
+    const fetchSimulatedSavingsData = async () => {
+      const simulatedSavingsData = await api.getOverallSavingsStimulated(
+        inputData
+      );
+      setSimulatedSavings(simulatedSavingsData.map((entry) => entry.simulated));
+      setLabels(
+        simulatedSavingsData.map((entry) =>
+          new Date(entry.Date).toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric",
+          })
+        )
+      );
+    };
+    fetchSimulatedSavingsData();
+  }, [selectedCSP, inputData]);
 
   const data = {
     labels,
@@ -72,8 +72,8 @@ useEffect(() => {
         label: "Reservations",
         backgroundColor: "rgba(255, 140, 0, 0.7)",
         data: reservations
-        .filter((entry) => typeof entry === "number" && !isNaN(entry))
-        .map((entry) => parseFloat(entry.toFixed(2))),
+          .filter((entry) => typeof entry === "number" && !isNaN(entry))
+          .map((entry) => parseFloat(entry.toFixed(2))),
       },
     ],
   };
@@ -85,8 +85,8 @@ useEffect(() => {
         label: "Simulated PAYGO",
         borderColor: "#0079B9",
         data: simulatedSavings
-        .filter((entry) => typeof entry === "number" && !isNaN(entry))
-        .map((entry) => parseFloat(entry.toFixed(2))),
+          .filter((entry) => typeof entry === "number" && !isNaN(entry))
+          .map((entry) => parseFloat(entry.toFixed(2))),
         fill: false,
         type: "line",
         pointRadius: 0,
@@ -119,9 +119,9 @@ useEffect(() => {
         callbacks: {
           label: function (tooltipItem) {
             if (tooltipItem.datasetIndex === 1) {
-              return `Simulated PAYGO: ${tooltipItem.raw}`;
+              return `Simulated PAYGO: ${currencySymbol}${tooltipItem.raw}`;
             } else if (tooltipItem.datasetIndex === 0) {
-              return `Reservations: ${tooltipItem.raw}`;
+              return `Reservations:${currencySymbol}${tooltipItem.raw}`;
             }
             return null;
           },

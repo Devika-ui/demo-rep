@@ -17,6 +17,7 @@ import {
 import api from "../api";
 import "../css/Billoverview.scss";
 import "../css/components/BillAllocation.css";
+import componentUtil from "../componentUtil.js";
 
 const BillOverview = () => {
   const [showStackBars, setShowStackBars] = useState(true);
@@ -41,6 +42,7 @@ const BillOverview = () => {
   const [inputData, setInputData] = useState({});
   const [subscriptions, setSubscriptions] = useState({});
   const [applicationData, setApplicationData] = useState({});
+  const [currencySymbol, setCurrencySymbol] = useState(null);
 
   const handleSubscriptionsFetch = (data) => {
     setSubscriptionsData(data);
@@ -97,7 +99,7 @@ const BillOverview = () => {
           return;
         }
         const billAllocation = await api.getBillAllocation(inputData);
-
+        const currencySymbol = await componentUtil.getCurrencySymbol();
         // Process and format the bill allocation data
         const billAllocationMap = Object.keys(
           billAllocation.billAllocation
@@ -219,6 +221,7 @@ const BillOverview = () => {
         setFilteredBillAllocationData(flattenedBillAllocationData);
         setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
         setUniqueBillAllocationData(uniqueNames);
+        setCurrencySymbol(currencySymbol);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -438,7 +441,7 @@ const BillOverview = () => {
           api.getSavings(inputData),
           api.getNormalizedVariation(inputData),
         ]);
-
+        const currencySymbol = await componentUtil.getCurrencySymbol();
         const totalSavings = savingsData.actualCost.toFixed(2);
         const simulatedBill = savingsData.simulatedCost.toFixed(2);
         const savings = savingsData.savings.toFixed(2);
@@ -452,9 +455,12 @@ const BillOverview = () => {
           normalizedVariationData.Normalized_Variation_MoM || "0.00";
 
         const dataSet1 = [
-          { number: `${totalSavings}`, text: "Total Bill" },
-          { number: `${simulatedBill}`, text: "Simulated Bill" },
-          { number: `${savings}`, text: "Total Savings" },
+          { number: `${currencySymbol}${totalSavings}`, text: "Total Bill" },
+          {
+            number: `${currencySymbol}${simulatedBill}`,
+            text: "Simulated Bill",
+          },
+          { number: `${currencySymbol}${savings}`, text: "Total Savings" },
           {
             number: `${percentageSavingsOverBill}%`,
             text: "% Savings over Bill",
@@ -529,20 +535,26 @@ const BillOverview = () => {
   };
 
   const columns = [
-    { key: "onDemandCost", label: "On Demand Cost" },
-    { key: "reservedInstanceCost", label: "Reserved Instances Cost" },
-    { key: "simulatedPayGoCost", label: "Simulated PAYGO" },
-    { key: "savings", label: "Savings" },
-    { key: "totalBill", label: "Total Bill" },
+    { key: "onDemandCost", label: `On Demand Cost (${currencySymbol})` },
+    {
+      key: "reservedInstanceCost",
+      label: `Reserved Instances Cost (${currencySymbol})`,
+    },
+    { key: "simulatedPayGoCost", label: `Simulated PAYGO (${currencySymbol})` },
+    { key: "savings", label: `Savings (${currencySymbol})` },
+    { key: "totalBill", label: `Total Bill (${currencySymbol})` },
   ];
 
   const columns1 = [
     // { key: "name", label: "Application Name" },
     { key: "ownerName", label: "Owner Name" },
-    { key: "onDemandCost", label: "On Demand Cost" },
-    { key: "reservedInstanceCost", label: "Reserved Instances Cost" },
-    { key: "savings", label: "Savings" },
-    { key: "totalBill", label: "Total Bill" },
+    { key: "onDemandCost", label: `On Demand Cost(${currencySymbol})` },
+    {
+      key: "reservedInstanceCost",
+      label: `Reserved Instances Cost (${currencySymbol})`,
+    },
+    { key: "savings", label: `Savings (${currencySymbol})` },
+    { key: "totalBill", label: `Total Bill (${currencySymbol})` },
   ];
 
   const pieChartContainerStyle = {
@@ -655,6 +667,7 @@ const BillOverview = () => {
             titleStyle2={titleStyle2}
             legendWrapperStyle1={{ bottom: 5, fontSize: "10px" }}
             legendWrapperStyle2={{ bottom: 5, fontSize: "10px" }}
+            currencySymbol={currencySymbol}
           />
         </div>
 
@@ -665,6 +678,7 @@ const BillOverview = () => {
             showStackBars={showStackBars}
             title="Total Bill vs. Simulated PAYGO"
             legendData={legendData}
+            currencySymbol={currencySymbol}
           />
         </div>
       </div>

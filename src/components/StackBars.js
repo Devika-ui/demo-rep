@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Typography, Box, Button } from "@mui/material";
 import Chart from "chart.js/auto";
 import api from "../api.js";
+import componentUtil from "../componentUtil.js";
 
 const StackBars = ({ inputData, selectedCSP }) => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -9,12 +10,14 @@ const StackBars = ({ inputData, selectedCSP }) => {
   const [showAzure, setShowAzure] = useState(true);
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const subscriptionsData1 = await api.getBillingCostEachDay(inputData);
         console.log("API response:", subscriptionsData1);
+        const currencySymbol = await componentUtil.getCurrencySymbol();
 
         // Update state
         setSubscriptions(subscriptionsData1);
@@ -23,8 +26,7 @@ const StackBars = ({ inputData, selectedCSP }) => {
       }
     };
 
-    
-      fetchData();
+    fetchData();
   }, [selectedCSP, inputData]);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const StackBars = ({ inputData, selectedCSP }) => {
       const date = new Date(dailydate).toISOString().split("T")[0];
 
       if (!awsData[date]) {
-        if(selectedCSP == 2 ){
+        if (selectedCSP == 2) {
           awsData[date] += totalcost;
         }
         awsData[date] = Math.random() * 10000; // Random data for AWS
@@ -112,6 +114,9 @@ const StackBars = ({ inputData, selectedCSP }) => {
               display: true,
             },
             ticks: {
+              callback: function (value) {
+                return `${currencySymbol}${value.toLocaleString()}`; // Add currency symbol
+              },
               stepSize: 6000,
               max: 6000,
               color: "rgba(0, 0, 0, 0.5)",

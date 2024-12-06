@@ -25,6 +25,7 @@ const PieChartContainer = ({
   titleStyle2 = {},
   legendWrapperStyle1 = {},
   legendWrapperStyle2 = {},
+  currencySymbol,
 }) => {
   const [activeIndex1, setActiveIndex1] = useState(null);
   const [activeIndex2, setActiveIndex2] = useState(null);
@@ -47,7 +48,6 @@ const PieChartContainer = ({
 
   const legendFontSize1 = getLegendFontSize();
   const legendFontSize2 = getLegendFontSize();
-
 
   const renderActiveShape = (props) => {
     const {
@@ -85,22 +85,22 @@ const PieChartContainer = ({
     if (width <= 600) {
       return "10px"; // Smaller screens
     } else if (width < 990) {
-      return "8px";  // Medium screens
+      return "8px"; // Medium screens
     }
-    return "12px";   // Larger screens
+    return "12px"; // Larger screens
   };
-  
+
   const renderLabel = (entry) => {
     const { cx, cy, midAngle, outerRadius, value } = entry;
-  
+
     // Adjust radius and move labels towards the outer part of the chart
     const radius = outerRadius * 0.57; // Move the label a bit further outwards
     const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
     const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
-  
+
     // Get responsive font size
     const fontSize = getResponsiveFontSize();
-  
+
     return (
       <text
         x={x}
@@ -110,11 +110,30 @@ const PieChartContainer = ({
         dominantBaseline="central"
         style={{ fontSize }} // Apply the responsive font size
       >
-        {formatValue(value)}
+        {`${currencySymbol}${formatValue(value)}`}
       </text>
     );
   };
-  
+
+  const CustomTooltip = ({ active, payload, currencySymbol }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div
+          style={{
+            backgroundColor: "#fff",
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
+        >
+          <p style={{ margin: 0 }}>
+            {payload[0].name} : {`${currencySymbol}${payload[0].value}`}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <Paper className="cmpPieChart_container" style={containerStyle}>
@@ -145,12 +164,14 @@ const PieChartContainer = ({
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                content={<CustomTooltip currencySymbol={currencySymbol} />}
+              />
               <Legend
                 align="center"
                 verticalAlign="bottom"
                 layout="horizontal"
-                wrapperStyle={{ fontSize: legendFontSize1}}
+                wrapperStyle={{ fontSize: legendFontSize1 }}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -183,7 +204,9 @@ const PieChartContainer = ({
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                content={<CustomTooltip currencySymbol={currencySymbol} />}
+              />
               <Legend
                 align="center"
                 verticalAlign="bottom"
@@ -198,7 +221,7 @@ const PieChartContainer = ({
   );
 };
 PieChartContainer.defaultProps = {
-  legendWrapperStyle1: { bottom: 5, fontSize: "12px" }, 
+  legendWrapperStyle1: { bottom: 5, fontSize: "12px" },
   legendWrapperStyle2: { bottom: 5, fontSize: "12px" }, // Default style for legend 2
 };
 export default PieChartContainer;
