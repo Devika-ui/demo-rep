@@ -29,6 +29,9 @@ const BusinessCostSplit = () => {
   const [inputData, setInputData] = useState({});
   const [applicationData, setApplicationData] = useState({});
   const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
+  const [formattedDates, setFormattedDates] = useState(null);
+  const [serviceData, setServiceData] = useState(null);
 
   const handleButtonClick = (value) => {
     if (value === "1") {
@@ -128,112 +131,120 @@ const BusinessCostSplit = () => {
     const fetchData = async () => {
       try {
         const serviceCategoryCost = await api.getServiceCategoryCost(inputData);
-        const formatNumber = (value) => {
-          return typeof value === "number" && !isNaN(value)
-            ? value.toFixed(2)
-            : "0.00";
-        };
+        const transformDataToArrayFormat = (data) => {
+          const result = [];
+          const allMonths = new Set();
 
-        const aggregateData = (data) => {
-          let totalBill = 0;
-          let onDemandCost = 0;
-          let commitmentsCost = 0;
-          let savings = 0;
+          // First pass: Collect all unique months
+          for (const subCategories of Object.values(data)) {
+            for (const resourceGroups of Object.values(subCategories)) {
+              for (const resources of Object.values(resourceGroups)) {
+                for (const resourceDetails of Object.values(resources)) {
+                  const { Date: date } = resourceDetails;
+                  const month = new Date(date).toISOString().slice(0, 7);
+                  allMonths.add(month);
+                }
+              }
+            }
+          }
 
-          data.forEach((item) => {
-            totalBill += parseFloat(item.totalBill) || 0;
-            onDemandCost += parseFloat(item.onDemandCost) || 0;
-            commitmentsCost += parseFloat(item.commitmentsCost) || 0;
-            savings += parseFloat(item.savings) || 0;
-          });
-
-          return {
-            totalBill: formatNumber(totalBill),
-            onDemandCost: formatNumber(onDemandCost),
-            commitmentsCost: formatNumber(commitmentsCost),
-            savings: formatNumber(savings),
-          };
-        };
-
-        const formattedServiceCategoryData = Object.keys(
-          serviceCategoryCost || {}
-        ).map((serviceCategory) => {
-          const services = Object.keys(
-            serviceCategoryCost[serviceCategory] || {}
-          ).map((service) => {
-            const resourceGroups = Object.keys(
-              serviceCategoryCost[serviceCategory][service] || {}
-            ).map((resourceGroup) => {
-              const resources = Object.keys(
-                serviceCategoryCost[serviceCategory][service][resourceGroup] ||
-                  {}
-              ).map((resource) => ({
-                name: resource,
-                totalBill: formatNumber(
-                  serviceCategoryCost[serviceCategory][service][resourceGroup][
-                    resource
-                  ]?.TotalBill
-                ),
-                onDemandCost: formatNumber(
-                  serviceCategoryCost[serviceCategory][service][resourceGroup][
-                    resource
-                  ]?.OnDemandCost
-                ),
-                commitmentsCost: formatNumber(
-                  serviceCategoryCost[serviceCategory][service][resourceGroup][
-                    resource
-                  ]?.CommitmentsCost
-                ),
-                savings: formatNumber(
-                  serviceCategoryCost[serviceCategory][service][resourceGroup][
-                    resource
-                  ]?.Savings
-                ),
-              }));
-
-              const { totalBill, onDemandCost, commitmentsCost, savings } =
-                aggregateData(resources);
-
-              return {
-                name: resourceGroup,
-                totalBill,
-                onDemandCost,
-                commitmentsCost,
-                savings,
-                resources,
-              };
-            });
-            const { totalBill, onDemandCost, commitmentsCost, savings } =
-              aggregateData(resourceGroups);
-
-            return {
-              name: service,
-              totalBill,
-              onDemandCost,
-              commitmentsCost,
-              savings,
-              resourceGroups,
+          // Second pass: Transform data into hierarchical array structure
+          for (const [category, subCategories] of Object.entries(data)) {
+            const categoryNode = {
+              name: category,
+              type: "category",
+              children: [],
             };
-          });
 
-          const { totalBill, onDemandCost, commitmentsCost, savings } =
-            aggregateData(services);
+            for (const [subCategory, resourceGroups] of Object.entries(
+              subCategories
+            )) {
+              const subCategoryNode = {
+                name: subCategory,
+                type: "subCategory",
+                children: [],
+              };
 
-          return {
-            name: serviceCategory,
-            totalBill,
-            onDemandCost,
-            commitmentsCost,
-            savings,
-            services,
-          };
-        });
+              for (const [resourceGroupName, resources] of Object.entries(
+                resourceGroups
+              )) {
+                const resourceGroupNode = {
+                  name: resourceGroupName,
+                  type: "resourceGroup",
+                  children: [],
+                };
 
-        setServiceCategoryData(formattedServiceCategoryData);
+                for (const [resourceName, resourceDetails] of Object.entries(
+                  resources
+                )) {
+                  const resourceNode = {
+                    name: resourceName,
+                    type: "resource",
+                    children: [],
+                  };
+
+                  // Extract the month data and ensure all months are present
+                  const monthData = {};
+                  for (const uniqueMonth of allMonths) {
+                    monthData[uniqueMonth] = {
+                      TotalBill: 0,
+                      OnDemandCost: 0,
+                      CommitmentsCost: 0,
+                      Savings: 0,
+                    };
+                  }
+
+                  const {
+                    Date: date,
+                    TotalBill,
+                    OnDemandCost,
+                    CommitmentsCost,
+                    Savings,
+                  } = resourceDetails;
+                  const month = new Date(date).toISOString().slice(0, 7);
+                  monthData[month] = {
+                    TotalBill,
+                    OnDemandCost,
+                    CommitmentsCost,
+                    Savings,
+                  };
+
+                  // Convert month data into an array for the resource
+                  for (const [monthName, monthDetails] of Object.entries(
+                    monthData
+                  )) {
+                    resourceNode.children.push({
+                      name: monthName,
+                      type: "month",
+                      ...monthDetails,
+                    });
+                  }
+
+                  resourceGroupNode.children.push(resourceNode);
+                }
+
+                subCategoryNode.children.push(resourceGroupNode);
+              }
+
+              categoryNode.children.push(subCategoryNode);
+            }
+
+            result.push(categoryNode);
+          }
+
+          return result;
+        };
+
+        // Example usage
+        const transformedData = transformDataToArrayFormat(serviceCategoryCost);
+
+        console.log("tt", transformedData);
+        setServiceData(transformedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
     if (hasFilters || subscriptionsData.length > 0) {
       fetchData();
     }
@@ -254,44 +265,53 @@ const BusinessCostSplit = () => {
           api.getProjectWithoutTags(inputData),
         ]);
         const currencySymbol = await componentUtil.getCurrencySymbol();
+        const currencyPreference = await componentUtil.getCurrencyPreference();
+        const formatCurrency = (value, currencySymbol, currencyPreference) => {
+          if (value === undefined || value === null) {
+            return "NA";
+          }
+          return currencyPreference === "start"
+            ? `${currencySymbol}${value}`
+            : `${value}${currencySymbol}`;
+        };
         const formattedBoxData = [
           {
-            number:
-              applicationsWithTags?.Applicationswithtags?.[0] !== undefined &&
-              applicationsWithTags.Applicationswithtags[0] !== null
-                ? `${currencySymbol}${applicationsWithTags.Applicationswithtags[0]}`
-                : "NA",
+            number: formatCurrency(
+              applicationsWithTags?.Applicationswithtags?.[0],
+              currencySymbol,
+              currencyPreference
+            ),
             text: "Applications with Tags",
           },
           {
-            number:
-              applicationsWithoutTags?.Applicationswithouttags?.[0] !==
-                undefined &&
-              applicationsWithoutTags.Applicationswithouttags[0] !== null
-                ? `${currencySymbol}${applicationsWithoutTags.Applicationswithouttags[0]}`
-                : "NA",
+            number: formatCurrency(
+              applicationsWithoutTags?.Applicationswithouttags?.[0],
+              currencySymbol,
+              currencyPreference
+            ),
             text: "Applications without Tags",
           },
           {
-            number:
-              projectsWithTags?.projectwithtags?.[0] !== undefined &&
-              projectsWithTags.projectwithtags[0] !== null
-                ? ` ${currencySymbol}${projectsWithTags.projectwithtags[0]}`
-                : "NA",
+            number: formatCurrency(
+              projectsWithTags?.projectwithtags?.[0],
+              currencySymbol,
+              currencyPreference
+            ),
             text: "Project with Tags",
           },
           {
-            number:
-              projectsWithoutTags?.Projectwithouttags?.[0] !== undefined &&
-              projectsWithoutTags.Projectwithouttags[0] !== null
-                ? `${currencySymbol}${projectsWithoutTags.Projectwithouttags[0]}`
-                : "NA",
+            number: formatCurrency(
+              projectsWithoutTags?.Projectwithouttags?.[0],
+              currencySymbol,
+              currencyPreference
+            ),
             text: "Project without Tags",
           },
         ];
 
         setBoxData(formattedBoxData);
         setCurrencySymbol(currencySymbol);
+        setCurrencyPreference(currencyPreference);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -520,6 +540,7 @@ const BusinessCostSplit = () => {
             subscriptionsData={subscriptionsData}
             selectedFilters={selectedFilters}
             currencySymbol={currencySymbol}
+            currencyPreference={currencyPreference}
           />
         </div>
         <div style={{ flex: 1 }}>
@@ -528,6 +549,7 @@ const BusinessCostSplit = () => {
             subscriptionsData={subscriptionsData}
             selectedFilters={selectedFilters}
             currencySymbol={currencySymbol}
+            currencyPreference={currencyPreference}
           />
         </div>
       </div>
@@ -597,10 +619,11 @@ const BusinessCostSplit = () => {
         }}
       >
         <ServiceCategory
-          dummyData={serviceCategoryData}
+          dummyData={serviceData}
           height="300px"
           width="97.5%"
           tableData={tableData}
+          uniqueMonths={formattedDates}
         />
       </div>
     </div>

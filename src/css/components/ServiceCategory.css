@@ -39,24 +39,56 @@
   border: 1px solid #ddd;
   border-radius: 0;
   overflow: auto;
+  overflow-x: auto;
   max-height: 210px !important;
 }
+
 .cmpSvcCat_tableHeader {
   padding: 8px 8px !important;
   text-align: center !important;
   color: white !important;
-  background-color: #72509b;
-  position: sticky;
+  background-color: #72509b !important;
+  position: sticky !important;
   top: 0;
-  z-index: 100;
+  z-index: 10;
+  border: 1px solid #ddd !important;
+}
+
+.cmpSvcCat_columnHeader_first_header {
+  text-align: center !important;
+  position: sticky !important;
+  top: 0px;
+  bottom: 20px;
+  left: 0px;
+  z-index: 20 !important;
+  background-color: #f0f0f0 !important;
+  width: 200px;
+}
+
+.cmpSvcCat_first_cell {
+  width: 200px;
+  padding: 4px 8px !important;
+  overflow: hidden;
+  text-align: center !important;
+  color: rgb(82, 32, 134) !important;
+  border-right: 1px solid #ddd;
+  position: sticky !important;
+  top: 0px;
+  left: 0;
+  z-index: 10;
+  background-color: whitesmoke !important;
 }
 
 .cmpSvcCat_columnHeader {
+  position: sticky !important;
+  top: 40px !important;
+  z-index: 0;
   text-align: center !important;
   padding: 20px 10px !important;
-  border: 1px solid #ddd!important;
+  border: 1px solid #ddd !important;
   color: black;
   background-color: #f0f0f0 !important;
+  width: 150px;
 }
 
 .cmpSvcCat_table {
@@ -86,6 +118,15 @@
 }
 .cmpSvcCat_nestedRow > .cmpSvcCat_tableCell {
   color: rgb(82, 32, 134) !important;
+}
+.service_overlay_content {
+  position: relative;
+  width: 75%;
+  height: 80vh;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 630px) {
