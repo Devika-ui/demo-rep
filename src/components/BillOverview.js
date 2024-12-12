@@ -43,6 +43,7 @@ const BillOverview = () => {
   const [subscriptions, setSubscriptions] = useState({});
   const [applicationData, setApplicationData] = useState({});
   const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
 
   const handleSubscriptionsFetch = (data) => {
     setSubscriptionsData(data);
@@ -99,7 +100,7 @@ const BillOverview = () => {
           return;
         }
         const billAllocation = await api.getBillAllocation(inputData);
-        const currencySymbol = await componentUtil.getCurrencySymbol();
+
         // Process and format the bill allocation data
         const billAllocationMap = Object.keys(
           billAllocation.billAllocation
@@ -442,6 +443,7 @@ const BillOverview = () => {
           api.getNormalizedVariation(inputData),
         ]);
         const currencySymbol = await componentUtil.getCurrencySymbol();
+        const currencyPreference = await componentUtil.getCurrencyPreference();
         const totalSavings = savingsData.actualCost.toFixed(2);
         const simulatedBill = savingsData.simulatedCost.toFixed(2);
         const savings = savingsData.savings.toFixed(2);
@@ -453,14 +455,19 @@ const BillOverview = () => {
             : "0.00";
         const normalizedVariation =
           normalizedVariationData.Normalized_Variation_MoM || "0.00";
+        const formatCurrency = (value) => {
+          return currencyPreference === "start"
+            ? `${currencySymbol}${value}` // Symbol at the start
+            : `${value}${currencySymbol}`; // Symbol at the end
+        };
 
         const dataSet1 = [
-          { number: `${currencySymbol}${totalSavings}`, text: "Total Bill" },
+          { number: formatCurrency(totalSavings), text: "Total Bill" },
           {
-            number: `${currencySymbol}${simulatedBill}`,
+            number: formatCurrency(simulatedBill),
             text: "Simulated Bill",
           },
-          { number: `${currencySymbol}${savings}`, text: "Total Savings" },
+          { number: formatCurrency(savings), text: "Total Savings" },
           {
             number: `${percentageSavingsOverBill}%`,
             text: "% Savings over Bill",
@@ -472,6 +479,8 @@ const BillOverview = () => {
           { number: `${normalizedVariation}%`, text: "Normalized Variation" },
         ];
         setBoxData(dataSet1);
+        setCurrencySymbol(currencySymbol);
+        setCurrencyPreference(currencyPreference);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -668,6 +677,7 @@ const BillOverview = () => {
             legendWrapperStyle1={{ bottom: 5, fontSize: "10px" }}
             legendWrapperStyle2={{ bottom: 5, fontSize: "10px" }}
             currencySymbol={currencySymbol}
+            currencyPreference={currencyPreference}
           />
         </div>
 
@@ -679,6 +689,7 @@ const BillOverview = () => {
             title="Total Bill vs. Simulated PAYGO"
             legendData={legendData}
             currencySymbol={currencySymbol}
+            currencyPreference={currencyPreference}
           />
         </div>
       </div>

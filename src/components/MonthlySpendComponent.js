@@ -19,6 +19,7 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
   });
 
   const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
 
   // Handle card click to open overlay and set bill summary details
   const handleCardClick = () => {
@@ -87,7 +88,9 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
     const fetchData = async () => {
       const data = await api.getMonthlyActualSpend(inputData);
       const currencySymbol = await componentUtil.getCurrencySymbol();
+      const currencyPreference = await componentUtil.getCurrencyPreference();
       setCurrencySymbol(currencySymbol);
+      setCurrencyPreference(currencyPreference);
       if (data.length > 0) {
         setTotalCost(data[0].totalCost);
         setGrowthPercentage(data[0].growthPercentage);
@@ -115,9 +118,9 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
           <div className="number">
             {totalCost !== null && totalCost !== undefined ? (
               <strong>
-                {" "}
-                {currencySymbol}
-                {totalCost.toFixed(2)}
+                {currencyPreference === "start"
+                  ? `${currencySymbol}${totalCost.toFixed(2)}`
+                  : `${totalCost.toFixed(2)}${currencySymbol}`}
               </strong>
             ) : (
               <strong>Loading...</strong>
@@ -152,7 +155,9 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
                 Pay-as-you-go Cost:{" "}
                 <span style={{ marginLeft: "10px" }}>
                   {billSummary.Payasyougocost != "NA"
-                    ? `${currencySymbol}${billSummary.Payasyougocost}`
+                    ? currencyPreference === "start"
+                      ? `${currencySymbol}${billSummary.Payasyougocost}`
+                      : `${billSummary.Payasyougocost}${currencySymbol}`
                     : "NA"}
                 </span>
               </p>
@@ -160,7 +165,9 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
                 Reserved Instances Cost:{" "}
                 <span style={{ marginLeft: "10px" }}>
                   {billSummary.reservedInstancesCost != "NA"
-                    ? `${currencySymbol}${billSummary.reservedInstancesCost}`
+                    ? currencyPreference === "start"
+                      ? `${currencySymbol}${billSummary.reservedInstancesCost}`
+                      : `${billSummary.reservedInstancesCost}${currencySymbol}`
                     : "NA"}
                 </span>
               </p>
@@ -168,7 +175,9 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
                 SaaS Subscription Cost:{" "}
                 <span style={{ marginLeft: "10px" }}>
                   {billSummary.saasCost != "NA"
-                    ? `${currencySymbol}${billSummary.saasCost}`
+                    ? currencyPreference === "start"
+                      ? `${currencySymbol}${billSummary.saasCost}`
+                      : `${billSummary.saasCost}${currencySymbol}`
                     : "NA"}
                 </span>
               </p>
@@ -176,7 +185,9 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
                 Market Purchases Cost:{" "}
                 <span style={{ marginLeft: "10px" }}>
                   {billSummary.marketPurchasesCost != "NA"
-                    ? `${currencySymbol}${billSummary.marketPurchasesCost}`
+                    ? currencyPreference === "start"
+                      ? `${currencySymbol}${billSummary.marketPurchasesCost}`
+                      : `${billSummary.marketPurchasesCost}${currencySymbol}`
                     : "NA"}
                 </span>
               </p>
@@ -184,7 +195,9 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
                 Savings Plan Cost:{" "}
                 <span style={{ marginLeft: "10px" }}>
                   {billSummary.savingsPlanCost != "NA"
-                    ? `${currencySymbol}${billSummary.Payasyougocost}`
+                    ? currencyPreference === "start"
+                      ? `${currencySymbol}${billSummary.savingsPlanCost}`
+                      : `${billSummary.savingsPlanCost}${currencySymbol}`
                     : "NA"}
                 </span>
               </p>
@@ -192,7 +205,9 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
                 Total Bill:{" "}
                 <span style={{ marginLeft: "10px" }}>
                   {billSummary.totalBill != "NA"
-                    ? `${currencySymbol}${billSummary.totalBill}`
+                    ? currencyPreference === "start"
+                      ? `${currencySymbol}${billSummary.totalBill}`
+                      : `${billSummary.totalBill}${currencySymbol}`
                     : "NA"}
                 </span>
               </p>

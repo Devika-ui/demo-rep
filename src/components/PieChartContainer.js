@@ -26,6 +26,7 @@ const PieChartContainer = ({
   legendWrapperStyle1 = {},
   legendWrapperStyle2 = {},
   currencySymbol,
+  currencyPreference,
 }) => {
   const [activeIndex1, setActiveIndex1] = useState(null);
   const [activeIndex2, setActiveIndex2] = useState(null);
@@ -94,7 +95,7 @@ const PieChartContainer = ({
     const { cx, cy, midAngle, outerRadius, value } = entry;
 
     // Adjust radius and move labels towards the outer part of the chart
-    const radius = outerRadius * 0.57; // Move the label a bit further outwards
+    const radius = outerRadius * 0.47; // Move the label a bit further outwards
     const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
     const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
 
@@ -110,7 +111,9 @@ const PieChartContainer = ({
         dominantBaseline="central"
         style={{ fontSize }} // Apply the responsive font size
       >
-        {`${currencySymbol}${formatValue(value)}`}
+        {currencyPreference === "start"
+          ? `${currencySymbol}${formatValue(value)}` // Currency symbol at the start
+          : `${formatValue(value)}${currencySymbol}`}
       </text>
     );
   };

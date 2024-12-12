@@ -11,6 +11,7 @@ const StackBars = ({ inputData, selectedCSP }) => {
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,8 +19,9 @@ const StackBars = ({ inputData, selectedCSP }) => {
         const subscriptionsData1 = await api.getBillingCostEachDay(inputData);
         console.log("API response:", subscriptionsData1);
         const currencySymbol = await componentUtil.getCurrencySymbol();
-
-        // Update state
+        const currencyPreference = await componentUtil.getCurrencyPreference();
+        setCurrencySymbol(currencySymbol);
+        setCurrencyPreference(currencyPreference);
         setSubscriptions(subscriptionsData1);
       } catch (error) {
         console.error("Failed to fetch data", error);
@@ -115,7 +117,11 @@ const StackBars = ({ inputData, selectedCSP }) => {
             },
             ticks: {
               callback: function (value) {
-                return `${currencySymbol}${value.toLocaleString()}`; // Add currency symbol
+                if (currencyPreference === "start") {
+                  return `${currencySymbol}${value.toLocaleString()}`;
+                } else {
+                  return `${value.toLocaleString()}${currencySymbol}`;
+                }
               },
               stepSize: 6000,
               max: 6000,

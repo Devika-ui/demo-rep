@@ -29,10 +29,12 @@ const OverallTotalRealizedSavings = ({ selectedCSP, inputData }) => {
   const [simulatedSavings, setSimulatedSavings] = useState([]);
   const [labels, setLabels] = useState([]);
   const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
   useEffect(() => {
     const fetchReservationsData = async () => {
       const reservationsData = await api.getOverallSavingsRI(inputData);
       const currencySymbol = await componentUtil.getCurrencySymbol();
+      const currencyPreference = await componentUtil.getCurrencyPreference();
       setReservations(reservationsData.map((entry) => entry.savings));
       setLabels(
         reservationsData.map((entry) =>
@@ -43,6 +45,7 @@ const OverallTotalRealizedSavings = ({ selectedCSP, inputData }) => {
         )
       );
       setCurrencySymbol(currencySymbol);
+      setCurrencyPreference(currencyPreference);
     };
     fetchReservationsData();
   }, [selectedCSP, inputData]);
@@ -118,10 +121,15 @@ const OverallTotalRealizedSavings = ({ selectedCSP, inputData }) => {
         intersect: false,
         callbacks: {
           label: function (tooltipItem) {
+            const formattedCost =
+              currencyPreference === "start"
+                ? `${currencySymbol}${tooltipItem.raw}`
+                : `${tooltipItem.raw}${currencySymbol}`;
+
             if (tooltipItem.datasetIndex === 1) {
-              return `Simulated PAYGO: ${currencySymbol}${tooltipItem.raw}`;
+              return `Simulated PAYGO: ${formattedCost}`;
             } else if (tooltipItem.datasetIndex === 0) {
-              return `Reservations:${currencySymbol}${tooltipItem.raw}`;
+              return `Reservations:${formattedCost}`;
             }
             return null;
           },

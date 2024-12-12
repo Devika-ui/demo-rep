@@ -9,6 +9,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
   const [topApplications, setTopApplications] = useState([]);
   const [topServices, setTopServices] = useState([]);
   const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
 
   const [tagCompliance, setTagCompliance] = useState({
     applicationpercentage: 0,
@@ -23,6 +24,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
         // Decide whether to use selected filters or subscriptionsData
         const subscriptionsData1 =
           await api.getOverallConsumptionForSubscription(inputData);
+        const currencyPreference = await componentUtil.getCurrencyPreference();
         const currencySymbol = await componentUtil.getCurrencySymbol();
         setTopSubscriptions(subscriptionsData1.topsubscriptions || []);
 
@@ -48,6 +50,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
           }
         );
         setCurrencySymbol(currencySymbol);
+        setCurrencyPreference(currencyPreference);
       } catch (error) {
         console.error("Error fetching overall consumption data:", error);
       }
@@ -107,22 +110,25 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
               {selectedCSP === 1 ? "Top Subscriptions" : "Top Accounts"}
             </div>
             <div className="price">
-              {currencySymbol}
-              {topSubscriptionCost}
+              {currencyPreference === "start"
+                ? `${currencySymbol}${topSubscriptionCost}`
+                : `${topSubscriptionCost}${currencySymbol}`}
             </div>
           </div>
           <div className="tile">
             <div className="tilename">Top Service</div>
             <div className="price">
-              {currencySymbol}
-              {topServiceCost}
+              {currencyPreference === "start"
+                ? `${currencySymbol}${topServiceCost}`
+                : `${topServiceCost}${currencySymbol}`}
             </div>
           </div>
           <div className="tile">
             <div className="tilename">Top Application</div>
             <div className="price">
-              {currencySymbol}
-              {topApplicationCost}
+              {currencyPreference === "start"
+                ? `${currencySymbol}${topApplicationCost}`
+                : `${topApplicationCost}${currencySymbol}`}
             </div>
           </div>
         </div>

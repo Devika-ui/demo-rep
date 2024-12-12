@@ -20,6 +20,7 @@ import {
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CloseIcon from "@mui/icons-material/Close";
 import api from "../api.js";
+import componentUtil from "../componentUtil.js";
 
 ChartJS.register(
   CategoryScale,
@@ -30,7 +31,7 @@ ChartJS.register(
   Legend
 );
 
-const options = {
+const options = (currencySymbol, currencyPreference) => ({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -52,7 +53,12 @@ const options = {
           if (label) {
             label += ": ";
           }
-          label += context.raw.toFixed(2);
+          let formattedValue = context.raw.toFixed(2);
+          if (currencyPreference === "start") {
+            label += `${currencySymbol}${formattedValue}`;
+          } else {
+            label += `${formattedValue}${currencySymbol}`;
+          }
           return label;
         },
       },
@@ -78,9 +84,9 @@ const options = {
           }
           return "";
         },
-        padding: 6, 
+        padding: 6,
         font: {
-          size: 12, 
+          size: 12,
           family: "Roboto",
         },
       },
@@ -97,7 +103,7 @@ const options = {
       },
     },
   },
-};
+});
 
 const DetailedCSPBars = ({ inputData, selectedCSP }) => {
   const [data, setData] = useState({ labels: [], datasets: [] });
@@ -105,12 +111,16 @@ const DetailedCSPBars = ({ inputData, selectedCSP }) => {
   const [loading, setLoading] = useState(true);
   const [showForecast, setShowForecast] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Construct input data based on selected filters or subscriptionsData
         const response = await api.getBillingCostEachDay(inputData);
+        const currencySymbol = await componentUtil.getCurrencySymbol();
+        const currencyPreference = await componentUtil.getCurrencyPreference();
         const labelsSet = new Set();
         const payAsYouGoData = {};
         const reservationsData = {};
@@ -150,6 +160,8 @@ const DetailedCSPBars = ({ inputData, selectedCSP }) => {
           },
         ];
         setData({ labels, datasets });
+        setCurrencySymbol(currencySymbol);
+        setCurrencyPreference(currencyPreference);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch data", error);
@@ -204,8 +216,8 @@ const DetailedCSPBars = ({ inputData, selectedCSP }) => {
         console.error("Failed to fetch forecast data", error);
       }
     };
-      fetchData();
-      fetchForecastData();
+    fetchData();
+    fetchForecastData();
   }, [selectedCSP, inputData]);
 
   const handleToggleChange = () => {
@@ -244,7 +256,7 @@ const DetailedCSPBars = ({ inputData, selectedCSP }) => {
           </IconButton>
           <Bar
             style={{ paddingTop: "5px" }}
-            options={options}
+            options={options(currencySymbol, currencyPreference)}
             data={showForecast && forecastData ? forecastData : data}
           />
         </div>
@@ -259,7 +271,7 @@ const DetailedCSPBars = ({ inputData, selectedCSP }) => {
         >
           <Bar
             style={{ paddingTop: "5px" }}
-            options={options}
+            options={options(currencySymbol, currencyPreference)}
             data={showForecast && forecastData ? forecastData : data}
           />
         </div>

@@ -30,6 +30,7 @@ const MonthlyCostTrends = ({
   subscriptionsData,
   selectedFilters,
   currencySymbol,
+  currencyPreference,
 }) => {
   const [chartData, setChartData] = useState({
     labels: [],
@@ -141,8 +142,12 @@ const MonthlyCostTrends = ({
       tooltip: {
         callbacks: {
           label: (context) => {
-            const value = context.raw; // Get the raw data value
-            return `${currencySymbol}${value?.toFixed(2)}`; // Format with currency symbol and two decimal places
+            const value = context.raw;
+            if (value === undefined || value === null) return "NA";
+
+            return currencyPreference === "start"
+              ? `${currencySymbol}${value.toFixed(2)}`
+              : `${value.toFixed(2)}${currencySymbol}`;
           },
         },
       },

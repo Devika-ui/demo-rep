@@ -6,6 +6,7 @@ import componentUtil from "../componentUtil.js";
 const RecommendationsComponent = ({ selectedCSP }) => {
   const [recommendations, setRecommendations] = useState([]);
   const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
   const totalSavings = recommendations
     .reduce((total, rec) => total + rec.value, 0)
     .toFixed(2);
@@ -15,8 +16,10 @@ const RecommendationsComponent = ({ selectedCSP }) => {
       try {
         const response = await api.getRecommendations();
         const currencySymbol = await componentUtil.getCurrencySymbol();
+        const currencyPreference = await componentUtil.getCurrencyPreference();
         setRecommendations(response);
         setCurrencySymbol(currencySymbol);
+        setCurrencyPreference(currencyPreference);
       } catch (error) {
         console.error("Error fetching Azure recommendations:", error);
       }
@@ -40,8 +43,9 @@ const RecommendationsComponent = ({ selectedCSP }) => {
               <div className="titlename">{rec.name}</div>
               <div className="content">
                 <div className="price1">
-                  {currencySymbol}
-                  {rec.value.toFixed(2)}
+                  {currencyPreference === "start"
+                    ? `${currencySymbol}${rec.value.toFixed(2)}`
+                    : `${rec.value.toFixed(2)}${currencySymbol}`}
                 </div>
                 <div className="savings">Savings Potential</div>
               </div>
@@ -51,8 +55,9 @@ const RecommendationsComponent = ({ selectedCSP }) => {
         <div className="total-savings">
           <div className="total-savings-text">Total Savings Potential</div>
           <div className="total-savings-amount">
-            {currencySymbol}
-            {totalSavings}
+            {currencyPreference === "start"
+              ? `${currencySymbol}${totalSavings}`
+              : `${totalSavings}${currencySymbol}`}
           </div>
         </div>
       </div>

@@ -4,7 +4,12 @@ import { Typography } from "@mui/material";
 import "../css/Ondemand.scss";
 import api from "../api";
 
-const Ondemand = ({ subscriptionsData, selectedFilters, currencySymbol }) => {
+const Ondemand = ({
+  subscriptionsData,
+  selectedFilters,
+  currencySymbol,
+  currencyPreference,
+}) => {
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
@@ -113,8 +118,11 @@ const Ondemand = ({ subscriptionsData, selectedFilters, currencySymbol }) => {
               intersect: false,
               callbacks: {
                 label: (context) => {
-                  const value = context.raw; // Access the raw data value
-                  return `${currencySymbol}${value.toFixed(2)}`; // Format with the currency symbol and two decimal places
+                  const value = context.raw;
+
+                  return currencyPreference === "start"
+                    ? `${currencySymbol}${value.toFixed(2)}`
+                    : `${value.toFixed(2)}${currencySymbol}`; // Format with the currency symbol and two decimal places
                 },
               },
             },

@@ -12,11 +12,13 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
   const [percentageIncrease, setPercentageIncrease] = useState(null);
   const [totalCost1, setTotalCost1] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const forecastData = await api.getMonthlyForecastSpend(inputData);
+        const currencyPreference = await componentUtil.getCurrencyPreference();
         const currencySymbol = await componentUtil.getCurrencySymbol();
         if (forecastData.length > 0) {
           const lastMonth = forecastData[0].lastMonthCost;
@@ -27,6 +29,7 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
           setPercentageIncrease(latestFutureCostData.percentageIncrease);
           setTotalCost1(lastMonth + latestFutureCostData.futureCost);
           setCurrencySymbol(currencySymbol);
+          setCurrencyPreference(currencyPreference);
         } else {
           setLastMonthCost(0);
           setFutureCost(0);
@@ -95,8 +98,9 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
           <div className="number">
             {totalCost1 !== null ? (
               <strong>
-                {currencySymbol}
-                {totalCost1.toFixed(2)}
+                {currencyPreference === "start"
+                  ? `${currencySymbol}${totalCost1.toFixed(2)}`
+                  : `${totalCost1.toFixed(2)}${currencySymbol}`}
               </strong>
             ) : (
               <strong>Loading...</strong>

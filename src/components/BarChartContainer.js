@@ -20,6 +20,7 @@ const BarChartContainer = ({
   trendData,
   legendData,
   currencySymbol,
+  currencyPreference,
 }) => {
   const [data, setData] = useState([]);
   const [legendFontSize, setLegendFontSize] = useState(12); // Default legend font size
@@ -91,15 +92,27 @@ const BarChartContainer = ({
           style={{ ...tooltipTextStyle, backgroundColor: "white" }}
         >
           <p>{`Date: ${label}`}</p>
-          <p
-            style={{ color: colorMap.costsPAYGO }}
-          >{`Pay as you go: ${currencySymbol}${costsPAYGO}`}</p>
-          <p
-            style={{ color: colorMap.savingsRI }}
-          >{`Reservations: ${currencySymbol}${savingsRI}`}</p>
-          <p
-            style={{ color: colorMap.simulated }}
-          >{`Simulated PAYGO: ${currencySymbol}${simulated}`}</p>
+          <p style={{ color: colorMap.costsPAYGO }}>
+            {" "}
+            {`Pay as you go: ${
+              currencyPreference === "start"
+                ? `${currencySymbol}${costsPAYGO}`
+                : `${costsPAYGO}${currencySymbol}`
+            }`}
+          </p>
+          <p style={{ color: colorMap.savingsRI }}>{`Reservations: ${
+            currencyPreference === "start"
+              ? `${currencySymbol}${savingsRI}`
+              : `${savingsRI}${currencySymbol}`
+          }`}</p>
+          <p style={{ color: colorMap.simulated }}>
+            {" "}
+            {`Simulated PAYGO: ${
+              currencyPreference === "start"
+                ? `${currencySymbol}${simulated}`
+                : `${simulated}${currencySymbol}`
+            }`}
+          </p>
         </div>
       );
     }
