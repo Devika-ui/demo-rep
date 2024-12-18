@@ -35,20 +35,12 @@ const currentMonthEnd = moment()
 console.log("Moment JS Date", previousMonthStart, currentMonthStart);
 const selectedCSP = await componentUtil.getSelectedCSP();
 const api = {
-  getMonthlyActualSpend: async (inputData) => {
-    // Check if inputData is an array (initial data) or an object (filters)
-    const isInitialData = Array.isArray(inputData);
-    // Construct requestBody based on the type of input data
+  getMonthlyActualSpend: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters,
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -72,18 +64,12 @@ const api = {
     }
   },
 
-  getMonthlyForecastSpend: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getMonthlyForecastSpend: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -152,18 +138,12 @@ const api = {
     }
   },
 
-  getDiscountKPICoverage: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getDiscountKPICoverage: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -220,18 +200,12 @@ const api = {
     }
   },
 
-  getOverallSavingsRI: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getOverallSavingsRI: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -257,18 +231,12 @@ const api = {
     }
   },
 
-  getOverallSavingsStimulated: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getOverallSavingsStimulated: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -336,18 +304,12 @@ const api = {
     }
   },
 
-  getMapData: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getMapData: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -395,19 +357,13 @@ const api = {
     }
   },
 
-  getBillingCostEachDay: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getBillingCostEachDay: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         StartDate: [previousMonthStart],
         EndDate: [currentMonthEnd],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -431,18 +387,12 @@ const api = {
       throw error;
     }
   },
-  getOverallConsumptionForSubscription: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getOverallConsumptionForSubscription: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -464,18 +414,12 @@ const api = {
       throw error;
     }
   },
-  getOverallConsumptionForApplication: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getOverallConsumptionForApplication: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -501,18 +445,12 @@ const api = {
       throw error;
     }
   },
-  getOverallConsumptionForServies: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getOverallConsumptionForServies: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -536,18 +474,12 @@ const api = {
     }
   },
 
-  getOverallConsumptionForTagCompliance: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getOverallConsumptionForTagCompliance: async (selectedFilters) => {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -597,15 +529,10 @@ const api = {
           Authorization: "Bearer " + (await componentUtil.getAccessToken()),
         },
         body: JSON.stringify({
-          CloudServiceProvider: selectedCSP,
+          CloudServiceProvider: await componentUtil.getSelectedCSP(),
           filters: {
             BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-            Subscription: selectedFilters.subscriptions || [],
-            BusinessUnit: selectedFilters.businessUnits || [],
-            Location: selectedFilters.locations || [],
-            Application: selectedFilters.applications || [],
-            Project: selectedFilters.projects || [],
-            Environment: selectedFilters.environments || [],
+            ...selectedFilters,
           },
           customerId: await componentUtil.getSelectedCustomerID(),
         }),
@@ -629,7 +556,7 @@ const api = {
           Authorization: "Bearer " + (await componentUtil.getAccessToken()),
         },
         body: JSON.stringify({
-          CloudServiceProvider: selectedCSP,
+          CloudServiceProvider: await componentUtil.getSelectedCSP(),
           filters: {
             BillingMonthStartDate: [
               previousMonthStart,
@@ -637,6 +564,7 @@ const api = {
               nextMonthStart,
             ],
           },
+          datesOnly:true,
           customerId: await componentUtil.getSelectedCustomerID(),
         }),
       });
@@ -652,22 +580,16 @@ const api = {
 
   /* with bill overview page  */
 
-  getSavings: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getSavings: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         billingStartDate: [
           previousMonthStart,
           currentMonthStart,
           nextMonthStart,
         ],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -690,18 +612,12 @@ const api = {
     }
   },
 
-  getNormalizedVariation: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getNormalizedVariation: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         billingStartDate: [currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters,
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -724,22 +640,16 @@ const api = {
     }
   },
 
-  getInvoiceView: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getInvoiceView: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [
           previousMonthStart,
           currentMonthStart,
           nextMonthStart,
         ],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters,
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -762,22 +672,16 @@ const api = {
     }
   },
 
-  getTotalBillVsSimulatedPaygo: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getTotalBillVsSimulatedPaygo: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [
           previousMonthStart,
           currentMonthStart,
           nextMonthStart,
         ],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -802,22 +706,16 @@ const api = {
       throw error;
     }
   },
-  getTopServies: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getTopServies: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [
           previousMonthStart,
           currentMonthStart,
           nextMonthStart,
         ],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -839,22 +737,16 @@ const api = {
       throw error;
     }
   },
-  getTopApplications: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getTopApplications: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [
           previousMonthStart,
           currentMonthStart,
           nextMonthStart,
         ],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -879,18 +771,12 @@ const api = {
 
   /* with business cost split page  */
 
-  getApplicationWithTags: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getApplicationWithTags: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -917,18 +803,12 @@ const api = {
     }
   },
 
-  getApplicationWithoutTags: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getApplicationWithoutTags: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -955,18 +835,12 @@ const api = {
     }
   },
 
-  getProjectWithTags: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getProjectWithTags: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -993,18 +867,12 @@ const api = {
     }
   },
 
-  getProjectWithoutTags: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getProjectWithoutTags: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -1031,18 +899,12 @@ const api = {
     }
   },
 
-  getBillAllocation: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getBillAllocation: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -1069,18 +931,12 @@ const api = {
     }
   },
 
-  getDataForAnomaly: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getDataForAnomaly: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -1105,18 +961,12 @@ const api = {
     }
   },
 
-  getServiceCategoryCost: async (inputData) => {
-    const isInitialData = Array.isArray(inputData);
+  getServiceCategoryCost: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: selectedCSP,
+      CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, lastPreviousMonthStart],
-        Subscription: isInitialData ? inputData : inputData.Subscriptions || [],
-        BusinessUnit: isInitialData ? [] : inputData.BusinessUnits || [],
-        Location: isInitialData ? [] : inputData.Locations || [],
-        Application: isInitialData ? [] : inputData.Applications || [],
-        Project: isInitialData ? [] : inputData.Projects || [],
-        Environment: isInitialData ? [] : inputData.Environments || [],
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -1152,7 +1002,7 @@ const api = {
           Authorization: "Bearer " + (await componentUtil.getAccessToken()),
         },
         body: JSON.stringify({
-          CloudServiceProvider: selectedCSP,
+          CloudServiceProvider: await componentUtil.getSelectedCSP(),
           filters: {
             BillingMonthStartDate: [
               previousMonthStart,
@@ -1184,7 +1034,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               BillingMonthStartDate: [
                 previousMonthStart,
@@ -1217,7 +1067,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {},
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1244,7 +1094,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               BillingMonthStartDate: ["2024-09-01", "2024-08-01", "2024-07-01"],
               Subscription: [subscription],
@@ -1276,7 +1126,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription1"],
               BusinessUnit: [],
@@ -1306,7 +1156,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2"],
             },
@@ -1334,7 +1184,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription1"],
             },
@@ -1363,7 +1213,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2", "Subscription1"],
             },
@@ -1391,7 +1241,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2"],
               // BusinessUnit: ["BU574862", "BU425929"],
@@ -1426,7 +1276,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2"],
             },
@@ -1454,7 +1304,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2"],
             },
@@ -1482,7 +1332,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: selectedCSP,
+            CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2", "Subscription1"],
             },

@@ -8,154 +8,56 @@ import api from "../api";
 
 const SubHeader = ({
   onButtonClick,
-  onSubscriptionsFetch,
-  onFiltersChange,
+  onFiltersChange, selectedCSP
 }) => {
-  const [subscriptionOptions, setSubscriptionOptions] = useState([]);
-  const initialFilters = {
-    subscriptions: [],
-    businessUnits: [],
-    locations: [],
-    applications: [],
-    projects: [],
-    environments: [],
-  };
 
-  const [selectedFilters, setSelectedFilters] = useState(initialFilters);
-  const [filterOptions, setFilterOptions] = useState({
-    subscriptions: [],
-    businessUnits: [],
-    locations: [],
-    applications: [],
-    projects: [],
-    environments: [],
-  });
+  //1-Azure,2-AWS,3-Next new CSP add further whenever new CSP we supporting
+  const [filterData,setFilterData] = useState({"1":[],"2":[],"3":[],"4":[],"5":[]});
+  const [filterDataTemplate,setFilterDataTemplate] = useState({"1":[],"2":[],"3":[],"4":[],"5":[]});
+  const [tags0,setTags0] = useState({"1":[],"2":[],"3":[],"4":[],"5":[]});
 
+  const [filterSelectedData,setFilterSelectedData] = useState({"1":{},"2":{},"3":{},"4":{},"5":{}});
+  const [filterSelectedDataTemplate,setFilterSelectedDataTemplate] = useState({"1":{},"2":{},"3":{},"4":{},"5":{}});
   useEffect(() => {
     fetchInitialFilters();
-  }, []);
+  }, [selectedCSP]);
 
   const fetchInitialFilters = async () => {
     try {
       const initialData = await api.getFilterBasedOnSelection({});
       const subscriptionsData = initialData.subscriptionName;
-
-      onSubscriptionsFetch(subscriptionsData);
-      setFilterOptions({
-        subscriptions: transformToOptions(initialData.subscriptionName),
-        businessUnits: transformToOptions(initialData.tags_BU_company),
-        locations: transformToOptions(initialData.resourceLocation),
-        applications: transformToOptions(initialData.tags_AppID_AppName),
-        projects: transformToOptions(initialData.tags_ProjectName),
-        environments: transformToOptions(initialData.tags_Environment),
-      });
+      setAndPopulateFilterValues(initialData);
     } catch (error) {
       console.error("Error fetching initial filters:", error);
     }
   };
 
-  const fetchFiltersBasedOnSelection = async (filters) => {
-    try {
-      const updatedData = await api.getFilterBasedOnSelection(filters);
-
-      // Merge new options with existing ones to preserve unselected options
-      setFilterOptions((prevOptions) => ({
-        subscriptions: mergeOptions(
-          prevOptions.subscriptions,
-          transformToOptions(updatedData.subscriptionName)
-        ),
-        businessUnits: mergeOptions(
-          prevOptions.businessUnits,
-          transformToOptions(updatedData.tags_BU_company)
-        ),
-        locations: mergeOptions(
-          prevOptions.locations,
-          transformToOptions(updatedData.resourceLocation)
-        ),
-        applications: mergeOptions(
-          prevOptions.applications,
-          transformToOptions(updatedData.tags_AppID_AppName)
-        ),
-        projects: mergeOptions(
-          prevOptions.projects,
-          transformToOptions(updatedData.tags_ProjectName)
-        ),
-        environments: mergeOptions(
-          prevOptions.environments,
-          transformToOptions(updatedData.tags_Environment)
-        ),
-      }));
-    } catch (error) {
-      console.error("Error fetching filters based on selection:", error);
+  const setAndPopulateFilterValues = async(apiData) =>{
+    let data =[];
+    let isDataAvailable = false;
+    for (const key in apiData) {
+      if(key.endsWith('_key')) {
+        let tagPart = key.substring(0,key.indexOf("_key"));
+        let displayName = tagPart + "_displayName";
+        let dataKeyName = apiData[key];
+        if (apiData[displayName] != undefined )
+        {
+          if(key == "tags0_key") {
+            if (tags0[selectedCSP].length == 0)
+              setTags0({...filterDataTemplate,[selectedCSP]:apiData[dataKeyName]});
+            else 
+              apiData[dataKeyName] = tags0[selectedCSP];
+          }
+          data.push({'key': (selectedCSP == 2 ? tagPart:dataKeyName),'displayName': apiData[displayName],data: apiData[dataKeyName]});
+        }
+      }
     }
+    /*setFilterData((prevFilterData)=>{
+      prevFilterData[selectedCSP]= data;
+      return prevFilterData;
+    });*/
+    setFilterData({[selectedCSP]:data});
   };
-
-  // Helper function to merge options and remove duplicates
-  const mergeOptions = (existingOptions, newOptions) => {
-    const allOptions = [...existingOptions, ...newOptions];
-    // Remove duplicates based on 'value'
-    const uniqueOptions = Array.from(
-      new Map(allOptions.map((item) => [item.value, item])).values()
-    );
-    return uniqueOptions;
-  };
-
-  // const handleFilterChange = async (filterType, values) => {
-  //   const newSelectedFilters = {
-  //     ...selectedFilters,
-  //     [filterType]: values,
-  //   };
-
-  //   setSelectedFilters(newSelectedFilters);
-
-  //   const filterParams = {
-  //     subscriptions: newSelectedFilters.subscriptions.map((sub) => sub.value),
-  //     businessUnits: newSelectedFilters.businessUnits.map((bu) => bu.value),
-  //     locations: newSelectedFilters.locations.map((loc) => loc.value),
-  //     applications: newSelectedFilters.applications.map((app) => app.value),
-  //     projects: newSelectedFilters.projects.map((proj) => proj.value),
-  //     environments: newSelectedFilters.environments.map((env) => env.value),
-  //   };
-
-  //   await fetchFiltersBasedOnSelection(filterParams); // Fetch updated filter options based on selections
-  // };
-
-  // const handleFilterChange = async (filterType, values) => {
-  //   let updatedValues;
-
-  //   // Check if "Select All" is chosen
-  //   const selectAllOption = values.find(
-  //     (option) => option.value === "selectAll"
-  //   );
-
-  //   if (selectAllOption) {
-  //     // If "Select All" is selected, replace with all options for that filter type
-  //     updatedValues = filterOptions[filterType];
-  //   } else if (values.length > 1) {
-  //     // Allow only one option at a time if "Select All" is not chosen
-  //     updatedValues = [values[values.length - 1]];
-  //   } else {
-  //     updatedValues = values; // Keep the single selected value
-  //   }
-
-  //   const newSelectedFilters = {
-  //     ...selectedFilters,
-  //     [filterType]: updatedValues,
-  //   };
-
-  //   setSelectedFilters(newSelectedFilters);
-
-  //   const filterParams = {
-  //     subscriptions: newSelectedFilters.subscriptions.map((sub) => sub.value),
-  //     businessUnits: newSelectedFilters.businessUnits.map((bu) => bu.value),
-  //     locations: newSelectedFilters.locations.map((loc) => loc.value),
-  //     applications: newSelectedFilters.applications.map((app) => app.value),
-  //     projects: newSelectedFilters.projects.map((proj) => proj.value),
-  //     environments: newSelectedFilters.environments.map((env) => env.value),
-  //   };
-
-  //   await fetchFiltersBasedOnSelection(filterParams); // Fetch updated filter options
-  // };
 
   const handleFilterChange = async (filterType, values) => {
     let updatedValues;
@@ -167,164 +69,90 @@ const SubHeader = ({
 
     if (selectAllOption) {
       // If "Select All" is selected, replace with all options for that filter type
-      updatedValues = filterOptions[filterType];
+      filterData[selectedCSP].map((filterObj)=>{
+        if(filterObj["key"] == filterType) {
+          updatedValues = filterObj.data;
+        }
+      });
     } else if (values.length > 1) {
       // Allow only one option at a time if "Select All" is not chosen
-      updatedValues = [values[values.length - 1]];
+      updatedValues = [values[values.length - 1]].map((selected) => selected.value);
     } else {
-      updatedValues = values; // Keep the single selected value
+      updatedValues = values.map((selected) => selected.value); // Keep the single selected value
     }
 
-    const newSelectedFilters = {
-      ...selectedFilters,
-      [filterType]: updatedValues,
-    };
 
-    setSelectedFilters(newSelectedFilters);
+      const newFilterSelectedData = {
+        ...filterSelectedData[selectedCSP],
+        [filterType]: updatedValues,
+      };
 
-    // Prepare filter parameters for the API
-    const filterParams = {
-      subscriptions: newSelectedFilters.subscriptions.map((sub) => sub.value),
-      businessUnits: newSelectedFilters.businessUnits.map((bu) => bu.value),
-      locations: newSelectedFilters.locations.map((loc) => loc.value),
-      applications: newSelectedFilters.applications.map((app) => app.value),
-      projects: newSelectedFilters.projects.map((proj) => proj.value),
-      environments: newSelectedFilters.environments.map((env) => env.value),
-    };
-
-    try {
-      // Fetch updated filter options based on the current selections
-      const updatedData = await api.getFilterBasedOnSelection(filterParams);
-
-      // Update the filter options for all dropdowns
-      setFilterOptions({
-        subscriptions: transformToOptions(updatedData.subscriptionName),
-        businessUnits: transformToOptions(updatedData.tags_BU_company),
-        locations: transformToOptions(updatedData.resourceLocation),
-        applications: transformToOptions(updatedData.tags_AppID_AppName),
-        projects: transformToOptions(updatedData.tags_ProjectName),
-        environments: transformToOptions(updatedData.tags_Environment),
+      setFilterSelectedData((prevFilterSelectedData) =>{
+        //prevFilterSelectedData[selectedCSP]= newFilterSelectedData;
+        return ({...filterSelectedDataTemplate,[selectedCSP]:newFilterSelectedData});
       });
-    } catch (error) {
-      console.error("Error fetching filters based on selection:", error);
-    }
+
+      try {
+        // Fetch updated filter options based on the current selections
+        const updatedData = await api.getFilterBasedOnSelection(newFilterSelectedData);
+        // Update the filter options for all dropdowns
+        setAndPopulateFilterValues(updatedData);
+      } catch (error) {
+        console.error("Error fetching filters based on selection:", error);
+      }
   };
 
-  // const transformToOptions = (data) => {
-  //   if (!data) return [];
-  //   return data.map((item) => ({
-  //     value: item,
-  //     label: item === null ? "null" : item,
-  //   }));
-  // };
 
-  const transformToOptions = (data) => {
-    if (!data) return [];
+  const transformToOptions = (data,optionsOnly) => {
+    if (!data || data.length == 0) return [];
     const options = data.map((item) => ({
       value: item,
       label: item === null ? "null" : item,
     }));
 
     // Add "Select All" as the first option
+    if(optionsOnly)
+    {
+      return [...options];
+    }
     return [{ value: "selectAll", label: "Select All" }, ...options];
   };
 
   const handleApplyFilters = () => {
-    onFiltersChange(selectedFilters);
+    onFiltersChange(filterSelectedData);
   };
 
   const handleResetFilters = () => {
-    console.log("Resetting filters to initial state:", initialFilters); // L
-    setSelectedFilters(initialFilters); // Reset to initial state
+    setFilterData(filterDataTemplate); // Reset to initial state
+    setFilterSelectedData(filterSelectedDataTemplate);
     fetchInitialFilters();
-    onFiltersChange(initialFilters); // Notify parent component of the reset filters
+    onFiltersChange(filterDataTemplate); // Notify parent component of the reset filters
   };
 
   return (
     <div className="Subheader-Container">
       <div className="Subheader-ButtonsContainer">
         <HeaderButtons onButtonClick={onButtonClick} />
-        <DateRangeDropdown />
+        <DateRangeDropdown selectedCSP={selectedCSP}/>
       </div>
       <div className="Subheader-Boxes">
         <div className="Filter-Options-Row">
-          <div className="filter-option-inline">
-            {/* Subscriptions dropdown */}
-            <label>Subscription(s)</label>
+      
+          {filterData[selectedCSP] && filterData[selectedCSP].map((filterObj)=>{
+            const selVal = filterSelectedData[selectedCSP][filterObj["key"]] !== undefined ? filterSelectedData[selectedCSP][filterObj["key"]] : [] ;
+            return (<div className="filter-option-inline">
+            <label>{filterObj.displayName}(s)</label>
             <MultiSelect
-              options={filterOptions.subscriptions}
-              value={selectedFilters.subscriptions}
-              onChange={(values) => handleFilterChange("subscriptions", values)}
-              labelledBy="Select"
-              disableSelectAll={false} // No built-in "Select All" needed as it's custom-handled
-              hasSelectAll={false}
-            />
-          </div>
-
-          {/* Business Unit dropdown */}
-          <div className="filter-option-inline">
-            <label>Business Unit(s)</label>
-            <MultiSelect
-              options={filterOptions.businessUnits}
-              value={selectedFilters.businessUnits}
-              onChange={(values) => handleFilterChange("businessUnits", values)}
+              options={transformToOptions(filterObj.data)}
+              value={transformToOptions(selVal,true)}
+              onChange={(values) => handleFilterChange(filterObj["key"], values)}
               labelledBy="Select"
               disableSelectAll={false}
               hasSelectAll={false}
             />
-          </div>
-
-          {/* Location dropdown */}
-          <div className="filter-option-inline">
-            <label>Location(s)</label>
-            <MultiSelect
-              options={filterOptions.locations}
-              value={selectedFilters.locations}
-              onChange={(values) => handleFilterChange("locations", values)}
-              labelledBy="Select"
-              disableSelectAll={false} // No built-in "Select All" needed as it's custom-handled
-              hasSelectAll={false}
-            />
-          </div>
-
-          {/* Application dropdown */}
-          <div className="filter-option-inline">
-            <label>Application(s)</label>
-            <MultiSelect
-              options={filterOptions.applications}
-              value={selectedFilters.applications}
-              onChange={(values) => handleFilterChange("applications", values)}
-              labelledBy="Select"
-              disableSelectAll={false} // No built-in "Select All" needed as it's custom-handled
-              hasSelectAll={false}
-            />
-          </div>
-
-          {/* Project dropdown */}
-          <div className="filter-option-inline">
-            <label>Project(s)</label>
-            <MultiSelect
-              options={filterOptions.projects}
-              value={selectedFilters.projects}
-              onChange={(values) => handleFilterChange("projects", values)}
-              labelledBy="Select"
-              disableSelectAll={false} // No built-in "Select All" needed as it's custom-handled
-              hasSelectAll={false}
-            />
-          </div>
-
-          {/* Environment dropdown */}
-          <div className="filter-option-inline">
-            <label>Environment(s)</label>
-            <MultiSelect
-              options={filterOptions.environments}
-              value={selectedFilters.environments}
-              onChange={(values) => handleFilterChange("environments", values)}
-              labelledBy="Select"
-              disableSelectAll={false}
-              hasSelectAll={false}
-            />
-          </div>
+          </div>)
+          })
+          }
         </div>
 
         <div className="Subheader-Buttons">

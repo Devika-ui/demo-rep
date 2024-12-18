@@ -5,7 +5,7 @@ import { enUS } from "date-fns/locale";
 import api from "../api.js";
 import "../css/components/DateRangeDropdown.css";
 
-const DateRangeDropdown = () => {
+const DateRangeDropdown = ({selectedCSP}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState([]);
   const [months, setMonths] = useState([]);
@@ -14,7 +14,7 @@ const DateRangeDropdown = () => {
     const fetchDates = async () => {
       try {
         const data = await api.getFilterForDropDown();
-        const modifiedDates = data.modifieddate.map((date) => new Date(date));
+        const modifiedDates =  selectedCSP ==1 ? data.modifieddate.map((date) => new Date(date)): data.BillingPeriodStart.map((date) => new Date(date));
         const uniqueMonths = Array.from(
           new Set(
             modifiedDates.map((date) =>
@@ -29,7 +29,7 @@ const DateRangeDropdown = () => {
     };
 
     fetchDates();
-  }, []);
+  }, [selectedCSP]);
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);

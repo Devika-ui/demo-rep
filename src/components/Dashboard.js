@@ -21,32 +21,20 @@ import componentUtil from "../componentUtil.js";
 const Dashboard = () => {
   const [showStackBars, setShowStackBars] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState(1);
-  const [subscriptionsData, setSubscriptionsData] = useState([]);
-  const [selectedFilters, setSelectedFilters] = useState({
-    subscriptions: [],
-    businessUnits: [],
-    locations: [],
-    applications: [],
-    projects: [],
-    environments: [],
-  });
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
   /*Filter Changes*/
-  let inputData = componentUtil.populateFilterData(selectedFilters,subscriptionsData);
+  let inputData = selectedFilters;
   const handleButtonClick = (value) => {
     componentUtil.setSelectedCSP(value);
     setSelectedProvider(value);
     setShowStackBars(value !== 1);
   };
 
-  const handleSubscriptionsFetch = async(data) => {
-    setSubscriptionsData(data);
-  };
-  
 
   // Function to update filters
   const handleFiltersChange = async(newFilters) => {
-    setSelectedFilters(newFilters); // Update selected filters
+    setSelectedFilters(newFilters[selectedProvider]); // Update selected filters
   };
 
   const navigate = useNavigate();
@@ -76,8 +64,7 @@ const Dashboard = () => {
       </Typography>
       <Subheader
         onButtonClick={handleButtonClick}
-        onSubscriptionsFetch={handleSubscriptionsFetch}
-        onFiltersChange={handleFiltersChange}
+        onFiltersChange={handleFiltersChange} selectedCSP={selectedProvider}
       />
       <NavigationBar />
 
