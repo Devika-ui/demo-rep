@@ -584,7 +584,7 @@ const api = {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
-        billingStartDate: [
+        BillingMonthStartDate: [
           previousMonthStart,
           currentMonthStart,
           nextMonthStart,
@@ -616,7 +616,7 @@ const api = {
     const requestBody = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
-        billingStartDate: [currentMonthStart],
+        BillingMonthStartDate: [currentMonthStart],
         ...selectedFilters,
       },
       customerId: await componentUtil.getSelectedCustomerID(),
