@@ -37,60 +37,19 @@ const BillOverview = () => {
     useState([]);
   const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
   const [legendData, setLegendData] = useState([]);
-  const [subscriptionsData, setSubscriptionsData] = useState([]);
   const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
-  const [inputData, setInputData] = useState({});
   const [subscriptions, setSubscriptions] = useState({});
   const [applicationData, setApplicationData] = useState({});
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
 
-  const handleSubscriptionsFetch = (data) => {
-    setSubscriptionsData(data);
-  };
-  const [selectedFilters, setSelectedFilters] = useState({
-    subscriptions: [],
-    businessUnits: [],
-    locations: [],
-    applications: [],
-    projects: [],
-    environments: [],
-  });
+  const [selectedProvider, setSelectedProvider] = useState(1);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  let inputData = selectedFilters;
 
   const handleFiltersChange = (newFilters) => {
-    setSelectedFilters(newFilters);
+    setSelectedFilters(newFilters[selectedProvider]);
   };
-
-  const hasFilters =
-    selectedFilters &&
-    (selectedFilters.subscriptions?.length > 0 ||
-      selectedFilters.businessUnits?.length > 0 ||
-      selectedFilters.locations?.length > 0 ||
-      selectedFilters.applications?.length > 0 ||
-      selectedFilters.projects?.length > 0 ||
-      selectedFilters.environments?.length > 0);
-
-  useEffect(() => {
-    if (hasFilters || subscriptionsData.length > 0) {
-      const inputData = hasFilters
-        ? {
-            Subscriptions: selectedFilters.subscriptions.map(
-              (sub) => sub.value
-            ),
-            BusinessUnits:
-              selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-            Locations: selectedFilters.locations?.map((loc) => loc.value) || [],
-            Applications:
-              selectedFilters.applications?.map((app) => app.value) || [],
-            Projects: selectedFilters.projects?.map((proj) => proj.value) || [],
-            Environments:
-              selectedFilters.environments?.map((env) => env.value) || [],
-          }
-        : subscriptionsData;
-
-      setInputData(inputData); // Store inputData for reuse in other useEffects
-    }
-  }, [selectedFilters, subscriptionsData]);
 
   useEffect(() => {
     const fetchBillAllocationData = async () => {
@@ -227,9 +186,8 @@ const BillOverview = () => {
         console.error("Error fetching data:", error);
       }
     };
-    if (hasFilters || subscriptionsData.length > 0) {
       fetchBillAllocationData();
-    }
+    
   }, [inputData]);
 
   useEffect(() => {
@@ -317,9 +275,7 @@ const BillOverview = () => {
         console.error("Error fetching data:", error);
       }
     };
-    if (hasFilters || subscriptionsData.length > 0) {
       fetchInvoiceViewData();
-    }
   }, [inputData]);
 
   useEffect(() => {
@@ -385,9 +341,9 @@ const BillOverview = () => {
         console.error("Error fetching data:", error);
       }
     };
-    if (hasFilters || subscriptionsData.length > 0) {
+
       fetchTotalBillVsSimulatedPaygoData();
-    }
+    
   }, [inputData]);
 
   useEffect(() => {
@@ -426,9 +382,9 @@ const BillOverview = () => {
         console.error("Error fetching data:", error);
       }
     };
-    if (hasFilters || subscriptionsData.length > 0) {
+
       fetchTopServiesApplicationsData();
-    }
+    
   }, [inputData]);
 
   useEffect(() => {
@@ -486,18 +442,16 @@ const BillOverview = () => {
       }
     };
 
-    if (hasFilters || subscriptionsData.length > 0) {
+
       fetchSavingsNormalizedVariationData();
-    }
+    
   }, [inputData]);
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
-    if (value === "Azure") {
-      setShowStackBars(false); // Hide StackBars and show AzureBars
-    } else {
-      setShowStackBars(true); // Show StackBars
-    }
+    componentUtil.setSelectedCSP(value);
+    setSelectedProvider(value);
+    setShowStackBars(value !== 1);
   };
 
   const handleReportTypeChange = (event) => {
@@ -624,8 +578,7 @@ const BillOverview = () => {
         </Typography>
         <Subheader
           onButtonClick={handleButtonClick}
-          onSubscriptionsFetch={handleSubscriptionsFetch}
-          onFiltersChange={handleFiltersChange}
+          onFiltersChange={handleFiltersChange} selectedCSP={selectedProvider}
         />
         <NavigationBar />
       </Box>

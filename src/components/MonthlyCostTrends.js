@@ -27,7 +27,6 @@ ChartJS.register(
 );
 
 const MonthlyCostTrends = ({
-  subscriptionsData,
   selectedFilters,
   currencySymbol,
   currencyPreference,
@@ -66,32 +65,11 @@ const MonthlyCostTrends = ({
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
   useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
 
-    const inputData = hasFilters
-      ? {
-          Subscriptions: selectedFilters.subscriptions.map((sub) => sub.value),
-          BusinessUnits:
-            selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-          Locations: selectedFilters.locations?.map((loc) => loc.value) || [],
-          Applications:
-            selectedFilters.applications?.map((app) => app.value) || [],
-          Projects: selectedFilters.projects?.map((proj) => proj.value) || [],
-          Environments:
-            selectedFilters.environments?.map((env) => env.value) || [],
-        }
-      : subscriptionsData;
 
     const fetchData = async () => {
       try {
-        const response = await api.getMonthlyForecastSpend(inputData);
+        const response = await api.getMonthlyForecastSpend(selectedFilters);
 
         const { pastCosts, futureCosts } = response[0];
         const labels = [
@@ -123,10 +101,8 @@ const MonthlyCostTrends = ({
         console.error("Error fetching forecast spend data:", error);
       }
     };
-    if (hasFilters || subscriptionsData.length > 0) {
       fetchData();
-    }
-  }, [subscriptionsData, selectedFilters]);
+  }, [selectedFilters]);
 
   const options = {
     responsive: true,

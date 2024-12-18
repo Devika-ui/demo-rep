@@ -6,16 +6,20 @@ import CostInventory from "./CostInventory";
 import ContainerBox from "./ContainerBox";
 import { Box, Typography } from "@mui/material";
 import api from "../api";
+import componentUtil from "../componentUtil.js";
 
 const InventoryCostSplit = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [dataSet1, setDataSet1] = useState([]);
+  const [selectedProvider, setSelectedProvider] = useState(1);
+  const [selectedFilters, setSelectedFilters] = useState([]);
   const handleButtonClick = (value) => {
-    if (value === 1) {
-      setShowStackBars(false); // Hide StackBars and show AzureBars
-    } else {
-      setShowStackBars(true); // Show StackBars
-    }
+    componentUtil.setSelectedCSP(value);
+    setSelectedProvider(value);
+    setShowStackBars(value !== 1);
+  };
+  const handleFiltersChange = (newFilters) => {
+    setSelectedFilters(newFilters[selectedProvider]);
   };
 
   const additionalFilters = [
@@ -109,7 +113,7 @@ const InventoryCostSplit = () => {
         >
           Inventory Cost Split
         </Typography>
-        <Subheader onButtonClick={handleButtonClick} />
+        <Subheader onButtonClick={handleButtonClick}  onFiltersChange={handleFiltersChange} selectedCSP={selectedProvider}/>
         <NavigationBar />
       </Box>
       <NavigationBar />

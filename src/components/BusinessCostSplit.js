@@ -25,36 +25,24 @@ const BusinessCostSplit = () => {
   const [headerLabelsForBillAllocation, setHeaderLabelsForBillAllocation] =
     useState([]);
   const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
-  const [subscriptionsData, setSubscriptionsData] = useState([]);
-  const [inputData, setInputData] = useState({});
   const [applicationData, setApplicationData] = useState({});
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
   const [formattedDates, setFormattedDates] = useState(null);
   const [serviceData, setServiceData] = useState(null);
+  const [selectedProvider, setSelectedProvider] = useState(1);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  let inputData = selectedFilters;
 
   const handleButtonClick = (value) => {
-    if (value === "1") {
-      setShowStackBars(false); // Hide StackBars and show AzureBars
-    } else {
-      setShowStackBars(true); // Show StackBars
-    }
+    componentUtil.setSelectedCSP(value);
+    setSelectedProvider(value);
+    setShowStackBars(value !== 1);
   };
-
-  const handleSubscriptionsFetch = (data) => {
-    setSubscriptionsData(data);
-  };
-  const [selectedFilters, setSelectedFilters] = useState({
-    subscriptions: [],
-    businessUnits: [],
-    locations: [],
-    applications: [],
-    projects: [],
-    environments: [],
-  });
+  
 
   const handleFiltersChange = (newFilters) => {
-    setSelectedFilters(newFilters);
+    setSelectedFilters(newFilters[selectedProvider]);
   };
 
   const handleReportTypeChange = (event) => {
@@ -96,36 +84,7 @@ const BusinessCostSplit = () => {
     }
   };
 
-  const hasFilters =
-    selectedFilters &&
-    (selectedFilters.subscriptions?.length > 0 ||
-      selectedFilters.businessUnits?.length > 0 ||
-      selectedFilters.locations?.length > 0 ||
-      selectedFilters.applications?.length > 0 ||
-      selectedFilters.projects?.length > 0 ||
-      selectedFilters.environments?.length > 0);
 
-  useEffect(() => {
-    if (hasFilters || subscriptionsData.length > 0) {
-      const inputData = hasFilters
-        ? {
-            Subscriptions: selectedFilters.subscriptions.map(
-              (sub) => sub.value
-            ),
-            BusinessUnits:
-              selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-            Locations: selectedFilters.locations?.map((loc) => loc.value) || [],
-            Applications:
-              selectedFilters.applications?.map((app) => app.value) || [],
-            Projects: selectedFilters.projects?.map((proj) => proj.value) || [],
-            Environments:
-              selectedFilters.environments?.map((env) => env.value) || [],
-          }
-        : subscriptionsData;
-
-      setInputData(inputData); // Store inputData for reuse in other useEffects
-    }
-  }, [selectedFilters, subscriptionsData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -244,10 +203,8 @@ const BusinessCostSplit = () => {
         console.error("Error fetching data:", error);
       }
     };
-
-    if (hasFilters || subscriptionsData.length > 0) {
       fetchData();
-    }
+    
   }, [inputData]);
 
   useEffect(() => {
@@ -316,9 +273,7 @@ const BusinessCostSplit = () => {
         console.error("Error fetching data:", error);
       }
     };
-    if (hasFilters || subscriptionsData.length > 0) {
       fetchData();
-    }
   }, [inputData]);
 
   useEffect(() => {
@@ -448,9 +403,8 @@ const BusinessCostSplit = () => {
         console.error("Error fetching data:", error);
       }
     };
-    if (hasFilters || subscriptionsData.length > 0) {
+
       fetchData();
-    }
   }, [inputData]);
 
   const columns1 = [
@@ -497,8 +451,7 @@ const BusinessCostSplit = () => {
         </Typography>
         <Subheader
           onButtonClick={handleButtonClick}
-          onSubscriptionsFetch={handleSubscriptionsFetch}
-          onFiltersChange={handleFiltersChange}
+          onFiltersChange={handleFiltersChange} selectedCSP={selectedProvider}
         />
         <NavigationBar />
       </Box>
@@ -537,7 +490,6 @@ const BusinessCostSplit = () => {
           }}
         >
           <Ondemand
-            subscriptionsData={subscriptionsData}
             selectedFilters={selectedFilters}
             currencySymbol={currencySymbol}
             currencyPreference={currencyPreference}
@@ -546,7 +498,6 @@ const BusinessCostSplit = () => {
         <div style={{ flex: 1 }}>
           {" "}
           <MonthlyCostTrends
-            subscriptionsData={subscriptionsData}
             selectedFilters={selectedFilters}
             currencySymbol={currencySymbol}
             currencyPreference={currencyPreference}

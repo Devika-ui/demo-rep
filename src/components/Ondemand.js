@@ -5,7 +5,6 @@ import "../css/Ondemand.scss";
 import api from "../api";
 
 const Ondemand = ({
-  subscriptionsData,
   selectedFilters,
   currencySymbol,
   currencyPreference,
@@ -15,31 +14,9 @@ const Ondemand = ({
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {
-    const hasFilters =
-      selectedFilters &&
-      (selectedFilters.subscriptions?.length > 0 ||
-        selectedFilters.businessUnits?.length > 0 ||
-        selectedFilters.locations?.length > 0 ||
-        selectedFilters.applications?.length > 0 ||
-        selectedFilters.projects?.length > 0 ||
-        selectedFilters.environments?.length > 0);
-
-    const inputData = hasFilters
-      ? {
-          Subscriptions: selectedFilters.subscriptions.map((sub) => sub.value),
-          BusinessUnits:
-            selectedFilters.businessUnits?.map((bu) => bu.value) || [],
-          Locations: selectedFilters.locations?.map((loc) => loc.value) || [],
-          Applications:
-            selectedFilters.applications?.map((app) => app.value) || [],
-          Projects: selectedFilters.projects?.map((proj) => proj.value) || [],
-          Environments:
-            selectedFilters.environments?.map((env) => env.value) || [],
-        }
-      : subscriptionsData;
     const loadData = async () => {
       try {
-        const data = await api.getDataForAnomaly(inputData);
+        const data = await api.getDataForAnomaly(selectedFilters);
 
         // Parse the date and sort the data by month
         const sortedData = data.sort(
@@ -72,10 +49,10 @@ const Ondemand = ({
       }
     };
 
-    if (hasFilters || subscriptionsData.length > 0) {
+
       loadData();
-    }
-  }, [subscriptionsData, selectedFilters]);
+
+  }, [selectedFilters]);
 
   useEffect(() => {
     if (chartContainer.current && chartData.labels.length) {
