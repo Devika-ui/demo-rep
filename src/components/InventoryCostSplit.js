@@ -19,7 +19,7 @@ const InventoryCostSplit = () => {
     setShowStackBars(value !== 1);
   };
   const handleFiltersChange = (newFilters) => {
-    setSelectedFilters(newFilters[selectedProvider]);
+    setSelectedFilters(newFilters);
   };
 
   const additionalFilters = [
@@ -88,7 +88,7 @@ const InventoryCostSplit = () => {
     };
 
     fetchDataAndFormat();
-  }, []);
+  }, [selectedProvider]);
 
   return (
     <div>
@@ -136,7 +136,7 @@ const InventoryCostSplit = () => {
           marginBottom: "10px",
         }}
       >
-        <CostInventory />
+        <CostInventory selectedCSP={selectedProvider}/>
       </div>
     </div>
   );

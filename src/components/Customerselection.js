@@ -1,30 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import "../css/components/Customerselection.css";
-import { useNavigate } from "react-router-dom";
 import api from "../api";
-
-const CustomerSelection = ({ flag }) => {
-  console.log("Flag value:", flag);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+import componentUtil from "../componentUtil";
+const CustomerSelection = ({ selectionHandler }) => {
+  const [selectedCustomer, setSelectedCustomer] = useState("");
   const [customers, setCustomers] = useState([]);
-  const [isNavigating, setIsNavigating] = useState(false);
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        // Fetch customer data from the API
-        const response = await api.getAssignedCustomerIds({
-          flag: flag ? "yes" : "no",
-        });
-
-        // Format the customers list based on API response
+        
+        const response = await api.getAssignedCustomerIds(true);
         const formattedCustomers = response.map((customer) => ({
-          name: customer.customerName || `Customer ${customer.customerId}`, // Default name if missing
-          logo: customer.image || "default-logo.png", // Fallback to default image
+          name: customer.customerName || `Customer ${customer.customerId}`, 
+          logo: customer.image || "default-logo.png", 
           currencySymbol: customer.currencySymbol,
           currencyPreference: customer.currencyPreference,
+          customerId: customer.customerId
         }));
         setCustomers(formattedCustomers);
       } catch (error) {
@@ -33,28 +27,15 @@ const CustomerSelection = ({ flag }) => {
     };
 
     fetchCustomers();
-  }, [flag]);
+  }, []);
 
-  const handleSelection = async (customerName) => {
-    setSelectedCustomer(customerName);
-    setIsNavigating(true);
-
-    try {
-      // Find customer data by name
-      const customerData = customers.find((c) => c.name === customerName);
-      if (customerData) {
-        await api.setSelectedCustomerName(customerData.name);
-        await api.setCurrencySymbol(customerData.currencySymbol);
-        await api.setCurrencyPreference(customerData.currencyPreference);
-      }
-    } catch (error) {
-      console.error("Error handling customer selection:", error);
-    }
-
-    // Redirect to dashboard after a delay
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 2000);
+  const handleSelection = async (customer) => {
+    setSelectedCustomer(customer.name);
+    await componentUtil.setSelectedCustomerID(customer.customerId);
+    await componentUtil.setCurrencySymbol(customer.currencySymbol);
+    await componentUtil.setCurrencyPreference(customer.currencyPreference);
+    console.log("customerId:::", await componentUtil.getSelectedCustomerID());
+    selectionHandler();
   };
 
   return (
@@ -62,19 +43,13 @@ const CustomerSelection = ({ flag }) => {
       <Header />
       <div className="customer-selection-container">
         <h2>OPTICS FinOps – Welcome Practitioner, Select a Customer</h2>
-        {isNavigating && (
-          <p className="navigation-message">
-            Redirecting to the Dashboard
-          </p>
-        )}
-
         <div className="customer-list">
           {customers.length > 0 ? (
             customers.map((customer) => (
               <div
                 key={customer.name}
                 className="customer-card"
-                onClick={() => handleSelection(customer.name)}
+                onClick={() => handleSelection(customer)}
               >
                 <div className="customer-details">
                   <img

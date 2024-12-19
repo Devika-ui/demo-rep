@@ -42,7 +42,7 @@ const BusinessCostSplit = () => {
   
 
   const handleFiltersChange = (newFilters) => {
-    setSelectedFilters(newFilters[selectedProvider]);
+    setSelectedFilters(newFilters);
   };
 
   const handleReportTypeChange = (event) => {
@@ -205,7 +205,7 @@ const BusinessCostSplit = () => {
     };
       fetchData();
     
-  }, [inputData]);
+  }, [selectedProvider]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -274,7 +274,7 @@ const BusinessCostSplit = () => {
       }
     };
       fetchData();
-  }, [inputData]);
+  }, [selectedProvider]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -405,7 +405,7 @@ const BusinessCostSplit = () => {
     };
 
       fetchData();
-  }, [inputData]);
+  }, [selectedProvider]);
 
   const columns1 = [
     { key: "ownerName", label: "Owner Name" },

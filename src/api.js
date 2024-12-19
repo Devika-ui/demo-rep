@@ -1349,7 +1349,7 @@ const api = {
       throw error;
     }
   },
-  getAssignedCustomerIds: async () => {
+  getAssignedCustomerIds: async (flag) => {
     try {
       const response = await fetch(`${apiUrl}/csp_customers/customerIdList`, {
         method: "POST",
@@ -1357,7 +1357,10 @@ const api = {
           "Content-Type": "application/json",
           Authorization: "Bearer " + (await componentUtil.getAccessToken()),
         },
-      });
+        body: JSON.stringify({
+          flag: flag,
+      }),
+    });
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }

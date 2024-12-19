@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Customerselection from "./components/Customerselection";
 import Dashboard from "./components/Dashboard";
 import BillOverview from "./components/BillOverview";
 import BusinessCostSplit from "./components/BusinessCostSplit";
@@ -21,27 +22,17 @@ import UserInfo from "./components/UserInfo";
 
 const UserWrappedApp = ({ token, userInfo }) => {
   const [dataPreload, setDataPreload] = useState(false);
+  const selectionHandler = async() =>{
+    setDataPreload(true);
+  };
   const setUserData = async () => {
     if (!dataPreload) sessionStorage.clear();
     let accessToken = await componentUtil.getAccessToken(token);
     if (accessToken !== token) {
       await componentUtil.setAccessToken(token);
-      accessToken = await componentUtil.getAccessToken(token);
     }
     const customerId = await componentUtil.getSelectedCustomerID();
-    if (customerId == 0 && dataPreload == false) {
-      const data = await api.getAssignedCustomerIds();
-      if (data.length > 0) {
-        await componentUtil.setSelectedCustomerID(data[0].customerId);
-        await componentUtil.setCurrencySymbol(data[0].currencySymbol);
-        await componentUtil.setCurrencyPreference(data[0].currencyPreference);
-        console.log(
-          "customerId:::",
-          await componentUtil.getSelectedCustomerID()
-        );
-        setDataPreload(true);
-      }
-    } else {
+    if (customerId > 0) {
       setDataPreload(true);
     }
   };
@@ -50,11 +41,11 @@ const UserWrappedApp = ({ token, userInfo }) => {
   }, [dataPreload]);
 
   return (
-    dataPreload && (
+    dataPreload === true ? (
       <BrowserRouter>
         <Routes>
+          <Route path="/Customerselection" element={<Customerselection />} />
           <Route path="/" element={<Dashboard />} />
-
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/billOverview" element={<BillOverview />} />
           <Route path="/businessCostSplit" element={<BusinessCostSplit />} />
@@ -62,10 +53,7 @@ const UserWrappedApp = ({ token, userInfo }) => {
 
           <Route path="/recommendations" element={<RecommendationSPA />} />
           <Route path="/orphanedSnapshots" element={<OrphanedSnapshots />} />
-          <Route
-            path="/unattachedManagedDisks"
-            element={<UnattachedManagedDisks />}
-          />
+          <Route path="/unattachedManagedDisks" element={<UnattachedManagedDisks />} />
           <Route path="/hyperScalarAdvisor" element={<HyperScalarAdvisor />} />
           <Route path="/sqlVmLicenses" element={<SqlVmLicenses />} />
           <Route path="/orphanedrsvbackups" element={<OrphanedRSVBackups />} />
@@ -73,7 +61,7 @@ const UserWrappedApp = ({ token, userInfo }) => {
           <Route path="/userInfo" element={<UserInfo userInfo={userInfo} />} />
         </Routes>
       </BrowserRouter>
-    )
+    ) : (<BrowserRouter><Customerselection  selectionHandler={selectionHandler}/></BrowserRouter>)
   );
 };
 

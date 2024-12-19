@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   // Function to update filters
   const handleFiltersChange = async(newFilters) => {
-    setSelectedFilters(newFilters[selectedProvider]); // Update selected filters
+    setSelectedFilters(newFilters); // Update selected filters
   };
 
   const navigate = useNavigate();

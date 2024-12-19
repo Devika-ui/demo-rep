@@ -48,7 +48,7 @@ const BillOverview = () => {
   let inputData = selectedFilters;
 
   const handleFiltersChange = (newFilters) => {
-    setSelectedFilters(newFilters[selectedProvider]);
+    setSelectedFilters(newFilters);
   };
 
   useEffect(() => {
@@ -188,7 +188,7 @@ const BillOverview = () => {
     };
       fetchBillAllocationData();
     
-  }, [inputData]);
+  }, [selectedProvider]);
 
   useEffect(() => {
     const fetchInvoiceViewData = async () => {
@@ -222,7 +222,10 @@ const BillOverview = () => {
               acc[formattedDate].push({
                 subscriptionName: subscriptionName,
                 onDemandCost: `${item.onDemandCost.toFixed(2)}`,
-                reservedInstanceCost: `${item.reservedInstanceCost.toFixed(2)}`,
+                // reservedInstanceCost: `${item.reservedInstanceCost.toFixed(2)}`,
+                reservedInstanceCost: item.reservedInstanceCost 
+                ? `${item.reservedInstanceCost.toFixed(2)}` 
+                : " ",
                 simulatedPayGoCost: `${item.simulatedPayGoCost.toFixed(2)}`,
                 savings: `${item.savings.toFixed(2)}`,
                 totalBill: `${item.totalBill.toFixed(2)}`,
@@ -276,7 +279,7 @@ const BillOverview = () => {
       }
     };
       fetchInvoiceViewData();
-  }, [inputData]);
+  }, [selectedProvider]);
 
   useEffect(() => {
     const fetchTotalBillVsSimulatedPaygoData = async () => {
@@ -344,7 +347,7 @@ const BillOverview = () => {
 
       fetchTotalBillVsSimulatedPaygoData();
     
-  }, [inputData]);
+  }, [selectedProvider]);
 
   useEffect(() => {
     const fetchTopServiesApplicationsData = async () => {
@@ -385,7 +388,7 @@ const BillOverview = () => {
 
       fetchTopServiesApplicationsData();
     
-  }, [inputData]);
+  }, [selectedProvider]);
 
   useEffect(() => {
     const fetchSavingsNormalizedVariationData = async () => {
@@ -445,7 +448,7 @@ const BillOverview = () => {
 
       fetchSavingsNormalizedVariationData();
     
-  }, [inputData]);
+  }, [selectedProvider]);
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {

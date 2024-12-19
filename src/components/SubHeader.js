@@ -5,6 +5,7 @@ import HeaderButtons from "./HeaderButtons";
 import DateRangeDropdown from "./DateRangeDropdown";
 import "../css/Subheader.scss";
 import api from "../api";
+import componentUtil from "../componentUtil";
 
 const SubHeader = ({
   onButtonClick,
@@ -48,7 +49,7 @@ const SubHeader = ({
             else 
               apiData[dataKeyName] = tags0[selectedCSP];
           }
-          data.push({'key': (selectedCSP == 2 ? tagPart:dataKeyName),'displayName': apiData[displayName],data: apiData[dataKeyName]});
+          data.push({'key': (selectedCSP == 2 ? tagPart:dataKeyName),'displayName': apiData[displayName],data: transformToOptions(apiData[dataKeyName])});
         }
       }
     }
@@ -76,9 +77,9 @@ const SubHeader = ({
       });
     } else if (values.length > 1) {
       // Allow only one option at a time if "Select All" is not chosen
-      updatedValues = [values[values.length - 1]].map((selected) => selected.value);
+      updatedValues = [values[values.length - 1]];
     } else {
-      updatedValues = values.map((selected) => selected.value); // Keep the single selected value
+      updatedValues = values; // Keep the single selected value
     }
 
 
@@ -94,7 +95,7 @@ const SubHeader = ({
 
       try {
         // Fetch updated filter options based on the current selections
-        const updatedData = await api.getFilterBasedOnSelection(newFilterSelectedData);
+        const updatedData = await api.getFilterBasedOnSelection(componentUtil.transformFiltersOptionsToObject(newFilterSelectedData));
         // Update the filter options for all dropdowns
         setAndPopulateFilterValues(updatedData);
       } catch (error) {
@@ -119,14 +120,14 @@ const SubHeader = ({
   };
 
   const handleApplyFilters = () => {
-    onFiltersChange(filterSelectedData);
+    onFiltersChange(componentUtil.transformFiltersOptionsToObject(filterSelectedData[selectedCSP]));
   };
 
   const handleResetFilters = () => {
     setFilterData(filterDataTemplate); // Reset to initial state
     setFilterSelectedData(filterSelectedDataTemplate);
     fetchInitialFilters();
-    onFiltersChange(filterDataTemplate); // Notify parent component of the reset filters
+    onFiltersChange(componentUtil.transformFiltersOptionsToObject(filterSelectedData[selectedCSP])); // Notify parent component of the reset filters
   };
 
   return (
@@ -143,8 +144,8 @@ const SubHeader = ({
             return (<div className="filter-option-inline">
             <label>{filterObj.displayName}(s)</label>
             <MultiSelect
-              options={transformToOptions(filterObj.data)}
-              value={transformToOptions(selVal,true)}
+              options={filterObj.data}
+              value={selVal}
               onChange={(values) => handleFilterChange(filterObj["key"], values)}
               labelledBy="Select"
               disableSelectAll={false}

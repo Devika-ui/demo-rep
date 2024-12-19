@@ -485,7 +485,7 @@ const TableRowComponent = ({
   });
 };
 
-const CostInventory = () => {
+const CostInventory = ({ selectedCSP }) => {
   const [expandedRows, setExpandedRows] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [groupBy, setGroupBy] = useState([
@@ -654,7 +654,7 @@ const CostInventory = () => {
     };
 
     fetchData();
-  }, []);
+  }, [selectedCSP]);
 
   return (
     <Box className="cmpCostInv_container">
