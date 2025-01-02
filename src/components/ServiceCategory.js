@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -7,7 +7,8 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import ShareIcon from "@mui/icons-material/Share";
+import CustomizedReportButton from "./CustomizedReportButton";
+import ShareButton from "./ShareButton";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -140,6 +141,11 @@ const TableRowComponent = ({
 const ServiceCategory = ({ dummyData, tableData, height, width }) => {
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [formattedMonths, setFormattedMonths] = useState([]);
+  const [sortedData, setSortedData] = useState(dummyData); // Track sorted data
+  const [currentSort, setCurrentSort] = useState({ field: "", direction: "" }); // Current sort state
+
+  // Create a ref for the table element
+  const tableRef = useRef(null);
 
   useEffect(() => {
     if (dummyData?.length) {
@@ -177,6 +183,79 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
     }
   }, [dummyData]);
 
+  useEffect(() => {
+    // Reset sortedData to the original dummyData when the component mounts or is refreshed
+    setSortedData(dummyData);
+  }, [dummyData]); // This will run whenever dummyData changes
+
+  const sortOptions = [
+    { value: "TotalBill", label: "Total Bill" },
+    { value: "OnDemandCost", label: "On-Demand Cost" },
+    { value: "CommitmentsCost", label: "Commitments Cost" },
+    { value: "Savings", label: "Savings" },
+  ];
+
+  const handleSortParentData = (field, direction) => {
+    // Helper function to aggregate data recursively for a node
+    const aggregateData = (node) => {
+      if (!node.children || node.children.length === 0) {
+        // Base case: no children, return node's own value, ensuring it has the expected properties
+        return {
+          ...node,
+          aggregatedData: {
+            TotalBill: node.TotalBill || 0,
+            OnDemandCost: node.OnDemandCost || 0,
+            CommitmentsCost: node.CommitmentsCost || 0,
+            Savings: node.Savings || 0,
+          },
+        };
+      }
+
+      // Aggregate data for the current node
+      const aggregated = node.children.reduce(
+        (acc, child) => {
+          const childData = aggregateData(child);
+          acc.TotalBill += childData.aggregatedData?.TotalBill || 0;
+          acc.OnDemandCost += childData.aggregatedData?.OnDemandCost || 0;
+          acc.CommitmentsCost += childData.aggregatedData?.CommitmentsCost || 0;
+          acc.Savings += childData.aggregatedData?.Savings || 0;
+          return acc;
+        },
+        {
+          TotalBill: 0,
+          OnDemandCost: 0,
+          CommitmentsCost: 0,
+          Savings: 0,
+        }
+      );
+
+      return {
+        ...node,
+        aggregatedData: aggregated, // Store aggregated data for sorting
+      };
+    };
+
+    // Aggregate data for all parent nodes and their children
+    const aggregatedData = dummyData.map(aggregateData);
+
+    // Sort parents based on the aggregated data
+    const sorted = [...aggregatedData].sort((a, b) => {
+      const valueA = a.aggregatedData?.[field] || 0;
+      const valueB = b.aggregatedData?.[field] || 0;
+
+      if (direction === "asc") {
+        return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+      } else {
+        return valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
+      }
+    });
+
+    console.log("Sorted data", sorted);
+
+    setSortedData(sorted); // Update state with sorted parent nodes
+    setCurrentSort({ field, direction });
+  };
+
   const headers = Object.keys(tableData[0]).filter((key) =>
     key.startsWith("columnHead")
   );
@@ -202,16 +281,18 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
         <div className="cmpSvcCat_header">
           <h2 className="cmpSvcCat_title">{tableData[0].tableTitle}</h2>
           <div className="cmpSvcCat_buttons">
-            <Button
-              variant="contained"
+            <CustomizedReportButton
+              handleSortData={handleSortParentData}
+              sortOptions={sortOptions}
+              currentSort={currentSort}
               className="cmpSvcCat_button"
-              color="inherit"
-            >
-              Customize Report
-            </Button>
-            <IconButton className="cmpSvcCat_button">
-              <ShareIcon />
-            </IconButton>
+            />
+            <ShareButton
+              tableData={dummyData}
+              tableRef={tableRef}
+              isHierarchical={true}
+              className="cmpSvcCat_button"
+            />
             <IconButton
               onClick={handleOverlayOpen}
               className="cmpSvcCat_button"
@@ -221,7 +302,7 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
           </div>
         </div>
         {/* <div className="cmpSvcCat_tableHeader"></div> */}
-        <TableContainer className="cmpSvcCat_tableContainer">
+        <TableContainer ref={tableRef} className="cmpSvcCat_tableContainer">
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -263,7 +344,7 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
             </TableHead>
             <TableBody>
               <TableRowComponent
-                data={dummyData || []}
+                data={sortedData || []}
                 level={0}
                 toggleRow={toggleRow}
                 expandedRows={expandedRows}
@@ -326,7 +407,7 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
                 </TableHead>
                 <TableBody>
                   <TableRowComponent
-                    data={dummyData || []}
+                    data={sortedData || []}
                     level={0}
                     toggleRow={toggleRow}
                     expandedRows={expandedRows}

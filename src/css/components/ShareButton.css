@@ -1,0 +1,27 @@
+.cmpInvTv_shareButton_popup {
+  max-width: 400px;
+  padding: 16px;
+}
+
+@media (max-width: 600px) {
+  .cmpInvTv_shareButton_popup {
+    max-width: 200px;
+    padding: 4px;
+  }
+
+  .cmpInvTv_shareButton_popup .MuiMenuItem-root {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin: 0;
+  }
+
+  .cmpInvTv_shareButton_popup .MuiListItemIcon-root {
+    min-width: 24px;
+    margin-right: 4px;
+  }
+
+  .cmpInvTv_shareButton_popup .MuiListItemText-primary {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+}

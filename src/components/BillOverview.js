@@ -186,8 +186,7 @@ const BillOverview = () => {
         console.error("Error fetching data:", error);
       }
     };
-      fetchBillAllocationData();
-    
+    fetchBillAllocationData();
   }, [selectedProvider]);
 
   useEffect(() => {
@@ -223,9 +222,9 @@ const BillOverview = () => {
                 subscriptionName: subscriptionName,
                 onDemandCost: `${item.onDemandCost.toFixed(2)}`,
                 // reservedInstanceCost: `${item.reservedInstanceCost.toFixed(2)}`,
-                reservedInstanceCost: item.reservedInstanceCost 
-                ? `${item.reservedInstanceCost.toFixed(2)}` 
-                : " ",
+                reservedInstanceCost: item.reservedInstanceCost
+                  ? `${item.reservedInstanceCost.toFixed(2)}`
+                  : " ",
                 simulatedPayGoCost: `${item.simulatedPayGoCost.toFixed(2)}`,
                 savings: `${item.savings.toFixed(2)}`,
                 totalBill: `${item.totalBill.toFixed(2)}`,
@@ -278,7 +277,7 @@ const BillOverview = () => {
         console.error("Error fetching data:", error);
       }
     };
-      fetchInvoiceViewData();
+    fetchInvoiceViewData();
   }, [selectedProvider]);
 
   useEffect(() => {
@@ -345,8 +344,7 @@ const BillOverview = () => {
       }
     };
 
-      fetchTotalBillVsSimulatedPaygoData();
-    
+    fetchTotalBillVsSimulatedPaygoData();
   }, [selectedProvider]);
 
   useEffect(() => {
@@ -386,8 +384,7 @@ const BillOverview = () => {
       }
     };
 
-      fetchTopServiesApplicationsData();
-    
+    fetchTopServiesApplicationsData();
   }, [selectedProvider]);
 
   useEffect(() => {
@@ -445,9 +442,7 @@ const BillOverview = () => {
       }
     };
 
-
-      fetchSavingsNormalizedVariationData();
-    
+    fetchSavingsNormalizedVariationData();
   }, [selectedProvider]);
 
   // Callback function to receive value from HeaderButton
@@ -514,7 +509,7 @@ const BillOverview = () => {
   const columns1 = [
     // { key: "name", label: "Application Name" },
     { key: "ownerName", label: "Owner Name" },
-    { key: "onDemandCost", label: `On Demand Cost(${currencySymbol})` },
+    { key: "onDemandCost", label: `On Demand Cost (${currencySymbol})` },
     {
       key: "reservedInstanceCost",
       label: `Reserved Instances Cost (${currencySymbol})`,
@@ -581,7 +576,8 @@ const BillOverview = () => {
         </Typography>
         <Subheader
           onButtonClick={handleButtonClick}
-          onFiltersChange={handleFiltersChange} selectedCSP={selectedProvider}
+          onFiltersChange={handleFiltersChange}
+          selectedCSP={selectedProvider}
         />
         <NavigationBar />
       </Box>
