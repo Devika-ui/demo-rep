@@ -159,6 +159,14 @@
   padding: 20px;
 }
 
+.loading-container3{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   height: 100%; 
+}
+
+
 @media (max-width: 768px) {
   .cmpCostInv_header {
     flex-direction: column;

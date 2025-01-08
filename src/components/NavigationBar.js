@@ -108,6 +108,8 @@ const NavigationBar = () => {
 
   const getPathForItem = (label) => {
     switch (label) {
+      case "Choose your customer":
+         return "/Customerselection";
       case "Overview":
         return "/dashboard";
       case "Favorites":

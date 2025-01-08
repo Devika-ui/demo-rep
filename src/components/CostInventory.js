@@ -15,6 +15,7 @@ import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
 import { MultiSelect } from "react-multi-select-component";
 import CostsAmortized from "./CostsAmortized";
+import CircularProgress from "@mui/material/CircularProgress";
 import "../css/components/CostInventory.css";
 import api from "../api";
 
@@ -386,6 +387,7 @@ const CostInventory = ({ selectedCSP }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const countData = await api.getCloudInventoryCount();
         const subscriptions = [
           ...new Set(countData.map((item) => item.subscriptionName)),
@@ -461,6 +463,11 @@ const CostInventory = ({ selectedCSP }) => {
           </div>
         </div>
       </div>
+      {loading ? (
+                    <div className="loading-container3">
+                      <CircularProgress />
+                    </div>
+                  ) : (
       <TableContainer className="cmpCostInv_tableContainer">
         <Table stickyHeader>
           <TableHead>
@@ -505,6 +512,7 @@ const CostInventory = ({ selectedCSP }) => {
           </TableBody>
         </Table>
       </TableContainer>
+                  )}
     </Box>
   );
 };
