@@ -4,9 +4,12 @@ import OpticLogo from "../images/OpticsFinopslogo.png";
 import DXCLogo from "../images/DXCLogo.jpg";
 import api from "../api.js";
 import { Link } from "react-router-dom";
+import componentUtil from "../componentUtil.js";
 
 const Header = ({ onButtonClick }) => {
   const [isNavOpen, setNavOpen] = useState(false);
+  const logoImg = componentUtil.getCustomerImage();
+  
 
   const siteIdentityStyle = {
     float: "right",
@@ -48,13 +51,13 @@ const Header = ({ onButtonClick }) => {
           <ul className="nav" style={{ display: "flex", alignItems: "center" }}>
             <li>
               <div className="site-identity" style={siteIdentityStyle}>
-                <Link to="/dashboard">
+                {logoImg && <Link to="/dashboard">
                   <img
-                    src={DXCLogo}
+                    src={logoImg}
                     alt="DXC Logo"
                     style={{ ...clientLogoStyle, ...logoImageStyle }}
                   />
-                </Link>
+                </Link>}
               </div>
             </li>
           </ul>

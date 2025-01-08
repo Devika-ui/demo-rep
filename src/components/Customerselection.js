@@ -37,7 +37,7 @@ const CustomerSelection = ({ selectionHandler }) => {
     await componentUtil.setSelectedCustomerID(customer.customerId);
     await componentUtil.setCurrencySymbol(customer.currencySymbol);
     await componentUtil.setCurrencyPreference(customer.currencyPreference);
-    console.log("customerId:::", await componentUtil.getSelectedCustomerID());
+    await componentUtil.setCustomerImage(customer.logo);
     // Redirect to dashboard after a delay
     setTimeout(() => {
       selectionHandler();

@@ -1,393 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import TableContainer from "@mui/material/TableContainer";
-// import Table from "@mui/material/Table";
-// import TableHead from "@mui/material/TableHead";
-// import TableBody from "@mui/material/TableBody";
-// import TableRow from "@mui/material/TableRow";
-// import TableCell from "@mui/material/TableCell";
-// import Button from "@mui/material/Button";
-// import IconButton from "@mui/material/IconButton";
-// import ShareIcon from "@mui/icons-material/Share";
-// import SearchIcon from "@mui/icons-material/Search";
-// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-// import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-// import Box from "@mui/material/Box";
-// import InputBase from "@mui/material/InputBase";
-// import { MultiSelect } from "react-multi-select-component";
-// import CostsAmortized from "./CostsAmortized";
-// import "../css/components/CostInventory.css";
-// import api from "../api";
-
-// const TableRowComponent = ({
-//   data,
-//   level,
-//   toggleRow,
-//   expandedRows,
-//   rowKey,
-//   indentIncrement,
-// }) => {
-//   const indentLevel = level * indentIncrement;
-
-//   const calculateAggregates = (value) => {
-//     let aggregatedOnDemandCost = 0;
-//     let aggregatedSavings = 0;
-
-//     if (typeof value === "object" && value !== null && !Array.isArray(value)) {
-//       for (const subValue of Object.values(value)) {
-//         if (subValue.OnDemandCost) {
-//           aggregatedOnDemandCost += parseFloat(subValue.OnDemandCost);
-//         }
-//         if (subValue.Savings) {
-//           aggregatedSavings += parseFloat(subValue.Savings);
-//         } else if (typeof subValue === "object") {
-//           const { onDemandCost, savings } = calculateAggregates(subValue);
-//           aggregatedOnDemandCost += onDemandCost;
-//           aggregatedSavings += savings;
-//         }
-//       }
-//     }
-//     return { onDemandCost: aggregatedOnDemandCost, savings: aggregatedSavings };
-//   };
-
-//   const renderRow = (key, value, index) => {
-//     const newKey = `${rowKey}-${index}`;
-//     const hasNestedData =
-//       typeof value === "object" &&
-//       value !== null &&
-//       !Array.isArray(value) &&
-//       !("Date" in value && "OnDemandCost" in value && "Savings" in value);
-
-//     const { onDemandCost: aggregatedOnDemandCost, savings: aggregatedSavings } =
-//       calculateAggregates(value);
-
-//     return (
-//       <React.Fragment key={newKey}>
-//         <TableRow className="cmpSvcCat_nestedRow">
-//           <TableCell
-//             style={{ paddingLeft: indentLevel }}
-//             className="cmpCostInv_tableCell"
-//           >
-//             {hasNestedData ? (
-//               <IconButton size="small" onClick={() => toggleRow(newKey)}>
-//                 {expandedRows[newKey] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-//               </IconButton>
-//             ) : null}
-//             {key}
-//           </TableCell>
-//           {typeof value === "object" &&
-//           value !== null &&
-//           !Array.isArray(value) ? (
-//             <>
-//               <TableCell className="cmpCostInv_cell">
-//                 {hasNestedData
-//                   ? aggregatedOnDemandCost.toFixed(2)
-//                   : value.OnDemandCost}
-//               </TableCell>
-//               <TableCell className="cmpCostInv_cell">
-//                 {hasNestedData ? aggregatedSavings.toFixed(2) : value.Savings}
-//               </TableCell>
-//             </>
-//           ) : (
-//             <>
-//               <TableCell className="cmpCostInv_cell" />
-//               <TableCell className="cmpCostInv_cell" />
-//             </>
-//           )}
-//         </TableRow>
-//         {expandedRows[newKey] && hasNestedData && (
-//           <TableRowComponent
-//             data={value}
-//             level={level + 1}
-//             toggleRow={toggleRow}
-//             expandedRows={expandedRows}
-//             rowKey={newKey}
-//             indentIncrement={indentIncrement}
-//           />
-//         )}
-//       </React.Fragment>
-//     );
-//   };
-
-//   return (
-//     <>
-//       {Object.entries(data).map(([key, value], index) =>
-//         renderRow(key, value, index)
-//       )}
-//     </>
-//   );
-// };
-
-// const CostInventory = () => {
-//   const [expandedRows, setExpandedRows] = useState({});
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const [groupBy, setGroupBy] = useState([]);
-//   const [tableData, setTableData] = useState({});
-//   const [loading, setLoading] = useState(true);
-//   const [date, setDate] = useState([]);
-//   const [pageState, setPageState] = useState({});
-//   const [totalPagesState, setTotalPagesState] = useState({});
-//   const [loadedSubscriptions, setLoadedSubscriptions] = useState({});
-//   const [loadedInnerRows, setLoadedInnerRows] = useState({});
-
-//   const handleSearchChange = (event) => {
-//     setSearchQuery(event.target.value);
-//   };
-
-//   const handleGroupByChange = (selectedOptions) => {
-//     setGroupBy(selectedOptions);
-//   };
-
-//   const toggleRow = async (rowKey) => {
-//     const isExpanded = !expandedRows[rowKey];
-//     setExpandedRows((prevExpandedRows) => ({
-//       ...prevExpandedRows,
-//       [rowKey]: isExpanded,
-//     }));
-
-//     // Extract the top-level subscription from the rowKey
-//     const topLevelSubscription = rowKey.split("-")[0];
-
-//     // If expanding, and data for the top-level subscription is not yet fully loaded
-//     if (isExpanded && !loadedSubscriptions[topLevelSubscription]) {
-//       const subscriptionNames = rowKey.split("-");
-//       const fetchAllData = async () => {
-//         for (const subscriptionName of subscriptionNames) {
-//           // Ensure we don't refetch data if it is already fully loaded
-//           if (loadedSubscriptions[subscriptionName]) continue;
-
-//           const currentPage = pageState[subscriptionName] || 1;
-//           const totalPages = totalPagesState[subscriptionName] || 1;
-
-//           const fetchDataForPages = async (page) => {
-//             await fetchCloudInventoryData(subscriptionName, page);
-//             if (page < totalPages) {
-//               await fetchDataForPages(page + 1);
-//             }
-//           };
-
-//           await fetchDataForPages(currentPage + 1);
-//         }
-
-//         // Mark the top-level subscription as fully loaded
-//         setLoadedSubscriptions((prevLoadedSubscriptions) => ({
-//           ...prevLoadedSubscriptions,
-//           [topLevelSubscription]: true,
-//         }));
-//       };
-//       await fetchAllData();
-//     }
-//   };
-
-//   // Example of fetchCloudInventoryData function
-//   const fetchCloudInventoryData = async (subscriptionName, page) => {
-//     try {
-//       const apiData = await api.getCloudInventory(subscriptionName, page);
-
-//       setTableData((prevTableData) => ({
-//         ...prevTableData,
-//         [subscriptionName]: appendData(
-//           prevTableData[subscriptionName] || {},
-//           apiData
-//         ),
-//       }));
-
-//       setPageState((prevPageState) => ({
-//         ...prevPageState,
-//         [subscriptionName]: page,
-//       }));
-//     } catch (error) {
-//       console.error("Error fetching more data:", error);
-//     }
-//   };
-
-//   const appendData = (originalData, newData) => {
-//     const mergedData = { ...originalData };
-
-//     const recursiveMerge = (orig, newData) => {
-//       for (const [key, value] of Object.entries(newData)) {
-//         if (
-//           orig[key] &&
-//           typeof orig[key] === "object" &&
-//           !Array.isArray(orig[key])
-//         ) {
-//           recursiveMerge(orig[key], value);
-//         } else {
-//           if (key === "OnDemandCost" || key === "Savings") {
-//             orig[key] = (
-//               parseFloat(orig[key] || 0) + parseFloat(value)
-//             ).toFixed(2);
-//           } else {
-//             orig[key] = value;
-//           }
-//         }
-//       }
-//     };
-
-//     recursiveMerge(mergedData, newData);
-//     return mergedData;
-//   };
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const countData = await api.getCloudInventoryCount();
-
-//         // Filter for March data
-//         const marchData = countData.filter(
-//           (item) => new Date(item.monthdetail).getMonth() === 8
-//         );
-
-//         // Extract unique subscriptions
-//         const subscriptions = Array.from(
-//           new Set(marchData.map((item) => item.subscriptionName))
-//         );
-
-//         // Initialize state for pages and data
-//         const pageState = {};
-//         const dataState = {};
-
-//         // Fetch total pages and data for each subscription
-//         await Promise.all(
-//           subscriptions.map(async (subscription) => {
-//             const totalCount = marchData
-//               .filter((item) => item.subscriptionName === subscription)
-//               .reduce((sum, item) => sum + item.totalcount, 0);
-
-//             pageState[subscription] = Math.ceil(totalCount / 1000);
-
-//             // Fetch initial data for each subscription
-//             dataState[subscription] = await api.getCloudInventory(
-//               subscription,
-//               1
-//             );
-//           })
-//         );
-
-//         // Update state with fetched data
-//         setTotalPagesState(pageState);
-//         setTableData(dataState);
-
-//         // Extract dates from data
-//         const datesSet = new Set();
-//         const extractDates = (data) => {
-//           for (const key in data) {
-//             const value = data[key];
-//             if (typeof value === "object" && value !== null) {
-//               extractDates(value);
-//             } else if (key === "Date") {
-//               datesSet.add(value);
-//             }
-//           }
-//         };
-
-//         Object.values(dataState).forEach((subscriptionData) =>
-//           extractDates(subscriptionData)
-//         );
-
-//         // Convert the set back to an array
-//         const uniqueDates = Array.from(datesSet);
-//         const formatMonthYear = (dateString) => {
-//           const date = new Date(dateString);
-//           const month = date.toLocaleString("default", { month: "long" });
-//           const year = date.getFullYear().toString().slice(-2);
-//           return `${month}-${year}`;
-//         };
-//         const formattedDates = uniqueDates.map((date) => formatMonthYear(date));
-
-//         // Update dates state
-//         setDate(formattedDates);
-//       } catch (error) {
-//         console.error("Error fetching initial data:", error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchData();
-//   }, []);
-
-//   return (
-//     <Box className="cmpCostInv_container">
-//       <div className="cmpCostInv_header">
-//         <h2 className="cmpCostInv_title">Cost Inventory</h2>
-//         <Box className="cmpCostInv_search">
-//           <div className="cmpCostInv_searchIcon">
-//             <SearchIcon />
-//           </div>
-//           <InputBase
-//             placeholder="Search by resource group"
-//             classes={{
-//               root: "cmpCostInv_inputRoot",
-//               input: "cmpCostInv_inputInput",
-//             }}
-//             value={searchQuery}
-//             onChange={handleSearchChange}
-//           />
-//         </Box>
-//         <div className="cmpCostInv_buttonsContainer">
-//           <div className="cmpCostInv_groupByContainer">
-//             <span className="cmpCostInv_groupByLabel">Group By</span>
-//             <MultiSelect
-//               className="cmpCostInv_groupBySelect"
-//               options={[
-//                 { label: "Resource", value: "Resource" },
-//                 { label: "Resource Group", value: "Resource Group" },
-//               ]}
-//               value={groupBy}
-//               onChange={handleGroupByChange}
-//               labelledBy="Select"
-//             />
-//           </div>
-
-//           <div className="cmpCostInv_buttons">
-//             <CostsAmortized dialogPaperClass="cmpCostInv_dialogPaper" />
-//             <Button
-//               variant="contained"
-//               className="cmpCostInv_button"
-//               color="inherit"
-//             >
-//               Customize Report
-//             </Button>
-//             <IconButton className="cmpCostInv_button">
-//               <ShareIcon />
-//             </IconButton>
-//           </div>
-//         </div>
-//       </div>
-//       <TableContainer>
-//         <Table className="cmpCostInv_table">
-//           <TableHead>
-//             <TableRow>
-//               <TableCell className="cmpCostInv_tableHeadCell">Name</TableCell>
-//               <TableCell className="cmpCostInv_tableHeadCell">
-//                 On Demand Cost
-//               </TableCell>
-//               <TableCell className="cmpCostInv_tableHeadCell">
-//                 Savings
-//               </TableCell>
-//             </TableRow>
-//           </TableHead>
-//           <TableBody>
-//             {Object.entries(tableData).map(([subscriptionName, data]) => (
-//               <TableRowComponent
-//                 key={subscriptionName}
-//                 data={data}
-//                 level={0}
-//                 toggleRow={toggleRow}
-//                 expandedRows={expandedRows}
-//                 rowKey={subscriptionName}
-//                 indentIncrement={20}
-//               />
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </TableContainer>
-//     </Box>
-//   );
-// };
-
-// export default CostInventory;
-
 import React, { useState, useEffect } from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
@@ -410,79 +20,123 @@ import api from "../api";
 
 const TableRowComponent = ({
   data,
-  level = 0,
+  level,
   toggleRow,
   expandedRows,
   rowKey,
   indentIncrement,
   selectedColumns,
+  uniqueMonths
 }) => {
-  return Object.entries(data).map(([key, value]) => {
-    const isGroup = typeof value === "object" && value !== null && !value.Date;
-    const isMonthLevel =
-      isGroup &&
-      Object.keys(value).every((k) =>
-        isNaN(new Date(k).getTime()) ? false : true
-      );
-    const rowId = `${rowKey}-${key}`;
+  let transformedData = [];
+  const indentLevel = level * indentIncrement;
+ 
+  const hasNestedData = (item) =>
+    Array.isArray(item?.children) && item.children.length > 0;
 
-    return (
-      <React.Fragment key={rowId}>
-        <TableRow>
-          <TableCell style={{ paddingLeft: `${level * indentIncrement}px` }}>
-            {isGroup ? (
-              <IconButton size="small" onClick={() => toggleRow(rowId)}>
-                {expandedRows[rowId] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-              </IconButton>
-            ) : null}
-            {key}
-          </TableCell>
-          {selectedColumns.map((col) => (
-            <TableCell key={col}>
-              {!isGroup && value[col] ? value[col].toFixed(2) : ""}
+  // Helper function to format values to 2 decimal points
+  const formatValueToTwoDecimals = (value) => {
+    return parseFloat(value || 0).toFixed(2);
+  };
+
+  const aggregateMonthData = (month, item) => {
+    const initialData = {
+      TotalBill: 0,
+      OnDemandCost: 0,
+      ReservationCost: 0,
+      SavingsPlanCost: 0,
+      MarketPurchaseCost: 0
+    };
+
+    const aggregateChildrenData = (children) => {
+      return children.reduce(
+        (acc, child) => {
+          if (child.name === month && child.type === "month") {
+            acc.TotalBill += child.TotalBill || 0;
+            acc.OnDemandCost += child.OnDemandCost || 0;
+            acc.ReservationCost += child.ReservationCost || 0;
+            acc.SavingsPlanCost += child.SavingsPlanCost || 0;
+            acc.MarketPurchaseCost += child.MarketPurchaseCostCost || 0;
+          }
+          if (child.children && child.children.length > 0) {
+            const nestedData = aggregateChildrenData(child.children);
+            acc.TotalBill += nestedData.TotalBill;
+            acc.OnDemandCost += nestedData.OnDemandCost;
+            acc.ReservationCost += nestedData.ReservationCost;
+            acc.SavingsPlanCost += nestedData.SavingsPlanCost;
+            acc.MarketPurchaseCost += child.MarketPurchaseCostCost || 0;
+          }
+          return acc;
+        },
+        { ...initialData }
+      );
+    };
+
+    return aggregateChildrenData(item?.children || []);
+  };
+  return (
+    <>
+      {data.map((item, index) => (
+        <React.Fragment key={`${rowKey}-${index}`}>
+          <TableRow className="cmpCostInv_nestedRow">
+            <TableCell
+              style={{ paddingLeft: indentLevel, width: "200px  " }}
+              className="cmpCostInv_first_cell"
+            >
+              {item.name}
+              {level < 4 && hasNestedData(item) && (
+                <IconButton
+                  size="small"
+                  onClick={() => toggleRow(rowKey, index)}
+                >
+                  {expandedRows[rowKey]?.[index] ? (
+                    <ExpandLessIcon />
+                  ) : (
+                    <ExpandMoreIcon />
+                  )}
+                </IconButton>
+              )}
             </TableCell>
-          ))}
-        </TableRow>
-        {isMonthLevel && expandedRows[rowId]
-          ? Object.entries(value).map(([month, monthData]) => (
-              <React.Fragment key={`${rowId}-${month}`}>
-                <TableRow>
-                  <TableCell
-                    colSpan={selectedColumns.length + 1}
-                    style={{
-                      fontWeight: "bold",
-                      paddingLeft: `${(level + 1) * indentIncrement}px`,
-                    }}
-                  >
-                    {month}
+
+            {uniqueMonths.map((month) => {
+              const monthData =
+                level === 3
+                  ? item.children?.find(
+                      (child) => child.name === month && child.type === "month"
+                    ) || {}
+                  : aggregateMonthData(month, item);
+
+              return (
+                <React.Fragment key={`${month}-${item.name}`}>
+                  {selectedColumns.map((col) => (
+                    <TableCell className="cmpCostInv_cell">
+                    {formatValueToTwoDecimals(monthData[col] || "0")}
                   </TableCell>
-                </TableRow>
-                <TableRowComponent
-                  data={monthData}
-                  level={level + 2}
-                  toggleRow={toggleRow}
-                  expandedRows={expandedRows}
-                  rowKey={`${rowId}-${month}`}
-                  indentIncrement={indentIncrement}
-                  selectedColumns={selectedColumns}
-                />
-              </React.Fragment>
-            ))
-          : isGroup &&
-            expandedRows[rowId] && (
+                  ))}
+                </React.Fragment>
+              );
+            })}
+          </TableRow>
+
+          {expandedRows[rowKey]?.[index] &&
+            level < 4 &&
+            item.children &&
+            item.children.length > 0 && (
               <TableRowComponent
-                data={value}
+                data={item.children}
                 level={level + 1}
                 toggleRow={toggleRow}
                 expandedRows={expandedRows}
-                rowKey={rowId}
+                rowKey={`${rowKey}-${index}`}
                 indentIncrement={indentIncrement}
                 selectedColumns={selectedColumns}
+                uniqueMonths={uniqueMonths}
               />
             )}
-      </React.Fragment>
-    );
-  });
+        </React.Fragment>
+      ))}
+    </>
+  );
 };
 
 const CostInventory = ({ selectedCSP }) => {
@@ -490,7 +144,7 @@ const CostInventory = ({ selectedCSP }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [groupBy, setGroupBy] = useState([
     { label: "On-Demand", value: "OnDemandCost" },
-    { label: "Savings", value: "Savings" },
+    { label: "Savings", value: "SavingsPlanCost" },
   ]);
 
   const [tableData, setTableData] = useState({});
@@ -499,12 +153,13 @@ const CostInventory = ({ selectedCSP }) => {
   const [totalPagesState, setTotalPagesState] = useState({});
   const [loadedSubscriptions, setLoadedSubscriptions] = useState({});
   const [columns, setColumns] = useState(groupBy.map((option) => option.value));
-
+  const [uniqueMonths, setUniqueMonths] = useState([]);
+  const [formattedMonths, setFormattedMonths] = useState([]);
   const columnOptions = [
     { label: "On-Demand", value: "OnDemandCost" },
-    { label: "Savings", value: "Savings" },
+    { label: "Savings", value: "SavingsPlanCost" },
     { label: "Reservation", value: "ReservationCost" },
-    { label: "Market Purchase", value: "MarketPurchaseCostCost" },
+    { label: "Market Purchase", value: "MarketPurchaseCost" },
     { label: "Total Bill", value: "TotalBill" },
   ];
 
@@ -520,8 +175,11 @@ const CostInventory = ({ selectedCSP }) => {
     setGroupBy(selectedOptions);
   };
 
-  const toggleRow = async (rowKey) => {
-    setExpandedRows((prev) => ({ ...prev, [rowKey]: !prev[rowKey] }));
+  const toggleRow = async (rowKey, index) => {
+    setExpandedRows((prev) => ({
+      ...prev,
+      [rowKey]: { ...prev[rowKey], [index]: !prev[rowKey]?.[index] },
+    }));
 
     if (!expandedRows[rowKey]) {
       const subscriptionNames = rowKey.split("-");
@@ -533,7 +191,11 @@ const CostInventory = ({ selectedCSP }) => {
           for (let page = currentPage + 1; page <= totalPages; page++) {
             await fetchCloudInventoryData(subscription, page);
           }
-
+          const groupedData = parseAndGroupByMonth(subscription);
+          setTableData((prevTableData) => ({
+            ...prevTableData,
+            [subscription]: groupedData
+          }));
           setLoadedSubscriptions((prev) => ({
             ...prev,
             [subscription]: true,
@@ -543,49 +205,155 @@ const CostInventory = ({ selectedCSP }) => {
     }
   };
 
-  const parseAndGroupByMonth = (data) => {
-    const groupedData = {};
-
-    const traverse = (obj, path = []) => {
-      for (const [key, value] of Object.entries(obj)) {
-        if (typeof value === "object" && value !== null) {
-          if (value.Date) {
-            // Extract the month
-            const monthKey = new Date(value.Date).toLocaleString("default", {
-              month: "long",
-              year: "numeric",
-            });
-            const subscription = path[0] || key; // Subscription Level
-            const service = path[1] || "General"; // Service Level
-            const type = path[2] || "Unknown"; // Type Level
-            const resourceGroup = path[3] || "No Resource Group"; // Resource Group Level
-
-            // Initialize the nested structure
-            groupedData[subscription] = groupedData[subscription] || {};
-            groupedData[subscription][service] =
-              groupedData[subscription][service] || {};
-            groupedData[subscription][service][type] =
-              groupedData[subscription][service][type] || {};
-            groupedData[subscription][service][type][resourceGroup] =
-              groupedData[subscription][service][type][resourceGroup] || {};
-            groupedData[subscription][service][type][resourceGroup][monthKey] =
-              groupedData[subscription][service][type][resourceGroup][
-                monthKey
-              ] || {};
-
-            // Assign the value under the month
-            groupedData[subscription][service][type][resourceGroup][monthKey][
-              key
-            ] = value;
-          } else {
-            traverse(value, [...path, key]);
+  const parseAndGroupByMonth = (subscriptionName) => {
+    const transformDataToArrayFormat = (data) => {
+      const result = [];
+      const allMonths = new Set();
+      if(data) {
+        // First pass: Collect all unique months
+      for(const [subscription,categories] of Object.entries(data)) {
+        if(subscription === subscriptionName){
+          for (const subCategories of Object.values(categories)) {
+            for (const resourceGroups of Object.values(subCategories)) {
+              for (const resources of Object.values(resourceGroups)) {
+                for (const resourceDetails of Object.values(resources)) {
+                  const { Date: date } = resourceDetails;
+                  const month = new Date(date).toISOString().slice(0, 7);
+                  allMonths.add(month);
+                }
+              }
+            }
           }
         }
       }
+
+      // Second pass: Transform data into hierarchical array structure
+      for(const [subscription,categories] of Object.entries(data)){        
+        if(subscription === subscriptionName) {
+          const subscriptionNode = {
+            name: subscription,
+            type: "subscription",
+            children: [],
+          };
+          for (const [category, subCategories] of Object.entries(categories)) {
+            const categoryNode = {
+              name: category,
+              type: "category",
+              children: [],
+            };
+    
+            for (const [subCategory, resourceGroups] of Object.entries(
+              subCategories
+            )) {
+              const subCategoryNode = {
+                name: subCategory,
+                type: "subCategory",
+                children: [],
+              };
+    
+              for (const [resourceGroupName, resources] of Object.entries(
+                resourceGroups
+              )) {
+                const resourceGroupNode = {
+                  name: resourceGroupName,
+                  type: "resourceGroup",
+                  children: [],
+                };
+    
+                for (const [resourceName, resourceDetails] of Object.entries(
+                  resources
+                )) {
+                  const resourceNode = {
+                    name: resourceName,
+                    type: "resource",
+                    children: [],
+                  };
+    
+                  // Extract the month data and ensure all months are present
+                  const monthData = {};
+                  for (const uniqueMonth of allMonths) {
+                    monthData[uniqueMonth] = {
+                      TotalBill: 0,
+                      OnDemandCost: 0,
+                      CommitmentsCost: 0,
+                      Savings: 0,
+                    };
+                  }
+    
+                  const {
+                    Date: date,
+                    TotalBill,
+                    OnDemandCost,
+                    CommitmentsCost,
+                    Savings,
+                  } = resourceDetails;
+                  const month = new Date(date).toISOString().slice(0, 7);
+                  monthData[month] = {
+                    TotalBill,
+                    OnDemandCost,
+                    CommitmentsCost,
+                    Savings,
+                  };
+    
+                  // Convert month data into an array for the resource
+                  for (const [monthName, monthDetails] of Object.entries(
+                    monthData
+                  )) {
+                    resourceNode.children.push({
+                      name: monthName,
+                      type: "month",
+                      ...monthDetails,
+                    });
+                  }
+    
+                  resourceGroupNode.children.push(resourceNode);
+                }
+    
+                subCategoryNode.children.push(resourceGroupNode);
+              }
+    
+              categoryNode.children.push(subCategoryNode);
+            }
+    
+            subscriptionNode.children.push(categoryNode)
+          }
+          result.push(subscriptionNode);
+        }
+      }
+    }
+    return result;
+    };
+    const transformedData = transformDataToArrayFormat(window.apiData);
+    const extractMonths = (data) => {
+      let months = [];
+      data.forEach((item) => {
+        if (item.children) {
+          months = months.concat(extractMonths(item.children));
+        }
+        if (item.type === "month" && item.name) {
+          months.push(item.name);
+        }
+      });
+      return months;
     };
 
-    traverse(data);
-    return groupedData;
+    // Extract unique months
+    const months = Array.from(new Set(extractMonths(transformedData)));
+    months.sort((a, b) => new Date(a) - new Date(b));
+    setUniqueMonths(months);
+    function formatMonthYear(dateString) {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "long" }; // e.g., "January-2024"
+      return date.toLocaleDateString("en-US", options).replace(" ", "-");
+    }
+
+    // Sort the dates in ascending order
+    const sortedMonths = months.sort((a, b) => new Date(a) - new Date(b));
+
+    // Map the sorted array to the new format
+    const formattedMonths = sortedMonths.map(formatMonthYear);
+    setFormattedMonths(formattedMonths);
+    return transformedData;
   };
   const fetchCloudInventoryData = async (subscriptionName, page) => {
     try {
@@ -593,15 +361,7 @@ const CostInventory = ({ selectedCSP }) => {
         `Fetching data for subscription: ${subscriptionName}, page: ${page}`
       ); // Debug log
       const rawData = await api.getCloudInventory(subscriptionName, page);
-      const groupedData = parseAndGroupByMonth(rawData);
-
-      setTableData((prev) => ({
-        ...prev,
-        [subscriptionName]: appendData(
-          prev[subscriptionName] || {},
-          groupedData
-        ),
-      }));
+      window.apiData[subscriptionName] = appendData(window.apiData[subscriptionName] || {},rawData[subscriptionName] )
       setPageState((prev) => ({ ...prev, [subscriptionName]: page }));
     } catch (error) {
       console.error("Error fetching more data:", error);
@@ -631,8 +391,8 @@ const CostInventory = ({ selectedCSP }) => {
           ...new Set(countData.map((item) => item.subscriptionName)),
         ];
         const pageState = {};
-        const dataState = {};
-
+        const dataState = [];
+        window.apiData = {};
         await Promise.all(
           subscriptions.map(async (subscription) => {
             const totalCount = countData
@@ -640,10 +400,11 @@ const CostInventory = ({ selectedCSP }) => {
               .reduce((sum, item) => sum + item.totalcount, 0);
             pageState[subscription] = Math.ceil(totalCount / 1000);
             const rawData = await api.getCloudInventory(subscription, 1);
-            dataState[subscription] = parseAndGroupByMonth(rawData);
+            window.apiData[subscription] = appendData(window.apiData[subscription] || {},rawData[subscription] )
+            const transformedData = parseAndGroupByMonth(subscription);
+            dataState[subscription] = transformedData;
           })
         );
-
         setTotalPagesState(pageState);
         setTableData(dataState);
       } catch (error) {
@@ -701,43 +462,46 @@ const CostInventory = ({ selectedCSP }) => {
         </div>
       </div>
       <TableContainer className="cmpCostInv_tableContainer">
-        <Table>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell className="cmpCostInv_tableHeader">
-                {" "}
+              <TableCell rowSpan={2} className="cmpCostInv_columnHeader_first_header">
                 SubscriptionName
               </TableCell>
-              {columns.map((col) => (
-                <TableCell key={col} className="cmpCostInv_tableHeader">
-                  {col}
+              {formattedMonths.map((month, index) => (
+                <TableCell
+                  key={index}
+                  colSpan={columns.length}
+                  className="cmpCostInv_tableHeader"
+                  style={{ fontWeight: "bold" }}
+                >
+                  {month}
                 </TableCell>
               ))}
+              
+            </TableRow>
+            <TableRow>
+            {formattedMonths.map((month, index) => (columns.map((col) => (
+                <TableCell key={col} className="cmpCostInv_columnHeader">
+                  {col}
+                </TableCell>
+              ))))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(tableData).map(([month, data]) => (
-              <React.Fragment key={month}>
-                {/* Top-level: Month */}
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length + 1}
-                    style={{ fontWeight: "bold" }}
-                  >
-                    {month}
-                  </TableCell>
-                </TableRow>
                 {/* Render nested levels */}
-                <TableRowComponent
-                  data={data}
+                {Object.entries(tableData).map(([subscriptionName, data]) => (
+                  <TableRowComponent
+                  data={data || []}
+                  level={0}
                   toggleRow={toggleRow}
                   expandedRows={expandedRows}
-                  rowKey={month}
+                  rowKey={subscriptionName}
                   indentIncrement={20}
                   selectedColumns={columns}
+                  uniqueMonths={uniqueMonths}
                 />
-              </React.Fragment>
-            ))}
+                ))}               
           </TableBody>
         </Table>
       </TableContainer>

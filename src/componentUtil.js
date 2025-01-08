@@ -35,6 +35,12 @@ const componentUtil = {
         toRet[key] = selectedFilters[key].map((selected) => selected.value);
         }
         return toRet;
+    },
+    getCustomerImage: () => {
+        return sessionStorage["customerImage"] !== undefined ? sessionStorage.getItem("customerImage") : "";
+    },
+    setCustomerImage: async (image) => {
+      sessionStorage.setItem("customerImage", image);
     }
 };
 

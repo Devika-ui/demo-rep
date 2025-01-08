@@ -69,7 +69,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -143,7 +143,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -205,7 +205,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -236,7 +236,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -309,7 +309,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -363,7 +363,7 @@ const api = {
       filters: {
         StartDate: [previousMonthStart],
         EndDate: [currentMonthEnd],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -392,7 +392,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -419,7 +419,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -450,7 +450,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -479,7 +479,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -589,7 +589,7 @@ const api = {
           currentMonthStart,
           nextMonthStart,
         ],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -681,7 +681,7 @@ const api = {
           currentMonthStart,
           nextMonthStart,
         ],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -715,7 +715,7 @@ const api = {
           currentMonthStart,
           nextMonthStart,
         ],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -746,7 +746,7 @@ const api = {
           currentMonthStart,
           nextMonthStart,
         ],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -776,7 +776,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -808,7 +808,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -840,7 +840,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -872,7 +872,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -904,7 +904,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, currentMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -936,7 +936,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: await componentUtil.getSelectedCustomerID(),
     };
@@ -966,7 +966,7 @@ const api = {
       CloudServiceProvider: await componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: [previousMonthStart, lastPreviousMonthStart],
-        ...selectedFilters,
+        ...selectedFilters
       },
       customerId: window.selectedCustomerId,
     };
@@ -1097,7 +1097,7 @@ const api = {
             CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
               BillingMonthStartDate: ["2024-09-01", "2024-08-01", "2024-07-01"],
-              Subscription: [subscription],
+              SubscriptionName: [subscription],
             },
             customerId: await componentUtil.getSelectedCustomerID(),
             page: page.toString(),
