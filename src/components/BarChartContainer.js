@@ -14,6 +14,7 @@ import {
 import Typography from "@mui/material/Typography";
 import { format, parseISO } from "date-fns";
 import "../css/components/BarChartContainer.css";
+import { CircularProgress } from "@mui/material";
 
 const BarChartContainer = ({
   chartData,
@@ -21,6 +22,7 @@ const BarChartContainer = ({
   legendData,
   currencySymbol,
   currencyPreference,
+  loading = false,
 }) => {
   const [data, setData] = useState([]);
   const [legendFontSize, setLegendFontSize] = useState(12); // Default legend font size
@@ -124,59 +126,71 @@ const BarChartContainer = ({
       <Typography className="cmpBarChart_heading">
         Total Bill Cost Vs Simulated PayGO
       </Typography>
-      <div className="chart-wrapper1">
-        <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart
-            data={data}
-            margin={{ top: 0, right: 30, left: 20, bottom: 0 }}
-          >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              horizontal={true}
-              vertical={false}
-            />
-            <XAxis
-              dataKey="modifieddate"
-              tick={{ fontSize: 12 }}
-              tickFormatter={(tick) => format(parseISO(tick), "yyyy-MM")}
-            />
-            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              layout="vertical"
-              verticalAlign="middle"
-              align="right"
-              wrapperStyle={{
-                right: 0,
-                top: "50%",
-                transform: "translateY(-50%)",
-                fontSize: `${legendFontSize}px`, // Dynamically set font size
-              }}
-              iconSize={10}
-            />
-            {legendData.map((legendItem) =>
-              legendItem.type === "Bar" ? (
-                <Bar
-                  key={legendItem.dataKey}
-                  dataKey={legendItem.dataKey}
-                  fill={legendItem.color}
-                  name={legendItem.name}
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <>
+          <div className="chart-wrapper1">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart
+                data={data}
+                margin={{ top: 0, right: 30, left: 20, bottom: 0 }}
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  horizontal={true}
+                  vertical={false}
                 />
-              ) : (
-                <Line
-                  key={legendItem.dataKey}
-                  type="monotone"
-                  dataKey={legendItem.dataKey}
-                  stroke={legendItem.color}
-                  strokeWidth={2}
-                  dot={false}
-                  name={legendItem.name}
+                <XAxis
+                  dataKey="modifieddate"
+                  tick={{ fontSize: 12 }}
+                  tickFormatter={(tick) => format(parseISO(tick), "yyyy-MM")}
                 />
-              )
-            )}
-          </ComposedChart>
-        </ResponsiveContainer>
-      </div>
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 10 }}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend
+                  layout="vertical"
+                  verticalAlign="middle"
+                  align="right"
+                  wrapperStyle={{
+                    right: 0,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    fontSize: `${legendFontSize}px`, // Dynamically set font size
+                  }}
+                  iconSize={10}
+                />
+                {legendData.map((legendItem) =>
+                  legendItem.type === "Bar" ? (
+                    <Bar
+                      key={legendItem.dataKey}
+                      dataKey={legendItem.dataKey}
+                      fill={legendItem.color}
+                      name={legendItem.name}
+                    />
+                  ) : (
+                    <Line
+                      key={legendItem.dataKey}
+                      type="monotone"
+                      dataKey={legendItem.dataKey}
+                      stroke={legendItem.color}
+                      strokeWidth={2}
+                      dot={false}
+                      name={legendItem.name}
+                    />
+                  )
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+        </>
+      )}
     </Paper>
   );
 };

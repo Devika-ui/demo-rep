@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Typography, Box, Button } from "@mui/material";
+import { Typography, Box, Button, CircularProgress } from "@mui/material";
 import Chart from "chart.js/auto";
 import api from "../api.js";
 import componentUtil from "../componentUtil.js";
@@ -12,9 +12,11 @@ const StackBars = ({ inputData, selectedCSP }) => {
   const chartInstance = useRef(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const subscriptionsData1 = await api.getBillingCostEachDay(inputData);
         console.log("API response:", subscriptionsData1);
@@ -25,6 +27,8 @@ const StackBars = ({ inputData, selectedCSP }) => {
         setSubscriptions(subscriptionsData1);
       } catch (error) {
         console.error("Failed to fetch data", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -209,7 +213,13 @@ const StackBars = ({ inputData, selectedCSP }) => {
           Azure
         </Button>
       </Box>
-      <canvas ref={chartContainer} style={{ flexGrow: 1 }}></canvas>
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <canvas ref={chartContainer} style={{ flexGrow: 1 }}></canvas>
+      )}
     </Box>
   );
 };

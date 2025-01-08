@@ -16,6 +16,7 @@ import {
   IconButton,
   Dialog,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CloseIcon from "@mui/icons-material/Close";
@@ -229,7 +230,18 @@ const DetailedCSPBars = ({ inputData, selectedCSP }) => {
   };
 
   if (loading) {
-    return null;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (

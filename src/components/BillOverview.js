@@ -42,7 +42,7 @@ const BillOverview = () => {
   const [applicationData, setApplicationData] = useState({});
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
-
+  const [loading, setLoading] = useState(true);
   const [selectedProvider, setSelectedProvider] = useState(1);
   const [selectedFilters, setSelectedFilters] = useState([]);
   let inputData = selectedFilters;
@@ -53,6 +53,7 @@ const BillOverview = () => {
 
   useEffect(() => {
     const fetchBillAllocationData = async () => {
+      setLoading(true);
       try {
         if (!inputData) {
           console.log("No input data, skipping API calls.");
@@ -184,6 +185,8 @@ const BillOverview = () => {
         setCurrencySymbol(currencySymbol);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchBillAllocationData();
@@ -191,6 +194,7 @@ const BillOverview = () => {
 
   useEffect(() => {
     const fetchInvoiceViewData = async () => {
+      setLoading(true);
       try {
         if (!inputData) {
           console.log("No input data, skipping API calls.");
@@ -275,6 +279,8 @@ const BillOverview = () => {
         setHeaderLabelsForInvoice(uniqueModifiedDatesForInvoice);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchInvoiceViewData();
@@ -282,6 +288,7 @@ const BillOverview = () => {
 
   useEffect(() => {
     const fetchTotalBillVsSimulatedPaygoData = async () => {
+      setLoading(true);
       try {
         if (!inputData) {
           console.log("No input data, skipping API calls.");
@@ -341,6 +348,8 @@ const BillOverview = () => {
         setLegendData(legendData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -349,6 +358,7 @@ const BillOverview = () => {
 
   useEffect(() => {
     const fetchTopServiesApplicationsData = async () => {
+      setLoading(true);
       try {
         if (!inputData) {
           console.log("No input data, skipping API calls.");
@@ -381,6 +391,8 @@ const BillOverview = () => {
         setTopApplications(formattedTopApplications);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -389,6 +401,7 @@ const BillOverview = () => {
 
   useEffect(() => {
     const fetchSavingsNormalizedVariationData = async () => {
+      setLoading(true);
       try {
         if (!inputData) {
           console.log("No input data, skipping API calls.");
@@ -439,6 +452,8 @@ const BillOverview = () => {
         setCurrencyPreference(currencyPreference);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -592,7 +607,7 @@ const BillOverview = () => {
           marginTop: "-5px",
         }}
       >
-        <ContainerForBillOverview data={boxData} />
+        <ContainerForBillOverview data={boxData} loading={loading} />
       </div>
 
       <div
@@ -620,6 +635,7 @@ const BillOverview = () => {
             data1={topApplications}
             title2="Top 5 Services"
             data2={topServices}
+            loading={loading}
             containerStyle={pieChartContainerStyle}
             chartStyle={pieChartStyle}
             pieChartHeight1={"100%"}
@@ -642,6 +658,7 @@ const BillOverview = () => {
             legendData={legendData}
             currencySymbol={currencySymbol}
             currencyPreference={currencyPreference}
+            loading={loading}
           />
         </div>
       </div>
@@ -668,6 +685,7 @@ const BillOverview = () => {
           columnTitle="Subscription Name"
           headerClass="headerClass-1"
           overlayHeight="55vh"
+          loading={loading}
         />
       </div>
       {/* Third Row: Total Bill Allocation */}
@@ -720,6 +738,7 @@ const BillOverview = () => {
           columnData={applicationData}
           columnTitle="Application Name"
           headerClass="headerClass"
+          loading={loading}
         />
       </div>
     </div>

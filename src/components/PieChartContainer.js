@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   PieChart,
   Pie,
@@ -27,6 +28,7 @@ const PieChartContainer = ({
   legendWrapperStyle2 = {},
   currencySymbol,
   currencyPreference,
+  loading = false,
 }) => {
   const [activeIndex1, setActiveIndex1] = useState(null);
   const [activeIndex2, setActiveIndex2] = useState(null);
@@ -140,86 +142,94 @@ const PieChartContainer = ({
 
   return (
     <Paper className="cmpPieChart_container" style={containerStyle}>
-      <div className="cmpPieChart_chartContainer" style={chartStyle}>
-        <Typography
-          variant="subtitle1"
-          gutterBottom
-          className="cmpPieChart_title"
-          style={titleStyle1}
-        >
-          {title1}
-        </Typography>
-        <div className="cmpPieChart_chart">
-          <ResponsiveContainer width="100%" height={pieChartHeight1}>
-            <PieChart>
-              <Pie
-                activeIndex={activeIndex1}
-                activeShape={renderActiveShape}
-                data={data1}
-                dataKey="value"
-                nameKey="name"
-                onMouseEnter={onPieEnter1}
-                onMouseLeave={onPieLeave1}
-                label={renderLabel}
-                labelLine={false}
-              >
-                {data1.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                content={<CustomTooltip currencySymbol={currencySymbol} />}
-              />
-              <Legend
-                align="center"
-                verticalAlign="bottom"
-                layout="horizontal"
-                wrapperStyle={{ fontSize: legendFontSize1 }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
         </div>
-      </div>
-      <div className="cmpPieChart_chartContainer" style={chartStyle}>
-        <Typography
-          variant="subtitle1"
-          gutterBottom
-          className="cmpPieChart_title1"
-          style={titleStyle2}
-        >
-          {title2}
-        </Typography>
-        <div className="cmpPieChart_chart">
-          <ResponsiveContainer width="100%" height={pieChartHeight2}>
-            <PieChart>
-              <Pie
-                activeIndex={activeIndex2}
-                activeShape={renderActiveShape}
-                data={data2}
-                dataKey="value"
-                nameKey="name"
-                onMouseEnter={onPieEnter2}
-                onMouseLeave={onPieLeave2}
-                label={renderLabel}
-                labelLine={false}
-              >
-                {data2.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                content={<CustomTooltip currencySymbol={currencySymbol} />}
-              />
-              <Legend
-                align="center"
-                verticalAlign="bottom"
-                layout="horizontal"
-                wrapperStyle={{ fontSize: legendFontSize2 }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      ) : (
+        <>
+          <div className="cmpPieChart_chartContainer" style={chartStyle}>
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              className="cmpPieChart_title"
+              style={titleStyle1}
+            >
+              {title1}
+            </Typography>
+            <div className="cmpPieChart_chart">
+              <ResponsiveContainer width="100%" height={pieChartHeight1}>
+                <PieChart>
+                  <Pie
+                    activeIndex={activeIndex1}
+                    activeShape={renderActiveShape}
+                    data={data1}
+                    dataKey="value"
+                    nameKey="name"
+                    onMouseEnter={onPieEnter1}
+                    onMouseLeave={onPieLeave1}
+                    label={renderLabel}
+                    labelLine={false}
+                  >
+                    {data1.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    content={<CustomTooltip currencySymbol={currencySymbol} />}
+                  />
+                  <Legend
+                    align="center"
+                    verticalAlign="bottom"
+                    layout="horizontal"
+                    wrapperStyle={{ fontSize: legendFontSize1 }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <div className="cmpPieChart_chartContainer" style={chartStyle}>
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              className="cmpPieChart_title1"
+              style={titleStyle2}
+            >
+              {title2}
+            </Typography>
+            <div className="cmpPieChart_chart">
+              <ResponsiveContainer width="100%" height={pieChartHeight2}>
+                <PieChart>
+                  <Pie
+                    activeIndex={activeIndex2}
+                    activeShape={renderActiveShape}
+                    data={data2}
+                    dataKey="value"
+                    nameKey="name"
+                    onMouseEnter={onPieEnter2}
+                    onMouseLeave={onPieLeave2}
+                    label={renderLabel}
+                    labelLine={false}
+                  >
+                    {data2.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    content={<CustomTooltip currencySymbol={currencySymbol} />}
+                  />
+                  <Legend
+                    align="center"
+                    verticalAlign="bottom"
+                    layout="horizontal"
+                    wrapperStyle={{ fontSize: legendFontSize2 }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </>
+      )}
     </Paper>
   );
 };

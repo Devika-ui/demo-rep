@@ -12,6 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CloseIcon from "@mui/icons-material/Close";
 import "../css/components/InvoiceTableView.css";
+import { CircularProgress } from "@mui/material";
 
 const InvoiceTableView = ({
   title,
@@ -25,6 +26,7 @@ const InvoiceTableView = ({
   headerClass,
   overlayHeight,
   columnData,
+  loading = false,
 }) => {
   const [isOverlayOpen, setOverlayOpen] = useState(false);
   const [tableData, setTableData] = useState(initialTableData);
@@ -117,79 +119,85 @@ const InvoiceTableView = ({
             </IconButton>
           </div>
         </div>
-        <TableContainer
-          ref={tableRef}
-          className="cmpInvTv_tableContainer"
-          style={{
-            backgroundColor: "#fff",
-          }}
-        >
-          <Table id="mytable" stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  rowSpan={2}
-                  className="cmpInvTv_stickyFirstRow1 cmpInvTv_stickyColumn"
-                >
-                  {columnTitle}
-                </TableCell>
-                {headerLabels.map((label, labelIndex) => (
+        {loading ? (
+          <div className="loading-container">
+            <CircularProgress />
+          </div>
+        ) : (
+          <TableContainer
+            ref={tableRef}
+            className="cmpInvTv_tableContainer"
+            style={{
+              backgroundColor: "#fff",
+            }}
+          >
+            <Table id="mytable" stickyHeader>
+              <TableHead>
+                <TableRow>
                   <TableCell
-                    key={labelIndex}
-                    className="cmpInvTv_tableHeadCell cmpInvTv_stickyHeader"
-                    colSpan={columns.length}
+                    rowSpan={2}
+                    className="cmpInvTv_stickyFirstRow1 cmpInvTv_stickyColumn"
                   >
-                    {label}
+                    {columnTitle}
                   </TableCell>
-                ))}
-              </TableRow>
-              <TableRow>
-                {headerLabels.flatMap((_, labelIndex) =>
-                  columns.map((column, colIndex) => (
+                  {headerLabels.map((label, labelIndex) => (
                     <TableCell
-                      key={`${labelIndex}-${colIndex}`}
-                      className="cmpInvTv_tableHeadCell"
+                      key={labelIndex}
+                      className="cmpInvTv_tableHeadCell cmpInvTv_stickyHeader"
+                      colSpan={columns.length}
                     >
-                      {column.label}
+                      {label}
                     </TableCell>
-                  ))
-                )}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tableData.map((row, rowIndex) => (
-                <TableRow key={rowIndex} className="cmpInvTv_tableRow">
-                  <TableCell className="cmpInvTv_tableCell cmpInvTv_stickyColumn">
-                    {Array.isArray(columnData) && columnData.length > 0 ? (
-                      <div>{columnData[rowIndex] || ""}</div>
-                    ) : (
-                      <span></span>
-                    )}
-                  </TableCell>
+                  ))}
+                </TableRow>
+                <TableRow>
                   {headerLabels.flatMap((_, labelIndex) =>
                     columns.map((column, colIndex) => (
                       <TableCell
                         key={`${labelIndex}-${colIndex}`}
-                        className={`cmpInvTv_tableCell ${
-                          column.key === "ownerName"
-                            ? "cmpInvTv_smallColumn"
-                            : ""
-                        }`}
-                        title={
-                          column.key === "ownerName"
-                            ? row[`${column.key}_${labelIndex}`]
-                            : ""
-                        }
+                        className="cmpInvTv_tableHeadCell"
                       >
-                        {row[`${column.key}_${labelIndex}`]}
+                        {column.label}
                       </TableCell>
                     ))
                   )}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {tableData.map((row, rowIndex) => (
+                  <TableRow key={rowIndex} className="cmpInvTv_tableRow">
+                    <TableCell className="cmpInvTv_tableCell cmpInvTv_stickyColumn">
+                      {Array.isArray(columnData) && columnData.length > 0 ? (
+                        <div>{columnData[rowIndex] || ""}</div>
+                      ) : (
+                        <span></span>
+                      )}
+                    </TableCell>
+                    {headerLabels.flatMap((_, labelIndex) =>
+                      columns.map((column, colIndex) => (
+                        <TableCell
+                          key={`${labelIndex}-${colIndex}`}
+                          className={`cmpInvTv_tableCell ${
+                            column.key === "ownerName"
+                              ? "cmpInvTv_smallColumn"
+                              : ""
+                          }`}
+                          title={
+                            column.key === "ownerName"
+                              ? row[`${column.key}_${labelIndex}`]
+                              : ""
+                          }
+                        >
+                          {row[`${column.key}_${labelIndex}`]}
+                        </TableCell>
+                      ))
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </div>
       {isOverlayOpen && (
         <div className="overlay overlay-mode">

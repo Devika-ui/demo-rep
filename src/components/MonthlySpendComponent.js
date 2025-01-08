@@ -4,6 +4,7 @@ import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import CircularProgress from "@mui/material/CircularProgress";
 import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 
@@ -17,11 +18,12 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
     savingsPlanCost: "NA",
     totalBill: 0,
   });
-
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
+  const [totalCost, setTotalCost] = useState(null);
+  const [growthPercentage, setGrowthPercentage] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Handle card click to open overlay and set bill summary details
   const handleCardClick = () => {
     setIsOverlayOpen(true);
     setBillSummary({
@@ -34,10 +36,10 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
     });
   };
 
-  // Close the overlay
   const handleOverlayClose = () => {
     setIsOverlayOpen(false);
   };
+
   const GrowthIndicator = ({ growthPercentage }) => {
     let imageSrc;
     let altText;
@@ -82,18 +84,22 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
       </div>
     );
   };
-  const [totalCost, setTotalCost] = useState(null);
-  const [growthPercentage, setGrowthPercentage] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
-      const data = await api.getMonthlyActualSpend(inputData);
-      const currencySymbol = await componentUtil.getCurrencySymbol();
-      const currencyPreference = await componentUtil.getCurrencyPreference();
-      setCurrencySymbol(currencySymbol);
-      setCurrencyPreference(currencyPreference);
-      if (data.length > 0) {
-        setTotalCost(data[0].totalCost);
-        setGrowthPercentage(data[0].growthPercentage);
+      setLoading(true);
+      try {
+        const data = await api.getMonthlyActualSpend(inputData);
+        const currencySymbol = await componentUtil.getCurrencySymbol();
+        const currencyPreference = await componentUtil.getCurrencyPreference();
+        setCurrencySymbol(currencySymbol);
+        setCurrencyPreference(currencyPreference);
+        if (data.length > 0) {
+          setTotalCost(data[0].totalCost);
+          setGrowthPercentage(data[0].growthPercentage);
+        }
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -107,36 +113,38 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
         </strong>
       </div>
 
-      {/* Main wrapper with click event */}
-      <div
-        className="content-wrapper"
-        onClick={handleCardClick}
-        style={{ cursor: "pointer" }}
-      >
-        {/* Card 1: Actual Spend */}
-        <div className="first">
-          <div className="number">
-            {totalCost !== null && totalCost !== undefined ? (
-              <strong>
-                {currencyPreference === "start"
-                  ? `${currencySymbol}${totalCost.toFixed(2)}`
-                  : `${totalCost.toFixed(2)}${currencySymbol}`}
-              </strong>
-            ) : (
-              <strong>Loading...</strong>
-            )}
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <div
+          className="content-wrapper"
+          onClick={handleCardClick}
+          style={{ cursor: "pointer" }}
+        >
+          {/* Card 1: Actual Spend */}
+          <div className="first">
+            <div className="number">
+              {totalCost !== null && totalCost !== undefined ? (
+                <strong>
+                  {currencyPreference === "start"
+                    ? `${currencySymbol}${totalCost.toFixed(2)}`
+                    : `${totalCost.toFixed(2)}${currencySymbol}`}
+                </strong>
+              ) : (
+                <strong>Loading...</strong>
+              )}
+            </div>
+          </div>
+
+          {/* Card 2: Growth */}
+          <div className="second">
+            <div className="indicator">
+              <GrowthIndicator growthPercentage={growthPercentage} />
+            </div>
           </div>
         </div>
+      )}
 
-        {/* Card 2: Growth */}
-        <div className="second">
-          <div className="indicator">
-            <GrowthIndicator growthPercentage={growthPercentage} />
-          </div>
-        </div>
-      </div>
-
-      {/* Overlay for expanded view */}
       {isOverlayOpen && (
         <div className="overlay">
           <div className="overlay-box">
@@ -214,7 +222,6 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
             </div>
           </div>
         </div>
-        // </div>
       )}
     </div>
   );

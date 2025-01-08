@@ -4,24 +4,27 @@ import "leaflet/dist/leaflet.css";
 import fallbackMarkerIcon from "../images/location.png";
 import "../css/MapContainer.scss";
 import api from "../api.js";
+import { CircularProgress } from "@mui/material";
 
 const MapContainer = ({ selectedCSP, inputData }) => {
   const mapRef = useRef(null);
   const [mapData, setMapData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    
     const fetchMapLocations = async () => {
+      setLoading(true);
       try {
-
         const data = await api.getMapData(inputData);
 
         setMapData(data);
       } catch (error) {
         console.error("Error fetching map data:", error);
+      } finally {
+        setLoading(false);
       }
     };
-      fetchMapLocations();
+    fetchMapLocations();
   }, [selectedCSP, inputData]);
 
   useEffect(() => {
@@ -62,14 +65,20 @@ const MapContainer = ({ selectedCSP, inputData }) => {
     return () => {
       map.remove();
     };
-  }, [mapData, inputData,selectedCSP]);
+  }, [mapData, inputData, selectedCSP]);
 
   return (
     <div className="map-container">
       <div className="map-heading">
         <strong>Resource Location</strong>
       </div>
-      <div className="map-content" ref={mapRef}></div>
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <div className="map-content" ref={mapRef}></div>
+      )}
     </div>
   );
 };

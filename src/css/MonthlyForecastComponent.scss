@@ -42,7 +42,7 @@
   }
 }
 
-.container-1 .number{
+.container-1 .number {
   display: flex;
   justify-content: space-between;
   height: 77%;
@@ -75,15 +75,23 @@
   overflow: hidden; /* Ensures the heading doesn't overflow */
 }
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; // Match container height
+}
+
 /* Responsive adjustments */
 @media screen and (max-width: 600px) {
-  .container-1, .container-2 {
+  .container-1,
+  .container-2 {
     width: 120px;
     height: 60px;
   }
 
-  @media screen { 
-    .monthly-forecast-container{
+  @media screen {
+    .monthly-forecast-container {
       margin-left: -8px;
     }
   }
@@ -98,43 +106,44 @@
   }
 }
 
-@media (max-width:600px){
-  .number,.indicator{
+@media (max-width: 600px) {
+  .number,
+  .indicator {
     margin-top: 0.2rem !important;
   }
 }
 
-@media (max-width:668px)
-{
-  .container-1,.container-2{
+@media (max-width: 668px) {
+  .container-1,
+  .container-2 {
     height: 15vh !important;
   }
 }
 
-@media (min-width:1400px)
-{
-  .container-1,.container-2{
+@media (min-width: 1400px) {
+  .container-1,
+  .container-2 {
     height: 8vh !important;
     margin-top: 1.5rem;
   }
 }
 
-@media (min-width:1400px)
-{
-  .title{
+@media (min-width: 1400px) {
+  .title {
     position: relative;
     top: 0.8rem;
   }
 }
 
-@media(max-width: 666px) {
-  .container-1,.container-2{
+@media (max-width: 666px) {
+  .container-1,
+  .container-2 {
     height: 11vh !important;
   }
 }
 
-@media(max-width: 990px){
-  .container-2-bottom{
+@media (max-width: 990px) {
+  .container-2-bottom {
     margin-top: -0.3rem;
   }
 }

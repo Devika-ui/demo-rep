@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import CustomProgressBar from "./CustomProgressBar";
 import "../css/kpiSection.scss";
 import api from "../api.js";
+import { CircularProgress } from "@mui/material";
 
 const KPISection = ({ selectedCSP, inputData }) => {
   const [percentCoverage, setPercentCoverage] = useState(0);
   const [percentUsage, setPercentUsage] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-   
     const fetchData = async () => {
+      setLoading(true);
       try {
         const coverageData = await api.getDiscountKPICoverage(inputData);
         setPercentCoverage(coverageData.coverage);
@@ -17,9 +19,11 @@ const KPISection = ({ selectedCSP, inputData }) => {
         setPercentUsage(usageData.usage);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
-    };  
-      fetchData();
+    };
+    fetchData();
   }, [selectedCSP]);
 
   return (
@@ -30,22 +34,28 @@ const KPISection = ({ selectedCSP, inputData }) => {
 
       {/* New Container for KPI Graphs */}
       <div className="kpi-container">
-        <div className="kpi-bottom-container">
-          <div className="kpi-graph">
-            <CustomProgressBar
-              title="% Coverage"
-              percentage={parseFloat(percentCoverage).toFixed(2)}
-              gradientColor="conic-gradient(from 0deg, rgba(62, 152, 199, 0.8) 0%, rgba(62, 152, 199, 0.8) 72%, rgba(255, 0, 0, 0.8) 72%, rgba(255, 0, 0, 0.8) 100%)"
-            />
+        {loading ? (
+          <div className="loading-container">
+            <CircularProgress />
           </div>
-          <div className="kpi-graph">
-            <CustomProgressBar
-              title="% Usage"
-              percentage={parseFloat(percentUsage).toFixed(2)}
-              gradientColor="conic-gradient(from 0deg, rgba(62, 152, 199, 0.8) 0%, rgba(62, 152, 199, 0.8) 72%, rgba(255, 0, 0, 0.8) 72%, rgba(255, 0, 0, 0.8) 100%)"
-            />
+        ) : (
+          <div className="kpi-bottom-container">
+            <div className="kpi-graph">
+              <CustomProgressBar
+                title="% Coverage"
+                percentage={parseFloat(percentCoverage).toFixed(2)}
+                gradientColor="conic-gradient(from 0deg, rgba(62, 152, 199, 0.8) 0%, rgba(62, 152, 199, 0.8) 72%, rgba(255, 0, 0, 0.8) 72%, rgba(255, 0, 0, 0.8) 100%)"
+              />
+            </div>
+            <div className="kpi-graph">
+              <CustomProgressBar
+                title="% Usage"
+                percentage={parseFloat(percentUsage).toFixed(2)}
+                gradientColor="conic-gradient(from 0deg, rgba(62, 152, 199, 0.8) 0%, rgba(62, 152, 199, 0.8) 72%, rgba(255, 0, 0, 0.8) 72%, rgba(255, 0, 0, 0.8) 100%)"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

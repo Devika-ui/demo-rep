@@ -3,6 +3,7 @@ import Chart from "react-apexcharts";
 import "../css/consumptionHighlights.scss";
 import api from "../api.js"; // Import API function
 import componentUtil from "../componentUtil.js";
+import { CircularProgress } from "@mui/material";
 
 const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
   const [topSubscriptions, setTopSubscriptions] = useState([]);
@@ -10,6 +11,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
   const [topServices, setTopServices] = useState([]);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [tagCompliance, setTagCompliance] = useState({
     applicationpercentage: 0,
@@ -20,6 +22,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
   });
   useEffect(() => {
     const fetchConsumptionData = async () => {
+      setLoading(true);
       try {
         // Decide whether to use selected filters or subscriptionsData
         const subscriptionsData1 =
@@ -53,6 +56,8 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
         setCurrencyPreference(currencyPreference);
       } catch (error) {
         console.error("Error fetching overall consumption data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchConsumptionData();
@@ -102,48 +107,53 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
       <div className="top">
         <strong>Overall Consumption Highlights</strong>
       </div>
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <div className="consumption-highlights-wrapper">
+          <div className="tiles">
+            <div className="tile">
+              <div className="tilename">
+                {selectedCSP === 1 ? "Top Subscriptions" : "Top Accounts"}
+              </div>
+              <div className="price">
+                {currencyPreference === "start"
+                  ? `${currencySymbol}${topSubscriptionCost}`
+                  : `${topSubscriptionCost}${currencySymbol}`}
+              </div>
+            </div>
+            <div className="tile">
+              <div className="tilename">Top Service</div>
+              <div className="price">
+                {currencyPreference === "start"
+                  ? `${currencySymbol}${topServiceCost}`
+                  : `${topServiceCost}${currencySymbol}`}
+              </div>
+            </div>
+            <div className="tile">
+              <div className="tilename">Top Application</div>
+              <div className="price">
+                {currencyPreference === "start"
+                  ? `${currencySymbol}${topApplicationCost}`
+                  : `${topApplicationCost}${currencySymbol}`}
+              </div>
+            </div>
+          </div>
 
-      <div className="consumption-highlights-wrapper">
-        <div className="tiles">
-          <div className="tile">
-            <div className="tilename">
-              {selectedCSP === 1 ? "Top Subscriptions" : "Top Accounts"}
-            </div>
-            <div className="price">
-              {currencyPreference === "start"
-                ? `${currencySymbol}${topSubscriptionCost}`
-                : `${topSubscriptionCost}${currencySymbol}`}
-            </div>
-          </div>
-          <div className="tile">
-            <div className="tilename">Top Service</div>
-            <div className="price">
-              {currencyPreference === "start"
-                ? `${currencySymbol}${topServiceCost}`
-                : `${topServiceCost}${currencySymbol}`}
-            </div>
-          </div>
-          <div className="tile">
-            <div className="tilename">Top Application</div>
-            <div className="price">
-              {currencyPreference === "start"
-                ? `${currencySymbol}${topApplicationCost}`
-                : `${topApplicationCost}${currencySymbol}`}
-            </div>
+          <div className="tag-compliance">
+            <h4>% Tag Compliance</h4>
+            <Chart
+              options={options}
+              series={options.series}
+              type="radialBar"
+              height="200px"
+              width="200px"
+            />
           </div>
         </div>
-
-        <div className="tag-compliance">
-          <h4>% Tag Compliance</h4>
-          <Chart
-            options={options}
-            series={options.series}
-            type="radialBar"
-            height="200px"
-            width="200px"
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };

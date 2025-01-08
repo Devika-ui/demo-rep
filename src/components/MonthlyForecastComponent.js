@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Tooltip } from "@mui/material";
+import { Tooltip, CircularProgress } from "@mui/material";
 import "../css/MonthlyForecastComponent.scss";
 import upArrow1 from "../images/Up Arrow1.png";
 import downArrow1 from "../images/Down Arrow1.png";
@@ -13,13 +13,17 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
   const [totalCost1, setTotalCost1] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+
       try {
         const forecastData = await api.getMonthlyForecastSpend(inputData);
         const currencyPreference = await componentUtil.getCurrencyPreference();
         const currencySymbol = await componentUtil.getCurrencySymbol();
+
         if (forecastData.length > 0) {
           const lastMonth = forecastData[0].lastMonthCost;
           const latestFutureCostData = forecastData[0].futureCosts.at(-1); // Get the latest month data
@@ -38,8 +42,11 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
         }
       } catch (error) {
         console.error("Error fetching forecast data:", error);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchData();
   }, [selectedCSP, inputData]);
 
@@ -93,26 +100,30 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
       <div className="title">
         <strong style={{ fontFamily: "sans-serif" }}>Monthly Forecast</strong>
       </div>
-      <div className="content-wrapper">
-        <div className="container-1">
-          <div className="number">
-            {totalCost1 !== null ? (
-              <strong>
-                {currencyPreference === "start"
-                  ? `${currencySymbol}${totalCost1.toFixed(2)}`
-                  : `${totalCost1.toFixed(2)}${currencySymbol}`}
-              </strong>
-            ) : (
-              <strong>Loading...</strong>
-            )}
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <div className="content-wrapper">
+          <div className="container-1">
+            <div className="number">
+              {totalCost1 !== null ? (
+                <strong>
+                  {currencyPreference === "start"
+                    ? `${currencySymbol}${totalCost1.toFixed(2)}`
+                    : `${totalCost1.toFixed(2)}${currencySymbol}`}
+                </strong>
+              ) : (
+                <strong>Loading...</strong>
+              )}
+            </div>
+          </div>
+          <div className="container-2">
+            <div className="indicator">
+              <GrowthIndicator percentageIncrease={percentageIncrease} />
+            </div>
           </div>
         </div>
-        <div className="container-2">
-          <div className="indicator">
-            <GrowthIndicator percentageIncrease={percentageIncrease} />
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

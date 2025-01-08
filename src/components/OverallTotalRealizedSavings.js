@@ -12,7 +12,7 @@ import {
 } from "chart.js";
 import api from "../api.js";
 import componentUtil from "../componentUtil.js";
-import { Typography } from "@mui/material";
+import { Typography, CircularProgress } from "@mui/material";
 
 ChartJS.register(
   BarElement,
@@ -30,40 +30,57 @@ const OverallTotalRealizedSavings = ({ selectedCSP, inputData }) => {
   const [labels, setLabels] = useState([]);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchReservationsData = async () => {
-      const reservationsData = await api.getOverallSavingsRI(inputData);
-      const currencySymbol = await componentUtil.getCurrencySymbol();
-      const currencyPreference = await componentUtil.getCurrencyPreference();
-      setReservations(reservationsData.map((entry) => entry.savings));
-      setLabels(
-        reservationsData.map((entry) =>
-          new Date(entry.modifieddate).toLocaleDateString("en-US", {
-            month: "long",
-            year: "numeric",
-          })
-        )
-      );
-      setCurrencySymbol(currencySymbol);
-      setCurrencyPreference(currencyPreference);
+      setLoading(true);
+      try {
+        const reservationsData = await api.getOverallSavingsRI(inputData);
+        const currencySymbol = await componentUtil.getCurrencySymbol();
+        const currencyPreference = await componentUtil.getCurrencyPreference();
+        setReservations(reservationsData.map((entry) => entry.savings));
+        setLabels(
+          reservationsData.map((entry) =>
+            new Date(entry.modifieddate).toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            })
+          )
+        );
+        setCurrencySymbol(currencySymbol);
+        setCurrencyPreference(currencyPreference);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Hide loader after fetching
+      }
     };
     fetchReservationsData();
   }, [selectedCSP, inputData]);
 
   useEffect(() => {
     const fetchSimulatedSavingsData = async () => {
-      const simulatedSavingsData = await api.getOverallSavingsStimulated(
-        inputData
-      );
-      setSimulatedSavings(simulatedSavingsData.map((entry) => entry.simulated));
-      setLabels(
-        simulatedSavingsData.map((entry) =>
-          new Date(entry.Date).toLocaleDateString("en-US", {
-            month: "long",
-            year: "numeric",
-          })
-        )
-      );
+      setLoading(true);
+      try {
+        const simulatedSavingsData = await api.getOverallSavingsStimulated(
+          inputData
+        );
+        setSimulatedSavings(
+          simulatedSavingsData.map((entry) => entry.simulated)
+        );
+        setLabels(
+          simulatedSavingsData.map((entry) =>
+            new Date(entry.Date).toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            })
+          )
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Hide loader after fetching
+      }
     };
     fetchSimulatedSavingsData();
   }, [selectedCSP, inputData]);
@@ -213,18 +230,22 @@ const OverallTotalRealizedSavings = ({ selectedCSP, inputData }) => {
       >
         <strong>Overall Total Realized Savings</strong>
       </Typography>
-      <div
-        style={{
-          height: "30vh",
-          position: "relative",
-          marginTop: "-45px",
-          width: "100%",
-        }}
-      >
-        {" "}
-        {/* Adjusted position and width */}
-        <Bar data={combinedData} options={options} />
-      </div>
+      {loading ? ( // Show loader while data is loading
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <div
+          style={{
+            height: "30vh",
+            position: "relative",
+            marginTop: "-45px",
+            width: "100%",
+          }}
+        >
+          <Bar data={combinedData} options={options} />
+        </div>
+      )}
     </>
   );
 };
