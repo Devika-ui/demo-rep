@@ -52,7 +52,7 @@ const CustomerSelection = ({ selectionHandler }) => {
         <h2>OPTICS FinOps – Welcome Practitioner, Select a Customer</h2>
         {isNavigating && (
           <p className="navigation-message">
-            Redirecting to the Dashboard
+            Redirecting to the Dashboard...
           </p>
         )}
         <div className="customer-list">

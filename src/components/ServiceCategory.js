@@ -11,6 +11,7 @@ import CustomizedReportButton from "./CustomizedReportButton";
 import ShareButton from "./ShareButton";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CloseIcon from "@mui/icons-material/Close";
+import CircularProgress from "@mui/material/CircularProgress";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import "../css/components/ServiceCategory.css";
@@ -143,12 +144,17 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
   const [formattedMonths, setFormattedMonths] = useState([]);
   const [sortedData, setSortedData] = useState(dummyData); // Track sorted data
   const [currentSort, setCurrentSort] = useState({ field: "", direction: "" }); // Current sort state
+  const [loading, setLoading] = useState(true);
 
   // Create a ref for the table element
   const tableRef = useRef(null);
 
   useEffect(() => {
-    if (dummyData?.length) {
+      if (!dummyData?.length) {
+        return;
+      }
+      setLoading(true);
+
       // Recursively extract 'name' field where 'type' is 'month'
       const extractMonths = (data) => {
         let months = [];
@@ -180,8 +186,9 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
       const formattedMonths = sortedMonths.map(formatMonthYear);
       console.log(formattedMonths);
       setFormattedMonths(formattedMonths);
-    }
-  }, [dummyData]);
+    
+    setLoading(false);
+}, [dummyData]);
 
   useEffect(() => {
     // Reset sortedData to the original dummyData when the component mounts or is refreshed
@@ -302,6 +309,11 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
           </div>
         </div>
         {/* <div className="cmpSvcCat_tableHeader"></div> */}
+        {loading ? (
+           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%"}}>
+               <CircularProgress />
+           </div>
+            ) : (
         <TableContainer ref={tableRef} className="cmpSvcCat_tableContainer">
           <Table stickyHeader>
             <TableHead>
@@ -355,6 +367,7 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
             </TableBody>
           </Table>
         </TableContainer>
+      ) } 
       </div>
 
       {isOverlayOpen && (

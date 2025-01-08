@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import IconButton from "@mui/material/IconButton";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import { CircularProgress } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import api from "../api.js";
 import "../css/components/MonthlyCostTrends.css";
@@ -63,45 +64,47 @@ const MonthlyCostTrends = ({
     ],
   });
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
-
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await api.getMonthlyForecastSpend(selectedFilters);
+        if (!response || !response[0]) {
+          throw new Error("Invalid API response");
+        }
 
-        const { pastCosts, futureCosts } = response[0];
+        const { pastCosts = [], futureCosts = [] } = response[0];
         const labels = [
           ...pastCosts.map((cost) => cost.month),
           ...futureCosts.map((cost) => cost.month),
         ];
         const consumptionCostData = pastCosts.map((cost) => cost.pastCost);
         const lastConsumptionCost =
-          consumptionCostData[consumptionCostData.length - 1];
+          consumptionCostData[consumptionCostData.length - 1] || 0;
         const projectedCostData = [
           ...new Array(pastCosts.length - 1).fill(null),
           lastConsumptionCost,
           ...futureCosts.map((cost) => cost.futureCost),
         ];
-        setChartData({
+
+        setChartData((prevData) => ({
+          ...prevData,
           labels,
           datasets: [
-            {
-              ...chartData.datasets[0],
-              data: consumptionCostData,
-            },
-            {
-              ...chartData.datasets[1],
-              data: projectedCostData,
-            },
+            { ...prevData.datasets[0], data: consumptionCostData },
+            { ...prevData.datasets[1], data: projectedCostData },
           ],
-        });
+        }));
       } catch (error) {
         console.error("Error fetching forecast spend data:", error);
+      } finally {
+        setLoading(false);
       }
     };
-      fetchData();
+
+    fetchData();
   }, [selectedFilters]);
 
   const options = {
@@ -153,13 +156,24 @@ const MonthlyCostTrends = ({
       <div className="container">
         <div className="title">
           Monthly Cost Trends & Evolution
-          <IconButton onClick={handleOverlayOpen} className="fullscreen-button">
-            <FullscreenIcon />
-          </IconButton>
+          {!loading && (
+            <IconButton
+              onClick={handleOverlayOpen}
+              className="fullscreen-button"
+            >
+              <FullscreenIcon />
+            </IconButton>
+          )}
         </div>
-        <div className="chart-wrapper">
-          <Line data={chartData} options={options} />
-        </div>
+        {loading ? (
+          <div className="loading-container1">
+            <CircularProgress />
+          </div>
+        ) : (
+          <div className="chart-wrapper">
+            <Line data={chartData} options={options} />
+          </div>
+        )}
       </div>
 
       {isOverlayOpen && (

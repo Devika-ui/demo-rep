@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import Chart from "chart.js/auto";
-import { Typography } from "@mui/material";
+import { Typography, CircularProgress } from "@mui/material";
 import "../css/Ondemand.scss";
 import api from "../api";
 
@@ -12,10 +12,12 @@ const Ondemand = ({
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
+        setLoading(true);
         const data = await api.getDataForAnomaly(selectedFilters);
 
         // Parse the date and sort the data by month
@@ -44,14 +46,15 @@ const Ondemand = ({
             },
           ],
         });
+        setLoading(false);
       } catch (error) {
         console.error("Error loading chart data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-
-      loadData();
-
+    loadData();
   }, [selectedFilters]);
 
   useEffect(() => {
@@ -99,7 +102,7 @@ const Ondemand = ({
 
                   return currencyPreference === "start"
                     ? `${currencySymbol}${value.toFixed(2)}`
-                    : `${value.toFixed(2)}${currencySymbol}`; // Format with the currency symbol and two decimal places
+                    : `${value.toFixed(2)}${currencySymbol}`;
                 },
               },
             },
@@ -120,13 +123,11 @@ const Ondemand = ({
         plugins: [
           {
             id: "customCrosshair",
-
             afterDraw: (chart) => {
               const ctx = chart.ctx;
               const xScale = chart.scales["x"];
               const yScale = chart.scales["y"];
 
-              // Ensure tooltip and _active are defined
               if (
                 chart.tooltip &&
                 chart.tooltip._active &&
@@ -136,7 +137,6 @@ const Ondemand = ({
                 const x = activePoint.element.x;
                 const y = activePoint.element.y;
 
-                // Draw vertical line
                 ctx.save();
                 ctx.beginPath();
                 ctx.moveTo(x, yScale.top);
@@ -170,9 +170,15 @@ const Ondemand = ({
         Anomalies Detection for On-Demand Cost
       </Typography>
 
-      <div className="chart">
-        <canvas ref={chartContainer} />
-      </div>
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <div className="chart">
+          <canvas ref={chartContainer} />
+        </div>
+      )}
     </div>
   );
 };

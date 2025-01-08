@@ -61,6 +61,14 @@
   height: 100%;
 }
 
+.loading-container1{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px; 
+  margin-top: -5rem;
+}
+
 @media (max-width: 415px) {
   .container {
     margin-top: 20rem;
