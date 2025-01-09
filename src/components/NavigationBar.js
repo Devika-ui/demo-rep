@@ -120,6 +120,8 @@ const NavigationBar = () => {
         return "/contact";
       case "Settings":
         return "/settings";
+      case "User Info":
+        return "/userInfo";
       case "Logout":
         return "/logout";
       default:
