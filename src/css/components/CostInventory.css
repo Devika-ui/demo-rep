@@ -7,7 +7,8 @@
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
   overflow: auto;
-  margin-left: 5px;
+  margin-left: -5px;
+  margin-right: -4px;
 }
 .cmpCostInv_header {
   display: flex;
@@ -51,7 +52,9 @@
   overflow: auto !important;
   max-height: 200px !important;
 }
-.cmpCostInv_tableHeader,.cmpCostInv_columnHeader_first_header, .cmpCostInv_columnHeader {
+.cmpCostInv_tableHeader,
+.cmpCostInv_columnHeader_first_header,
+.cmpCostInv_columnHeader {
   padding: 4px 8px !important;
   text-align: center !important;
   color: #63666a !important;
@@ -64,9 +67,16 @@
 }
 .cmpCostInv_columnHeader_first_header {
   z-index: 20 !important;
+  background-color: whitesmoke !important;
+  color: black !important;
 }
 .cmpCostInv_columnHeader {
   z-index: 20 !important;
+  top: 30px !important;
+  color: black !important;
+  background-color: whitesmoke !important;
+  border: 1px solid #ddd !important ;
+  position: sticky !important;
 }
 .cmpCostInv_nestedRow {
   background-color: #f9f9f9;
@@ -87,10 +97,10 @@
   text-align: center !important;
   color: rgb(82, 32, 134) !important;
   border-right: 1px solid #ddd;
-  position: sticky !important;
+  /* position: sticky !important; */
   top: 0px;
   left: 0;
-  z-index: 10;
+  /* z-index: 10; */
   background-color: whitesmoke !important;
 }
 .cmpCostInv_tableCell {
@@ -147,8 +157,10 @@
 .cmpCostInv_groupBySelect {
   min-width: 150px;
   margin-left: 8px;
+
   margin-top: 17px;
   color: #63666a;
+  z-index: 1000;
 }
 .cmpCostInv_dialogPaper {
   background-color: #d9d9d9;
@@ -159,13 +171,12 @@
   padding: 20px;
 }
 
-.loading-container3{
+.loading-container3 {
   display: flex;
   justify-content: center;
   align-items: center;
-   height: 100%; 
+  height: 100%;
 }
-
 
 @media (max-width: 768px) {
   .cmpCostInv_header {

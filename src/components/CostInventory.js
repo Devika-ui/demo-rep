@@ -27,11 +27,11 @@ const TableRowComponent = ({
   rowKey,
   indentIncrement,
   selectedColumns,
-  uniqueMonths
+  uniqueMonths,
 }) => {
   let transformedData = [];
   const indentLevel = level * indentIncrement;
- 
+
   const hasNestedData = (item) =>
     Array.isArray(item?.children) && item.children.length > 0;
 
@@ -46,7 +46,7 @@ const TableRowComponent = ({
       OnDemandCost: 0,
       ReservationCost: 0,
       SavingsPlanCost: 0,
-      MarketPurchaseCost: 0
+      MarketPurchaseCost: 0,
     };
 
     const aggregateChildrenData = (children) => {
@@ -111,8 +111,8 @@ const TableRowComponent = ({
                 <React.Fragment key={`${month}-${item.name}`}>
                   {selectedColumns.map((col) => (
                     <TableCell className="cmpCostInv_cell">
-                    {formatValueToTwoDecimals(monthData[col] || "0")}
-                  </TableCell>
+                      {formatValueToTwoDecimals(monthData[col] || "0")}
+                    </TableCell>
                   ))}
                 </React.Fragment>
               );
@@ -195,7 +195,7 @@ const CostInventory = ({ selectedCSP }) => {
           const groupedData = parseAndGroupByMonth(subscription);
           setTableData((prevTableData) => ({
             ...prevTableData,
-            [subscription]: groupedData
+            [subscription]: groupedData,
           }));
           setLoadedSubscriptions((prev) => ({
             ...prev,
@@ -210,119 +210,121 @@ const CostInventory = ({ selectedCSP }) => {
     const transformDataToArrayFormat = (data) => {
       const result = [];
       const allMonths = new Set();
-      if(data) {
+      if (data) {
         // First pass: Collect all unique months
-      for(const [subscription,categories] of Object.entries(data)) {
-        if(subscription === subscriptionName){
-          for (const subCategories of Object.values(categories)) {
-            for (const resourceGroups of Object.values(subCategories)) {
-              for (const resources of Object.values(resourceGroups)) {
-                for (const resourceDetails of Object.values(resources)) {
-                  const { Date: date } = resourceDetails;
-                  const month = new Date(date).toISOString().slice(0, 7);
-                  allMonths.add(month);
+        for (const [subscription, categories] of Object.entries(data)) {
+          if (subscription === subscriptionName) {
+            for (const subCategories of Object.values(categories)) {
+              for (const resourceGroups of Object.values(subCategories)) {
+                for (const resources of Object.values(resourceGroups)) {
+                  for (const resourceDetails of Object.values(resources)) {
+                    const { Date: date } = resourceDetails;
+                    const month = new Date(date).toISOString().slice(0, 7);
+                    allMonths.add(month);
+                  }
                 }
               }
             }
           }
         }
-      }
 
-      // Second pass: Transform data into hierarchical array structure
-      for(const [subscription,categories] of Object.entries(data)){        
-        if(subscription === subscriptionName) {
-          const subscriptionNode = {
-            name: subscription,
-            type: "subscription",
-            children: [],
-          };
-          for (const [category, subCategories] of Object.entries(categories)) {
-            const categoryNode = {
-              name: category,
-              type: "category",
+        // Second pass: Transform data into hierarchical array structure
+        for (const [subscription, categories] of Object.entries(data)) {
+          if (subscription === subscriptionName) {
+            const subscriptionNode = {
+              name: subscription,
+              type: "subscription",
               children: [],
             };
-    
-            for (const [subCategory, resourceGroups] of Object.entries(
-              subCategories
+            for (const [category, subCategories] of Object.entries(
+              categories
             )) {
-              const subCategoryNode = {
-                name: subCategory,
-                type: "subCategory",
+              const categoryNode = {
+                name: category,
+                type: "category",
                 children: [],
               };
-    
-              for (const [resourceGroupName, resources] of Object.entries(
-                resourceGroups
+
+              for (const [subCategory, resourceGroups] of Object.entries(
+                subCategories
               )) {
-                const resourceGroupNode = {
-                  name: resourceGroupName,
-                  type: "resourceGroup",
+                const subCategoryNode = {
+                  name: subCategory,
+                  type: "subCategory",
                   children: [],
                 };
-    
-                for (const [resourceName, resourceDetails] of Object.entries(
-                  resources
+
+                for (const [resourceGroupName, resources] of Object.entries(
+                  resourceGroups
                 )) {
-                  const resourceNode = {
-                    name: resourceName,
-                    type: "resource",
+                  const resourceGroupNode = {
+                    name: resourceGroupName,
+                    type: "resourceGroup",
                     children: [],
                   };
-    
-                  // Extract the month data and ensure all months are present
-                  const monthData = {};
-                  for (const uniqueMonth of allMonths) {
-                    monthData[uniqueMonth] = {
-                      TotalBill: 0,
-                      OnDemandCost: 0,
-                      CommitmentsCost: 0,
-                      Savings: 0,
-                    };
-                  }
-    
-                  const {
-                    Date: date,
-                    TotalBill,
-                    OnDemandCost,
-                    CommitmentsCost,
-                    Savings,
-                  } = resourceDetails;
-                  const month = new Date(date).toISOString().slice(0, 7);
-                  monthData[month] = {
-                    TotalBill,
-                    OnDemandCost,
-                    CommitmentsCost,
-                    Savings,
-                  };
-    
-                  // Convert month data into an array for the resource
-                  for (const [monthName, monthDetails] of Object.entries(
-                    monthData
+
+                  for (const [resourceName, resourceDetails] of Object.entries(
+                    resources
                   )) {
-                    resourceNode.children.push({
-                      name: monthName,
-                      type: "month",
-                      ...monthDetails,
-                    });
+                    const resourceNode = {
+                      name: resourceName,
+                      type: "resource",
+                      children: [],
+                    };
+
+                    // Extract the month data and ensure all months are present
+                    const monthData = {};
+                    for (const uniqueMonth of allMonths) {
+                      monthData[uniqueMonth] = {
+                        TotalBill: 0,
+                        OnDemandCost: 0,
+                        CommitmentsCost: 0,
+                        Savings: 0,
+                      };
+                    }
+
+                    const {
+                      Date: date,
+                      TotalBill,
+                      OnDemandCost,
+                      CommitmentsCost,
+                      Savings,
+                    } = resourceDetails;
+                    const month = new Date(date).toISOString().slice(0, 7);
+                    monthData[month] = {
+                      TotalBill,
+                      OnDemandCost,
+                      CommitmentsCost,
+                      Savings,
+                    };
+
+                    // Convert month data into an array for the resource
+                    for (const [monthName, monthDetails] of Object.entries(
+                      monthData
+                    )) {
+                      resourceNode.children.push({
+                        name: monthName,
+                        type: "month",
+                        ...monthDetails,
+                      });
+                    }
+
+                    resourceGroupNode.children.push(resourceNode);
                   }
-    
-                  resourceGroupNode.children.push(resourceNode);
+
+                  subCategoryNode.children.push(resourceGroupNode);
                 }
-    
-                subCategoryNode.children.push(resourceGroupNode);
+
+                categoryNode.children.push(subCategoryNode);
               }
-    
-              categoryNode.children.push(subCategoryNode);
+
+              subscriptionNode.children.push(categoryNode);
             }
-    
-            subscriptionNode.children.push(categoryNode)
+            result.push(subscriptionNode);
           }
-          result.push(subscriptionNode);
         }
       }
-    }
-    return result;
+      return result;
     };
     const transformedData = transformDataToArrayFormat(window.apiData);
     const extractMonths = (data) => {
@@ -362,7 +364,10 @@ const CostInventory = ({ selectedCSP }) => {
         `Fetching data for subscription: ${subscriptionName}, page: ${page}`
       ); // Debug log
       const rawData = await api.getCloudInventory(subscriptionName, page);
-      window.apiData[subscriptionName] = appendData(window.apiData[subscriptionName] || {},rawData[subscriptionName] )
+      window.apiData[subscriptionName] = appendData(
+        window.apiData[subscriptionName] || {},
+        rawData[subscriptionName]
+      );
       setPageState((prev) => ({ ...prev, [subscriptionName]: page }));
     } catch (error) {
       console.error("Error fetching more data:", error);
@@ -402,7 +407,10 @@ const CostInventory = ({ selectedCSP }) => {
               .reduce((sum, item) => sum + item.totalcount, 0);
             pageState[subscription] = Math.ceil(totalCount / 1000);
             const rawData = await api.getCloudInventory(subscription, 1);
-            window.apiData[subscription] = appendData(window.apiData[subscription] || {},rawData[subscription] )
+            window.apiData[subscription] = appendData(
+              window.apiData[subscription] || {},
+              rawData[subscription]
+            );
             const transformedData = parseAndGroupByMonth(subscription);
             dataState[subscription] = transformedData;
           })
@@ -472,7 +480,10 @@ const CostInventory = ({ selectedCSP }) => {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell rowSpan={2} className="cmpCostInv_columnHeader_first_header">
+              <TableCell
+                rowSpan={2}
+                className="cmpCostInv_columnHeader_first_header"
+              >
                 SubscriptionName
               </TableCell>
               {formattedMonths.map((month, index) => (
@@ -485,30 +496,31 @@ const CostInventory = ({ selectedCSP }) => {
                   {month}
                 </TableCell>
               ))}
-              
             </TableRow>
             <TableRow>
-            {formattedMonths.map((month, index) => (columns.map((col) => (
-                <TableCell key={col} className="cmpCostInv_columnHeader">
-                  {col}
-                </TableCell>
-              ))))}
+              {formattedMonths.map((month, index) =>
+                columns.map((col) => (
+                  <TableCell key={col} className="cmpCostInv_columnHeader">
+                    {col}
+                  </TableCell>
+                ))
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
-                {/* Render nested levels */}
-                {Object.entries(tableData).map(([subscriptionName, data]) => (
-                  <TableRowComponent
-                  data={data || []}
-                  level={0}
-                  toggleRow={toggleRow}
-                  expandedRows={expandedRows}
-                  rowKey={subscriptionName}
-                  indentIncrement={20}
-                  selectedColumns={columns}
-                  uniqueMonths={uniqueMonths}
-                />
-                ))}               
+            {/* Render nested levels */}
+            {Object.entries(tableData).map(([subscriptionName, data]) => (
+              <TableRowComponent
+                data={data || []}
+                level={0}
+                toggleRow={toggleRow}
+                expandedRows={expandedRows}
+                rowKey={subscriptionName}
+                indentIncrement={20}
+                selectedColumns={columns}
+                uniqueMonths={uniqueMonths}
+              />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

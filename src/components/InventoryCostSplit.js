@@ -113,7 +113,11 @@ const InventoryCostSplit = () => {
         >
           Inventory Cost Split
         </Typography>
-        <Subheader onButtonClick={handleButtonClick}  onFiltersChange={handleFiltersChange} selectedCSP={selectedProvider}/>
+        <Subheader
+          onButtonClick={handleButtonClick}
+          onFiltersChange={handleFiltersChange}
+          selectedCSP={selectedProvider}
+        />
         <NavigationBar />
       </Box>
       <NavigationBar />
@@ -136,7 +140,7 @@ const InventoryCostSplit = () => {
           marginBottom: "10px",
         }}
       >
-        <CostInventory selectedCSP={selectedProvider}/>
+        <CostInventory selectedCSP={selectedProvider} />
       </div>
     </div>
   );
