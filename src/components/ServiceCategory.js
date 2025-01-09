@@ -30,12 +30,16 @@ const TableRowComponent = ({
   const hasNestedData = (item) =>
     Array.isArray(item?.children) && item.children.length > 0;
 
+  const isResourceLevel = (item) =>
+    !hasNestedData(item) || item.type === "resource"; // Assuming resource items have `type: "resource"`
+
   // Helper function to format values to 2 decimal points
   const formatValueToTwoDecimals = (value) => {
     return parseFloat(value || 0).toFixed(2);
   };
 
-  const aggregateMonthData = (month, item) => {
+  // Dynamically aggregate data for each level
+  const aggregateData = (month, item) => {
     const initialData = {
       TotalBill: 0,
       OnDemandCost: 0,
@@ -43,7 +47,7 @@ const TableRowComponent = ({
       Savings: 0,
     };
 
-    const aggregateChildrenData = (children) => {
+    const aggregateChildren = (children) => {
       return children.reduce(
         (acc, child) => {
           if (child.name === month && child.type === "month") {
@@ -53,7 +57,7 @@ const TableRowComponent = ({
             acc.Savings += child.Savings || 0;
           }
           if (child.children && child.children.length > 0) {
-            const nestedData = aggregateChildrenData(child.children);
+            const nestedData = aggregateChildren(child.children);
             acc.TotalBill += nestedData.TotalBill;
             acc.OnDemandCost += nestedData.OnDemandCost;
             acc.CommitmentsCost += nestedData.CommitmentsCost;
@@ -65,7 +69,7 @@ const TableRowComponent = ({
       );
     };
 
-    return aggregateChildrenData(item?.children || []);
+    return aggregateChildren(item?.children || []);
   };
 
   return (
@@ -74,10 +78,11 @@ const TableRowComponent = ({
         <React.Fragment key={`${rowKey}-${index}`}>
           <TableRow className="cmpSvcCat_nestedRow">
             <TableCell
-              style={{ paddingLeft: indentLevel, width: "200px  " }}
+              style={{ paddingLeft: indentLevel, width: "200px" }}
               className="cmpSvcCat_first_cell"
             >
-              {level < 3 && hasNestedData(item) && (
+              {/* Only show expand button if not at resource level */}
+              {!isResourceLevel(item) && hasNestedData(item) && (
                 <IconButton
                   size="small"
                   onClick={() => toggleRow(rowKey, index)}
@@ -94,11 +99,11 @@ const TableRowComponent = ({
 
             {uniqueMonths.map((month) => {
               const monthData =
-                level === 3
+                level === "leaf"
                   ? item.children?.find(
                       (child) => child.name === month && child.type === "month"
                     ) || {}
-                  : aggregateMonthData(month, item);
+                  : aggregateData(month, item);
 
               return (
                 <React.Fragment key={`${month}-${item.name}`}>
@@ -120,9 +125,8 @@ const TableRowComponent = ({
           </TableRow>
 
           {expandedRows[rowKey]?.[index] &&
-            level < 3 &&
-            item.children &&
-            item.children.length > 0 && (
+            !isResourceLevel(item) &&
+            hasNestedData(item) && (
               <TableRowComponent
                 data={item.children}
                 level={level + 1}
@@ -150,45 +154,45 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
   const tableRef = useRef(null);
 
   useEffect(() => {
-      if (!dummyData?.length) {
-        return;
-      }
-      setLoading(true);
+    if (!dummyData?.length) {
+      return;
+    }
+    setLoading(true);
 
-      // Recursively extract 'name' field where 'type' is 'month'
-      const extractMonths = (data) => {
-        let months = [];
-        data.forEach((item) => {
-          if (item.children) {
-            months = months.concat(extractMonths(item.children));
-          }
-          if (item.type === "month" && item.name) {
-            months.push(item.name);
-          }
-        });
-        return months;
-      };
+    // Recursively extract 'name' field where 'type' is 'month'
+    const extractMonths = (data) => {
+      let months = [];
+      data.forEach((item) => {
+        if (item.children) {
+          months = months.concat(extractMonths(item.children));
+        }
+        if (item.type === "month" && item.name) {
+          months.push(item.name);
+        }
+      });
+      return months;
+    };
 
-      // Extract unique months
-      const months = Array.from(new Set(extractMonths(dummyData)));
-      months.sort((a, b) => new Date(a) - new Date(b));
-      setUniqueMonths(months);
-      function formatMonthYear(dateString) {
-        const date = new Date(dateString);
-        const options = { year: "numeric", month: "long" }; // e.g., "January-2024"
-        return date.toLocaleDateString("en-US", options).replace(" ", "-");
-      }
+    // Extract unique months
+    const months = Array.from(new Set(extractMonths(dummyData)));
+    months.sort((a, b) => new Date(a) - new Date(b));
+    setUniqueMonths(months);
+    function formatMonthYear(dateString) {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "long" }; // e.g., "January-2024"
+      return date.toLocaleDateString("en-US", options).replace(" ", "-");
+    }
 
-      // Sort the dates in ascending order
-      const sortedMonths = months.sort((a, b) => new Date(a) - new Date(b));
+    // Sort the dates in ascending order
+    const sortedMonths = months.sort((a, b) => new Date(a) - new Date(b));
 
-      // Map the sorted array to the new format
-      const formattedMonths = sortedMonths.map(formatMonthYear);
-      console.log(formattedMonths);
-      setFormattedMonths(formattedMonths);
-    
+    // Map the sorted array to the new format
+    const formattedMonths = sortedMonths.map(formatMonthYear);
+    console.log(formattedMonths);
+    setFormattedMonths(formattedMonths);
+
     setLoading(false);
-}, [dummyData]);
+  }, [dummyData]);
 
   useEffect(() => {
     // Reset sortedData to the original dummyData when the component mounts or is refreshed
@@ -310,64 +314,71 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
         </div>
         {/* <div className="cmpSvcCat_tableHeader"></div> */}
         {loading ? (
-           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%"}}>
-               <CircularProgress />
-           </div>
-            ) : (
-        <TableContainer ref={tableRef} className="cmpSvcCat_tableContainer">
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  rowSpan={2}
-                  className="cmpSvcCat_columnHeader_first_header"
-                >
-                  {tableData[0].columnHead1}
-                </TableCell>
-                {formattedMonths.map((month, index) => (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <CircularProgress />
+          </div>
+        ) : (
+          <TableContainer ref={tableRef} className="cmpSvcCat_tableContainer">
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
                   <TableCell
-                    key={index}
-                    colSpan={4} // Adjust this based on the number of replicated headers per month
-                    className="cmpSvcCat_tableHeader"
+                    rowSpan={2}
+                    className="cmpSvcCat_columnHeader_first_header"
                   >
-                    {month}
+                    {tableData[0].columnHead1}
                   </TableCell>
-                ))}
-              </TableRow>
-              <TableRow>
-                {uniqueMonths.flatMap((month, monthIndex) =>
-                  headers.map((headerKey, index) => {
-                    // Skip the 0th index for the second iteration (monthIndex > 0)
-                    if (monthIndex >= 0 && index === 0) {
-                      return null; // Skip rendering for this cell
-                    }
+                  {formattedMonths.map((month, index) => (
+                    <TableCell
+                      key={index}
+                      colSpan={4} // Adjust this based on the number of replicated headers per month
+                      className="cmpSvcCat_tableHeader"
+                    >
+                      {month}
+                    </TableCell>
+                  ))}
+                </TableRow>
+                <TableRow>
+                  {uniqueMonths.flatMap((month, monthIndex) =>
+                    headers.map((headerKey, index) => {
+                      // Skip the 0th index for the second iteration (monthIndex > 0)
+                      if (monthIndex >= 0 && index === 0) {
+                        return null; // Skip rendering for this cell
+                      }
 
-                    return (
-                      <TableCell
-                        key={`${month}-${headerKey}-${index}`}
-                        className="cmpSvcCat_columnHeader"
-                      >
-                        {tableData[0][headerKey]}
-                      </TableCell>
-                    );
-                  })
-                )}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRowComponent
-                data={sortedData || []}
-                level={0}
-                toggleRow={toggleRow}
-                expandedRows={expandedRows}
-                rowKey="category"
-                indentIncrement={indentIncrement}
-                uniqueMonths={uniqueMonths}
-              />
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) } 
+                      return (
+                        <TableCell
+                          key={`${month}-${headerKey}-${index}`}
+                          className="cmpSvcCat_columnHeader"
+                        >
+                          {tableData[0][headerKey]}
+                        </TableCell>
+                      );
+                    })
+                  )}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRowComponent
+                  data={sortedData || []}
+                  level={0}
+                  toggleRow={toggleRow}
+                  expandedRows={expandedRows}
+                  rowKey="category"
+                  indentIncrement={indentIncrement}
+                  uniqueMonths={uniqueMonths}
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </div>
 
       {isOverlayOpen && (

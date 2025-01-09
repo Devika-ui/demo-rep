@@ -11,6 +11,7 @@ import api from "../api";
 import MonthlyCostTrends from "./MonthlyCostTrends";
 import { Box, Typography } from "@mui/material";
 import componentUtil from "../componentUtil.js";
+import TotalBillAllocationTable from "./TotalBillAllocationTable.js";
 import { json } from "react-router-dom";
 
 const BusinessCostSplit = () => {
@@ -32,6 +33,10 @@ const BusinessCostSplit = () => {
   const [serviceData, setServiceData] = useState(null);
   const [selectedProvider, setSelectedProvider] = useState(1);
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [uniqueMonths, setUniqueMonths] = useState([]);
+  const [filteredData, setFilteredData] = useState(billAllocationData);
+  const [applicationNames, setApplicationNames] = useState([]);
+
   let inputData = selectedFilters;
 
   const handleButtonClick = (value) => {
@@ -39,172 +44,142 @@ const BusinessCostSplit = () => {
     setSelectedProvider(value);
     setShowStackBars(value !== 1);
   };
-  
 
   const handleFiltersChange = (newFilters) => {
     setSelectedFilters(newFilters);
   };
 
+  useEffect(() => {
+    const uniqueApplications = billAllocationData.map((app) => app.name);
+    setApplicationNames(uniqueApplications);
+  }, [billAllocationData]);
+
   const handleReportTypeChange = (event) => {
-    const selectedReportType = event.target.value;
-    setReportType(selectedReportType);
+    const selectedApplication = event.target.value;
+    setReportType(selectedApplication);
 
-    if (selectedReportType) {
-      const filteredData = billAllocationData.filter((item) => {
-        return Object.keys(item).some(
-          (key) => key.startsWith("name_") && item[key] === selectedReportType
-        );
-      });
-      // const selectedApplication = filteredData.map((item) => item.name_0);
-      const selectedApplication = filteredData.map((item) => {
-        // Find the first available non-empty name among name_0, name_1, name_2
-        return (
-          item.name_0?.trim() ||
-          item.name_1?.trim() ||
-          item.name_2?.trim() ||
-          "No Name Found"
-        );
-      });
-
-      setApplicationData(selectedApplication);
-      setFilteredBillAllocationData(filteredData);
+    if (selectedApplication) {
+      const filtered = billAllocationData.filter(
+        (app) => app.name === selectedApplication
+      );
+      setFilteredBillAllocationData(filtered);
     } else {
-      const selectedApplication = billAllocationData.map((item) => {
-        // Find the first available non-empty name among name_0, name_1, name_2
-        return (
-          item.name_0?.trim() ||
-          item.name_1?.trim() ||
-          item.name_2?.trim() ||
-          "No Name Found"
-        );
-      });
-
-      setApplicationData(selectedApplication);
+      // Reset to show all applications
       setFilteredBillAllocationData(billAllocationData);
     }
   };
-
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const serviceCategoryCost = await api.getServiceCategoryCost(inputData);
+
         const transformDataToArrayFormat = (data) => {
           const result = [];
           const allMonths = new Set();
 
-          // First pass: Collect all unique months
-          for (const subCategories of Object.values(data)) {
-            for (const resourceGroups of Object.values(subCategories)) {
-              for (const resources of Object.values(resourceGroups)) {
-                for (const resourceDetails of Object.values(resources)) {
-                  const { Date: date } = resourceDetails;
-                  const month = new Date(date).toISOString().slice(0, 7);
-                  allMonths.add(month);
+          const collectMonths = (node) => {
+            for (const key in node) {
+              if (typeof node[key] === "object" && node[key] !== null) {
+                collectMonths(node[key]);
+              } else if (key === "Date") {
+                const month = new Date(node[key]).toISOString().slice(0, 7);
+                allMonths.add(month);
+              }
+            }
+          };
+
+          collectMonths(data);
+
+          const transformNode = (node, nodeName) => {
+            if (typeof node !== "object" || node === null) {
+              return null;
+            }
+
+            const children = [];
+            let isLeafNode = true;
+
+            for (const key in node) {
+              if (typeof node[key] === "object" && node[key] !== null) {
+                const childNode = transformNode(node[key], key);
+                if (childNode) {
+                  isLeafNode = false;
+                  children.push(childNode);
                 }
               }
             }
-          }
 
-          // Second pass: Transform data into hierarchical array structure
-          for (const [category, subCategories] of Object.entries(data)) {
-            const categoryNode = {
-              name: category,
-              type: "category",
-              children: [],
-            };
+            if (isLeafNode) {
+              const monthData = {};
 
-            for (const [subCategory, resourceGroups] of Object.entries(
-              subCategories
-            )) {
-              const subCategoryNode = {
-                name: subCategory,
-                type: "subCategory",
-                children: [],
+              for (const uniqueMonth of allMonths) {
+                monthData[uniqueMonth] = {
+                  TotalBill: 0,
+                  OnDemandCost: 0,
+                  CommitmentsCost: 0,
+                  Savings: 0,
+                };
+              }
+
+              // Populate month data for this leaf node
+              const {
+                Date: date,
+                TotalBill,
+                OnDemandCost,
+                CommitmentsCost,
+                Savings,
+              } = node;
+              const month = new Date(date).toISOString().slice(0, 7);
+              monthData[month] = {
+                TotalBill,
+                OnDemandCost,
+                CommitmentsCost,
+                Savings,
               };
 
-              for (const [resourceGroupName, resources] of Object.entries(
-                resourceGroups
-              )) {
-                const resourceGroupNode = {
-                  name: resourceGroupName,
-                  type: "resourceGroup",
-                  children: [],
-                };
+              const monthChildren = Object.entries(monthData).map(
+                ([monthName, monthDetails]) => ({
+                  name: monthName,
+                  type: "month",
+                  ...monthDetails,
+                })
+              );
 
-                for (const [resourceName, resourceDetails] of Object.entries(
-                  resources
-                )) {
-                  const resourceNode = {
-                    name: resourceName,
-                    type: "resource",
-                    children: [],
-                  };
-
-                  // Extract the month data and ensure all months are present
-                  const monthData = {};
-                  for (const uniqueMonth of allMonths) {
-                    monthData[uniqueMonth] = {
-                      TotalBill: 0,
-                      OnDemandCost: 0,
-                      CommitmentsCost: 0,
-                      Savings: 0,
-                    };
-                  }
-
-                  const {
-                    Date: date,
-                    TotalBill,
-                    OnDemandCost,
-                    CommitmentsCost,
-                    Savings,
-                  } = resourceDetails;
-                  const month = new Date(date).toISOString().slice(0, 7);
-                  monthData[month] = {
-                    TotalBill,
-                    OnDemandCost,
-                    CommitmentsCost,
-                    Savings,
-                  };
-
-                  // Convert month data into an array for the resource
-                  for (const [monthName, monthDetails] of Object.entries(
-                    monthData
-                  )) {
-                    resourceNode.children.push({
-                      name: monthName,
-                      type: "month",
-                      ...monthDetails,
-                    });
-                  }
-
-                  resourceGroupNode.children.push(resourceNode);
-                }
-
-                subCategoryNode.children.push(resourceGroupNode);
-              }
-
-              categoryNode.children.push(subCategoryNode);
+              return {
+                name: nodeName,
+                type: "resource",
+                children: monthChildren,
+              };
             }
 
-            result.push(categoryNode);
+            // Non-leaf node
+            return {
+              name: nodeName,
+              type: isLeafNode ? "resource" : "category",
+              children,
+            };
+          };
+
+          // Process the top-level data structure
+          for (const [key, value] of Object.entries(data)) {
+            const transformedNode = transformNode(value, key);
+            if (transformedNode) {
+              result.push(transformedNode);
+            }
           }
 
           return result;
         };
 
-        // Example usage
         const transformedData = transformDataToArrayFormat(serviceCategoryCost);
 
-        console.log("tt", transformedData);
+        console.log("Transformed Data:", transformedData);
         setServiceData(transformedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-      fetchData();
-    
+
+    fetchData();
   }, [selectedProvider]);
 
   useEffect(() => {
@@ -273,147 +248,198 @@ const BusinessCostSplit = () => {
         console.error("Error fetching data:", error);
       }
     };
-      fetchData();
+    fetchData();
   }, [selectedProvider]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBillAllocationData = async () => {
       try {
+        if (!inputData) {
+          console.log("No input data, skipping API calls.");
+          return;
+        }
+
         const billAllocation = await api.getBillAllocation(inputData);
 
-        // Process and format the bill allocation data
-        const billAllocationMap = Object.keys(
-          billAllocation.billAllocation
-        ).reduce((acc, appName) => {
-          const appData = billAllocation.billAllocation[appName];
-          appData.forEach((item) => {
-            const modifiedDate = new Date(item.modifieddate);
-            const monthString = modifiedDate.toLocaleString("en-US", {
-              month: "long",
-            });
-            const yearString = modifiedDate.getFullYear().toString().slice(-2);
-            const formattedDate = `${monthString}-${yearString}`;
+        function extractUniqueMonths(data) {
+          const months = new Set();
 
-            if (!acc[formattedDate]) {
-              acc[formattedDate] = [];
-            }
-
-            acc[formattedDate].push({
-              name: appName === null ? " " : appName,
-              ownerName: item.tags_owner,
-              onDemandCost: item.onDemandCost
-                ? `${item.onDemandCost.toFixed(2)}`
-                : "",
-              normalizedVariation:
-                item.Normalized_Variation_MoM === null
-                  ? " "
-                  : item.Normalized_Variation_MoM === 0
-                  ? "0.00"
-                  : `${(item.Normalized_Variation_MoM * 100).toFixed(2)}%`,
-              savings: item.savings ? `${item.savings.toFixed(2)}` : "",
-              totalBill: item.totalBill ? `${item.totalBill.toFixed(2)}` : "",
-            });
-          });
-
-          return acc;
-        }, {});
-
-        // Get unique modified dates for table headers
-        const uniqueModifiedDatesForBillAllocation =
-          Object.keys(billAllocationMap);
-
-        // Group data by application name and owner name
-        const groupedData = {};
-        uniqueModifiedDatesForBillAllocation.forEach((date, dateIndex) => {
-          billAllocationMap[date].forEach((item) => {
-            const key = `${item.name}_${item.ownerName}`;
-            if (!groupedData[key]) {
-              groupedData[key] = Array(
-                uniqueModifiedDatesForBillAllocation.length
-              )
-                .fill(null)
-                .map(() => ({
-                  name: "",
-                  ownerName: "",
-                  onDemandCost: "",
-                  normalizedVariation: "",
-                  savings: "",
-                  totalBill: "",
-                }));
-            }
-            groupedData[key][dateIndex] = {
-              name: item.name,
-              ownerName: item.ownerName,
-              onDemandCost: item.onDemandCost ? item.onDemandCost : "0.00",
-              normalizedVariation: item.normalizedVariation
-                ? item.normalizedVariation
-                : "0",
-              savings: item.savings ? item.savings : "0.00",
-              totalBill: item.totalBill ? item.totalBill : "0.00",
-            };
-          });
-        });
-
-        const applicationData = Object.values(groupedData).map((entries) => {
-          // Check each entry in the array and return the first valid name found.
-          for (let i = 0; i < entries.length; i++) {
-            if (entries[i]?.name) {
-              return entries[i].name;
-            }
-          }
-          return null; // Return null if no valid name is found
-        });
-        setApplicationData(applicationData);
-        const flattenedBillAllocationData = Object.values(groupedData).map(
-          (entries) => {
-            let hasNameBeenSet = false;
-            return entries.reduce((acc, entry, index) => {
-              if (!acc.name && entry.name && entry.name.trim()) {
-                acc[`name_${index}`] = entry.name;
-                hasNameBeenSet = true; // Store the first non-empty name
+          function traverse(obj) {
+            if (obj && typeof obj === "object") {
+              if ("modifieddate" in obj) {
+                const month = new Date(obj.modifieddate)
+                  .toISOString()
+                  .slice(0, 7);
+                months.add(month);
               }
-              acc[`ownerName_${index}`] = entry.ownerName;
-              acc[`onDemandCost_${index}`] = entry.onDemandCost;
-              acc[`normalizedVariation_${index}`] = entry.normalizedVariation;
-              acc[`savings_${index}`] = entry.savings;
-              acc[`totalBill_${index}`] = entry.totalBill;
-
-              return acc;
-            }, {});
-          }
-        );
-        // Extract unique application names from flattenedBillAllocationData
-        const uniqueNamesSet = new Set();
-        flattenedBillAllocationData.forEach((item) => {
-          Object.keys(item).forEach((key) => {
-            if (key.startsWith("name_")) {
-              uniqueNamesSet.add(item[key]);
+              for (const key in obj) {
+                traverse(obj[key]);
+              }
             }
-          });
-        });
-        const uniqueNames = [...uniqueNamesSet];
+          }
 
-        // Set the required state for your application
-        setBillAllocationData(flattenedBillAllocationData);
-        setFilteredBillAllocationData(flattenedBillAllocationData);
-        setHeaderLabelsForBillAllocation(uniqueModifiedDatesForBillAllocation);
-        setUniqueBillAllocationData(uniqueNames);
-        console.log("flattenedBillAllocationData", flattenedBillAllocationData);
+          traverse(data);
+          return Array.from(months);
+        }
+
+        const uniqueMonths = extractUniqueMonths(billAllocation);
+        setUniqueMonths(uniqueMonths);
+
+        // Transform bill allocation data into a hierarchical structure
+        const transformBillAllocationDataDynamic = (data) => {
+          const result = [];
+          const allMonths = new Set();
+
+          function collectMonths(data) {
+            if (data && typeof data === "object") {
+              if (data.modifieddate) {
+                const month = new Date(data.modifieddate)
+                  .toISOString()
+                  .slice(0, 7);
+                allMonths.add(month);
+              }
+              for (const key in data) {
+                collectMonths(data[key]);
+              }
+            }
+          }
+
+          collectMonths(data);
+
+          function transformNode(node, name = "root", type = "root") {
+            let transformedNode = {
+              name,
+              type,
+              children: [],
+            };
+
+            if (node && typeof node === "object" && !Array.isArray(node)) {
+              for (const [key, value] of Object.entries(node)) {
+                if (key === "modifieddate") {
+                  continue;
+                }
+
+                if (typeof value === "object" && value !== null) {
+                  transformedNode.children.push(
+                    transformNode(value, key, "node")
+                  );
+                }
+              }
+
+              if (node.modifieddate) {
+                const monthData = {};
+                for (const uniqueMonth of allMonths) {
+                  monthData[uniqueMonth] = {
+                    tags_owner: null,
+                    onDemandCost: 0,
+                    reservedInstanceCost: 0,
+                    savings: 0,
+                    totalBill: 0,
+                    deltaNormalizedVariationMoM: 0,
+                    Normalized_Variation_MoM: 0,
+                  };
+                }
+
+                const resourceMonth = new Date(node.modifieddate)
+                  .toISOString()
+                  .slice(0, 7);
+
+                if (allMonths.has(resourceMonth)) {
+                  monthData[resourceMonth] = {
+                    tags_owner: node.tags_owner || null,
+                    onDemandCost: node.onDemandCost || 0,
+                    reservedInstanceCost: node.reservedInstanceCost || 0,
+                    savings: node.savings || 0,
+                    totalBill: node.totalBill || 0,
+                    deltaNormalizedVariationMoM:
+                      node.deltaNormalizedVariationMoM || 0,
+                    Normalized_Variation_MoM:
+                      node.Normalized_Variation_MoM || 0,
+                  };
+                }
+
+                for (const [monthName, monthDetails] of Object.entries(
+                  monthData
+                )) {
+                  transformedNode.children.push({
+                    name: monthName,
+                    type: "month",
+                    ...monthDetails,
+                  });
+                }
+              }
+
+              if (
+                transformedNode.children.some((child) => child.type === "month")
+              ) {
+                transformedNode.type = "resource";
+              }
+            }
+
+            return transformedNode;
+          }
+
+          for (const [key, value] of Object.entries(data)) {
+            result.push(transformNode(value, key, "application"));
+          }
+
+          return result;
+        };
+
+        const transformedData = transformBillAllocationDataDynamic(
+          billAllocation.billAllocation
+        );
+        const applicationNames = transformedData.map((app) => app.name);
+        setApplicationNames(applicationNames);
+
+        console.log("Transformed Data:", transformedData);
+        setBillAllocationData(transformedData);
+        setFilteredBillAllocationData(transformedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
-      fetchData();
+    fetchBillAllocationData();
   }, [selectedProvider]);
 
+  // const columns1 = [
+  //   { key: "ownerName", label: "Owner Name" },
+  //   { key: "totalBill", label: `Total Bill (${currencySymbol})` },
+  //   { key: "normalizedVariation", label: "%Normalized Variation" },
+  //   { key: "rawVariation", label: "%Raw Variation" },
+  //   { key: "savings", label: `Savings (${currencySymbol})` },
+  // ];
   const columns1 = [
-    { key: "ownerName", label: "Owner Name" },
-    { key: "totalBill", label: `Total Bill (${currencySymbol})` },
-    { key: "normalizedVariation", label: "%Normalized Variation" },
-    { key: "rawVariation", label: "%Raw Variation" },
-    { key: "savings", label: `Savings (${currencySymbol})` },
+    {
+      tableTitle: "Total Bill Allocation across Application",
+      columnHead1: { key: "applicationName", title: "Application Name" },
+      columnHead2: { key: "tags_owner", title: "Owner Name" },
+      columnHead3: {
+        key: "totalBill",
+        title: `Total Bill (${currencySymbol})`,
+      },
+      columnHead4: {
+        key: "Normalized_Variation_MoM",
+        title: `%Normalized Variation (${currencySymbol})`,
+      },
+      columnHead5: {
+        key: "rawVariation",
+        title: `%Raw Variation (${currencySymbol})`,
+      },
+      columnHead6: { key: "savings", title: `Savings (${currencySymbol})` },
+    },
   ];
+  // const columns1 = [
+  //   {
+  //     tableTitle: "Total Bill Allocation across Application",
+  //     columnHead1: "Application Name",
+  //     columnHead2: "Owner Name",
+  //     columnHead3: `Total Bill (${currencySymbol})`,
+  //     columnHead4: `%Normalized Variation (${currencySymbol})`,
+  //     columnHead5: `%Raw Variation (${currencySymbol})`,
+  //     columnHead6: `Savings (${currencySymbol})`,
+  //   },
+  // ];
 
   const tableData = [
     {
@@ -425,6 +451,26 @@ const BusinessCostSplit = () => {
       columnHead5: `Savings (${currencySymbol})`,
     },
   ];
+
+  // const tableData = [
+  //   {
+  //     tableTitle: "Service Category Cost Allocation",
+  //     columnHead1: { key: "serviceCategory", title: "Service Category" },
+  //     columnHead2: {
+  //       key: "TotalBill",
+  //       title: `Total Bill (${currencySymbol})`,
+  //     },
+  //     columnHead3: {
+  //       key: "OnDemandCost",
+  //       title: `On Demand Cost (${currencySymbol})`,
+  //     },
+  //     columnHead4: {
+  //       key: "CommitmentsCost",
+  //       title: `Commitments Cost (${currencySymbol})`,
+  //     },
+  //     columnHead5: { key: "Savings", title: `Savings (${currencySymbol})` },
+  //   },
+  // ];
 
   return (
     <div>
@@ -451,7 +497,8 @@ const BusinessCostSplit = () => {
         </Typography>
         <Subheader
           onButtonClick={handleButtonClick}
-          onFiltersChange={handleFiltersChange} selectedCSP={selectedProvider}
+          onFiltersChange={handleFiltersChange}
+          selectedCSP={selectedProvider}
         />
         <NavigationBar />
       </Box>
@@ -515,8 +562,7 @@ const BusinessCostSplit = () => {
           marginLeft: "-8px",
         }}
       >
-        <InvoiceTableView
-          title={"Total Bill Allocation across Application"}
+        <TotalBillAllocationTable
           dropdown={
             <FormControl variant="outlined" className="formControl">
               <InputLabel id="report-type-label" className="inputLabel">
@@ -532,32 +578,26 @@ const BusinessCostSplit = () => {
                 MenuProps={{
                   PaperProps: {
                     style: {
-                      maxHeight: 300, // Adjust the dropdown height if needed
+                      maxHeight: 300,
                     },
                   },
                 }}
               >
                 <MenuItem value="">All Applications</MenuItem>
-                {uniqueBillAllocationData.map((name, index) => (
-                  <MenuItem
-                    key={index}
-                    value={name}
-                    style={{ whiteSpace: "normal" }}
-                  >
+                {applicationNames.map((name, index) => (
+                  <MenuItem key={index} value={name} className="menuItem">
                     {name === "null" ? "null" : name}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
           }
-          tableData={filteredBillAllocationData}
-          tableHeight="300px"
-          tableWidth="92.5%"
-          columns={columns1}
-          headerLabels={headerLabelsForBillAllocation}
-          columnData={applicationData}
-          columnTitle="Application Name"
-          headerClass="headerClass"
+          dummyData={filteredBillAllocationData}
+          height="300px"
+          width="92%"
+          tableData={columns1}
+          uniqueMonths={uniqueMonths}
+          headerClass="headerClass-1"
         />
       </div>
       <div
