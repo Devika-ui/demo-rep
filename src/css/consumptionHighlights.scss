@@ -37,7 +37,7 @@
   height: 5vh;
   width: 100%;
   display: flex;
-  margin-left: -0.8rem;
+  margin-left: -0.2rem;
   justify-content: space-between;
   padding: 0.7rem;
   border: 1px solid #ccc;
@@ -69,7 +69,7 @@
   flex: 0 1 35%; /* Allows the chart section to shrink but stay at least 35% width */
   display: flex;
   margin-top: -10px;
-   margin-left: -1.4rem;
+  margin-left: -0.8rem;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -93,7 +93,8 @@
     align-items: stretch; /* Ensure full-width alignment */
   }
 
-  .tiles, .tag-compliance {
+  .tiles,
+  .tag-compliance {
     width: 100%; /* Make both sections full width on small screens */
     margin-bottom: 20px; /* Space between sections */
   }
@@ -106,83 +107,81 @@
     height: 5vh;
     margin-top: -0.3rem;
   }
-  .price{
-   font-size: 0.7rem;
-   margin-right: -0.6rem;
+  .price {
+    font-size: 0.7rem;
+    margin-right: -0.6rem;
   }
-  .tilename{
+  .tilename {
     font-size: 0.7rem;
     font-weight: bold;
     margin-left: -0.6rem;
   }
-  .tag-compliance{
+  .tag-compliance {
     margin-top: -13rem;
     margin-left: 5rem;
   }
 }
 
-@media (max-width:464px){
-  .tag-compliance{
+@media (max-width: 464px) {
+  .tag-compliance {
     margin-left: 6rem !important;
   }
 }
 
-
-@media (max-width :376px){
-  .tag-compliance{
+@media (max-width: 376px) {
+  .tag-compliance {
     margin-left: 5rem !important;
   }
-  .tilename{
+  .tilename {
     margin-top: -0.6rem;
     margin-left: -0.8rem;
   }
-  .price{
+  .price {
     font-size: 0.7rem !important;
     margin-top: 0.6rem;
   }
 }
-@media (min-width: 667px) and (max-width:668px){
-  .tile{
+@media (min-width: 667px) and (max-width: 668px) {
+  .tile {
     height: 4vh;
   }
 }
- @media (max-width :976px)
- {
-  .tilename{
+@media (max-width: 976px) {
+  .tilename {
     margin-top: -0.4rem !important;
     margin-left: -0.6rem;
     font-size: 0.68rem;
     font-weight: bold;
   }
-  .price{
+  .price {
     font-size: 0.6rem;
     margin-top: 0.2rem;
   }
-  .tag-compliance{
+  .tag-compliance {
     margin-top: -13rem;
     position: relative;
   }
 
-  .tag-compliance h4{
+  .tag-compliance h4 {
     font-size: 0.7rem !important;
     top: 1.5rem;
     position: relative;
   }
- }
- @media (max-width: 600px){
-  .tag-compliance{
+}
+@media (max-width: 600px) {
+  .tag-compliance {
     margin-left: 5rem;
   }
-  .tilename{
+  .tilename {
     font-size: 0.9rem;
     font-weight: lighter;
   }
-  .price{
+  .price {
     font-size: 0.9rem;
   }
 }
 
- @media screen and (min-width: 991px) {
+@media screen and (min-width: 991px) {
   .tag-compliance {
     margin-top: -1rem; /* Move the tag compliance down */
   }
@@ -195,30 +194,30 @@
     height: 4vh;
     margin-top: -0.3rem;
   }
-  .price{
-    font-size: 0.6rem;
-   }
-
-   .tag-compliance h4{
-    position: relative;
-    top: 0.5rem;
-   }
- 
-   .tag-compliance{
-     margin-top: -13rem;
-     margin-left: 5rem;
-    }
-    .tilename{
-      margin-left: -0.5rem;
-      font-size: 0.75rem;
-    }
-}
-
-@media screen and (min-width:989px) and (max-width:989px){
-  .tilename{
+  .price {
     font-size: 0.6rem;
   }
-  .price{
+
+  .tag-compliance h4 {
+    position: relative;
+    top: 0.5rem;
+  }
+
+  .tag-compliance {
+    margin-top: -13rem;
+    margin-left: 5rem;
+  }
+  .tilename {
+    margin-left: -0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media screen and (min-width: 989px) and (max-width: 989px) {
+  .tilename {
+    font-size: 0.6rem;
+  }
+  .price {
     font-size: 0.4rem;
   }
 }

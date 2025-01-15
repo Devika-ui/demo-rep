@@ -50,9 +50,9 @@
 }
 
 .filter-option-inline label {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
   margin-bottom: 5px;
   font-weight: bold;
 }
