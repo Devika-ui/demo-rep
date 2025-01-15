@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import ShareIcon from "@mui/icons-material/Share";
+
 import SearchIcon from "@mui/icons-material/Search";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -15,9 +15,9 @@ import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
 import { MultiSelect } from "react-multi-select-component";
 import CostsAmortized from "./CostsAmortized";
-import CircularProgress from "@mui/material/CircularProgress";
 import "../css/components/CostInventory.css";
 import api from "../api";
+import ShareButton from "./ShareButton";
 
 const TableRowComponent = ({
   data,
@@ -163,6 +163,46 @@ const CostInventory = ({ selectedCSP }) => {
     { label: "Market Purchase", value: "MarketPurchaseCost" },
     { label: "Total Bill", value: "TotalBill" },
   ];
+
+  const flattenTableData = (data) => {
+    const result = [];
+
+    const flatten = (node) => {
+      if (!node) return;
+
+      const { name, type, children } = node;
+      const row = { name, type };
+
+      // Add month data if it exists
+      if (children) {
+        children.forEach((child) => {
+          if (child.type === "month") {
+            row[child.name] = {
+              TotalBill: child.TotalBill || 0,
+              OnDemandCost: child.OnDemandCost || 0,
+              ReservationCost: child.ReservationCost || 0,
+              SavingsPlanCost: child.SavingsPlanCost || 0,
+              MarketPurchaseCost: child.MarketPurchaseCost || 0,
+            };
+          } else {
+            flatten(child); // Recursively flatten children
+          }
+        });
+      }
+
+      result.push(row);
+    };
+
+    Object.values(data).forEach((subscriptionData) => {
+      subscriptionData.forEach(flatten);
+    });
+
+    return result;
+  };
+
+  const flattenedData = flattenTableData(tableData);
+
+  const tableRef = useRef(null);
 
   useEffect(() => {
     setColumns(groupBy.map((option) => option.value));
@@ -392,7 +432,6 @@ const CostInventory = ({ selectedCSP }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const countData = await api.getCloudInventoryCount();
         const subscriptions = [
           ...new Set(countData.map((item) => item.subscriptionName)),
@@ -417,6 +456,7 @@ const CostInventory = ({ selectedCSP }) => {
         );
         setTotalPagesState(pageState);
         setTableData(dataState);
+        console.log("new data", dataState);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -465,18 +505,17 @@ const CostInventory = ({ selectedCSP }) => {
             >
               Customize Report
             </Button>
-            <IconButton className="cmpCostInv_Sharebutton">
-              <ShareIcon />
-            </IconButton>
+            <ShareButton
+              tableData={flattenedData}
+              tableRef={tableRef}
+              isHierarchical={true}
+              className="cmpCostInv_Sharebutton"
+              dataType="CostInventory"
+            />
           </div>
         </div>
       </div>
-      {loading ? (
-                    <div className="loading-container3">
-                      <CircularProgress />
-                    </div>
-                  ) : (
-      <TableContainer className="cmpCostInv_tableContainer">
+      <TableContainer ref={tableRef} className="cmpCostInv_tableContainer">
         <Table stickyHeader>
           <TableHead>
             <TableRow>
@@ -524,7 +563,6 @@ const CostInventory = ({ selectedCSP }) => {
           </TableBody>
         </Table>
       </TableContainer>
-                  )}
     </Box>
   );
 };

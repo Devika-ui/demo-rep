@@ -22,7 +22,13 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import "../css/components/ShareButton.css";
 import * as XLSX from "xlsx";
 
-const ShareButton = ({ tableData, tableRef, isHierarchical, className }) => {
+const ShareButton = ({
+  tableData,
+  tableRef,
+  isHierarchical,
+  dataType,
+  className,
+}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [exportAnchorEl, setExportAnchorEl] = React.useState(null);
   const [csvMenuAnchorEl, setCsvMenuAnchorEl] = React.useState(null);
@@ -283,13 +289,128 @@ const ShareButton = ({ tableData, tableRef, isHierarchical, className }) => {
     });
   };
 
+  const generateCurrentLayoutCsvCI = (tableData) => {
+    const headers = [
+      "Name",
+      "Type",
+      "TotalBill",
+      "OnDemandCost",
+      "MarketPurachseCost",
+      "ReservationCost",
+      "SavingsPlanCost",
+    ];
+
+    const csvContent = [
+      headers.join(","),
+      ...tableData.flatMap((row) => {
+        const monthEntries = Object.entries(row).filter(
+          ([key]) => key !== "name" && key !== "type"
+        );
+
+        return monthEntries.map(([monthName, monthData]) => {
+          return [
+            row.name,
+            row.type,
+            monthData.TotalBill || 0,
+            monthData.OnDemandCost || 0,
+            monthData.SavingsPlanCost || 0,
+            monthData.RerservationCost || 0,
+            monthData.MarketPurchaseCost || 0,
+          ]
+            .map((val) => `"${val}"`)
+            .join(",");
+        });
+      }),
+    ];
+
+    return csvContent;
+  };
+
+  // const generateSummarizedCsvWithLevelsCI = (tableData) => {
+  //   const headers = [
+  //     "Level 1 Name",
+  //     "Level 1 Type",
+  //     "Level 2 Name",
+  //     "Level 2 Type",
+  //     "Level 3 Name",
+  //     "Level 3 Type",
+  //     "Level 4 Name",
+  //     "Level 4 Type",
+  //     "Level 5 Name",
+  //     "Level 5 Type",
+  //     "Month Name",
+  //     "TotalBill",
+  //     "OnDemandCost",
+  //     "MarketPurchaseCost",
+  //     "ReservationCost",
+  //     "SavingsPlanCost",
+  //   ];
+
+  //   const flattenData = (data, parentLevels = []) => {
+  //     return data.flatMap((row) => {
+  //       console.log("Flattening row: ", row);
+
+  //       const currentLevels = [
+  //         ...parentLevels,
+  //         { name: row.name, type: row.type },
+  //       ];
+
+  //       if (row.children && row.children.length > 0) {
+  //         return flattenData(row.children, currentLevels);
+  //       } else {
+  //         return (
+  //           Object.entries(row)
+  //             .filter(([key]) => key !== "name" && key !== "type")
+  //             .map(([monthName, monthData]) => {
+  //               console.log("Month Data: ", monthData);
+
+  //               return [
+  //                 currentLevels[0]?.name || "",
+  //                 currentLevels[0]?.type || "",
+  //                 currentLevels[1]?.name || "",
+  //                 currentLevels[1]?.type || "",
+  //                 currentLevels[2]?.name || "",
+  //                 currentLevels[2]?.type || "",
+  //                 currentLevels[3]?.name || "",
+  //                 currentLevels[3]?.type || "",
+  //                 currentLevels[4]?.name || "",
+  //                 currentLevels[4]?.type || "",
+  //                 monthName, // Month name (e.g., "2024-07")
+  //                 monthData.TotalBill || 0,
+  //                 monthData.OnDemandCost || 0,
+  //                 monthData.MarketPurchaseCost || 0,
+  //                 monthData.ReservationCost || 0,
+  //                 monthData.SavingsPlanCost || 0,
+  //               ]
+  //                 .map((val) => `"${val}"`) // Escape values
+  //                 .join(","); // Join for CSV row
+  //             }) || []
+  //         );
+  //       }
+  //     });
+  //   };
+
+  //   const csvContent = [
+  //     headers.join(","),
+  //     ...flattenData(tableData),
+  //   ];
+
+  //   console.log("Generated CSV Content: ", csvContent);
+
+  //   return csvContent;
+  // };
+
   const handleExportCsv = (type) => {
     const headers = Object.keys(tableData[0]);
     let csvContent = [];
     if (type === "currentLayout") {
       // For non-hierarchical and parent rows in hierarchical data
       if (isHierarchical) {
-        csvContent = generateCurrentLayoutCsv(tableData);
+        if (dataType === "ServiceCategory") {
+          csvContent = generateCurrentLayoutCsv(tableData);
+        } else if (dataType === "CostInventory") {
+          csvContent = generateCurrentLayoutCsvCI(tableData);
+        }
       } else {
         // Non-hierarchical case (same as current)
         csvContent = [
@@ -304,7 +425,11 @@ const ShareButton = ({ tableData, tableRef, isHierarchical, className }) => {
     } else if (type === "summarizedData") {
       // Generate summarized data for hierarchical data
       if (isHierarchical) {
-        csvContent = generateSummarizedCsvWithLevels(tableData).split("\n");
+        if (dataType === "ServiceCategory") {
+          csvContent = generateSummarizedCsvWithLevels(tableData).split("\n");
+          // } else if (dataType === "CostInventory") {
+          //   csvContent = generateSummarizedCsvWithLevelsCI(tableData);
+        }
       } else {
         alert(
           "Summarized data export is only applicable to hierarchical data."
@@ -334,40 +459,76 @@ const ShareButton = ({ tableData, tableRef, isHierarchical, className }) => {
       };
       let csvContent;
       if (isHierarchical) {
-        // Generate the CSV content for hierarchical data
-        csvContent = generateCurrentLayoutCsv(tableData, isHierarchical);
+        if (dataType === "ServiceCategory") {
+          // Generate the CSV content for hierarchical data
+          csvContent = generateCurrentLayoutCsv(tableData, isHierarchical);
 
-        // Create a table element to be used by html2pdf, using the csvContent for PDF generation
-        const tableElement = document.createElement("table");
-        const tableHeader = tableElement.createTHead();
-        const headerRow = tableHeader.insertRow();
-        const headers = [
-          "Name",
-          "TotalBill",
-          "OnDemandCost",
-          "CommitmentsCost",
-          "Savings",
-        ];
+          const tableElement = document.createElement("table");
+          const tableHeader = tableElement.createTHead();
+          const headerRow = tableHeader.insertRow();
+          const headers = [
+            "Name",
+            "TotalBill",
+            "OnDemandCost",
+            "CommitmentsCost",
+            "Savings",
+          ];
 
-        // Add header cells
-        headers.forEach((header) => {
-          const th = document.createElement("th");
-          th.textContent = header;
-          headerRow.appendChild(th);
-        });
-
-        // Create the table body and populate it with csvContent
-        const tableBody = tableElement.createTBody();
-        // Ensure csvContent is not empty or undefined
-        if (csvContent && csvContent.length > 1) {
-          csvContent.slice(1).forEach((row) => {
-            const tr = tableBody.insertRow();
-            const rowValues = row.split(",");
-            rowValues.forEach((val) => {
-              const td = tr.insertCell();
-              td.textContent = val.replace(/"/g, ""); // Remove quotes from CSV content
-            });
+          // Add header cells
+          headers.forEach((header) => {
+            const th = document.createElement("th");
+            th.textContent = header;
+            headerRow.appendChild(th);
           });
+
+          // Create the table body and populate it with csvContent
+          const tableBody = tableElement.createTBody();
+          // Ensure csvContent is not empty or undefined
+          if (csvContent && csvContent.length > 1) {
+            csvContent.slice(1).forEach((row) => {
+              const tr = tableBody.insertRow();
+              const rowValues = row.split(",");
+              rowValues.forEach((val) => {
+                const td = tr.insertCell();
+                td.textContent = val.replace(/"/g, ""); // Remove quotes from CSV content
+              });
+            });
+          }
+        } else if (dataType === "CostInventory") {
+          csvContent = generateCurrentLayoutCsvCI(tableData, isHierarchical);
+
+          const tableElement = document.createElement("table");
+          const tableHeader = tableElement.createTHead();
+          const headerRow = tableHeader.insertRow();
+          const headers = [
+            "Name",
+            "TotalBill",
+            "OnDemandCost",
+            "ReservationCost",
+            "SavingsPlanCost",
+            "MarketPurchaseCost",
+          ];
+
+          // Add header cells
+          headers.forEach((header) => {
+            const th = document.createElement("th");
+            th.textContent = header;
+            headerRow.appendChild(th);
+          });
+
+          // Create the table body and populate it with csvContent
+          const tableBody = tableElement.createTBody();
+          // Ensure csvContent is not empty or undefined
+          if (csvContent && csvContent.length > 1) {
+            csvContent.slice(1).forEach((row) => {
+              const tr = tableBody.insertRow();
+              const rowValues = row.split(",");
+              rowValues.forEach((val) => {
+                const td = tr.insertCell();
+                td.textContent = val.replace(/"/g, ""); // Remove quotes from CSV content
+              });
+            });
+          }
         } else {
           console.error("csvContent is empty or invalid.");
         }
@@ -520,6 +681,7 @@ ShareButton.propTypes = {
   tableRef: PropTypes.object.isRequired,
   isHierarchical: PropTypes.bool,
   className: PropTypes.string,
+  dataType: PropTypes.oneOf(["ServiceCategory", "CostInventory"]).isRequired,
 };
 
 ShareButton.defaultProps = {

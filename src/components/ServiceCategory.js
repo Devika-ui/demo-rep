@@ -5,7 +5,6 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CustomizedReportButton from "./CustomizedReportButton";
 import ShareButton from "./ShareButton";
@@ -30,16 +29,12 @@ const TableRowComponent = ({
   const hasNestedData = (item) =>
     Array.isArray(item?.children) && item.children.length > 0;
 
-  const isResourceLevel = (item) =>
-    !hasNestedData(item) || item.type === "resource"; // Assuming resource items have `type: "resource"`
-
   // Helper function to format values to 2 decimal points
   const formatValueToTwoDecimals = (value) => {
     return parseFloat(value || 0).toFixed(2);
   };
 
-  // Dynamically aggregate data for each level
-  const aggregateData = (month, item) => {
+  const aggregateMonthData = (month, item) => {
     const initialData = {
       TotalBill: 0,
       OnDemandCost: 0,
@@ -47,7 +42,7 @@ const TableRowComponent = ({
       Savings: 0,
     };
 
-    const aggregateChildren = (children) => {
+    const aggregateChildrenData = (children) => {
       return children.reduce(
         (acc, child) => {
           if (child.name === month && child.type === "month") {
@@ -57,7 +52,7 @@ const TableRowComponent = ({
             acc.Savings += child.Savings || 0;
           }
           if (child.children && child.children.length > 0) {
-            const nestedData = aggregateChildren(child.children);
+            const nestedData = aggregateChildrenData(child.children);
             acc.TotalBill += nestedData.TotalBill;
             acc.OnDemandCost += nestedData.OnDemandCost;
             acc.CommitmentsCost += nestedData.CommitmentsCost;
@@ -69,7 +64,7 @@ const TableRowComponent = ({
       );
     };
 
-    return aggregateChildren(item?.children || []);
+    return aggregateChildrenData(item?.children || []);
   };
 
   return (
@@ -78,11 +73,10 @@ const TableRowComponent = ({
         <React.Fragment key={`${rowKey}-${index}`}>
           <TableRow className="cmpSvcCat_nestedRow">
             <TableCell
-              style={{ paddingLeft: indentLevel, width: "200px" }}
+              style={{ paddingLeft: indentLevel, width: "200px  " }}
               className="cmpSvcCat_first_cell"
             >
-              {/* Only show expand button if not at resource level */}
-              {!isResourceLevel(item) && hasNestedData(item) && (
+              {level < 3 && hasNestedData(item) && (
                 <IconButton
                   size="small"
                   onClick={() => toggleRow(rowKey, index)}
@@ -99,11 +93,11 @@ const TableRowComponent = ({
 
             {uniqueMonths.map((month) => {
               const monthData =
-                level === "leaf"
+                level === 3
                   ? item.children?.find(
                       (child) => child.name === month && child.type === "month"
                     ) || {}
-                  : aggregateData(month, item);
+                  : aggregateMonthData(month, item);
 
               return (
                 <React.Fragment key={`${month}-${item.name}`}>
@@ -125,8 +119,9 @@ const TableRowComponent = ({
           </TableRow>
 
           {expandedRows[rowKey]?.[index] &&
-            !isResourceLevel(item) &&
-            hasNestedData(item) && (
+            level < 3 &&
+            item.children &&
+            item.children.length > 0 && (
               <TableRowComponent
                 data={item.children}
                 level={level + 1}
