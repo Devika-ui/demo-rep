@@ -51,8 +51,8 @@
 
 .filter-option-inline label {
   display: flex !important;
-  justify-content: flex-start !important;
-  align-items: flex-start !important;
+  justify-content: center !important;
+  align-items: center !important;
   margin-bottom: 5px;
   font-weight: bold;
 }
@@ -110,10 +110,10 @@
   }
 
   .Filter-Options-Row {
-    gap: 15px;
+    gap: 10px !important;
     width: auto;
-    margin-right: 5px;
-    justify-content: space-between;
+    margin-right: 0px;
+    // justify-content: space-between;
     display: flex;
     flex-wrap: wrap;
   }
