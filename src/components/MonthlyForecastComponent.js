@@ -66,17 +66,17 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
     }
 
     return (
-      <div className="right">
+      <div>
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
+            alignItems: "left",
+            justifyContent: "center",
             width: "90%",
           }}
         >
           {imageSrc && (
-            <span className="icon" style={{ marginLeft: "8px" }}>
+            <span className="icon" style={{ marginLeft: "0px" }}>
               <img
                 src={imageSrc}
                 alt={altText}

@@ -1,5 +1,5 @@
 .kpi-section {
-  position: relative; 
+  position: relative;
   padding-top: 2rem !important; /* Make sure this container is relatively positioned */
 }
 
@@ -13,11 +13,10 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better visual separation */
   border-radius: 8px; /* Optional rounded corners */
   background-color: #ffffff; /* Optional background color */
-  margin-top: -2.1rem !important;
-  height: 36.2vh !important;
+  margin-top: -2rem !important;
+  height: 35.5vh !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
-
 
 .kpi-heading {
   position: absolute; /* Take it out of the normal document flow */
@@ -38,10 +37,10 @@
   height: 20vh !important;
   justify-content: center;
   align-items: center;
-  width: 100%
+  width: 100%;
 }
 
-.kpi-graph{
+.kpi-graph {
   width: 100% !important;
 }
 
@@ -94,8 +93,9 @@
   .kpi-bottom-container {
     gap: 10px;
   }
-}.kpi-section {
-  position: relative; 
+}
+.kpi-section {
+  position: relative;
   padding-top: 30px; /* Make sure this container is relatively positioned */
 }
 
@@ -111,7 +111,6 @@
   text-overflow: ellipsis; /* Adds "..." if the text is too long */
 }
 
-
 .kpi-bottom-container {
   display: flex;
   flex-direction: column;
@@ -126,9 +125,9 @@
 }
 
 @media (min-width: 1285px) {
- .kpi-container{
-  height: 34vh !important;
- }
+  .kpi-container {
+    height: 34vh !important;
+  }
 }
 
 // @media (min-width: 668px){
@@ -136,7 +135,7 @@
 //       margin-top: 10rem !important;
 //   }
 // }
- 
+
 @media (max-width: 767px) {
   .kpi-bottom-container {
     flex-direction: row;
@@ -162,8 +161,9 @@
   .kpi-bottom-container {
     gap: 10px;
   }
-}.kpi-section {
-  position: relative; 
+}
+.kpi-section {
+  position: relative;
   padding-top: 30px; /* Make sure this container is relatively positioned */
 }
 
@@ -256,8 +256,9 @@
   .kpi-bottom-container {
     gap: 10px;
   }
-}.kpi-section {
-  position: relative; 
+}
+.kpi-section {
+  position: relative;
   padding-top: 30px; /* Make sure this container is relatively positioned */
 }
 
@@ -351,8 +352,9 @@
   .kpi-bottom-container {
     gap: 10px;
   }
-}.kpi-section {
-  position: relative; 
+}
+.kpi-section {
+  position: relative;
   padding-top: 30px; /* Make sure this container is relatively positioned */
 }
 
@@ -445,8 +447,9 @@
   .kpi-bottom-container {
     gap: 10px;
   }
-}.kpi-section {
-  position: relative; 
+}
+.kpi-section {
+  position: relative;
   padding-top: 30px; /* Make sure this container is relatively positioned */
 }
 
@@ -539,8 +542,9 @@
   .kpi-bottom-container {
     gap: 10px;
   }
-}.kpi-section {
-  position: relative; 
+}
+.kpi-section {
+  position: relative;
   padding-top: 30px; /* Make sure this container is relatively positioned */
 }
 
@@ -633,8 +637,9 @@
   .kpi-bottom-container {
     gap: 10px;
   }
-}.kpi-section {
-  position: relative; 
+}
+.kpi-section {
+  position: relative;
   padding-top: 30px; /* Make sure this container is relatively positioned */
 }
 
@@ -727,8 +732,9 @@
   .kpi-bottom-container {
     gap: 10px;
   }
-}.kpi-section {
-  position: relative; 
+}
+.kpi-section {
+  position: relative;
   padding-top: 30px; /* Make sure this container is relatively positioned */
 }
 
@@ -747,8 +753,8 @@
 .kpi-container {
   width: 100%;
   height: 28vh;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
+  border: 0px solid #ccc;
+  // background-color: #f9f9f9;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -797,62 +803,62 @@
 }
 
 @media (max-width: 899px) {
-  .kpi-heading{
+  .kpi-heading {
     margin-top: 1.4rem;
   }
 
   .kpi-container {
     margin-top: -0.6rem !important;
-  } 
+  }
 }
 
 @media (max-width: 668px) {
-  .kpi-container{
+  .kpi-container {
     height: 39vh !important;
   }
-  .kpi-bottom-container{
-     margin-left: -0.1rem;
-     gap: 1px;
+  .kpi-bottom-container {
+    margin-left: -0.1rem;
+    gap: 1px;
   }
-.kpi-bottom-container {
-   margin-top: -1rem;
+  .kpi-bottom-container {
+    margin-top: -1rem;
   }
 }
 
- @media (max-width: 600px) {
-  .kpi-container{
+@media (max-width: 600px) {
+  .kpi-container {
     margin-top: -1rem !important;
   }
 
-   .kpi-heading {
-     margin-top: 1rem !important;
-   }
-}
-
-@media  (min-width: 1024px) and (max-width:1024px){
-  .kpi-container{
-    height: 34.7vh !important;
-  }
- .kpi-bottom-container{
-  gap: 5px;
-  margin-left: -1.5rem !important;
- }
-}
-
-@media(max-width:668px){
-  .kpi-container{
-     height: 38.4vh !important;
+  .kpi-heading {
+    margin-top: 1rem !important;
   }
 }
- 
-@media screen  and (min-height: 769px){
-  .kpi-container{
+
+@media (min-width: 1024px) and (max-width: 1024px) {
+  .kpi-container {
+    height: 34.2vh !important;
+  }
+  .kpi-bottom-container {
+    gap: 5px;
+    margin-left: -1.5rem !important;
+  }
+}
+
+@media (max-width: 668px) {
+  .kpi-container {
+    height: 38.4vh !important;
+  }
+}
+
+@media screen and (min-height: 769px) {
+  .kpi-container {
     height: 33vh !important;
   }
 }
 
-@media (min-width:899px) and (max-width:990px){
-  .kpi-container{
+@media (min-width: 899px) and (max-width: 990px) {
+  .kpi-container {
     height: 37.7vh !important;
   }
 }

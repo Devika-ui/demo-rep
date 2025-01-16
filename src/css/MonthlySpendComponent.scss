@@ -36,7 +36,7 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   font-size: 16px;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  
+
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -48,25 +48,27 @@
   justify-content: space-between;
   height: 77%;
   padding: 20px;
-  margin-left: 12px;
-  color: black;
-  margin-top: -14px;
+  margin-left: 0px;
+  color: #330072;
+  margin-top: -7px;
 }
 
 .second-bottom {
   font-weight: bold;
   font-size: 14px;
-  color:black ;
+  color: black;
   margin-top: 0px;
-  margin-left: -10px;
+  margin-left: 0px;
   text-align: center;
   white-space: nowrap; /* Prevents the text from wrapping */
   overflow: hidden; /* Ensures the heading doesn't overflow */
 }
 
-.first .number{
-  margin-top: -0.1rem !important;
-  margin-left: 1rem !important;
+.first .number {
+  display: flex;
+  justify-content: center;
+  margin-top: 0rem !important;
+  margin-left: 0rem !important;
 }
 .bill-summary {
   position: relative;
@@ -96,9 +98,9 @@
 .overlay-box {
   background: #fff;
   padding: 20px;
-  border: 1px solid black; 
+  border: 1px solid black;
   border-radius: 5px;
-   max-height: 60% !important;
+  max-height: 60% !important;
   max-width: 80% !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -111,20 +113,18 @@
   color: #000;
 }
 
-
-
 /* Responsive adjustments */
 @media screen and (max-width: 600px) {
-  .first, .second {
+  .first,
+  .second {
     width: 120px;
     height: 60px;
   }
-   
+
   @media screen {
-  .monthly-spend-container{
-    margin-left:-8px;
-  }
-    
+    .monthly-spend-container {
+      margin-left: -8px;
+    }
   }
 
   .first .number,
@@ -139,37 +139,37 @@
 
 .first .number {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   height: 77%;
   padding: 20px;
-  margin-left: 0.4rem;
   color: #330072;
   margin-top: -5px; /* Move the number down */
 }
 
-@media (max-width:668px)
-{
-  .first,.second{
+@media (max-width: 668px) {
+  .first,
+  .second {
     height: 15vh !important;
   }
 }
 
-@media (min-width:1400px)
-{
-  .first,.second{
+@media (min-width: 1400px) {
+  .first,
+  .second {
     height: 8vh !important;
     margin-top: 1.5rem;
   }
 }
 
-@media(max-width: 666px) {
-  .first,.second{
+@media (max-width: 666px) {
+  .first,
+  .second {
     height: 11vh !important;
   }
 }
 
-@media(max-width: 990px){
-  .second-bottom{
+@media (max-width: 990px) {
+  .second-bottom {
     margin-top: -0.3rem;
   }
 }

@@ -16,7 +16,6 @@ const MapContainer = ({ selectedCSP, inputData }) => {
       setLoading(true);
       try {
         const data = await api.getMapData(inputData);
-
         setMapData(data);
       } catch (error) {
         console.error("Error fetching map data:", error);
@@ -24,11 +23,12 @@ const MapContainer = ({ selectedCSP, inputData }) => {
         setLoading(false);
       }
     };
+
     fetchMapLocations();
   }, [selectedCSP, inputData]);
 
   useEffect(() => {
-    if (!mapRef.current || !mapData.length) return;
+    if (loading || !mapRef.current || !mapData.length) return;
 
     const map = L.map(mapRef.current, {
       layers: [
@@ -65,7 +65,7 @@ const MapContainer = ({ selectedCSP, inputData }) => {
     return () => {
       map.remove();
     };
-  }, [mapData, inputData, selectedCSP]);
+  }, [mapData, loading]);
 
   return (
     <div className="map-container">
