@@ -51,8 +51,8 @@
 
 .filter-option-inline label {
   display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
   margin-bottom: 5px;
   font-weight: bold;
 }
