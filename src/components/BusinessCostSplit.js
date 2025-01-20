@@ -4,7 +4,6 @@ import Subheader from "./SubHeader";
 import Ondemand from "./Ondemand";
 import NavigationBar from "./NavigationBar";
 import ServiceCategory from "./ServiceCategory";
-import InvoiceTableView from "./InvoiceTableView";
 import ContainerForBusinessCost from "./ContainerForBusinessCost";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import api from "../api";
@@ -36,6 +35,7 @@ const BusinessCostSplit = () => {
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [filteredData, setFilteredData] = useState(billAllocationData);
   const [applicationNames, setApplicationNames] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   let inputData = selectedFilters;
 
@@ -71,6 +71,7 @@ const BusinessCostSplit = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const serviceCategoryCost = await api.getServiceCategoryCost(inputData);
 
         const transformDataToArrayFormat = (data) => {
@@ -176,6 +177,8 @@ const BusinessCostSplit = () => {
         setServiceData(transformedData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -185,6 +188,8 @@ const BusinessCostSplit = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+        setBoxData([]);
         const [
           applicationsWithTags,
           applicationsWithoutTags,
@@ -246,6 +251,8 @@ const BusinessCostSplit = () => {
         setCurrencyPreference(currencyPreference);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -254,6 +261,7 @@ const BusinessCostSplit = () => {
   useEffect(() => {
     const fetchBillAllocationData = async () => {
       try {
+        setLoading(true);
         if (!inputData) {
           console.log("No input data, skipping API calls.");
           return;
@@ -397,6 +405,8 @@ const BusinessCostSplit = () => {
         setFilteredBillAllocationData(transformedData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchBillAllocationData();
@@ -512,7 +522,7 @@ const BusinessCostSplit = () => {
           marginTop: "-5px",
         }}
       >
-        <ContainerForBusinessCost data={boxData} />
+        <ContainerForBusinessCost data={boxData} loading={loading} />
       </div>
 
       {/* New Flex Container for Ondemand and MonthlyCostTrends */}
@@ -598,6 +608,7 @@ const BusinessCostSplit = () => {
           tableData={columns1}
           uniqueMonths={uniqueMonths}
           headerClass="headerClass-1"
+          loading={loading}
         />
       </div>
       <div
@@ -615,6 +626,7 @@ const BusinessCostSplit = () => {
           width="97.5%"
           tableData={tableData}
           uniqueMonths={formattedDates}
+          loading={loading}
         />
       </div>
     </div>

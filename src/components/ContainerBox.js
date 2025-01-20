@@ -4,19 +4,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "./Box";
 import "../css/components/ContainerBox.css";
 
-const ContainerBox = ({ data }) => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setIsLoading(false);
-    }
-  }, [data]);
-
+const ContainerBox = ({ data, loading }) => {
   return (
     <Paper className="cmp_containerBox">
-      {isLoading ? (
-        <div className="loading-spinner-container">
+      {loading ? (
+        <div className="loadingcontainer">
           <CircularProgress />
         </div>
       ) : (

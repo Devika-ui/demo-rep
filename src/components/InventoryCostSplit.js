@@ -13,6 +13,7 @@ const InventoryCostSplit = () => {
   const [dataSet1, setDataSet1] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(1);
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [loading, setLoading] = useState(true);
   const handleButtonClick = (value) => {
     componentUtil.setSelectedCSP(value);
     setSelectedProvider(value);
@@ -64,6 +65,8 @@ const InventoryCostSplit = () => {
   useEffect(() => {
     const fetchDataAndFormat = async () => {
       try {
+        setLoading(true);
+        setDataSet1([]);
         const [monthBillData, totalResourcesData] = await Promise.all([
           api.getMonthBillAndIncreasedPercentage(),
           api.getTotalResouces(),
@@ -84,6 +87,8 @@ const InventoryCostSplit = () => {
         setDataSet1(formattedData);
       } catch (error) {
         console.error("Error fetching and formatting data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -129,7 +134,7 @@ const InventoryCostSplit = () => {
           marginLeft: "-35px",
         }}
       >
-        <ContainerBox data={dataSet1} />
+        <ContainerBox data={dataSet1} loading={loading} />
       </div>
       <div
         style={{

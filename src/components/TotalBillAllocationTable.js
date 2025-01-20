@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import "../css/components/ServiceCategory.css";
+import { CircularProgress } from "@mui/material";
 
 const TableRowComponent = ({
   data,
@@ -153,6 +154,7 @@ const TotalBillAllocationTable = ({
   height,
   width,
   headerClass,
+  loading = false,
 }) => {
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [formattedMonths, setFormattedMonths] = useState([]);
@@ -238,61 +240,66 @@ const TotalBillAllocationTable = ({
             </IconButton>
           </div>
         </div>
-        {/* <div className="cmpSvcCat_tableHeader"></div> */}
-        <TableContainer className="cmpSvcCat_tableContainer">
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  rowSpan={2}
-                  className="cmpSvcCat_columnHeader_first_header"
-                >
-                  {tableData[0].columnHead1.title}
-                </TableCell>
-                {formattedMonths.map((month, index) => (
+        {loading ? (
+          <div className="loading-container">
+            <CircularProgress />
+          </div>
+        ) : (
+          <TableContainer className="cmpSvcCat_tableContainer">
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
                   <TableCell
-                    key={index}
-                    colSpan={5} // Adjust this based on the number of replicated headers per month
-                    className="cmpSvcCat_tableHeader"
+                    rowSpan={2}
+                    className="cmpSvcCat_columnHeader_first_header"
                   >
-                    {month}
+                    {tableData[0].columnHead1.title}
                   </TableCell>
-                ))}
-              </TableRow>
-              <TableRow>
-                {uniqueMonths.flatMap((month, monthIndex) =>
-                  Object.keys(tableData[0])
-                    .filter((key) => key.startsWith("columnHead"))
-                    .map((headerKey, index) => {
-                      if (monthIndex >= 0 && index === 0) return null; // Skip rendering the first column repeatedly
-                      const header = tableData[0][headerKey]; // Header object
-                      return (
-                        <TableCell
-                          key={`${month}-${headerKey}-${index}`}
-                          className="cmpSvcCat_columnHeader"
-                        >
-                          {header.title}
-                        </TableCell>
-                      );
-                    })
-                )}
-              </TableRow>
-            </TableHead>
+                  {formattedMonths.map((month, index) => (
+                    <TableCell
+                      key={index}
+                      colSpan={5} // Adjust this based on the number of replicated headers per month
+                      className="cmpSvcCat_tableHeader"
+                    >
+                      {month}
+                    </TableCell>
+                  ))}
+                </TableRow>
+                <TableRow>
+                  {uniqueMonths.flatMap((month, monthIndex) =>
+                    Object.keys(tableData[0])
+                      .filter((key) => key.startsWith("columnHead"))
+                      .map((headerKey, index) => {
+                        if (monthIndex >= 0 && index === 0) return null; // Skip rendering the first column repeatedly
+                        const header = tableData[0][headerKey]; // Header object
+                        return (
+                          <TableCell
+                            key={`${month}-${headerKey}-${index}`}
+                            className="cmpSvcCat_columnHeader"
+                          >
+                            {header.title}
+                          </TableCell>
+                        );
+                      })
+                  )}
+                </TableRow>
+              </TableHead>
 
-            <TableBody>
-              <TableRowComponent
-                data={dummyData || []}
-                level={0}
-                toggleRow={toggleRow}
-                expandedRows={expandedRows}
-                rowKey="category"
-                indentIncrement={indentIncrement}
-                uniqueMonths={uniqueMonths}
-                tableData={tableData}
-              />
-            </TableBody>
-          </Table>
-        </TableContainer>
+              <TableBody>
+                <TableRowComponent
+                  data={dummyData || []}
+                  level={0}
+                  toggleRow={toggleRow}
+                  expandedRows={expandedRows}
+                  rowKey="category"
+                  indentIncrement={indentIncrement}
+                  uniqueMonths={uniqueMonths}
+                  tableData={tableData}
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </div>
 
       {isOverlayOpen && (

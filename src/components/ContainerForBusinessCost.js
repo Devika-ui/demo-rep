@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Paper from "@mui/material/Paper";
-import CircularProgress from "@mui/material/CircularProgress"; 
+import CircularProgress from "@mui/material/CircularProgress";
 import Box from "./Box";
 import "../css/components/ContainerForBusinessCost.css";
 
-const ContainerForBusinessCost = ({ data }) => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setIsLoading(false);
-    }
-  }, [data]);
-
+const ContainerForBusinessCost = ({ data, loading }) => {
   return (
     <Paper className="cmp_containerBox" style={{ width: "100%" }}>
-      {isLoading ? (
-        <div className="loading-spinner-container">
+      {loading ? (
+        <div className="loading-container">
           <CircularProgress />
         </div>
       ) : (

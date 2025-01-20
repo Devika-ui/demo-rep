@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-
+import { CircularProgress } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -515,54 +515,60 @@ const CostInventory = ({ selectedCSP }) => {
           </div>
         </div>
       </div>
-      <TableContainer ref={tableRef} className="cmpCostInv_tableContainer">
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell
-                rowSpan={2}
-                className="cmpCostInv_columnHeader_first_header"
-              >
-                SubscriptionName
-              </TableCell>
-              {formattedMonths.map((month, index) => (
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <TableContainer ref={tableRef} className="cmpCostInv_tableContainer">
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
                 <TableCell
-                  key={index}
-                  colSpan={columns.length}
-                  className="cmpCostInv_tableHeader"
-                  style={{ fontWeight: "bold" }}
+                  rowSpan={2}
+                  className="cmpCostInv_columnHeader_first_header"
                 >
-                  {month}
+                  SubscriptionName
                 </TableCell>
-              ))}
-            </TableRow>
-            <TableRow>
-              {formattedMonths.map((month, index) =>
-                columns.map((col) => (
-                  <TableCell key={col} className="cmpCostInv_columnHeader">
-                    {col}
+                {formattedMonths.map((month, index) => (
+                  <TableCell
+                    key={index}
+                    colSpan={columns.length}
+                    className="cmpCostInv_tableHeader"
+                    style={{ fontWeight: "bold" }}
+                  >
+                    {month}
                   </TableCell>
-                ))
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {/* Render nested levels */}
-            {Object.entries(tableData).map(([subscriptionName, data]) => (
-              <TableRowComponent
-                data={data || []}
-                level={0}
-                toggleRow={toggleRow}
-                expandedRows={expandedRows}
-                rowKey={subscriptionName}
-                indentIncrement={20}
-                selectedColumns={columns}
-                uniqueMonths={uniqueMonths}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                ))}
+              </TableRow>
+              <TableRow>
+                {formattedMonths.map((month, index) =>
+                  columns.map((col) => (
+                    <TableCell key={col} className="cmpCostInv_columnHeader">
+                      {col}
+                    </TableCell>
+                  ))
+                )}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {/* Render nested levels */}
+              {Object.entries(tableData).map(([subscriptionName, data]) => (
+                <TableRowComponent
+                  data={data || []}
+                  level={0}
+                  toggleRow={toggleRow}
+                  expandedRows={expandedRows}
+                  rowKey={subscriptionName}
+                  indentIncrement={20}
+                  selectedColumns={columns}
+                  uniqueMonths={uniqueMonths}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </Box>
   );
 };

@@ -138,12 +138,17 @@ const TableRowComponent = ({
   );
 };
 
-const ServiceCategory = ({ dummyData, tableData, height, width }) => {
+const ServiceCategory = ({
+  dummyData,
+  tableData,
+  height,
+  width,
+  loading = false,
+}) => {
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [formattedMonths, setFormattedMonths] = useState([]);
   const [sortedData, setSortedData] = useState(dummyData); // Track sorted data
   const [currentSort, setCurrentSort] = useState({ field: "", direction: "" }); // Current sort state
-  const [loading, setLoading] = useState(true);
 
   // Create a ref for the table element
   const tableRef = useRef(null);
@@ -152,7 +157,6 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
     if (!dummyData?.length) {
       return;
     }
-    setLoading(true);
 
     // Recursively extract 'name' field where 'type' is 'month'
     const extractMonths = (data) => {
@@ -185,8 +189,6 @@ const ServiceCategory = ({ dummyData, tableData, height, width }) => {
     const formattedMonths = sortedMonths.map(formatMonthYear);
     console.log(formattedMonths);
     setFormattedMonths(formattedMonths);
-
-    setLoading(false);
   }, [dummyData]);
 
   useEffect(() => {
