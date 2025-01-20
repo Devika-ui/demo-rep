@@ -87,6 +87,51 @@
   margin-left: -1rem;
 }
 
+.closebutton {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  background-color: red !important;
+  color: white !important;
+  padding: 5px 8px !important;
+  border-radius: 20% !important;
+  cursor: pointer;
+  border: none !important;
+}
+
+.expanded-view {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 10px;
+  width: 980px;
+
+  .category-box {
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgb(58, 152, 137); 
+    border-radius: 8px;
+    padding: -10px;
+    width: calc(33% - 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    h5 {
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #5f249f;
+    }
+
+    .apexcharts-canvas {
+      width: 100%;
+    }
+  }
+}
+
 @media (max-width: 1024px) {
   .consumption-highlights-wrapper {
     flex-direction: column; /* Stack items vertically on smaller screens */
