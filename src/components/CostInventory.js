@@ -403,7 +403,7 @@ const CostInventory = ({ selectedCSP }) => {
       console.log(
         `Fetching data for subscription: ${subscriptionName}, page: ${page}`
       ); // Debug log
-      const rawData = await api.getCloudInventory(subscriptionName, page);
+      const rawData = await api.getCloudInventory(subscriptionName, page,src);
       window.apiData[subscriptionName] = appendData(
         window.apiData[subscriptionName] || {},
         rawData[subscriptionName]
@@ -445,7 +445,7 @@ const CostInventory = ({ selectedCSP }) => {
               .filter((item) => item.subscriptionName === subscription)
               .reduce((sum, item) => sum + item.totalcount, 0);
             pageState[subscription] = Math.ceil(totalCount / 1000);
-            const rawData = await api.getCloudInventory(subscription, 1);
+            const rawData = await api.getCloudInventory(subscription, 1,selectedCSP);
             window.apiData[subscription] = appendData(
               window.apiData[subscription] || {},
               rawData[subscription]

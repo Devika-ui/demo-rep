@@ -22,14 +22,16 @@ import UserInfo from "./components/UserInfo";
 
 const UserWrappedApp = ({ token, userInfo }) => {
   const [dataPreload, setDataPreload] = useState(false);
+  const [tokenAvailable,setTokenAvailable] = useState(false);
   const selectionHandler = async() =>{
     setDataPreload(true);
   };
   const setUserData = async () => {
-    if (!dataPreload) sessionStorage.clear();
+    //if (!dataPreload) sessionStorage.clear();
     let accessToken = await componentUtil.getAccessToken(token);
     if (accessToken !== token) {
       await componentUtil.setAccessToken(token);
+      setTokenAvailable(true);
     }
     const customerId = await componentUtil.getSelectedCustomerID();
     if (customerId > 0) {
@@ -39,29 +41,34 @@ const UserWrappedApp = ({ token, userInfo }) => {
   useEffect(() => {
     setUserData();
   }, [dataPreload]);
+  let toRet = "";
+  sessionStorage.removeItem("overviewPage");
+  if(tokenAvailable && !dataPreload) {
+    toRet = <BrowserRouter><Customerselection  selectionHandler={selectionHandler}/></BrowserRouter>
+  }
+  if(dataPreload)
+    toRet = <BrowserRouter>
+              <Routes>
+                <Route path="/Customerselection" element={<Customerselection selectionHandler={selectionHandler}/>} />
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/billOverview" element={<BillOverview />} />
+                <Route path="/businessCostSplit" element={<BusinessCostSplit />} />
+                <Route path="/inventoryCostSplit" element={<InventoryCostSplit />} />
 
+                <Route path="/recommendations" element={<RecommendationSPA />} />
+                <Route path="/orphanedSnapshots" element={<OrphanedSnapshots />} />
+                <Route path="/unattachedManagedDisks" element={<UnattachedManagedDisks />} />
+                <Route path="/hyperScalarAdvisor" element={<HyperScalarAdvisor />} />
+                <Route path="/sqlVmLicenses" element={<SqlVmLicenses />} />
+                <Route path="/orphanedrsvbackups" element={<OrphanedRSVBackups />} />
+                <Route path="/ondemandCostStudy" element={<OnDemandCostStudy />} />
+                <Route path="/userInfo" element={<UserInfo userInfo={userInfo} />} />
+              </Routes>
+            </BrowserRouter>;
+  
   return (
-    dataPreload === true ? (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/Customerselection" element={<Customerselection />} />
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/billOverview" element={<BillOverview />} />
-          <Route path="/businessCostSplit" element={<BusinessCostSplit />} />
-          <Route path="/inventoryCostSplit" element={<InventoryCostSplit />} />
-
-          <Route path="/recommendations" element={<RecommendationSPA />} />
-          <Route path="/orphanedSnapshots" element={<OrphanedSnapshots />} />
-          <Route path="/unattachedManagedDisks" element={<UnattachedManagedDisks />} />
-          <Route path="/hyperScalarAdvisor" element={<HyperScalarAdvisor />} />
-          <Route path="/sqlVmLicenses" element={<SqlVmLicenses />} />
-          <Route path="/orphanedrsvbackups" element={<OrphanedRSVBackups />} />
-          <Route path="/ondemandCostStudy" element={<OnDemandCostStudy />} />
-          <Route path="/userInfo" element={<UserInfo userInfo={userInfo} />} />
-        </Routes>
-      </BrowserRouter>
-    ) : (<BrowserRouter><Customerselection  selectionHandler={selectionHandler}/></BrowserRouter>)
+    toRet
   );
 };
 

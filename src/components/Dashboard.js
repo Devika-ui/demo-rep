@@ -19,8 +19,9 @@ import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 
 const Dashboard = () => {
+  sessionStorage.setItem("overviewPage",true);
   const [showStackBars, setShowStackBars] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState(1);
+  const [selectedProvider, setSelectedProvider] = useState(100);
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   /*Filter Changes*/
@@ -38,7 +39,7 @@ const Dashboard = () => {
   };
 
   const navigate = useNavigate();
-
+  
   return (
     <Box
       sx={{

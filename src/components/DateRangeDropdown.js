@@ -14,7 +14,7 @@ const DateRangeDropdown = ({selectedCSP}) => {
     const fetchDates = async () => {
       try {
         const data = await api.getFilterForDropDown();
-        const modifiedDates =  selectedCSP ==1 ? data.modifieddate.map((date) => new Date(date)): data.BillingPeriodStart.map((date) => new Date(date));
+        const modifiedDates =  selectedCSP == 100 ? data.modifieddate.map((date) => new Date(date)): data.BillingPeriodStart.map((date) => new Date(date));
         const uniqueMonths = Array.from(
           new Set(
             modifiedDates.map((date) =>

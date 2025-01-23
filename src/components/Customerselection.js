@@ -22,7 +22,12 @@ const CustomerSelection = ({ selectionHandler }) => {
           currencyPreference: customer.currencyPreference,
           customerId: customer.customerId
         }));
-        setCustomers(formattedCustomers);
+        if(formattedCustomers.length == 1) {
+          handleSelection(formattedCustomers[0])
+        }
+        else{
+          setCustomers(formattedCustomers);
+        }
       } catch (error) {
         console.error("Error fetching customers:", error);
       }
@@ -79,7 +84,7 @@ const CustomerSelection = ({ selectionHandler }) => {
               </div>
             ))
           ) : (
-            <p>Loading customers...</p>
+            <p>Loading Assigned Customers...</p>
           )}
         </div>
       </div>

@@ -27,7 +27,10 @@ const componentUtil = {
       sessionStorage.setItem("currencyPreference", loc);
     },
     getSelectedCSP: async () => {
-        return Number(sessionStorage["cspId"] !== undefined ? sessionStorage.getItem("cspId") : 1);
+        if(sessionStorage["overviewPage"] !== undefined) {
+            return 0;
+        }
+        return Number(sessionStorage["cspId"] !== undefined ? sessionStorage.getItem("cspId") : 100);
     },
     transformFiltersOptionsToObject: (selectedFilters) => {
       let toRet = {};

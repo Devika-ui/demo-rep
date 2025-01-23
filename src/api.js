@@ -1106,10 +1106,15 @@ const api = {
     }
   },
 
-  getCloudInventory: async (subscription, page) => {
+  getCloudInventory: async (subscription, page, selectedCSP) => {
     try {
-      const countData = await api.getCloudInventoryCount();
-      console.log("count", countData);
+      let keyName = "SubscriptionName";
+      let filtersMonths = ["2024-09-01", "2024-08-01", "2024-07-01"]
+      if(selectedCSP == 2) {
+        keyName = "BillingAccountName"
+        filtersMonths = ["2024-11-01", "2024-12-01", "2025-01-01"]
+      }
+      
       const response = await fetch(
         `${apiUrl}/inventorycostsplit/cloudinventory`,
         {
@@ -1121,8 +1126,8 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: await componentUtil.getSelectedCSP(),
             filters: {
-              BillingMonthStartDate: ["2024-09-01", "2024-08-01", "2024-07-01"],
-              SubscriptionName: [subscription],
+              BillingMonthStartDate: filtersMonths,
+              [keyName]: [subscription],
             },
             customerId: await componentUtil.getSelectedCustomerID(),
             page: page.toString(),

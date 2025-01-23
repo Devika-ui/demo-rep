@@ -56,11 +56,11 @@ const NavigationBar = () => {
           { label: "Bill Overview", path: "/billOverview" },
           { label: "Business Cost Split View", path: "/businessCostSplit" },
           { label: "Inventory Cost Split View", path: "/inventoryCostSplit" },
-          {
+          /*{
             label: "Infra Consumption Cost Study",
             path: "/cost-and-usage/subitem4",
           },
-          { label: "Infra Changes Audit", path: "/cost-and-usage/subitem1" },
+          { label: "Infra Changes Audit", path: "/cost-and-usage/subitem1" },*/
         ];
       case "Commitments":
         return [

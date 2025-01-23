@@ -11,7 +11,7 @@ import componentUtil from "../componentUtil.js";
 const InventoryCostSplit = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [dataSet1, setDataSet1] = useState([]);
-  const [selectedProvider, setSelectedProvider] = useState(1);
+  const [selectedProvider, setSelectedProvider] = useState(100);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(true);
   const handleButtonClick = (value) => {

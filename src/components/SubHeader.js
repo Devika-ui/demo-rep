@@ -9,36 +9,36 @@ import componentUtil from "../componentUtil";
 import { CircularProgress } from "@mui/material";
 
 const SubHeader = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
-  //1-Azure,2-AWS,3-Next new CSP add further whenever new CSP we supporting
+  //100-Azure,110-AWS,120-Next new CSP add further whenever new CSP we supporting
   const [filterData, setFilterData] = useState({
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
+    100: [],
+    110: [],
+    120: [],
+    130: [],
+    140: [],
   });
   const [filterDataTemplate, setFilterDataTemplate] = useState({
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
+    100: [],
+    110: [],
+    120: [],
+    130: [],
+    140: [],
   });
-  const [tags0, setTags0] = useState({ 1: [], 2: [], 3: [], 4: [], 5: [] });
+  const [tags0, setTags0] = useState({ 100: [], 110: [], 120: [], 130: [], 140: [] });
 
   const [filterSelectedData, setFilterSelectedData] = useState({
-    1: {},
-    2: {},
-    3: {},
-    4: {},
-    5: {},
+    100: {},
+    110: {},
+    120: {},
+    130: {},
+    140: {},
   });
   const [filterSelectedDataTemplate, setFilterSelectedDataTemplate] = useState({
-    1: {},
-    2: {},
-    3: {},
-    4: {},
-    5: {},
+    100: {},
+    110: {},
+    120: {},
+    130: {},
+    140: {},
   });
 
   const [loading, setLoading] = useState(false);
@@ -78,7 +78,7 @@ const SubHeader = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
             else apiData[dataKeyName] = tags0[selectedCSP];
           }
           data.push({
-            key: selectedCSP == 2 ? tagPart : dataKeyName,
+            key: selectedCSP == 110 ? tagPart : dataKeyName,
             displayName: apiData[displayName],
             data: transformToOptions(apiData[dataKeyName]),
           });

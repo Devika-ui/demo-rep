@@ -36,7 +36,7 @@ const HeaderButtons = ({ onButtonClick }) => {
           return (
             <button
               key={provider.csp_id}
-              onClick={() => handleClick(index + 1)}
+              onClick={() => handleClick(provider.csp_id)}
               className={`logo-button ${
                 currentCSP === index ? "selected" : ""
               }`}
