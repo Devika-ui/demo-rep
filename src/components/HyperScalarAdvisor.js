@@ -24,6 +24,7 @@ const HyperScalarAdvisor = ({
   data2,
   bars,
 }) => {
+  sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
 

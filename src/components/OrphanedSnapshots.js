@@ -26,6 +26,7 @@ const OrphanedSnapshots = ({
   horizontaldata,
   bars,
 }) => {
+  sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
   const navigate = useNavigate();

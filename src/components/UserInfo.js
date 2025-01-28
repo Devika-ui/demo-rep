@@ -5,6 +5,7 @@ import "../css/components/UserInfo.css";
 import "../css/components/ServiceCategory.css";
 
 const UserInfo = ({ userInfo }) => {
+  sessionStorage.removeItem("overviewPage");
   return (
     <div className="user-info-container">
       <Header />

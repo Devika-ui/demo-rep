@@ -9,6 +9,7 @@ import api from "../api";
 import componentUtil from "../componentUtil.js";
 
 const InventoryCostSplit = () => {
+  sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [dataSet1, setDataSet1] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(100);

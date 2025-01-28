@@ -20,6 +20,7 @@ const OrphanedRSVBackups = ({
   bars,
   horizontaldata,
 }) => {
+  sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
 

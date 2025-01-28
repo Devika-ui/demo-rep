@@ -1110,7 +1110,7 @@ const api = {
     try {
       let keyName = "SubscriptionName";
       let filtersMonths = ["2024-09-01", "2024-08-01", "2024-07-01"]
-      if(selectedCSP == 2) {
+      if(selectedCSP == 110) {
         keyName = "BillingAccountName"
         filtersMonths = ["2024-11-01", "2024-12-01", "2025-01-01"]
       }

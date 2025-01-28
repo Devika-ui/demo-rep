@@ -21,6 +21,7 @@ import componentUtil from "../componentUtil.js";
 import TotalBillAllocationTable from "./TotalBillAllocationTable.js";
 
 const BillOverview = () => {
+  sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [reportType, setReportType] = useState("");
   const [billAllocationData, setBillAllocationData] = useState([]);
@@ -44,7 +45,7 @@ const BillOverview = () => {
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedProvider, setSelectedProvider] = useState(1);
+  const [selectedProvider, setSelectedProvider] = useState(100);
   const [selectedFilters, setSelectedFilters] = useState([]);
   let inputData = selectedFilters;
   const [uniqueMonths, setUniqueMonths] = useState([]);

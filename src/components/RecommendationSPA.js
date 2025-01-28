@@ -9,6 +9,7 @@ import OrphanedRSVBackups from "./OrphanedRSVBackups";
 import api from "../api.js";
 
 const RecommendationSPA = () => {
+  sessionStorage.removeItem("overviewPage");
   const location = useLocation();
   const [activeSection, setActiveSection] = useState("unattachedManagedDisks");
   const navigate = useNavigate();

@@ -28,9 +28,12 @@ const TableRowComponent = ({
   indentIncrement,
   selectedColumns,
   uniqueMonths,
+  selectedCSP
 }) => {
   let transformedData = [];
   const indentLevel = level * indentIncrement;
+  const heirarchyLevel = selectedCSP == 100 ? 4 : 3;
+  const dateLevel = selectedCSP == 100 ?3 : 2;
 
   const hasNestedData = (item) =>
     Array.isArray(item?.children) && item.children.length > 0;
@@ -85,7 +88,7 @@ const TableRowComponent = ({
               className="cmpCostInv_first_cell"
             >
               {item.name}
-              {level < 4 && hasNestedData(item) && (
+              {level < heirarchyLevel && hasNestedData(item) && (
                 <IconButton
                   size="small"
                   onClick={() => toggleRow(rowKey, index)}
@@ -101,7 +104,7 @@ const TableRowComponent = ({
 
             {uniqueMonths.map((month) => {
               const monthData =
-                level === 3
+                level === dateLevel
                   ? item.children?.find(
                       (child) => child.name === month && child.type === "month"
                     ) || {}
@@ -120,7 +123,7 @@ const TableRowComponent = ({
           </TableRow>
 
           {expandedRows[rowKey]?.[index] &&
-            level < 4 &&
+            level < heirarchyLevel &&
             item.children &&
             item.children.length > 0 && (
               <TableRowComponent
@@ -132,6 +135,7 @@ const TableRowComponent = ({
                 indentIncrement={indentIncrement}
                 selectedColumns={selectedColumns}
                 uniqueMonths={uniqueMonths}
+                selectedCSP = {selectedCSP}
               />
             )}
         </React.Fragment>
@@ -403,7 +407,7 @@ const CostInventory = ({ selectedCSP }) => {
       console.log(
         `Fetching data for subscription: ${subscriptionName}, page: ${page}`
       ); // Debug log
-      const rawData = await api.getCloudInventory(subscriptionName, page,src);
+      const rawData = await api.getCloudInventory(subscriptionName, page,selectedCSP);
       window.apiData[subscriptionName] = appendData(
         window.apiData[subscriptionName] || {},
         rawData[subscriptionName]
@@ -434,7 +438,7 @@ const CostInventory = ({ selectedCSP }) => {
       try {
         const countData = await api.getCloudInventoryCount();
         const subscriptions = [
-          ...new Set(countData.map((item) => item.subscriptionName)),
+          ...new Set(countData.map((item) => item.subscriptionName || item.BillingAccountName)),
         ];
         const pageState = {};
         const dataState = [];
@@ -442,8 +446,9 @@ const CostInventory = ({ selectedCSP }) => {
         await Promise.all(
           subscriptions.map(async (subscription) => {
             const totalCount = countData
-              .filter((item) => item.subscriptionName === subscription)
+              .filter((item) => item.subscriptionName === subscription || item.BillingAccountName === subscription)
               .reduce((sum, item) => sum + item.totalcount, 0);
+            console.log(totalCount);
             pageState[subscription] = Math.ceil(totalCount / 1000);
             const rawData = await api.getCloudInventory(subscription, 1,selectedCSP);
             window.apiData[subscription] = appendData(
@@ -563,6 +568,7 @@ const CostInventory = ({ selectedCSP }) => {
                   indentIncrement={20}
                   selectedColumns={columns}
                   uniqueMonths={uniqueMonths}
+                  selectedCSP = {selectedCSP}
                 />
               ))}
             </TableBody>

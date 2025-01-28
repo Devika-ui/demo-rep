@@ -19,7 +19,7 @@ import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 
 const Dashboard = () => {
-  sessionStorage.setItem("overviewPage",true);
+  //sessionStorage.setItem("overviewPage",true);
   const [showStackBars, setShowStackBars] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState(100);
   const [selectedFilters, setSelectedFilters] = useState([]);

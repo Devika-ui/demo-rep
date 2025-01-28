@@ -14,6 +14,7 @@ import TotalBillAllocationTable from "./TotalBillAllocationTable.js";
 import { json } from "react-router-dom";
 
 const BusinessCostSplit = () => {
+  sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [reportType, setReportType] = useState("");
   const [boxData, setBoxData] = useState([]);

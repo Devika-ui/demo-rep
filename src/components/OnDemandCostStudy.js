@@ -6,6 +6,7 @@ import NavigationBar from "./NavigationBar";
 import Ondemand from "./Ondemand";
 
 const OnDemandCostStudy = () => {
+    sessionStorage.removeItem("overviewPage");
     const [showStackBars, setShowStackBars] = useState(true);
     const [groupBy, setGroupBy] = useState("");
   

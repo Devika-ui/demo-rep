@@ -5,6 +5,7 @@ import api from "../api";
 import componentUtil from "../componentUtil";
 import { useNavigate } from "react-router-dom";
 const CustomerSelection = ({ selectionHandler }) => {
+  sessionStorage.removeItem("overviewPage");
   const [selectedCustomer, setSelectedCustomer] = useState("");
   const [customers, setCustomers] = useState([]);
   const [isNavigating, setIsNavigating] = useState(false);
