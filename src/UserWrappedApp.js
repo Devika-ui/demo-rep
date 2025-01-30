@@ -16,7 +16,7 @@ import { ReactKeycloakProvider, useKeycloak } from "@react-keycloak/web";
 import keycloak from "./components/Keycloak";
 import OnDemandCostStudy from "./components/OnDemandCostStudy";
 import RecommendationSPA from "./components/RecommendationSPA";
-import TrustedAdvisor from "./components/AWSTrusteAdvisor";
+import TrustedAdvisor from "./components/AWSTrustedAdvisor";
 import api from "./api";
 import componentUtil from "./componentUtil";
 import UserInfo from "./components/UserInfo";
