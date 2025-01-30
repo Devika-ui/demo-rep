@@ -4,7 +4,7 @@ import Chart from "chart.js/auto";
 import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 
-const StackBars = ({ inputData, selectedCSP }) => {
+const StackBars = ({ inputData, selectedCSP, startDate, endDate }) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [showAWS, setShowAWS] = useState(true);
   const [showAzure, setShowAzure] = useState(true);
@@ -18,7 +18,11 @@ const StackBars = ({ inputData, selectedCSP }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const subscriptionsData1 = await api.getBillingCostEachDay(inputData);
+        const subscriptionsData1 = await api.getBillingCostEachDay(
+          inputData,
+          startDate,
+          endDate
+        );
         console.log("API response:", subscriptionsData1);
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
@@ -33,7 +37,7 @@ const StackBars = ({ inputData, selectedCSP }) => {
     };
 
     fetchData();
-  }, [selectedCSP, inputData]);
+  }, [selectedCSP, inputData, startDate, endDate]);
 
   useEffect(() => {
     if (subscriptions.length === 0) return;

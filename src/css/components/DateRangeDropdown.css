@@ -3,5 +3,9 @@
   color: #5f249f !important;
   text-wrap: nowrap;
   font-weight: 550 !important;
-  margin-left: -18px !important;
+  margin-right: 7px !important;
+}
+.custom-menu .MuiMenuItem-root.Mui-selected {
+  background-color: #5f249f !important;
+  color: white !important;
 }

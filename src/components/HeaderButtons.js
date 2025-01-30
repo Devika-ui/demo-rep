@@ -6,10 +6,11 @@ import componentUtil from "../componentUtil";
 import api from "../api.js";
 
 const HeaderButtons = ({ onButtonClick }) => {
-  const [currentCSP, setCurrentCSP] = useState(componentUtil.getSelectedCSP());
+  const [currentCSP, setCurrentCSP] = useState(null);
   const [cloudProviders, setCloudProviders] = useState([]);
 
   const handleClick = (value) => {
+    console.log("clickoncspp", value);
     setCurrentCSP(value);
     onButtonClick(value);
   };
@@ -18,6 +19,8 @@ const HeaderButtons = ({ onButtonClick }) => {
     const fetchData = async () => {
       try {
         const data = await api.getCloudProviderList();
+        const selectedCSP = await componentUtil.getSelectedCSP();
+        setCurrentCSP(selectedCSP);
         setCloudProviders(data);
       } catch (error) {
         console.error("Error fetching cloud providers:", error);
@@ -29,7 +32,7 @@ const HeaderButtons = ({ onButtonClick }) => {
   return (
     <div className="button-container">
       <div className="button-box">
-        {cloudProviders.map((provider, index) => {
+        {cloudProviders.map((provider) => {
           const img = new Image();
           img.src = provider.logo_img;
 
@@ -38,7 +41,7 @@ const HeaderButtons = ({ onButtonClick }) => {
               key={provider.csp_id}
               onClick={() => handleClick(provider.csp_id)}
               className={`logo-button ${
-                currentCSP === index ? "selected" : ""
+                currentCSP === provider.csp_id ? "selected" : ""
               }`}
             >
               <img

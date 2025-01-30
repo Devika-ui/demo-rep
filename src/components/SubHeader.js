@@ -7,8 +7,20 @@ import "../css/Subheader.scss";
 import api from "../api";
 import componentUtil from "../componentUtil";
 import { CircularProgress } from "@mui/material";
+import AWSFilter from "./AWSFilter.js";
+import AzureFilter from "./AzureFilter.js";
+import AzureBox from "../images/Azure box.png";
+import AWSBox from "../images/AWS box.png";
+import FilterIcon from "../images/filter.png";
+import LIcon from "../images/Iicon.png";
+import { Tooltip } from "@mui/material";
 
-const SubHeader = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
+const SubHeader = ({
+  onButtonClick,
+  onFiltersChange,
+  selectedCSP,
+  onMonthChange,
+}) => {
   //100-Azure,110-AWS,120-Next new CSP add further whenever new CSP we supporting
   const [filterData, setFilterData] = useState({
     100: [],
@@ -24,7 +36,13 @@ const SubHeader = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
     130: [],
     140: [],
   });
-  const [tags0, setTags0] = useState({ 100: [], 110: [], 120: [], 130: [], 140: [] });
+  const [tags0, setTags0] = useState({
+    100: [],
+    110: [],
+    120: [],
+    130: [],
+    140: [],
+  });
 
   const [filterSelectedData, setFilterSelectedData] = useState({
     100: {},
@@ -41,6 +59,14 @@ const SubHeader = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
     140: {},
   });
 
+  const [billingMonth, setBillingMonth] = useState([]);
+
+  const handleBillingMonthsChange = (month) => {
+    setBillingMonth(month);
+    onMonthChange(month);
+  };
+
+  const [csp, setCSP] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -51,6 +77,8 @@ const SubHeader = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
     setLoading(true);
     try {
       const initialData = await api.getFilterBasedOnSelection({});
+      const csp = await componentUtil.getSelectedCSP();
+      setCSP(csp);
       const subscriptionsData = initialData.subscriptionName;
       setAndPopulateFilterValues(initialData);
     } catch (error) {
@@ -176,50 +204,110 @@ const SubHeader = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
     <div className="Subheader-Container">
       <div className="Subheader-ButtonsContainer">
         <HeaderButtons onButtonClick={onButtonClick} />
-        <DateRangeDropdown selectedCSP={selectedCSP} />
       </div>
-      <div className="Subheader-Boxes">
-        {loading ? (
-          <div className="loading-guage">
-            <CircularProgress />
-          </div>
-        ) : (
-          <div className="Filter-Options-Row">
-            {filterData[selectedCSP] &&
-              filterData[selectedCSP].map((filterObj) => {
-                const selVal =
-                  filterSelectedData[selectedCSP][filterObj["key"]] !==
-                  undefined
-                    ? filterSelectedData[selectedCSP][filterObj["key"]]
-                    : [];
-                return (
-                  <div className="filter-option-inline">
-                    <label>{filterObj.displayName}(s)</label>
-                    <MultiSelect
-                      options={filterObj.data}
-                      value={selVal}
-                      onChange={(values) =>
-                        handleFilterChange(filterObj["key"], values)
-                      }
-                      labelledBy="Select"
-                      disableSelectAll={false}
-                      hasSelectAll={false}
-                    />
-                  </div>
-                );
-              })}
-          </div>
-        )}
 
-        <div className="Subheader-Buttons">
-          <button className="apply-button" onClick={handleApplyFilters}>
-            Apply
-          </button>
-          <button className="reset-button" onClick={handleResetFilters}>
-            Reset
-          </button>
+      {loading ? (
+        <div>
+          <CircularProgress />
         </div>
-      </div>
+      ) : (
+        <div className="Subheader-Container">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "white",
+            }}
+          >
+            {csp === 100 && (
+              <div
+                className="AzureBox"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "250px",
+                }}
+              >
+                <img
+                  src={AzureBox}
+                  alt="Azure"
+                  style={{ width: "30px", height: "34px", marginRight: "5px" }}
+                />
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                    paddingRight: "5px",
+                    marginTop: "5px",
+                  }}
+                >
+                  Azure
+                </div>
+                <img
+                  src={FilterIcon}
+                  alt="Filter"
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    marginRight: "3px",
+                    marginTop: "5px",
+                  }}
+                />
+                <AWSFilter
+                  onButtonClick={onButtonClick}
+                  onFiltersChange={onFiltersChange}
+                  selectedCSP={selectedCSP}
+                />
+              </div>
+            )}
+            {csp === 110 && (
+              <div
+                className="AWSBox"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "500px",
+                }}
+              >
+                <img
+                  src={AWSBox}
+                  alt="AWS"
+                  style={{ width: "30px", height: "34px", marginRight: "5px" }}
+                />
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                    paddingRight: "5px",
+                    marginTop: "5px",
+                  }}
+                >
+                  AWS
+                </div>
+                <img
+                  src={FilterIcon}
+                  alt="Filter"
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    marginRight: "5px",
+                    marginTop: "5px",
+                  }}
+                />
+                <AWSFilter
+                  onButtonClick={onButtonClick}
+                  onFiltersChange={onFiltersChange}
+                  selectedCSP={selectedCSP}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      <DateRangeDropdown
+        selectedCSP={selectedCSP}
+        onBillingMonthsChange={handleBillingMonthsChange}
+      />
     </div>
   );
 };

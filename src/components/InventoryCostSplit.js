@@ -15,6 +15,7 @@ const InventoryCostSplit = () => {
   const [selectedProvider, setSelectedProvider] = useState(100);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [billingMonth, setBillingMonth] = useState([]);
   const handleButtonClick = (value) => {
     componentUtil.setSelectedCSP(value);
     setSelectedProvider(value);
@@ -22,6 +23,10 @@ const InventoryCostSplit = () => {
   };
   const handleFiltersChange = (newFilters) => {
     setSelectedFilters(newFilters);
+  };
+
+  const handleMonthChange = (months) => {
+    setBillingMonth(months);
   };
 
   const additionalFilters = [
@@ -66,11 +71,14 @@ const InventoryCostSplit = () => {
   useEffect(() => {
     const fetchDataAndFormat = async () => {
       try {
+        if (billingMonth.length == 0) {
+          return;
+        }
         setLoading(true);
         setDataSet1([]);
         const [monthBillData, totalResourcesData] = await Promise.all([
-          api.getMonthBillAndIncreasedPercentage(),
-          api.getTotalResouces(),
+          api.getMonthBillAndIncreasedPercentage(billingMonth),
+          api.getTotalResouces(billingMonth),
         ]);
 
         const { firstMonthCost, growthPercentage } = monthBillData[0];
@@ -94,7 +102,7 @@ const InventoryCostSplit = () => {
     };
 
     fetchDataAndFormat();
-  }, [selectedProvider]);
+  }, [selectedProvider, billingMonth]);
 
   return (
     <div>
@@ -123,6 +131,7 @@ const InventoryCostSplit = () => {
           onButtonClick={handleButtonClick}
           onFiltersChange={handleFiltersChange}
           selectedCSP={selectedProvider}
+          onMonthChange={handleMonthChange}
         />
         <NavigationBar />
       </Box>
@@ -146,7 +155,10 @@ const InventoryCostSplit = () => {
           marginBottom: "10px",
         }}
       >
-        <CostInventory selectedCSP={selectedProvider} />
+        <CostInventory
+          selectedCSP={selectedProvider}
+          billingMonth={billingMonth}
+        />
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import downArrow1 from "../images/Down Arrow1.png";
 import componentUtil from "../componentUtil.js";
 import api from "../api.js";
 
-const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
+const MonthlyForecastComponent = ({ selectedCSP, inputData, billingMonth }) => {
   const [lastMonthCost, setLastMonthCost] = useState(null);
   const [futureCost, setFutureCost] = useState(null);
   const [percentageIncrease, setPercentageIncrease] = useState(null);
@@ -17,10 +17,16 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
 
       try {
-        const forecastData = await api.getMonthlyForecastSpend(inputData);
+        const forecastData = await api.getMonthlyForecastSpend(
+          inputData,
+          billingMonth
+        );
         const currencyPreference = await componentUtil.getCurrencyPreference();
         const currencySymbol = await componentUtil.getCurrencySymbol();
 
@@ -48,7 +54,7 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData }) => {
     };
 
     fetchData();
-  }, [selectedCSP, inputData]);
+  }, [selectedCSP, inputData, billingMonth]);
 
   const GrowthIndicator = ({ percentageIncrease }) => {
     let imageSrc;

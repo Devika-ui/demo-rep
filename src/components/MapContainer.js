@@ -6,16 +6,19 @@ import "../css/MapContainer.scss";
 import api from "../api.js";
 import { CircularProgress } from "@mui/material";
 
-const MapContainer = ({ selectedCSP, inputData }) => {
+const MapContainer = ({ selectedCSP, inputData, billingMonth }) => {
   const mapRef = useRef(null);
   const [mapData, setMapData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMapLocations = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
-        const data = await api.getMapData(inputData);
+        const data = await api.getMapData(inputData, billingMonth);
         setMapData(data);
       } catch (error) {
         console.error("Error fetching map data:", error);
@@ -25,7 +28,7 @@ const MapContainer = ({ selectedCSP, inputData }) => {
     };
 
     fetchMapLocations();
-  }, [selectedCSP, inputData]);
+  }, [selectedCSP, inputData, billingMonth]);
 
   useEffect(() => {
     if (loading || !mapRef.current || !mapData.length) return;

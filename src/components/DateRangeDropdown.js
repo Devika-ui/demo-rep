@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Menu, MenuItem, Button } from "@mui/material";
-import { format } from "date-fns";
-import { enUS } from "date-fns/locale";
 import api from "../api.js";
 import "../css/components/DateRangeDropdown.css";
+import componentUtil from "../componentUtil.js";
 
-const DateRangeDropdown = ({selectedCSP}) => {
+const DateRangeDropdown = ({ selectedCSP, onBillingMonthsChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState([]);
-  const [months, setMonths] = useState([]);
+  const [billingPeriod, setBillingPeriod] = useState([]);
 
   useEffect(() => {
     const fetchDates = async () => {
       try {
-        const data = await api.getFilterForDropDown();
-        const modifiedDates =  selectedCSP == 100 ? data.modifieddate.map((date) => new Date(date)): data.BillingPeriodStart.map((date) => new Date(date));
-        const uniqueMonths = Array.from(
-          new Set(
-            modifiedDates.map((date) =>
-              format(date, "MMMM yyyy", { locale: enUS })
-            )
-          )
-        );
-        setMonths(uniqueMonths);
+        const data1 = await api.getAssignedCustomerIds();
+        const cspid = await componentUtil.getSelectedCSP();
+
+        const billingPeriods = data1[0].dataMonths
+          .filter((item) => item.csp_id === cspid)
+          .map((item) => {
+            const date = new Date(item.billingPeriod);
+            return date.toISOString().split("T")[0];
+          });
+
+        const formattedBillingPeriods = billingPeriods.map((date) => {
+          const options = { year: "numeric", month: "long" };
+          return new Date(date).toLocaleDateString("en-US", options);
+        });
+
+        setBillingPeriod(formattedBillingPeriods);
+
+        // Set selectedMonths by default to all billing periods
+        setSelectedMonths(formattedBillingPeriods);
       } catch (error) {
         console.error("Error fetching dates:", error);
       }
@@ -39,16 +47,40 @@ const DateRangeDropdown = ({selectedCSP}) => {
     setAnchorEl(null);
   };
 
-  const toggleMonth = (month) => {
-    const isSelected = selectedMonths.includes(month);
-    if (isSelected) {
-      setSelectedMonths(
-        selectedMonths.filter((selectedMonth) => selectedMonth !== month)
-      );
-    } else {
-      setSelectedMonths([...selectedMonths, month]);
-    }
+  const toggleMonth = (billingPeriod) => {
+    setSelectedMonths((prevSelectedMonths) => {
+      if (
+        prevSelectedMonths.length === 1 &&
+        prevSelectedMonths.includes(billingPeriod)
+      ) {
+        return prevSelectedMonths;
+      }
+      if (prevSelectedMonths.includes(billingPeriod)) {
+        return prevSelectedMonths.filter(
+          (selectedMonth) => selectedMonth !== billingPeriod
+        );
+      } else {
+        return [...prevSelectedMonths, billingPeriod];
+      }
+    });
   };
+
+  useEffect(() => {
+    if (onBillingMonthsChange) {
+      // onBillingMonthsChange(selectedMonths);
+
+      const modifiedMonths = selectedMonths.map((month) => {
+        // Convert each month to the required format (yyyy-mm-dd)
+        const date = new Date(month);
+        const year = date.getFullYear();
+        const monthNumber = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero for single-digit months
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${monthNumber}-${day}`;
+      });
+      //console.log("22", modifiedMonths);
+      onBillingMonthsChange(modifiedMonths);
+    }
+  }, [selectedMonths]);
 
   return (
     <div>
@@ -69,14 +101,15 @@ const DateRangeDropdown = ({selectedCSP}) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        className="custom-menu"
       >
-        {months.map((month, index) => (
+        {billingPeriod.map((period, index) => (
           <MenuItem
             key={index}
-            selected={selectedMonths.includes(month)}
-            onClick={() => toggleMonth(month)}
+            selected={selectedMonths.includes(period)}
+            onClick={() => toggleMonth(period)}
           >
-            {month}
+            {period}
           </MenuItem>
         ))}
       </Menu>

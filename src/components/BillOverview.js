@@ -51,6 +51,7 @@ const BillOverview = () => {
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [filteredData, setFilteredData] = useState(billAllocationData);
   const [applicationNames, setApplicationNames] = useState([]);
+  const [billingMonth, setBillingMonth] = useState([]);
 
   const handleFiltersChange = (newFilters) => {
     setSelectedFilters(newFilters);
@@ -84,7 +85,10 @@ const BillOverview = () => {
           return;
         }
 
-        const billAllocation = await api.getBillAllocation(inputData);
+        const billAllocation = await api.getBillAllocation(
+          inputData,
+          billingMonth
+        );
         function extractUniqueMonths(data) {
           const months = new Set();
 
@@ -218,7 +222,7 @@ const BillOverview = () => {
         const applicationNames = transformedData.map((app) => app.name);
         setApplicationNames(applicationNames);
 
-        console.log("Transformed Data:", transformedData);
+        // console.log("Transformed Data:", transformedData);
         setBillAllocationData(transformedData);
         setFilteredBillAllocationData(transformedData);
       } catch (error) {
@@ -228,17 +232,23 @@ const BillOverview = () => {
       }
     };
     fetchBillAllocationData();
-  }, [selectedProvider]);
+  }, [selectedProvider, billingMonth]);
 
   useEffect(() => {
     const fetchInvoiceViewData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
         if (!inputData) {
           console.log("No input data, skipping API calls.");
           return;
         }
-        const invoiceResponse = await api.getInvoiceView(inputData);
+        const invoiceResponse = await api.getInvoiceView(
+          inputData,
+          billingMonth
+        );
 
         const invoiceMap = Object.entries(invoiceResponse.invoiceView).reduce(
           (acc, [subscriptionName, data]) => {
@@ -308,7 +318,7 @@ const BillOverview = () => {
         );
 
         // Set state for the table data and the unique month labels
-        console.log("data", flattenedInvoiceData);
+
         const subscriptionNames = flattenedInvoiceData.map(
           (item) => item.subscriptionName
         );
@@ -322,10 +332,13 @@ const BillOverview = () => {
       }
     };
     fetchInvoiceViewData();
-  }, [selectedProvider]);
+  }, [selectedProvider, billingMonth]);
 
   useEffect(() => {
     const fetchTotalBillVsSimulatedPaygoData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
         if (!inputData) {
@@ -333,9 +346,8 @@ const BillOverview = () => {
           return;
         }
         const totalBillVsSimulatedPaygo =
-          await api.getTotalBillVsSimulatedPaygo(inputData);
+          await api.getTotalBillVsSimulatedPaygo(inputData, billingMonth);
 
-        console.log("TotalBillVsSimulatedPaygo:", totalBillVsSimulatedPaygo);
         const formattedChartData = totalBillVsSimulatedPaygo.costsPAYGO.map(
           (item) => {
             const savingsItem = totalBillVsSimulatedPaygo.savingsRI.find(
@@ -392,10 +404,13 @@ const BillOverview = () => {
     };
 
     fetchTotalBillVsSimulatedPaygoData();
-  }, [selectedProvider]);
+  }, [selectedProvider, billingMonth]);
 
   useEffect(() => {
     const fetchTopServiesApplicationsData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
         if (!inputData) {
@@ -403,8 +418,8 @@ const BillOverview = () => {
           return;
         }
         const [topServicesData, topApplicationData] = await Promise.all([
-          api.getTopServies(inputData),
-          api.getTopApplications(inputData),
+          api.getTopServies(inputData, billingMonth),
+          api.getTopApplications(inputData, billingMonth),
         ]);
 
         const formattedTopServices = topServicesData.topServices.map(
@@ -435,10 +450,13 @@ const BillOverview = () => {
     };
 
     fetchTopServiesApplicationsData();
-  }, [selectedProvider]);
+  }, [selectedProvider, billingMonth]);
 
   useEffect(() => {
     const fetchSavingsNormalizedVariationData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
         if (!inputData) {
@@ -446,8 +464,8 @@ const BillOverview = () => {
           return;
         }
         const [savingsData, normalizedVariationData] = await Promise.all([
-          api.getSavings(inputData),
-          api.getNormalizedVariation(inputData),
+          api.getSavings(inputData, billingMonth),
+          api.getNormalizedVariation(inputData, billingMonth),
         ]);
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
@@ -496,13 +514,16 @@ const BillOverview = () => {
     };
 
     fetchSavingsNormalizedVariationData();
-  }, [selectedProvider]);
+  }, [selectedProvider, billingMonth]);
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
     componentUtil.setSelectedCSP(value);
     setSelectedProvider(value);
     setShowStackBars(value !== 1);
+  };
+  const handleMonthChange = (months) => {
+    setBillingMonth(months);
   };
 
   const columns = [
@@ -605,6 +626,7 @@ const BillOverview = () => {
           onButtonClick={handleButtonClick}
           onFiltersChange={handleFiltersChange}
           selectedCSP={selectedProvider}
+          onMonthChange={handleMonthChange}
         />
         <NavigationBar />
       </Box>

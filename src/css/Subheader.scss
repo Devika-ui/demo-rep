@@ -16,7 +16,7 @@
 
 .Subheader-ButtonsContainer {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   padding-left: 20px;
   font-size: 20px;
   color: #5f249f;
@@ -59,18 +59,18 @@
 
 .Subheader-Buttons {
   display: flex;
-  flex-direction: column;
   align-items: flex-end;
-  margin-left: 60px; /* Space between filters and buttons */
+  flex-direction: row;
+  margin-left: auto;
   width: 120px; /* Adjust width to fit buttons */
   box-sizing: border-box;
+  gap: 20px;
 }
 
 .Subheader-Buttons .apply-button,
 .Subheader-Buttons .reset-button {
   width: 100%; /* Make buttons fit within the container */
   box-sizing: border-box;
-  margin-right: 30px;
 }
 
 .Subheader-Buttons .apply-button {
@@ -81,7 +81,20 @@
   border: none;
   cursor: pointer;
   min-width: 70px;
-  margin-bottom: 5px; /* Space between Apply and Reset */
+  margin-left: -40px;
+}
+.toggle-filters-button {
+  margin: 10px 0;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.toggle-filters-button:hover {
+  background-color: #0056b3;
 }
 
 .loading-guage {
@@ -99,6 +112,7 @@
   border: none;
   cursor: pointer;
   min-width: 70px;
+  margin-left: -10px;
 }
 
 @media (max-width: 1802px) {
@@ -126,12 +140,12 @@
   }
 
   .Subheader-Buttons {
-    margin-left: 40px; /* Adjust space for smaller screens */
+    margin-left: 20px; /* Adjust space for smaller screens */
     width: 100px; /* Adjust width for smaller screens */
   }
   .Subheader-Buttons .apply-button,
   .Subheader-Buttons .reset-button {
-    margin-right: 15px;
+    margin-right: 0px;
   }
 }
 

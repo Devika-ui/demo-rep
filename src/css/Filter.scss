@@ -1,38 +1,88 @@
 .Filter-Text {
   cursor: pointer;
-  color: #63666A;
+  color: #63666a;
   font-weight: bold;
   font-size: 16px;
   padding: 5px;
   margin-top: 5px;
-  
+
   &:hover {
     text-decoration: underline;
   }
 }
 
+.Subheader-Buttons {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+  margin-left: auto;
+}
 .filter-options-container {
   display: flex;
   flex-wrap: wrap; /* Allow items to wrap to the next line */
 }
 
+.modal-content {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 100%;
+  max-width: 800px;
+  max-height: calc(100% - 150px);
+  overflow: auto;
+  padding: 20px;
+  margin: 0;
+  z-index: 1050;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .filter-option {
-  flex: 1 1 calc(33.33% - 10px); /* Each option takes 33.33% width with some margin */
-  margin-right: 10px;
-  margin-bottom: 20px;
+  flex: 1 1 calc(27% - 20px); /* Each option takes 33.33% width with some margin */
+  margin-right: 20px;
+  margin-bottom: 40px;
   box-sizing: border-box; /* Ensure padding and border are included in width */
+  height: auto;
 }
 
 .filter-option:last-child {
-  margin-right: 0;
+  margin-right: 0px;
   margin-bottom: 20px; /* Adjust as needed for spacing */
 }
 
 .filter-option label {
-  display: inline-block;
-  margin-right: 10px;
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .search-input {
-  margin-top: 5px; 
+  margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 90%;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    max-width: 100%;
+    padding: 10px;
+  }
 }

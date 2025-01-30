@@ -4,18 +4,31 @@ import "../css/kpiSection.scss";
 import api from "../api.js";
 import { CircularProgress } from "@mui/material";
 
-const KPISection = ({ selectedCSP, inputData }) => {
+const KPISection = ({
+  selectedCSP,
+  inputData,
+  billingMonth,
+  startDate,
+  endDate,
+}) => {
   const [percentCoverage, setPercentCoverage] = useState(0);
   const [percentUsage, setPercentUsage] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (billingMonth.length == 0 || !startDate || !endDate) {
+        return;
+      }
+
       setLoading(true);
       try {
-        const coverageData = await api.getDiscountKPICoverage(inputData);
+        const coverageData = await api.getDiscountKPICoverage(
+          inputData,
+          billingMonth
+        );
         setPercentCoverage(coverageData.coverage);
-        const usageData = await api.getDiscountKPIUsage();
+        const usageData = await api.getDiscountKPIUsage(startDate, endDate);
         setPercentUsage(usageData.usage);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -24,7 +37,7 @@ const KPISection = ({ selectedCSP, inputData }) => {
       }
     };
     fetchData();
-  }, [selectedCSP]);
+  }, [selectedCSP, billingMonth, startDate, endDate]);
 
   return (
     <div className="kpi-section">

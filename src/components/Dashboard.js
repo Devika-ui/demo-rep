@@ -19,27 +19,65 @@ import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 
 const Dashboard = () => {
-  //sessionStorage.setItem("overviewPage",true);
+  //sessionStorage.setItem("overviewPage", true);
   const [showStackBars, setShowStackBars] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState(100);
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [billingMonth, setBillingMonth] = useState([]);
+  const [dates, setDates] = useState(null);
 
   /*Filter Changes*/
   let inputData = selectedFilters;
   const handleButtonClick = (value) => {
     componentUtil.setSelectedCSP(value);
     setSelectedProvider(value);
-    setShowStackBars(value !== 1);
+    setShowStackBars(value !== 100);
   };
 
-
   // Function to update filters
-  const handleFiltersChange = async(newFilters) => {
+  const handleFiltersChange = async (newFilters) => {
     setSelectedFilters(newFilters); // Update selected filters
   };
 
   const navigate = useNavigate();
-  
+
+  // console.log("selectedpp", selectedProvider);
+
+  const handleMonthChange = (months) => {
+    setBillingMonth(months);
+  };
+
+  function getStartAndEndDates(billingMonth) {
+    if (!billingMonth || billingMonth.length === 0) return null;
+    billingMonth.sort((a, b) => new Date(a) - new Date(b));
+
+    let startDate = billingMonth[0].substring(0, 7) + "-01";
+
+    let lastDate = new Date(billingMonth[billingMonth.length - 1]);
+    let year = lastDate.getFullYear();
+    let month = lastDate.getMonth() + 1;
+
+    let lastDay = new Date(year, month, 0).getDate();
+    let endDate = `${year}-${month.toString().padStart(2, "0")}-${lastDay}`;
+
+    return { startDate, endDate };
+  }
+
+  // console.log(getStartAndEndDates(billingMonth));
+
+  useEffect(() => {
+    if (billingMonth?.length > 0) {
+      setDates(getStartAndEndDates(billingMonth));
+    }
+  }, [billingMonth]);
+
+  const startDate = dates?.startDate;
+  const endDate = dates?.endDate;
+
+  // console.log("1,2", startDate, endDate);
+
+  // console.log("dash", billingMonth);
+
   return (
     <Box
       sx={{
@@ -65,7 +103,9 @@ const Dashboard = () => {
       </Typography>
       <Subheader
         onButtonClick={handleButtonClick}
-        onFiltersChange={handleFiltersChange} selectedCSP={selectedProvider}
+        onFiltersChange={handleFiltersChange}
+        selectedCSP={selectedProvider}
+        onMonthChange={handleMonthChange}
       />
       <NavigationBar />
 
@@ -81,19 +121,24 @@ const Dashboard = () => {
           {/* First Row: Monthly Spend, Forecast, Subscriptions */}
           <Grid item xs={12} sm={6} md={4}>
             <MonthlySpendComponent
-              selectedProvider={selectedProvider} inputData={inputData}
+              selectedProvider={selectedProvider}
+              inputData={inputData}
+              billingMonth={billingMonth}
             />
           </Grid>
- 
+
           <Grid item xs={12} sm={6} md={4}>
-            <MonthlyForecastComponent selectedCSP={selectedProvider} inputData={inputData}
+            <MonthlyForecastComponent
+              selectedCSP={selectedProvider}
+              inputData={inputData}
+              billingMonth={billingMonth}
             />
           </Grid>
- 
+
           <Grid item xs={12} sm={6} md={4}>
             <TotalSubscriptionsComponent selectedCSP={selectedProvider} />
           </Grid>
- 
+
           {/* Second Row: StackBars (or AzureBars), Recommendations, KPI */}
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={12} sm={6} md={4} sx={{ position: "relative" }}>
@@ -129,34 +174,40 @@ const Dashboard = () => {
                 <Box sx={{ flexGrow: 1 }}>
                   {showStackBars ? (
                     <StackBars
-                      inputData={inputData} selectedCSP={selectedProvider}
+                      inputData={inputData}
+                      selectedCSP={selectedProvider}
+                      startDate={startDate}
+                      endDate={endDate}
                     />
                   ) : (
                     <DetailedCSPBars
-                      inputData={inputData} selectedCSP={selectedProvider}
+                      inputData={inputData}
+                      selectedCSP={selectedProvider}
+                      billingMonth={billingMonth}
+                      startDate={startDate}
+                      endDate={endDate}
                     />
                   )}
                 </Box>
               </Paper>
             </Grid>
 
-          <Grid item xs={12} sm={6} md={4}>
-            <Paper
-              sx={{
-                p: 2,
-                height: "30vh",
-                display: "flex",
-                flexDirection: "column",
-                marginTop: "-10px",
-                boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
-              }}
-            >
-              <RecommendationsComponent selectedCSP={selectedProvider}
-               />
-            </Paper>
-          </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Paper
+                sx={{
+                  p: 2,
+                  height: "30vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  marginTop: "-10px",
+                  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
+                }}
+              >
+                <RecommendationsComponent selectedCSP={selectedProvider} />
+              </Paper>
+            </Grid>
 
-          <Grid
+            <Grid
               item
               xs={12}
               sm={6}
@@ -164,12 +215,18 @@ const Dashboard = () => {
               sx={{ position: "relative", top: "-10px" }}
             >
               {/* <Paper sx={{ p: 2, height: '30vh', display: 'flex', flexDirection: 'column' }}> */}
-              <KPISection selectedCSP={selectedProvider} inputData={inputData}/>
+              <KPISection
+                selectedCSP={selectedProvider}
+                inputData={inputData}
+                billingMonth={billingMonth}
+                startDate={startDate}
+                endDate={endDate}
+              />
               {/* </Paper> */}
             </Grid>
 
-        {/* Third Row */}
-        <Grid item xs={12} sm={6} md={4}>
+            {/* Third Row */}
+            <Grid item xs={12} sm={6} md={4}>
               <Paper
                 sx={{
                   p: 2,
@@ -179,7 +236,11 @@ const Dashboard = () => {
                   boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
                 }}
               >
-                <ConsumptionHighlights selectedCSP={selectedProvider} inputData={inputData} />
+                <ConsumptionHighlights
+                  selectedCSP={selectedProvider}
+                  inputData={inputData}
+                  billingMonth={billingMonth}
+                />
               </Paper>
             </Grid>
 
@@ -193,7 +254,10 @@ const Dashboard = () => {
                 }}
               >
                 <MapContainer
-                  selectedCSP = {selectedProvider} inputData= {inputData} />
+                  selectedCSP={selectedProvider}
+                  inputData={inputData}
+                  billingMonth={billingMonth}
+                />
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -205,7 +269,11 @@ const Dashboard = () => {
                   boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
                 }}
               >
-                <OverallTotalRealizedSavings selectedCSP = {selectedProvider} inputData= {inputData}/>
+                <OverallTotalRealizedSavings
+                  selectedCSP={selectedProvider}
+                  inputData={inputData}
+                  billingMonth={billingMonth}
+                />
               </Paper>
             </Grid>
           </Grid>

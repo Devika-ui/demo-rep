@@ -1,15 +1,21 @@
-
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import "../css/consumptionHighlights.scss";
 import api from "../api.js";
 import componentUtil from "../componentUtil.js";
-import { CircularProgress, Dialog, DialogTitle, DialogContent, Button, Tooltip} from "@mui/material";
+import {
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Button,
+  Tooltip,
+} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import ShareButton from "./ShareButton.js";
 
-const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
+const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
   const [topSubscriptions, setTopSubscriptions] = useState([]);
   const [topApplications, setTopApplications] = useState([]);
   const [topServices, setTopServices] = useState([]);
@@ -28,26 +34,37 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
 
   useEffect(() => {
     const fetchConsumptionData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
         const subscriptionsData1 =
-          await api.getOverallConsumptionForSubscription(inputData);
+          await api.getOverallConsumptionForSubscription(
+            inputData,
+            billingMonth
+          );
         const currencyPreference = await componentUtil.getCurrencyPreference();
         const currencySymbol = await componentUtil.getCurrencySymbol();
         setTopSubscriptions(subscriptionsData1.topsubscriptions || []);
 
         const applicationsData = await api.getOverallConsumptionForApplication(
-          inputData
+          inputData,
+          billingMonth
         );
         setTopApplications(applicationsData.topApplications || []);
 
         const servicesData = await api.getOverallConsumptionForServies(
-          inputData
+          inputData,
+          billingMonth
         );
         setTopServices(servicesData.topServices || []);
 
         const tagComplianceData =
-          await api.getOverallConsumptionForTagCompliance(inputData);
+          await api.getOverallConsumptionForTagCompliance(
+            inputData,
+            billingMonth
+          );
 
         if (tagComplianceData && tagComplianceData.length > 0) {
           const latestData = tagComplianceData[tagComplianceData.length - 1];
@@ -58,7 +75,8 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
             bupercentage: latestData.bupercentage || 0,
             environmentpercentage: latestData.environmentpercentage || 0,
           });
-          setMonthlyData(tagComplianceData); 
+
+          setMonthlyData(tagComplianceData);
         }
         setCurrencySymbol(currencySymbol);
         setCurrencyPreference(currencyPreference);
@@ -69,7 +87,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
       }
     };
     fetchConsumptionData();
-  }, [selectedCSP, inputData]);
+  }, [selectedCSP, inputData, billingMonth]);
 
   const topSubscriptionCost =
     topSubscriptions.length > 0
@@ -90,34 +108,37 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
           .toFixed(2)
       : "0.00";
 
-      const radialBarOptions = {
-            chart: {
-              type: "radialBar",
-              height: 200,
-              events: {
-                dataPointSelection: () => setShowDetailedView(true),
-              },
-            },
-            plotOptions: {
-              radialBar: {
-                dataLabels: {
-                  name: { fontSize: "12px" },
-                  value: { fontSize: "10px" },
-                },
-              },
-            },
-            labels: ["Application", "Owner", "Project", "Business Unit", "Environment"],
-            series: [
-              (tagCompliance.applicationpercentage * 100).toFixed(2),
-              (tagCompliance.ownerpercentage * 100).toFixed(2),
-              (tagCompliance.projectpercentage * 100).toFixed(2),
-              (tagCompliance.bupercentage * 100).toFixed(2),
-              (tagCompliance.environmentpercentage * 100).toFixed(2),
-            ],
-          };
+  const radialBarOptions = {
+    chart: {
+      type: "radialBar",
+      height: 200,
+      events: {
+        dataPointSelection: () => setShowDetailedView(true),
+      },
+    },
+    plotOptions: {
+      radialBar: {
+        dataLabels: {
+          name: { fontSize: "12px" },
+          value: { fontSize: "10px" },
+        },
+      },
+    },
+    labels: ["Application", "Owner", "Project", "Business Unit", "Environment"],
+    series: [
+      (tagCompliance.applicationpercentage * 100).toFixed(2),
+      (tagCompliance.ownerpercentage * 100).toFixed(2),
+      (tagCompliance.projectpercentage * 100).toFixed(2),
+      (tagCompliance.bupercentage * 100).toFixed(2),
+      (tagCompliance.environmentpercentage * 100).toFixed(2),
+    ],
+  };
 
   const categories = [
-    { name: "% Resource Tagging by Application", data: "applicationpercentage" },
+    {
+      name: "% Resource Tagging by Application",
+      data: "applicationpercentage",
+    },
     { name: "% Resource Tagging Owner", data: "ownerpercentage" },
     { name: "% Resource Tagging Project", data: "projectpercentage" },
     { name: "% Resource Tagging Business Unit", data: "bupercentage" },
@@ -138,7 +159,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
           <div className="tiles">
             <div className="tile">
               <div className="tilename">
-                {selectedCSP === 1 ? "Top Subscriptions" : "Top Accounts"}
+                {selectedCSP === 100 ? "Top Subscriptions" : "Top Accounts"}
               </div>
               <div className="price">
                 {currencyPreference === "start"
@@ -170,14 +191,13 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
                 onClick={() => setShowDetailedView(true)}
                 style={{ cursor: "pointer" }}
               >
-                 <Chart
+                <Chart
                   options={radialBarOptions}
                   series={radialBarOptions.series}
                   type="radialBar"
                   height="200px"
                   width="200px"
                 />
-                
               </div>
             </Tooltip>
           </div>
@@ -187,13 +207,15 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
             onClose={() => setShowDetailedView(false)}
             maxWidth={false}
           >
-            <DialogTitle style={{color:"#5f249f"}}>Detailed % Tag Compliance
-            <IconButton className="closebutton"
+            <DialogTitle style={{ color: "#5f249f" }}>
+              Detailed % Tag Compliance
+              <IconButton
+                className="closebutton"
                 onClick={() => setShowDetailedView(false)}
               >
-              <CloseIcon/>
+                <CloseIcon />
               </IconButton>
-              </DialogTitle>
+            </DialogTitle>
             <DialogContent>
               <div className="expanded-view">
                 {categories.map((category) => (
@@ -205,7 +227,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
                         plotOptions: {
                           bar: {
                             dataLabels: {
-                              position: "top", 
+                              position: "top",
                             },
                           },
                         },
@@ -217,12 +239,12 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
                           categories: monthlyData.map((data) => data.month),
                         },
                         yaxis: {
-                          show: false, 
+                          show: false,
                         },
                         grid: {
                           show: false,
                         },
-                        colors: ['#5f249f']
+                        colors: ["#5f249f"],
                       }}
                       series={[
                         {
@@ -239,7 +261,6 @@ const ConsumptionHighlights = ({ selectedCSP, inputData }) => {
                   </div>
                 ))}
               </div>
-              
             </DialogContent>
           </Dialog>
         </div>

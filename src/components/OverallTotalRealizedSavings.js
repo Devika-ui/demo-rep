@@ -24,7 +24,11 @@ ChartJS.register(
   Legend
 );
 
-const OverallTotalRealizedSavings = ({ selectedCSP, inputData }) => {
+const OverallTotalRealizedSavings = ({
+  selectedCSP,
+  inputData,
+  billingMonth,
+}) => {
   const [reservations, setReservations] = useState([]);
   const [simulatedSavings, setSimulatedSavings] = useState([]);
   const [labels, setLabels] = useState([]);
@@ -33,9 +37,15 @@ const OverallTotalRealizedSavings = ({ selectedCSP, inputData }) => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchReservationsData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
-        const reservationsData = await api.getOverallSavingsRI(inputData);
+        const reservationsData = await api.getOverallSavingsRI(
+          inputData,
+          billingMonth
+        );
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
         setReservations(reservationsData.map((entry) => entry.savings));
@@ -56,14 +66,18 @@ const OverallTotalRealizedSavings = ({ selectedCSP, inputData }) => {
       }
     };
     fetchReservationsData();
-  }, [selectedCSP, inputData]);
+  }, [selectedCSP, inputData, billingMonth]);
 
   useEffect(() => {
     const fetchSimulatedSavingsData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
         const simulatedSavingsData = await api.getOverallSavingsStimulated(
-          inputData
+          inputData,
+          billingMonth
         );
         setSimulatedSavings(
           simulatedSavingsData.map((entry) => entry.simulated)

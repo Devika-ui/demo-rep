@@ -4,89 +4,183 @@ import { MultiSelect } from "react-multi-select-component";
 import Modal from "react-modal";
 import api from "../api";
 import "../css/Filter.scss";
+import componentUtil from "../componentUtil";
+import { CircularProgress } from "@mui/material";
 
-const AWSFilter = ({ additionalFilters = [] }) => {
+const AWSFilter = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState({
-    subscriptions: [],
-    businessUnits: [],
-    locations: [],
-    applications: [],
-    projects: [],
-    environments: [],
+  //100-Azure,110-AWS,120-Next new CSP add further whenever new CSP we supporting
+  const [filterData, setFilterData] = useState({
+    100: [],
+    110: [],
+    120: [],
+    130: [],
+    140: [],
+  });
+  const [filterDataTemplate, setFilterDataTemplate] = useState({
+    100: [],
+    110: [],
+    120: [],
+    130: [],
+    140: [],
+  });
+  const [tags0, setTags0] = useState({
+    100: [],
+    110: [],
+    120: [],
+    130: [],
+    140: [],
   });
 
-  const [filterOptions, setFilterOptions] = useState({
-    subscriptions: [],
-    businessUnits: [],
-    locations: [],
-    applications: [],
-    projects: [],
-    environments: [],
+  const [filterSelectedData, setFilterSelectedData] = useState({
+    100: {},
+    110: {},
+    120: {},
+    130: {},
+    140: {},
   });
+  const [filterSelectedDataTemplate, setFilterSelectedDataTemplate] = useState({
+    100: {},
+    110: {},
+    120: {},
+    130: {},
+    140: {},
+  });
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchFilters = async () => {
-      try {
-        const data = await api.getAllFilters();
-        setFilterOptions({
-          subscriptions: transformToOptions(data.subscriptionName),
-          businessUnits: transformToOptions(data.tags_BU_company),
-          locations: transformToOptions(data.resourceLocation),
-          applications: transformToOptions(data.tags_AppID_AppName),
-          projects: transformToOptions(data.tags_ProjectName),
-          environments: transformToOptions(data.tags_Environment),
-        });
-      } catch (error) {
-        console.error("Error fetching filters:", error);
+    fetchInitialFilters();
+  }, [selectedCSP]);
+
+  const fetchInitialFilters = async () => {
+    setLoading(true);
+    try {
+      const initialData = await api.getFilterBasedOnSelection({});
+      const subscriptionsData = initialData.subscriptionName;
+      setAndPopulateFilterValues(initialData);
+    } catch (error) {
+      console.error("Error fetching initial filters:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const setAndPopulateFilterValues = async (apiData) => {
+    let data = [];
+    let isDataAvailable = false;
+    for (const key in apiData) {
+      if (key.endsWith("_key")) {
+        let tagPart = key.substring(0, key.indexOf("_key"));
+        let displayName = tagPart + "_displayName";
+        let dataKeyName = apiData[key];
+        if (apiData[displayName] != undefined) {
+          if (key == "tags0_key") {
+            if (tags0[selectedCSP].length == 0)
+              setTags0({
+                ...filterDataTemplate,
+                [selectedCSP]: apiData[dataKeyName],
+              });
+            else apiData[dataKeyName] = tags0[selectedCSP];
+          }
+          data.push({
+            key: selectedCSP == 110 ? tagPart : dataKeyName,
+            displayName: apiData[displayName],
+            data: transformToOptions(apiData[dataKeyName]),
+          });
+        }
       }
+    }
+    /*setFilterData((prevFilterData)=>{
+      prevFilterData[selectedCSP]= data;
+      return prevFilterData;
+    });*/
+    setFilterData({ [selectedCSP]: data });
+  };
+
+  const handleFilterChange = async (filterType, values) => {
+    let updatedValues;
+
+    // Check if "Select All" is chosen
+    const selectAllOption = values.find(
+      (option) => option.value === "selectAll"
+    );
+
+    if (selectAllOption) {
+      // If "Select All" is selected, replace with all options for that filter type
+      filterData[selectedCSP].map((filterObj) => {
+        if (filterObj["key"] == filterType) {
+          updatedValues = filterObj.data;
+        }
+      });
+    } else if (values.length > 1) {
+      // Allow only one option at a time if "Select All" is not chosen
+      updatedValues = [values[values.length - 1]];
+    } else {
+      updatedValues = values; // Keep the single selected value
+    }
+
+    const newFilterSelectedData = {
+      ...filterSelectedData[selectedCSP],
+      [filterType]: updatedValues,
     };
 
-    fetchFilters();
-  }, []);
+    setFilterSelectedData((prevFilterSelectedData) => {
+      //prevFilterSelectedData[selectedCSP]= newFilterSelectedData;
+      return {
+        ...filterSelectedDataTemplate,
+        [selectedCSP]: newFilterSelectedData,
+      };
+    });
 
-  const transformToOptions = (data) => {
-    return data
-      .filter((item) => item !== null) // Exclude null values
-      .map((item) => ({ value: item, label: item }));
+    try {
+      // Fetch updated filter options based on the current selections
+      const updatedData = await api.getFilterBasedOnSelection(
+        componentUtil.transformFiltersOptionsToObject(newFilterSelectedData)
+      );
+      // Update the filter options for all dropdowns
+      setAndPopulateFilterValues(updatedData);
+    } catch (error) {
+      console.error("Error fetching filters based on selection:", error);
+    }
+  };
+
+  const transformToOptions = (data, optionsOnly) => {
+    if (!data || data.length == 0) return [];
+    const options = data.map((item) => ({
+      value: item,
+      label: item === null ? "null" : item,
+    }));
+
+    // Add "Select All" as the first option
+    if (optionsOnly) {
+      return [...options];
+    }
+    return [{ value: "selectAll", label: "Select All" }, ...options];
+  };
+
+  const handleApplyFilters = () => {
+    toggleFiltersVisibility();
+    onFiltersChange(
+      componentUtil.transformFiltersOptionsToObject(
+        filterSelectedData[selectedCSP]
+      )
+    );
+  };
+
+  const handleResetFilters = () => {
+    setFilterData(filterDataTemplate); // Reset to initial state
+    setFilterSelectedData(filterSelectedDataTemplate);
+    fetchInitialFilters();
+    onFiltersChange(
+      componentUtil.transformFiltersOptionsToObject(
+        filterSelectedData[selectedCSP]
+      )
+    ); // Notify parent component of the reset filters
   };
 
   const toggleFiltersVisibility = () => {
     setIsFiltersVisible(!isFiltersVisible);
-  };
-
-  const handleFilterChange = async (filterType, values) => {
-    if (values.length === filterOptions[filterType].length) {
-      // "Select All" case
-      setSelectedFilters({ ...selectedFilters, [filterType]: values });
-    } else if (values.length > 1) {
-      // Restrict to single selection
-      setSelectedFilters({
-        ...selectedFilters,
-        [filterType]: [values[values.length - 1]],
-      });
-    } else {
-      setSelectedFilters({ ...selectedFilters, [filterType]: values });
-    }
-
-    if (filterType === "subscriptions" && values.length > 0) {
-      const selectedSubscriptions = values.map((sub) => sub.value);
-      try {
-        const updatedData = await api.getFilterBasedOnSelection(
-          selectedSubscriptions
-        );
-        setFilterOptions({
-          subscriptions: transformToOptions(updatedData.subscriptionName),
-          businessUnits: transformToOptions(updatedData.tags_BU_company),
-          locations: transformToOptions(updatedData.resourceLocation),
-          applications: transformToOptions(updatedData.tags_AppID_AppName),
-          projects: transformToOptions(updatedData.tags_ProjectName),
-          environments: transformToOptions(updatedData.tags_Environment),
-        });
-      } catch (error) {
-        console.error("Error fetching filters based on selection:", error);
-      }
-    }
   };
 
   const customStyles = {
@@ -108,22 +202,62 @@ const AWSFilter = ({ additionalFilters = [] }) => {
     },
   };
 
-  const handleApplyFilters = () => {
-    console.log("Selected filters:", selectedFilters);
-    toggleFiltersVisibility();
-    // Apply filter logic here
-  };
+  // return (
+  //   <div className="Filter-Container">
+  //     <span onClick={toggleFiltersVisibility} className="Filter-Text">
+  //       Options
+  //     </span>
+  //     <Modal
+  //       isOpen={isFiltersVisible}
+  //       onRequestClose={toggleFiltersVisibility}
+  //       style={customStyles}
+  //       contentLabel="Filter Dialog"
+  //     >
+  //       <div className="Subheader-Boxes">
+  //         {loading ? (
+  //           <div className="loading-guage">
+  //             <CircularProgress />
+  //           </div>
+  //         ) : (
+  //           <div className="filter-options-container">
+  //             {filterData[selectedCSP] &&
+  //               filterData[selectedCSP].map((filterObj) => {
+  //                 const selVal =
+  //                   filterSelectedData[selectedCSP][filterObj["key"]] !==
+  //                   undefined
+  //                     ? filterSelectedData[selectedCSP][filterObj["key"]]
+  //                     : [];
+  //                 return (
+  //                   <div className="filter-option">
+  //                     <label>{filterObj.displayName}(s)</label>
+  //                     <MultiSelect
+  //                       options={filterObj.data}
+  //                       value={selVal}
+  //                       onChange={(values) =>
+  //                         handleFilterChange(filterObj["key"], values)
+  //                       }
+  //                       labelledBy="Select"
+  //                       disableSelectAll={false}
+  //                       hasSelectAll={false}
+  //                     />
+  //                   </div>
+  //                 );
+  //               })}
+  //           </div>
+  //         )}
 
-  const handleResetFilters = () => {
-    setSelectedFilters({
-      subscriptions: [],
-      businessUnits: [],
-      locations: [],
-      applications: [],
-      projects: [],
-      environments: [],
-    });
-  };
+  //         <div className="Subheader-Buttons">
+  //           <button className="apply-button" onClick={handleApplyFilters}>
+  //             Apply
+  //           </button>
+  //           <button className="reset-button" onClick={handleResetFilters}>
+  //             Reset
+  //           </button>
+  //         </div>
+  //       </div>
+  //     </Modal>
+  //   </div>
+  // );
 
   return (
     <div className="Filter-Container">
@@ -133,155 +267,51 @@ const AWSFilter = ({ additionalFilters = [] }) => {
       <Modal
         isOpen={isFiltersVisible}
         onRequestClose={toggleFiltersVisibility}
-        style={customStyles}
+        className="modal-content"
+        overlayClassName="modal-overlay"
         contentLabel="Filter Dialog"
       >
-        <div className="filter-options-container">
-          {/* Subscriptions dropdown */}
-          <div className="filter-option">
-            <label>Subscriptions(s)</label>
-            <MultiSelect
-              options={filterOptions.subscriptions}
-              value={selectedFilters.subscriptions}
-              onChange={(values) => handleFilterChange("subscriptions", values)}
-              labelledBy="Select"
-              overrideStrings={{
-                selectSomeItems: "Select...",
-                allItemsAreSelected: "All items are selected",
-                selectAll: "Select All",
-                search: "Search",
-              }}
-            />
-          </div>
-          {/* Business Unit dropdown */}
-          <div className="filter-option">
-            <label>Business Unit(s)</label>
-            <MultiSelect
-              options={filterOptions.businessUnits}
-              value={selectedFilters.businessUnits}
-              onChange={(values) => handleFilterChange("businessUnits", values)}
-              labelledBy="Select"
-              overrideStrings={{
-                selectSomeItems: "Select...",
-                allItemsAreSelected: "All items are selected",
-                selectAll: "Select All",
-                search: "Search",
-              }}
-            />
-          </div>
-          {/* Location dropdown */}
-          <div className="filter-option">
-            <label>Location(s)</label>
-            <MultiSelect
-              options={filterOptions.locations}
-              value={selectedFilters.locations}
-              onChange={(values) => handleFilterChange("locations", values)}
-              labelledBy="Select"
-              overrideStrings={{
-                selectSomeItems: "Select...",
-                allItemsAreSelected: "All items are selected",
-                selectAll: "Select All",
-                search: "Search",
-              }}
-            />
-          </div>
-          {/* Application dropdown */}
-          <div className="filter-option">
-            <label>Application(s)</label>
-            <MultiSelect
-              options={filterOptions.applications}
-              value={selectedFilters.applications}
-              onChange={(values) => handleFilterChange("applications", values)}
-              labelledBy="Select"
-              overrideStrings={{
-                selectSomeItems: "Select...",
-                allItemsAreSelected: "All items are selected",
-                selectAll: "Select All",
-                search: "Search",
-              }}
-            />
-          </div>
-          {/* Project dropdown */}
-          <div className="filter-option">
-            <label>Project(s)</label>
-            <MultiSelect
-              options={filterOptions.projects}
-              value={selectedFilters.projects}
-              onChange={(values) => handleFilterChange("projects", values)}
-              labelledBy="Select"
-              overrideStrings={{
-                selectSomeItems: "Select...",
-                allItemsAreSelected: "All items are selected",
-                selectAll: "Select All",
-                search: "Search",
-              }}
-            />
-          </div>
-          {/* Environment dropdown */}
-          <div className="filter-option">
-            <label>Environment(s)</label>
-            <MultiSelect
-              options={filterOptions.environments}
-              value={selectedFilters.environments}
-              onChange={(values) => handleFilterChange("environments", values)}
-              labelledBy="Select"
-              overrideStrings={{
-                selectSomeItems: "Select...",
-                allItemsAreSelected: "All items are selected",
-                selectAll: "Select All",
-                search: "Search",
-              }}
-            />
-          </div>
-          {/* Additional filters from props */}
-          {additionalFilters?.map((filter, index) => (
-            <div key={index} className="filter-option">
-              <label>{filter.label}</label>
-              <MultiSelect
-                options={filter.options || []}
-                value={selectedFilters[filter.name] || []}
-                onChange={(values) => handleFilterChange(filter.name, values)}
-                labelledBy="Select"
-                overrideStrings={{
-                  selectSomeItems: "Select...",
-                  allItemsAreSelected: "All items are selected",
-                  selectAll: "Select All",
-                  search: "Search",
-                }}
-              />
+        <div>
+          {loading ? (
+            <div className="loading-guage">
+              <CircularProgress />
             </div>
-          ))}
-        </div>
-        {/* Buttons */}
-        <div
-          className="filter-buttons"
-          style={{ textAlign: "right", marginTop: "20px" }}
-        >
-          <button
-            onClick={handleApplyFilters}
-            style={{
-              backgroundColor: "#5F249F",
-              color: "#fff",
-              marginRight: "10px",
-              padding: "10px 20px",
-              fontSize: "14px",
-              borderRadius: "17px",
-              minWidth: "70px",
-            }}
-          >
-            Apply
-          </button>
-          <button
-            onClick={handleResetFilters}
-            style={{
-              padding: "10px 20px",
-              fontSize: "14px",
-              borderRadius: "17px",
-              minWidth: "70px",
-            }}
-          >
-            Reset Filters
-          </button>
+          ) : (
+            <div className="filter-options-container">
+              {filterData[selectedCSP] &&
+                filterData[selectedCSP].map((filterObj) => {
+                  const selVal =
+                    filterSelectedData[selectedCSP][filterObj["key"]] !==
+                    undefined
+                      ? filterSelectedData[selectedCSP][filterObj["key"]]
+                      : [];
+                  return (
+                    <div className="filter-option">
+                      <label>{filterObj.displayName}(s)</label>
+                      <MultiSelect
+                        options={filterObj.data}
+                        value={selVal}
+                        onChange={(values) =>
+                          handleFilterChange(filterObj["key"], values)
+                        }
+                        labelledBy="Select"
+                        disableSelectAll={false}
+                        hasSelectAll={false}
+                      />
+                    </div>
+                  );
+                })}
+            </div>
+          )}
+
+          <div className="Subheader-Buttons">
+            <button className="apply-button" onClick={handleApplyFilters}>
+              Apply
+            </button>
+            <button className="reset-button" onClick={handleResetFilters}>
+              Reset
+            </button>
+          </div>
         </div>
       </Modal>
     </div>

@@ -31,6 +31,7 @@ const MonthlyCostTrends = ({
   selectedFilters,
   currencySymbol,
   currencyPreference,
+  billingMonth,
 }) => {
   const [chartData, setChartData] = useState({
     labels: [],
@@ -69,8 +70,14 @@ const MonthlyCostTrends = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (billingMonth.length == 0) {
+          return;
+        }
         setLoading(true);
-        const response = await api.getMonthlyForecastSpend(selectedFilters);
+        const response = await api.getMonthlyForecastSpend(
+          selectedFilters,
+          billingMonth
+        );
         if (!response || !response[0]) {
           throw new Error("Invalid API response");
         }
@@ -105,7 +112,7 @@ const MonthlyCostTrends = ({
     };
 
     fetchData();
-  }, [selectedFilters]);
+  }, [selectedFilters, billingMonth]);
 
   const options = {
     responsive: true,

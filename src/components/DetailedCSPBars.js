@@ -106,7 +106,13 @@ const options = (currencySymbol, currencyPreference) => ({
   },
 });
 
-const DetailedCSPBars = ({ inputData, selectedCSP }) => {
+const DetailedCSPBars = ({
+  inputData,
+  selectedCSP,
+  billingMonth,
+  startDate,
+  endDate,
+}) => {
   const [data, setData] = useState({ labels: [], datasets: [] });
   const [forecastData, setForecastData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -118,8 +124,15 @@ const DetailedCSPBars = ({ inputData, selectedCSP }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (billingMonth.length == 0 || !startDate || !endDate) {
+          return;
+        }
         // Construct input data based on selected filters or subscriptionsData
-        const response = await api.getBillingCostEachDay(inputData);
+        const response = await api.getBillingCostEachDay(
+          inputData,
+          startDate,
+          endDate
+        );
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
         const labelsSet = new Set();
@@ -173,7 +186,13 @@ const DetailedCSPBars = ({ inputData, selectedCSP }) => {
     const fetchForecastData = async () => {
       try {
         // Construct input data for the forecast API
-        const forecastResponse = await api.getMonthlyForecastSpend(inputData);
+        if (billingMonth.length == 0) {
+          return;
+        }
+        const forecastResponse = await api.getMonthlyForecastSpend(
+          inputData,
+          billingMonth
+        );
 
         const pastMonths = forecastResponse[0].pastCosts.map(
           (item) => item.month
@@ -219,7 +238,7 @@ const DetailedCSPBars = ({ inputData, selectedCSP }) => {
     };
     fetchData();
     fetchForecastData();
-  }, [selectedCSP, inputData]);
+  }, [selectedCSP, inputData, billingMonth, startDate, endDate]);
 
   const handleToggleChange = () => {
     setShowForecast(!showForecast);

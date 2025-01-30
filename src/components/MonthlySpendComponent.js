@@ -8,7 +8,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 
-const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
+const MonthlySpendComponent = ({
+  selectedProvider,
+  inputData,
+  billingMonth,
+}) => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false); // Track overlay visibility
   const [billSummary, setBillSummary] = useState({
     Payasyougocost: 0,
@@ -87,9 +91,12 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
-        const data = await api.getMonthlyActualSpend(inputData);
+        const data = await api.getMonthlyActualSpend(inputData, billingMonth);
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
         setCurrencySymbol(currencySymbol);
@@ -103,7 +110,7 @@ const MonthlySpendComponent = ({ selectedProvider, inputData }) => {
       }
     };
     fetchData();
-  }, [selectedProvider, inputData]);
+  }, [selectedProvider, inputData, billingMonth]);
 
   return (
     <div className="monthly-spend-container">

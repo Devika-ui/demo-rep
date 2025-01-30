@@ -37,6 +37,7 @@ const BusinessCostSplit = () => {
   const [filteredData, setFilteredData] = useState(billAllocationData);
   const [applicationNames, setApplicationNames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [billingMonth, setBillingMonth] = useState([]);
 
   let inputData = selectedFilters;
 
@@ -48,6 +49,9 @@ const BusinessCostSplit = () => {
 
   const handleFiltersChange = (newFilters) => {
     setSelectedFilters(newFilters);
+  };
+  const handleMonthChange = (months) => {
+    setBillingMonth(months);
   };
 
   useEffect(() => {
@@ -72,8 +76,14 @@ const BusinessCostSplit = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (billingMonth.length == 0) {
+          return;
+        }
         setLoading(true);
-        const serviceCategoryCost = await api.getServiceCategoryCost(inputData);
+        const serviceCategoryCost = await api.getServiceCategoryCost(
+          inputData,
+          billingMonth
+        );
 
         const transformDataToArrayFormat = (data) => {
           const result = [];
@@ -174,7 +184,7 @@ const BusinessCostSplit = () => {
 
         const transformedData = transformDataToArrayFormat(serviceCategoryCost);
 
-        console.log("Transformed Data:", transformedData);
+        //console.log("Transformed Data:", transformedData);
         setServiceData(transformedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -184,11 +194,14 @@ const BusinessCostSplit = () => {
     };
 
     fetchData();
-  }, [selectedProvider]);
+  }, [selectedProvider, billingMonth]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (billingMonth.length == 0) {
+          return;
+        }
         setLoading(true);
         setBoxData([]);
         const [
@@ -197,10 +210,10 @@ const BusinessCostSplit = () => {
           projectsWithTags,
           projectsWithoutTags,
         ] = await Promise.all([
-          api.getApplicationWithTags(inputData),
-          api.getApplicationWithoutTags(inputData),
-          api.getProjectWithTags(inputData),
-          api.getProjectWithoutTags(inputData),
+          api.getApplicationWithTags(inputData, billingMonth),
+          api.getApplicationWithoutTags(inputData, billingMonth),
+          api.getProjectWithTags(inputData, billingMonth),
+          api.getProjectWithoutTags(inputData, billingMonth),
         ]);
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
@@ -257,18 +270,24 @@ const BusinessCostSplit = () => {
       }
     };
     fetchData();
-  }, [selectedProvider]);
+  }, [selectedProvider, billingMonth]);
 
   useEffect(() => {
     const fetchBillAllocationData = async () => {
       try {
+        if (billingMonth.length == 0) {
+          return;
+        }
         setLoading(true);
         if (!inputData) {
           console.log("No input data, skipping API calls.");
           return;
         }
 
-        const billAllocation = await api.getBillAllocation(inputData);
+        const billAllocation = await api.getBillAllocation(
+          inputData,
+          billingMonth
+        );
 
         function extractUniqueMonths(data) {
           const months = new Set();
@@ -401,7 +420,7 @@ const BusinessCostSplit = () => {
         const applicationNames = transformedData.map((app) => app.name);
         setApplicationNames(applicationNames);
 
-        console.log("Transformed Data:", transformedData);
+        //console.log("Transformed Data:", transformedData);
         setBillAllocationData(transformedData);
         setFilteredBillAllocationData(transformedData);
       } catch (error) {
@@ -411,7 +430,7 @@ const BusinessCostSplit = () => {
       }
     };
     fetchBillAllocationData();
-  }, [selectedProvider]);
+  }, [selectedProvider, billingMonth]);
 
   // const columns1 = [
   //   { key: "ownerName", label: "Owner Name" },
@@ -510,6 +529,7 @@ const BusinessCostSplit = () => {
           onButtonClick={handleButtonClick}
           onFiltersChange={handleFiltersChange}
           selectedCSP={selectedProvider}
+          onMonthChange={handleMonthChange}
         />
         <NavigationBar />
       </Box>
@@ -559,6 +579,7 @@ const BusinessCostSplit = () => {
             selectedFilters={selectedFilters}
             currencySymbol={currencySymbol}
             currencyPreference={currencyPreference}
+            billingMonth={billingMonth}
           />
         </div>
       </div>
