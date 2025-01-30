@@ -1125,6 +1125,168 @@ const api = {
     }
   },
 
+  getTotalRecommendations: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/costoptimization/advisor/totalrecommendations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+        },
+        body: JSON.stringify({
+          CloudServiceProvider:110,
+          filters: {
+            BillingAccountName: ["550262613464"],
+          },
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch total recommendations");
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching total recommendations:", error);
+      throw error;
+    }
+  },
+
+  getMonthlySavings: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/costoptimization/advisor/highimpactrecommendations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+        },
+        body: JSON.stringify({
+          CloudServiceProvider:110,
+          filters: {
+            BillingAccountName: ["550262613464"],
+          },
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch Monthly Savings");
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching Monthly Savings:", error);
+      throw error;
+    }
+  },
+
+  getServicemonthlysavings: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/costoptimization/advisor/servicecatwithhighimpact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+        },
+        body: JSON.stringify({
+          CloudServiceProvider:110,
+          filters: {
+            BillingAccountName: ["550262613464"],
+          },
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch Monthly Savings");
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching Monthly Savings:", error);
+      throw error;
+    }
+  },
+  
+  getapplicationswithhighimpact: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/costoptimization/advisor/applicationswithhighimpact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+        },
+        body: JSON.stringify({
+          CloudServiceProvider:110,
+          filters: {
+            BillingAccountName: ["550262613464"],
+          },
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch Monthly Savings");
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching Monthly Savings:", error);
+      throw error;
+    }
+  },
+  
+  getRightsizingRecommendations: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/costoptimization/advisor/costallocation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+        },
+        body: JSON.stringify({
+          CloudServiceProvider:110,
+          filters: {
+            BillingAccountName: ["550262613464"],
+          },
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch Monthly Savings");
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching Monthly Savings:", error);
+      throw error;
+    }
+  },
+
+  getCosttrend: async () => {
+    try {
+      const response = await fetch(`${apiUrl}/costoptimization/advisor/costvssubandimpact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+        },
+        body: JSON.stringify({
+          CloudServiceProvider:110,
+          filters: {
+            BillingAccountName: ["550262613464"],
+          },
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch Monthly Savings");
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching Monthly Savings:", error);
+      throw error;
+    }
+  },
+  
   getCountUnattachedDisk1: async () => {
     try {
       const response = await fetch(

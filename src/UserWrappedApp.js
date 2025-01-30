@@ -16,6 +16,7 @@ import { ReactKeycloakProvider, useKeycloak } from "@react-keycloak/web";
 import keycloak from "./components/Keycloak";
 import OnDemandCostStudy from "./components/OnDemandCostStudy";
 import RecommendationSPA from "./components/RecommendationSPA";
+import TrustedAdvisor from "./components/AWSTrusteAdvisor";
 import api from "./api";
 import componentUtil from "./componentUtil";
 import UserInfo from "./components/UserInfo";
@@ -62,6 +63,7 @@ const UserWrappedApp = ({ token, userInfo }) => {
                 <Route path="/hyperScalarAdvisor" element={<HyperScalarAdvisor />} />
                 <Route path="/sqlVmLicenses" element={<SqlVmLicenses />} />
                 <Route path="/orphanedrsvbackups" element={<OrphanedRSVBackups />} />
+                <Route path="/TrustedAdvisor" element={<TrustedAdvisor />} />
                 <Route path="/ondemandCostStudy" element={<OnDemandCostStudy />} />
                 <Route path="/userInfo" element={<UserInfo userInfo={userInfo} />} />
               </Routes>

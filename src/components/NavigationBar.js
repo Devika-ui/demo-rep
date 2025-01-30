@@ -90,6 +90,10 @@ const NavigationBar = () => {
             label: "Orphaned RSV Backups",
             path: "/recommendations#orphanedRSVBackups",
           },
+          {
+            label: "AWS Trusted Advisor",
+            path: "/TrustedAdvisor",
+          },
         ];
 
       case "Monitoring":

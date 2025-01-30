@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -32,6 +33,7 @@ const MonthlyCostTrends = ({
   currencySymbol,
   currencyPreference,
   billingMonth,
+  dummyData = null,
 }) => {
   const [chartData, setChartData] = useState({
     labels: [],
@@ -68,6 +70,12 @@ const MonthlyCostTrends = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (dummyData) {
+      setChartData(dummyData);
+      setLoading(false);
+      return;
+    }
+
     const fetchData = async () => {
       try {
         if (billingMonth.length == 0) {
@@ -112,7 +120,7 @@ const MonthlyCostTrends = ({
     };
 
     fetchData();
-  }, [selectedFilters, billingMonth]);
+  }, [dummyData, selectedFilters, billingMonth]);
 
   const options = {
     responsive: true,
@@ -200,3 +208,4 @@ const MonthlyCostTrends = ({
 };
 
 export default MonthlyCostTrends;
+

@@ -1,0 +1,84 @@
+.savings-container {
+    padding: 20px;
+    border-radius: 10px;
+    height: 30vh;
+    width: 90.5%;
+    margin-left: 4rem;
+    overflow: hidden;
+     margin-top: -9rem;
+  }
+   
+  .CmpSrtable_container {
+    overflow: auto;
+    max-height: 150px;
+  }
+   
+  .CmpSrtable_container2{
+    max-height: 430px;
+  }
+  .savings-title {
+    color: #5F249F;
+    font-weight: bold !important;
+    text-align: left;
+    margin-bottom: 15px;
+  }
+   
+  .table-header {
+    background-color: #f0f0f0;
+  }
+   
+  .table-header-cell {
+    color: #0f0f0f;
+    font-weight: bold;
+    position: sticky;
+    background-color: #f0f0f0;
+    z-index: 100;
+    top: 5px;
+  }
+   
+  .account-row {
+    background-color: #f8f8f8;
+  }
+   
+  .account-name {
+    color: #5F249F;
+  }
+   
+  .service-row {
+    background-color: #f4f4f4;
+    color: #5F249F;
+  }
+   
+  .purple-text td {
+    color: #5F249F !important;
+  }
+  
+  .service-cell {
+    padding: 4px 8px !important;
+    overflow: hidden;
+    text-align: center !important;
+    color: #5F249F !important;
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+  }
+  .cmpSR_buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: -25px;
+    margin-left: 769px;
+  }
+  .cmpSRCustomize_button {
+    font-size: 0.7rem !important;
+    padding: 2px 8px !important;
+    color: #63666a !important;
+    height: 30px;
+    border-color: #63666a !important ;
+  }
+  .cmpSR_Sharebutton,
+  .cmpSR_fullscreenButton {
+    top: -5px;
+  }
+
+.service_overlay_content1{
+    height: 40vh;
+}

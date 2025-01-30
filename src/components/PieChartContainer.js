@@ -15,9 +15,9 @@ import "../css/components/PieChartContainer.css";
 
 const PieChartContainer = ({
   title1,
-  data1,
+  data1 = [],
   title2,
-  data2,
+  data2 = [],
   containerStyle,
   chartStyle,
   pieChartHeight1 = 250,

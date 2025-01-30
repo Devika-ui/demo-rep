@@ -4,17 +4,21 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "./Box";
 import "../css/components/ContainerBox.css";
 
-const ContainerBox = ({ data, loading }) => {
+const ContainerBox = ({ data = [], loading }) => {
   return (
     <Paper className="cmp_containerBox">
       {loading ? (
         <div className="loadingcontainer">
           <CircularProgress />
         </div>
+      ) : data.length > 0 ? (
+        <div className="cmp_innerBox">
+          {data.map((item, index) => (
+            <Box key={index} number={item.number} text={item.text} />
+          ))}
+        </div>
       ) : (
-        data.map((item, index) => (
-          <Box key={index} number={item.number} text={item.text} />
-        ))
+        <div>No recommendations available</div>
       )}
     </Paper>
   );
