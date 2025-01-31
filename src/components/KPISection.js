@@ -29,7 +29,7 @@ const KPISection = ({
         );
         setPercentCoverage(coverageData.coverage);
         const usageData = await api.getDiscountKPIUsage(startDate, endDate);
-        setPercentUsage(usageData.usage);
+        setPercentUsage(usageData.usage ?? 0);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
