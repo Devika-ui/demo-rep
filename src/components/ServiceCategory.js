@@ -29,6 +29,8 @@ const TableRowComponent = ({
   const hasNestedData = (item) =>
     Array.isArray(item?.children) && item.children.length > 0;
 
+  const isResourceLevel = (item) => item.type === "resource";
+
   // Helper function to format values to 2 decimal points
   const formatValueToTwoDecimals = (value) => {
     return parseFloat(value || 0).toFixed(2);
@@ -76,7 +78,7 @@ const TableRowComponent = ({
               style={{ paddingLeft: indentLevel, width: "200px  " }}
               className="cmpSvcCat_first_cell"
             >
-              {level < 3 && hasNestedData(item) && (
+              {!isResourceLevel(item) && hasNestedData(item) && (
                 <IconButton
                   size="small"
                   onClick={() => toggleRow(rowKey, index)}
@@ -118,7 +120,8 @@ const TableRowComponent = ({
             })}
           </TableRow>
 
-          {expandedRows[rowKey]?.[index] &&
+          {!isResourceLevel(item) &&
+            expandedRows[rowKey]?.[index] &&
             level < 3 &&
             item.children &&
             item.children.length > 0 && (
