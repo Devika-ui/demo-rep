@@ -387,7 +387,12 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
     // Extract unique months
     const months = Array.from(new Set(extractMonths(transformedData)));
     months.sort((a, b) => new Date(a) - new Date(b));
-    setUniqueMonths(months);
+    // Update formattedMonths only if new months are added
+    setUniqueMonths((prevMonths) => {
+      const newMonths = Array.from(new Set([...prevMonths, ...months]));
+      return newMonths;
+    });
+    // setUniqueMonths(months);
     function formatMonthYear(dateString) {
       const date = new Date(dateString);
       const options = { year: "numeric", month: "long" }; // e.g., "January-2024"
@@ -399,7 +404,14 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
 
     // Map the sorted array to the new format
     const formattedMonths = sortedMonths.map(formatMonthYear);
-    setFormattedMonths(formattedMonths);
+    // setFormattedMonths(formattedMonths);
+    // Update formattedMonths state
+    setFormattedMonths((prevFormattedMonths) => {
+      const newFormattedMonths = Array.from(
+        new Set([...prevFormattedMonths, ...formattedMonths])
+      );
+      return newFormattedMonths;
+    });
     return transformedData;
   };
   const fetchCloudInventoryData = async (subscriptionName, page) => {
