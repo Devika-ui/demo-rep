@@ -28,11 +28,11 @@ const TotalSubscriptionsComponent = ({ selectedCSP }) => {
   }, [selectedCSP]);
 
   switch (selectedCSP) {
-    case 1:
+    case 100:
       displayTitleTxt = "Total Subscriptions";
       displayInfoTxt = "Azure Subscriptions";
       break;
-    case 2:
+    case 110:
       displayTitleTxt = "Total Accounts";
       displayInfoTxt = "AWS Accounts";
       break;

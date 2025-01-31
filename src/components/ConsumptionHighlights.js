@@ -557,7 +557,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
           <div className="tiles">
             <div className="tile">
               <div className="tilename">
-                {selectedCSP === 1 ? "Top Subscriptions" : "Top Accounts"}
+                {selectedCSP === 100 ? "Top Subscriptions" : "Top Accounts"}
               </div>
               <div className="price">
                 {currencyPreference === "start"

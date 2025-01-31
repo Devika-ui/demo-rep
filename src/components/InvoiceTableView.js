@@ -213,7 +213,7 @@ const InvoiceTableView = ({
                       rowSpan={2}
                       className="cmpInvTv_stickyFirstRow1 cmpInvTv_stickyColumn"
                     >
-                      Subscription Name
+                      {columnTitle}
                     </TableCell>
                     {headerLabels.map((label, labelIndex) => (
                       <TableCell

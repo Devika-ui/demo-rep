@@ -716,7 +716,7 @@ const BillOverview = () => {
           columns={columns}
           headerLabels={headerLabelsForInvoice}
           columnData={subscriptions}
-          columnTitle="Subscription Name"
+          columnTitle={selectedProvider === 100 ? "Subscription Name" : "BillingAccount Name"}
           headerClass="headerClass-1"
           overlayHeight="55vh"
           loading={loading}
