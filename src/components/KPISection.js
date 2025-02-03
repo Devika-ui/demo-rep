@@ -27,7 +27,7 @@ const KPISection = ({
           inputData,
           billingMonth
         );
-        setPercentCoverage(coverageData.coverage);
+        setPercentCoverage(coverageData.coverage ?? 0);
         const usageData = await api.getDiscountKPIUsage(startDate, endDate);
         setPercentUsage(usageData.usage ?? 0);
       } catch (error) {
