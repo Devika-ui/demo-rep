@@ -13,7 +13,7 @@ const DateRangeDropdown = ({ selectedCSP, onBillingMonthsChange }) => {
     const fetchDates = async () => {
       try {
         const data1 = await api.getAssignedCustomerIds();
-        const cspid = await componentUtil.getSelectedCSP();
+        const cspid = componentUtil.getSelectedCSP();
 
         const billingPeriods = data1[0].dataMonths
           .filter((item) => item.csp_id === cspid)

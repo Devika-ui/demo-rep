@@ -19,7 +19,7 @@ const HeaderButtons = ({ onButtonClick }) => {
     const fetchData = async () => {
       try {
         const data = await api.getCloudProviderList();
-        const selectedCSP = await componentUtil.getSelectedCSP();
+        const selectedCSP = componentUtil.getSelectedCSP();
         setCurrentCSP(selectedCSP);
         setCloudProviders(data);
       } catch (error) {

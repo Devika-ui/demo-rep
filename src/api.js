@@ -33,7 +33,7 @@ const currentMonthEnd = moment()
   .format("YYYY-MM-DD");
 
 console.log("Moment JS Date", previousMonthStart, currentMonthStart);
-const selectedCSP = await componentUtil.getSelectedCSP();
+const selectedCSP = componentUtil.getSelectedCSP();
 const api = {
   getCloudProviderList: async () => {
     try {
@@ -60,7 +60,7 @@ const api = {
 
   getMonthlyActualSpend: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -89,7 +89,7 @@ const api = {
 
   getMonthlyForecastSpend: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -125,7 +125,7 @@ const api = {
         },
         body: JSON.stringify({
           customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: await componentUtil.getSelectedCSP(),
+          CloudServiceProvider: componentUtil.getSelectedCSP(),
         }),
       });
       if (!response.ok) {
@@ -148,7 +148,7 @@ const api = {
         },
         body: JSON.stringify({
           customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: await componentUtil.getSelectedCSP(),
+          CloudServiceProvider: componentUtil.getSelectedCSP(),
         }),
       });
       if (!response.ok) {
@@ -163,7 +163,7 @@ const api = {
 
   getDiscountKPICoverage: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -204,7 +204,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               Startdate: startDate,
               Enddate: endDate,
@@ -225,7 +225,7 @@ const api = {
 
   getOverallSavingsRI: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -256,7 +256,7 @@ const api = {
 
   getOverallSavingsStimulated: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -329,7 +329,7 @@ const api = {
 
   getMapData: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -382,7 +382,7 @@ const api = {
 
   getBillingCostEachDay: async (selectedFilters, startDate, endDate) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         StartDate: startDate,
         EndDate: endDate,
@@ -415,7 +415,7 @@ const api = {
     billingMonth
   ) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -445,7 +445,7 @@ const api = {
     billingMonth
   ) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -476,7 +476,7 @@ const api = {
   },
   getOverallConsumptionForServies: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -508,7 +508,7 @@ const api = {
     billingMonth
   ) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -562,7 +562,7 @@ const api = {
           Authorization: "Bearer " + (await componentUtil.getAccessToken()),
         },
         body: JSON.stringify({
-          CloudServiceProvider: await componentUtil.getSelectedCSP(),
+          CloudServiceProvider: componentUtil.getSelectedCSP(),
           filters: {
             BillingMonthStartDate: [previousMonthStart, currentMonthStart],
             ...selectedFilters,
@@ -589,7 +589,7 @@ const api = {
           Authorization: "Bearer " + (await componentUtil.getAccessToken()),
         },
         body: JSON.stringify({
-          CloudServiceProvider: await componentUtil.getSelectedCSP(),
+          CloudServiceProvider: componentUtil.getSelectedCSP(),
           filters: {
             BillingMonthStartDate: [
               previousMonthStart,
@@ -615,7 +615,7 @@ const api = {
 
   getSavings: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -643,7 +643,7 @@ const api = {
 
   getNormalizedVariation: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -671,7 +671,7 @@ const api = {
 
   getInvoiceView: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -699,7 +699,7 @@ const api = {
 
   getTotalBillVsSimulatedPaygo: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -729,7 +729,7 @@ const api = {
   },
   getTopServies: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -756,7 +756,7 @@ const api = {
   },
   getTopApplications: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -786,7 +786,7 @@ const api = {
 
   getApplicationWithTags: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -818,7 +818,7 @@ const api = {
 
   getApplicationWithoutTags: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -850,7 +850,7 @@ const api = {
 
   getProjectWithTags: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -882,7 +882,7 @@ const api = {
 
   getProjectWithoutTags: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -914,7 +914,7 @@ const api = {
 
   getBillAllocation: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -946,7 +946,7 @@ const api = {
 
   getDataForAnomaly: async (selectedFilters) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: ["2024-05-01", "2024-06-01"],
         ...selectedFilters,
@@ -976,7 +976,7 @@ const api = {
 
   getServiceCategoryCost: async (selectedFilters, billingMonth) => {
     const requestBody = {
-      CloudServiceProvider: await componentUtil.getSelectedCSP(),
+      CloudServiceProvider: componentUtil.getSelectedCSP(),
       filters: {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
@@ -1015,7 +1015,7 @@ const api = {
           Authorization: "Bearer " + (await componentUtil.getAccessToken()),
         },
         body: JSON.stringify({
-          CloudServiceProvider: await componentUtil.getSelectedCSP(),
+          CloudServiceProvider: componentUtil.getSelectedCSP(),
           filters: {
             BillingMonthStartDate: billingMonth,
           },
@@ -1043,7 +1043,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               BillingMonthStartDate: billingMonth,
             },
@@ -1072,7 +1072,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {},
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1104,7 +1104,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               BillingMonthStartDate: billingMonth,
               [keyName]: [subscription],
@@ -1298,7 +1298,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription1"],
               BusinessUnit: [],
@@ -1328,7 +1328,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2"],
             },
@@ -1356,7 +1356,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription1"],
             },
@@ -1385,7 +1385,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2", "Subscription1"],
             },
@@ -1413,7 +1413,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2"],
               // BusinessUnit: ["BU574862", "BU425929"],
@@ -1448,7 +1448,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2"],
             },
@@ -1476,7 +1476,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2"],
             },
@@ -1504,7 +1504,7 @@ const api = {
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
           body: JSON.stringify({
-            CloudServiceProvider: await componentUtil.getSelectedCSP(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               Subscription: ["Subscription2", "Subscription1"],
             },

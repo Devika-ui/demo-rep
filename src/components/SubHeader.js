@@ -77,7 +77,7 @@ const SubHeader = ({
     setLoading(true);
     try {
       const initialData = await api.getFilterBasedOnSelection({});
-      const csp = await componentUtil.getSelectedCSP();
+      const csp = componentUtil.getSelectedCSP();
       setCSP(csp);
       const subscriptionsData = initialData.subscriptionName;
       setAndPopulateFilterValues(initialData);

@@ -26,7 +26,7 @@ const componentUtil = {
     setCurrencyPreference: async (loc) => {
       sessionStorage.setItem("currencyPreference", loc);
     },
-    getSelectedCSP: async () => {
+    getSelectedCSP: () => {
         if(sessionStorage["overviewPage"] !== undefined) {
             return 0;
         }

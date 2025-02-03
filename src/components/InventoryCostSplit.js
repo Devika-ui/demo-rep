@@ -12,7 +12,7 @@ const InventoryCostSplit = () => {
   sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [dataSet1, setDataSet1] = useState([]);
-  const [selectedProvider, setSelectedProvider] = useState(100);
+  const [selectedProvider, setSelectedProvider] = useState(componentUtil.getSelectedCSP());
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [billingMonth, setBillingMonth] = useState([]);
