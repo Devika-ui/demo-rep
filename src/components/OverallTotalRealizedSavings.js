@@ -97,7 +97,7 @@ const OverallTotalRealizedSavings = ({
       }
     };
     fetchSimulatedSavingsData();
-  }, [selectedCSP, inputData]);
+  }, [selectedCSP, inputData, billingMonth]);
 
   const data = {
     labels,
