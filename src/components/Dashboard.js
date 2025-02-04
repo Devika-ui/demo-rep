@@ -21,7 +21,7 @@ import componentUtil from "../componentUtil.js";
 const Dashboard = () => {
   //sessionStorage.setItem("overviewPage", true);
   const [showStackBars, setShowStackBars] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState(100);
+  const [selectedProvider, setSelectedProvider] = useState(componentUtil.getSelectedCSP());
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [billingMonth, setBillingMonth] = useState([]);
   const [dates, setDates] = useState(null);

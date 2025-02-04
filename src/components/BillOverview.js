@@ -45,7 +45,7 @@ const BillOverview = () => {
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedProvider, setSelectedProvider] = useState(100);
+  const [selectedProvider, setSelectedProvider] = useState(componentUtil.getSelectedCSP());
   const [selectedFilters, setSelectedFilters] = useState([]);
   let inputData = selectedFilters;
   const [uniqueMonths, setUniqueMonths] = useState([]);

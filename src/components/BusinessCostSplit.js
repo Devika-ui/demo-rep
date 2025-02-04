@@ -31,7 +31,7 @@ const BusinessCostSplit = () => {
   const [currencyPreference, setCurrencyPreference] = useState(null);
   const [formattedDates, setFormattedDates] = useState(null);
   const [serviceData, setServiceData] = useState(null);
-  const [selectedProvider, setSelectedProvider] = useState(100);
+  const [selectedProvider, setSelectedProvider] = useState(componentUtil.getSelectedCSP());
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [filteredData, setFilteredData] = useState(billAllocationData);
