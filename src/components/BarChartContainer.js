@@ -27,16 +27,9 @@ const BarChartContainer = ({
   const [data, setData] = useState([]);
   const [legendFontSize, setLegendFontSize] = useState(12); // Default legend font size
 
-  // Function to set the legend font size dynamically based on screen width
   const updateLegendFontSize = () => {
     const screenWidth = window.innerWidth;
-    if (screenWidth < 600) {
-      setLegendFontSize(8); // Smaller font size for small screens
-    } else if (screenWidth < 900) {
-      setLegendFontSize(10); // Medium font size for mid-sized screens
-    } else {
-      setLegendFontSize(16); // Default font size for larger screens
-    }
+    setLegendFontSize(screenWidth < 600 ? 8 : screenWidth < 900 ? 10 : 16);
   };
 
   useEffect(() => {
@@ -148,7 +141,7 @@ const BarChartContainer = ({
                   tick={{ fontSize: 12 }}
                   tickFormatter={(tick) => format(parseISO(tick), "yyyy-MM")}
                 />
-                <YAxis
+                <YAxis domain={[0, "dataMax + 2000"]}
                   axisLine={false}
                   tickLine={false}
                   tick={{ fontSize: 10 }}
@@ -183,6 +176,7 @@ const BarChartContainer = ({
                       strokeWidth={2}
                       dot={false}
                       name={legendItem.name}
+                      connectNulls={true}
                     />
                   )
                 )}

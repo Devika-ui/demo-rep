@@ -20,6 +20,7 @@ const TrustedAdvisor = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [pieChartData, setPieChartData] = useState([]);
   const [costTrendData, setCostTrendData] = useState(null);
+  const [billingMonth, setBillingMonth] = useState([]);
 
   const titleStyle1 = {
     fontSize: "1rem",
@@ -40,6 +41,10 @@ const TrustedAdvisor = () => {
 
   const handleFiltersChange = (newFilters) => {
     setSelectedFilters(newFilters);
+  };
+
+  const handleMonthChange = (months) => {
+    setBillingMonth(months);
   };
 
   useEffect(() => {
@@ -154,6 +159,7 @@ const TrustedAdvisor = () => {
           onButtonClick={handleButtonClick}
           onFiltersChange={handleFiltersChange}
           selectedCSP={selectedProvider}
+          onMonthChange={handleMonthChange}
         />
         <NavigationBar />
       </Box>

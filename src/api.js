@@ -423,7 +423,7 @@ const api = {
       customerId: await componentUtil.getSelectedCustomerID(),
     };
     try {
-      const response = await fetch(`${apiUrl}/overview/subscriptions/top/2`, {
+      const response = await fetch(`${apiUrl}/overview/subscriptions/top/3`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -453,7 +453,7 @@ const api = {
       customerId: await componentUtil.getSelectedCustomerID(),
     };
     try {
-      const response = await fetch(`${apiUrl}/common/topapplications/2`, {
+      const response = await fetch(`${apiUrl}/common/topapplications/3`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -484,7 +484,7 @@ const api = {
       customerId: await componentUtil.getSelectedCustomerID(),
     };
     try {
-      const response = await fetch(`${apiUrl}/common/topservices/2`, {
+      const response = await fetch(`${apiUrl}/common/topservices/3`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
