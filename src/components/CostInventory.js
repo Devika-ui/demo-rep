@@ -162,6 +162,7 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
   const [formattedMonths, setFormattedMonths] = useState([]);
   const [fetchingPage, setFetchingPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [isFetching, setIsFetching] = useState(false);
 
   const columnOptions = [
     { label: "On-Demand", value: "OnDemandCost" },
@@ -471,7 +472,8 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
   };
   const fetchCloudInventoryData = async (subscriptionName, page) => {
     try {
-      setFetchingPage(page); // Track the page being fetched
+      setFetchingPage(page);
+      setIsFetching(true);
       console.log(
         `Fetching data for subscription: ${subscriptionName}, page: ${page}`
       ); // Debug log
@@ -488,6 +490,8 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
       setPageState((prev) => ({ ...prev, [subscriptionName]: page }));
     } catch (error) {
       console.error("Error fetching more data:", error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -672,11 +676,23 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
           </Table>
         </TableContainer>
       )}
-      <div style={{ textAlign: "center", marginTop: "10px" }}>
-        {fetchingPage > 0 && totalPages > 0 && (
-          <p>
-            Fetching {fetchingPage} of {totalPages} pages...
-          </p>
+      <div
+        style={{
+          textAlign: "center",
+          marginTop: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "5px",
+        }}
+      >
+        {isFetching && (
+          <>
+            <CircularProgress size={18} thickness={5} color="primary" />
+            <p>
+              Fetching {fetchingPage} of {totalPages} pages...
+            </p>
+          </>
         )}
       </div>
     </Box>
