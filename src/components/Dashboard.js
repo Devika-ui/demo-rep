@@ -74,10 +74,6 @@ const Dashboard = () => {
   const startDate = dates?.startDate;
   const endDate = dates?.endDate;
 
-  // console.log("1,2", startDate, endDate);
-
-  // console.log("dash", billingMonth);
-
   return (
     <Box
       sx={{
@@ -167,27 +163,18 @@ const Dashboard = () => {
                 >
                   <strong>
                     {showStackBars
-                      ? "Total Bill Cost by Providers"
+                      ? "AWS Total Bill Cost"
                       : "Azure Total Bill Cost"}
                   </strong>
                 </Box>
                 <Box sx={{ flexGrow: 1 }}>
-                  {showStackBars ? (
-                    <StackBars
-                      inputData={inputData}
-                      selectedCSP={selectedProvider}
-                      startDate={startDate}
-                      endDate={endDate}
-                    />
-                  ) : (
-                    <DetailedCSPBars
-                      inputData={inputData}
-                      selectedCSP={selectedProvider}
-                      billingMonth={billingMonth}
-                      startDate={startDate}
-                      endDate={endDate}
-                    />
-                  )}
+                  <DetailedCSPBars
+                    inputData={inputData}
+                    selectedCSP={selectedProvider}
+                    billingMonth={billingMonth}
+                    startDate={startDate}
+                    endDate={endDate}
+                  />
                 </Box>
               </Paper>
             </Grid>

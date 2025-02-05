@@ -52,6 +52,7 @@ const BillOverview = () => {
   const [filteredData, setFilteredData] = useState(billAllocationData);
   const [applicationNames, setApplicationNames] = useState([]);
   const [billingMonth, setBillingMonth] = useState([]);
+  const [csp, setCsp] = useState(null);
 
   const handleFiltersChange = (newFilters) => {
     setSelectedFilters(newFilters);
@@ -249,7 +250,7 @@ const BillOverview = () => {
           inputData,
           billingMonth
         );
-
+        const csp = componentUtil.getSelectedCSP();
         const invoiceMap = Object.entries(invoiceResponse.invoiceView).reduce(
           (acc, [subscriptionName, data]) => {
             // Loop over each subscription data
@@ -325,6 +326,7 @@ const BillOverview = () => {
         setSubscriptions(subscriptionNames);
         setInvoiceData(flattenedInvoiceData);
         setHeaderLabelsForInvoice(uniqueModifiedDatesForInvoice);
+        setCsp(csp);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -716,7 +718,9 @@ const BillOverview = () => {
           columns={columns}
           headerLabels={headerLabelsForInvoice}
           columnData={subscriptions}
-          columnTitle={selectedProvider === 100 ? "Subscription Name" : "BillingAccount Name"}
+          columnTitle={
+            csp === 100 ? "Subscription Name" : "BillingAccount Name"
+          }
           headerClass="headerClass-1"
           overlayHeight="55vh"
           loading={loading}

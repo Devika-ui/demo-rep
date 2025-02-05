@@ -136,44 +136,51 @@ const DetailedCSPBars = ({
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
         const labelsSet = new Set();
-        const payAsYouGoData = {};
-        const reservationsData = {};
+
+        const ridTypeData = {};
+        const lastValidRidTypeByMonth = {};
 
         response.forEach(({ dailydate, totalcost, RIDTYPE }) => {
           const date = new Date(dailydate);
           const dateString = date.toISOString().split("T")[0];
+          const monthKey = dateString.substring(0, 7);
           labelsSet.add(dateString);
 
-          if (RIDTYPE === "PAY GO") {
-            payAsYouGoData[dateString] =
-              (payAsYouGoData[dateString] || 0) + totalcost;
-          } else if (RIDTYPE === "RI") {
-            reservationsData[dateString] =
-              (reservationsData[dateString] || 0) + totalcost;
+          // Use last known valid RIDTYPE if current is empty
+          const ridTypeToUse = RIDTYPE.trim()
+            ? RIDTYPE
+            : lastValidRidTypeByMonth[monthKey];
+
+          if (ridTypeToUse) {
+            lastValidRidTypeByMonth[monthKey] = ridTypeToUse;
+
+            if (!ridTypeData[ridTypeToUse]) {
+              ridTypeData[ridTypeToUse] = {};
+            }
+
+            ridTypeData[ridTypeToUse][dateString] =
+              (ridTypeData[ridTypeToUse][dateString] || 0) + totalcost;
           }
         });
 
         const labels = Array.from(labelsSet).sort();
-        const payAsYouGo = labels.map((date) => payAsYouGoData[date] || 0);
-        const reservations = labels.map((date) => reservationsData[date] || 0);
+        const ridTypes = Object.keys(ridTypeData); // Extract unique RIDTYPEs
 
-        const datasets = [
-          {
-            type: "bar",
-            label: "Pay-as-you-go",
-            backgroundColor: "#00A3E1",
-            data: payAsYouGo,
-            stack: "total",
-          },
-          {
-            type: "bar",
-            label: "Reservations",
-            backgroundColor: "#ED9B33",
-            data: reservations,
-            stack: "total",
-          },
-        ];
+        const getColorForRIDType = (index) => {
+          const predefinedColors = ["#00A3E1", "#ED9B33"];
+          return predefinedColors[index] || `hsl(${index * 60}, 70%, 50%)`;
+        };
+
+        const datasets = ridTypes.map((ridType, index) => ({
+          type: "bar",
+          label: ridType,
+          backgroundColor: getColorForRIDType(index),
+          data: labels.map((date) => ridTypeData[ridType][date] || 0),
+          stack: "total",
+        }));
+
         setData({ labels, datasets });
+
         setCurrencySymbol(currencySymbol);
         setCurrencyPreference(currencyPreference);
         setLoading(false);

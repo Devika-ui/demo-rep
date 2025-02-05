@@ -34,6 +34,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
     environmentpercentage: 0,
     NSSRpercentage: 0,
   });
+  const [csp, setCsp] = useState(null);
   const [showDetailedView, setShowDetailedView] = useState(false);
   const [monthlyData, setMonthlyData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -75,7 +76,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
             inputData,
             billingMonth
           );
-
+        const csp = componentUtil.getSelectedCSP();
         if (tagComplianceData && tagComplianceData.length > 0) {
           const latestData = tagComplianceData[tagComplianceData.length - 1];
           setTagCompliance({
@@ -90,6 +91,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
         }
         setCurrencySymbol(currencySymbol);
         setCurrencyPreference(currencyPreference);
+        setCsp(csp);
       } catch (error) {
         console.error("Error fetching tag compliance data:", error);
       } finally {
