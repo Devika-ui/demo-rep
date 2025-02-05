@@ -261,8 +261,15 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
             for (const subCategories of Object.values(categories)) {
               for (const resourceGroups of Object.values(subCategories)) {
                 for (const resources of Object.values(resourceGroups)) {
-                  for (const resourceDetails of Object.values(resources)) {
-                    const { Date: date } = resourceDetails;
+                  if(selectedCSP == 100) {
+                    for (const resourceDetails of Object.values(resources)) {
+                      const { Date: date } = resourceDetails;
+                      const month = new Date(date).toISOString().slice(0, 7);
+                      allMonths.add(month);
+                    }
+                  }
+                  else {
+                    const { Date: date } = resources;
                     const month = new Date(date).toISOString().slice(0, 7);
                     allMonths.add(month);
                   }
@@ -307,11 +314,58 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
                     children: [],
                   };
 
-                  for (const [resourceName, resourceDetails] of Object.entries(
-                    resources
-                  )) {
+                  if(selectedCSP ==100) {
+                    for (const [resourceName, resourceDetails] of Object.entries(
+                      resources
+                    )) {
+                      const resourceNode = {
+                        name: resourceName,
+                        type: "resource",
+                        children: [],
+                      };
+  
+                      // Extract the month data and ensure all months are present
+                      const monthData = {};
+                      for (const uniqueMonth of allMonths) {
+                        monthData[uniqueMonth] = {
+                          TotalBill: 0,
+                          OnDemandCost: 0,
+                          CommitmentsCost: 0,
+                          Savings: 0,
+                        };
+                      }
+  
+                      const {
+                        Date: date,
+                        TotalBill,
+                        OnDemandCost,
+                        CommitmentsCost,
+                        Savings,
+                      } = resourceDetails;
+                      const month = new Date(date).toISOString().slice(0, 7);
+                      monthData[month] = {
+                        TotalBill,
+                        OnDemandCost,
+                        CommitmentsCost,
+                        Savings,
+                      };
+  
+                      // Convert month data into an array for the resource
+                      for (const [monthName, monthDetails] of Object.entries(
+                        monthData
+                      )) {
+                        resourceNode.children.push({
+                          name: monthName,
+                          type: "month",
+                          ...monthDetails,
+                        });
+                      }
+                      resourceGroupNode.children.push(resourceNode);
+                    }
+                  }
+                  else {
                     const resourceNode = {
-                      name: resourceName,
+                      name: resourceGroupName,
                       type: "resource",
                       children: [],
                     };
@@ -333,7 +387,7 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
                       OnDemandCost,
                       CommitmentsCost,
                       Savings,
-                    } = resourceDetails;
+                    } = resources;
                     const month = new Date(date).toISOString().slice(0, 7);
                     monthData[month] = {
                       TotalBill,
@@ -352,7 +406,6 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
                         ...monthDetails,
                       });
                     }
-
                     resourceGroupNode.children.push(resourceNode);
                   }
 
@@ -438,12 +491,17 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
   const appendData = (originalData, newData) => {
     const mergedData = { ...originalData };
     const recursiveMerge = (orig, newData) => {
-      for (const [key, value] of Object.entries(newData)) {
-        if (orig[key] && typeof orig[key] === "object") {
-          recursiveMerge(orig[key], value);
-        } else {
-          orig[key] = value;
+      try {
+        for (const [key, value] of Object.entries(newData)) {
+          if (orig[key] && typeof orig[key] === "object") {
+            recursiveMerge(orig[key], value);
+          } else {
+            orig[key] = value;
+          }
         }
+      }
+      catch(exception) {
+        console.log("API Response seems empty")
       }
     };
     recursiveMerge(mergedData, newData);
