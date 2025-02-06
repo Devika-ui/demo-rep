@@ -45,7 +45,9 @@ const BillOverview = () => {
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedProvider, setSelectedProvider] = useState(componentUtil.getSelectedCSP());
+  const [selectedProvider, setSelectedProvider] = useState(
+    componentUtil.getSelectedCSP()
+  );
   const [selectedFilters, setSelectedFilters] = useState([]);
   let inputData = selectedFilters;
   const [uniqueMonths, setUniqueMonths] = useState([]);
@@ -223,7 +225,7 @@ const BillOverview = () => {
         const applicationNames = transformedData.map((app) => app.name);
         setApplicationNames(applicationNames);
 
-        // console.log("Transformed Data:", transformedData);
+        console.log("Transformed Data:", transformedData);
         setBillAllocationData(transformedData);
         setFilteredBillAllocationData(transformedData);
       } catch (error) {

@@ -262,7 +262,7 @@ const AWSFilter = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
   return (
     <div className="Filter-Container">
       <span onClick={toggleFiltersVisibility} className="Filter-Text">
-        Options
+        Filters
       </span>
       <Modal
         isOpen={isFiltersVisible}

@@ -87,7 +87,7 @@ const InvoiceTableView = ({
       return 0;
     });
 
-    console.log("Sorted Data:", sortedData); // Debugging output to verify the result
+    // console.log("Sorted Data:", sortedData);
     setTableData(sortedData);
   };
 

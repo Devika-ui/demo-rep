@@ -12,10 +12,13 @@ const InventoryCostSplit = () => {
   sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [dataSet1, setDataSet1] = useState([]);
-  const [selectedProvider, setSelectedProvider] = useState(componentUtil.getSelectedCSP());
+  const [selectedProvider, setSelectedProvider] = useState(
+    componentUtil.getSelectedCSP()
+  );
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [billingMonth, setBillingMonth] = useState([]);
+
   const handleButtonClick = (value) => {
     componentUtil.setSelectedCSP(value);
     setSelectedProvider(value);
@@ -83,13 +86,28 @@ const InventoryCostSplit = () => {
 
         const { firstMonthCost, growthPercentage } = monthBillData[0];
         const { totalresources } = totalResourcesData;
+        const currencyPreference = await componentUtil.getCurrencyPreference();
+        const currencySymbol = await componentUtil.getCurrencySymbol();
+        const formatCurrency = (value, currencySymbol, currencyPreference) => {
+          if (value === undefined || value === null) {
+            return "NA";
+          }
+          return currencyPreference === "start"
+            ? `${currencySymbol}${value}`
+            : `${value}${currencySymbol}`;
+        };
 
         const formattedData = [
           {
-            number: `$${(firstMonthCost / 1000).toFixed(1)}K`,
+            number: formatCurrency(
+              `${(firstMonthCost / 1000).toFixed(1)}K`,
+              currencySymbol,
+              currencyPreference
+            ),
             text: "Previous Month Total Bill",
           },
-          { number: `${growthPercentage}%`, text: "Increase Rate" },
+          { number: `${growthPercentage.toFixed(2)}%`, text: "Increase Rate" },
+
           { number: totalresources.toString(), text: "Total Resources" },
         ];
 

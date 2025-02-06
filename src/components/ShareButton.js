@@ -326,6 +326,144 @@ const ShareButton = ({
     return csvContent;
   };
 
+  const flattenData = (data, result = [], parentName = "", parentType = "") => {
+    data.forEach((item) => {
+      if (item.type === "month") {
+        // Add the month data along with its parent resource name and type
+        result.push({
+          name: parentName, // Resource name
+          type: parentType, // Resource type
+          ...item, // Spread month-specific data
+        });
+      } else if (item.children) {
+        // Recursively flatten nested data
+        flattenData(
+          item.children,
+          result,
+          item.name || parentName, // Pass the current name if available
+          item.type || parentType // Pass the current type if available
+        );
+      }
+    });
+    return result;
+  };
+
+  const generateCsvSummarizedTBA = (data) => {
+    const headers = [
+      "Application",
+      "Category",
+      "Subcategory",
+      "ResourceGroup",
+      "Resource",
+      "Month",
+      "TotalBill",
+      "OnDemandCost",
+      "ReservedInstanceCost",
+      "Savings",
+      "DeltaNormalizedVariationMoM",
+      "Normalized_Variation_MoM",
+    ];
+
+    const flattenData = (node, parentNames = []) => {
+      if (!node) return []; // Ensure node exists
+
+      if (node.type === "month") {
+        return [
+          [
+            ...parentNames,
+            node.name, // Month Name
+            node.totalBill || 0,
+            node.onDemandCost || 0,
+            node.reservedInstanceCost || 0,
+            node.savings || 0,
+            node.deltaNormalizedVariationMoM || 0,
+            node.Normalized_Variation_MoM || 0,
+          ],
+        ];
+      }
+
+      if (node.children && Array.isArray(node.children)) {
+        return node.children.flatMap((child) =>
+          flattenData(child, [...parentNames, node.name])
+        );
+      }
+
+      return []; // Return an empty array if no children exist
+    };
+
+    const rows = data.flatMap((root) => flattenData(root));
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.map((val) => `"${val}"`).join(",")), // Ensure row is an array
+    ];
+
+    return csvContent;
+  };
+
+  const generateCsvCurrentLayoutTBA = (data) => {
+    const headers = [
+      "Application",
+      "TotalBill",
+      "OnDemandCost",
+      "ReservedInstanceCost",
+      "Savings",
+      "DeltaNormalizedVariationMoM",
+      "Normalized_Variation_MoM",
+    ];
+
+    const aggregateData = (node) => {
+      if (!node || !node.children) return null; // Ignore if no children
+
+      let summary = {
+        name: node.name,
+        totalBill: 0,
+        onDemandCost: 0,
+        reservedInstanceCost: 0,
+        savings: 0,
+        deltaNormalizedVariationMoM: 0,
+        Normalized_Variation_MoM: 0,
+      };
+
+      const traverseAndSum = (child) => {
+        if (child.type === "month") {
+          // Aggregate only numerical values
+          summary.totalBill += child.totalBill || 0;
+          summary.onDemandCost += child.onDemandCost || 0;
+          summary.reservedInstanceCost += child.reservedInstanceCost || 0;
+          summary.savings += child.savings || 0;
+          summary.deltaNormalizedVariationMoM +=
+            child.deltaNormalizedVariationMoM || 0;
+          summary.Normalized_Variation_MoM +=
+            child.Normalized_Variation_MoM || 0;
+        } else if (child.children) {
+          child.children.forEach(traverseAndSum);
+        }
+      };
+
+      node.children.forEach(traverseAndSum);
+      return summary;
+    };
+
+    const rows = data
+      .map(aggregateData)
+      .filter((row) => row !== null) // Remove empty nodes
+      .map((row) =>
+        [
+          `"${row.name}"`,
+          row.totalBill.toFixed(2),
+          row.onDemandCost.toFixed(2),
+          row.reservedInstanceCost.toFixed(2),
+          row.savings.toFixed(2),
+          row.deltaNormalizedVariationMoM.toFixed(2),
+          row.Normalized_Variation_MoM.toFixed(2),
+        ].join(",")
+      );
+
+    const csvContent = [headers.join(","), ...rows];
+    return csvContent;
+  };
+
   // const generateSummarizedCsvWithLevelsCI = (tableData) => {
   //   const headers = [
   //     "Level 1 Name",
@@ -410,6 +548,8 @@ const ShareButton = ({
           csvContent = generateCurrentLayoutCsv(tableData);
         } else if (dataType === "CostInventory") {
           csvContent = generateCurrentLayoutCsvCI(tableData);
+        } else if (dataType === "TotalBillAllocation") {
+          csvContent = generateCsvCurrentLayoutTBA(tableData);
         }
       } else {
         // Non-hierarchical case (same as current)
@@ -427,8 +567,8 @@ const ShareButton = ({
       if (isHierarchical) {
         if (dataType === "ServiceCategory") {
           csvContent = generateSummarizedCsvWithLevels(tableData).split("\n");
-          // } else if (dataType === "CostInventory") {
-          //   csvContent = generateSummarizedCsvWithLevelsCI(tableData);
+        } else if (dataType === "TotalBillAllocation") {
+          csvContent = generateCsvSummarizedTBA(tableData);
         }
       } else {
         alert(
@@ -681,7 +821,11 @@ ShareButton.propTypes = {
   tableRef: PropTypes.object.isRequired,
   isHierarchical: PropTypes.bool,
   className: PropTypes.string,
-  dataType: PropTypes.oneOf(["ServiceCategory", "CostInventory"]).isRequired,
+  dataType: PropTypes.oneOf([
+    "ServiceCategory",
+    "CostInventory",
+    "TotalBillAllocation",
+  ]).isRequired,
 };
 
 ShareButton.defaultProps = {

@@ -225,14 +225,14 @@ const SubHeader = ({
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginLeft: "250px",
+                  marginLeft: "350px",
                 }}
               >
-                <img
+                {/* <img
                   src={AzureBox}
                   alt="Azure"
                   style={{ width: "30px", height: "34px", marginRight: "5px" }}
-                />
+                /> */}
                 <div
                   style={{
                     fontWeight: "bold",
@@ -266,14 +266,14 @@ const SubHeader = ({
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginLeft: "500px",
+                  marginLeft: "350px",
                 }}
               >
-                <img
+                {/* <img
                   src={AWSBox}
                   alt="AWS"
                   style={{ width: "30px", height: "34px", marginRight: "5px" }}
-                />
+                /> */}
                 <div
                   style={{
                     fontWeight: "bold",

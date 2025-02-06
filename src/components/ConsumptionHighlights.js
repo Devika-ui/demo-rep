@@ -39,8 +39,8 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
   const [monthlyData, setMonthlyData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [showServiceDetails, setShowServiceDetails] = useState(false);
-  const [showApplicationDetails, setApplicationDetails] = useState(false)
-  const [showSubscriptionDetails, setSubscriptionDetails] = useState(false)
+  const [showApplicationDetails, setApplicationDetails] = useState(false);
+  const [showSubscriptionDetails, setSubscriptionDetails] = useState(false);
   const isMenuOpen = Boolean(anchorEl);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
             projectpercentage: latestData.projectpercentage || 0,
             bupercentage: latestData.bupercentage || 0,
             environmentpercentage: latestData.environmentpercentage || 0,
-            NSSRpercentage: latestData.NSSRpercentage  || 0,
+            NSSRpercentage: latestData.NSSRpercentage || 0,
           });
           setMonthlyData(tagComplianceData);
         }
@@ -213,7 +213,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                   : `${topSubscriptionCost}${currencySymbol}`}
               </div>
             </div>
-            <div className="tile"  onClick={() => setShowServiceDetails(true)}>
+            <div className="tile" onClick={() => setShowServiceDetails(true)}>
               <div className="tilename">Top Service</div>
               <div className="price">
                 {currencyPreference === "start"
@@ -221,7 +221,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                   : `${topServiceCost}${currencySymbol}`}
               </div>
             </div>
-            <div className="tile"  onClick={() => setApplicationDetails(true)}>
+            <div className="tile" onClick={() => setApplicationDetails(true)}>
               <div className="tilename">Top Application</div>
               <div className="price">
                 {currencyPreference === "start"
@@ -339,99 +339,133 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
               </div>
             </DialogContent>
           </Dialog>
-          
-            <Dialog
-               open={showServiceDetails}
-               onClose={() => setShowServiceDetails(false)}
-               maxWidth="sm"
-               fullWidth
-            >
+
+          <Dialog
+            open={showServiceDetails}
+            onClose={() => setShowServiceDetails(false)}
+            maxWidth="sm"
+            fullWidth
+          >
             <DialogTitle>
-            <span style={{ color: "#5f249f" }}>Top 3 Services & Costs </span>
-             <IconButton
-               style={{ float: "right" }}
-               onClick={() => setShowServiceDetails(false)}
+              <span style={{ color: "#5f249f" }}>Top 3 Services & Costs </span>
+              <IconButton
+                style={{ float: "right" }}
+                onClick={() => setShowServiceDetails(false)}
               >
                 <CloseIcon />
-             </IconButton>
+              </IconButton>
             </DialogTitle>
-          <DialogContent>
+            <DialogContent>
               {topServices.length > 0 ? (
-               <ul>
-              {topServices.map((service, index) => (
-                <li key={index}>
-                  <strong style={{ color: "#5f249f",marginRight: "5px"  }}>{service.Service}</strong>:{" "}
-                  <span style={{ color: "orange",fontWeight:"bold" }}>
-                  {service.totalcost.toFixed(2)}
-                  {currencySymbol}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No services available.</p>
-          )}
-         </DialogContent>
-         </Dialog>
+                <ul>
+                  {topServices.map((service, index) => (
+                    <li key={index}>
+                      <strong style={{ color: "#5f249f", marginRight: "5px" }}>
+                        {service.Service}
+                      </strong>
+                      :{" "}
+                      <span style={{ color: "orange", fontWeight: "bold" }}>
+                        {service.totalcost.toFixed(2)}
+                        {currencySymbol}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No services available.</p>
+              )}
+            </DialogContent>
+          </Dialog>
 
-         <Dialog open={showApplicationDetails} onClose={() => setApplicationDetails(false)} maxWidth="sm" fullWidth>
-  <DialogTitle>
-    <span style={{ color: "#5f249f" }}>Top 3 Applications & Costs</span>
-    <IconButton style={{ float: "right" }} onClick={() => setApplicationDetails(false)}>
-      <CloseIcon />
-    </IconButton>
-  </DialogTitle>
-  <DialogContent>
-    {topApplications.length > 0 ? (
-      <ul>
-        {topApplications.slice(0, 3).map((application, index) => (
-          <li key={index}>
-            <strong style={{ color: "#5f249f",marginRight: "5px" }}>
-              {application.Application ? application.Application : "Null"}
-            </strong>:{" "}
-            <span style={{ color: "orange",fontWeight:"bold" }}>
-              {application.totalcost !== null && application.totalcost !== undefined
-                ? application.totalcost.toFixed(2)
-                : "N/A"}
-                {currencySymbol}
-            </span>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p>No applications available.</p>
-    )}
-  </DialogContent>
-</Dialog>
+          <Dialog
+            open={showApplicationDetails}
+            onClose={() => setApplicationDetails(false)}
+            maxWidth="sm"
+            fullWidth
+          >
+            <DialogTitle>
+              <span style={{ color: "#5f249f" }}>
+                Top 3 Applications & Costs
+              </span>
+              <IconButton
+                style={{ float: "right" }}
+                onClick={() => setApplicationDetails(false)}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent>
+              {topApplications.length > 0 ? (
+                <ul>
+                  {topApplications.slice(0, 3).map((application, index) => (
+                    <li key={index}>
+                      <strong style={{ color: "#5f249f", marginRight: "5px" }}>
+                        {application.Application
+                          ? application.Application
+                          : "Null"}
+                      </strong>
+                      :{" "}
+                      <span style={{ color: "orange", fontWeight: "bold" }}>
+                        {application.totalcost !== null &&
+                        application.totalcost !== undefined
+                          ? application.totalcost.toFixed(2)
+                          : "N/A"}
+                        {currencySymbol}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No applications available.</p>
+              )}
+            </DialogContent>
+          </Dialog>
 
-
-<Dialog open={showSubscriptionDetails} onClose={() => setSubscriptionDetails(false)} maxWidth="sm" fullWidth>
-  <DialogTitle>
-    <span style={{color:"#5f249f"}}> Top 3 Subscriptions & Costs</span>
-    <IconButton style={{ float: "right" }} onClick={() => setSubscriptionDetails(false)}>
-      <CloseIcon />
-    </IconButton>
-  </DialogTitle>
-  <DialogContent>
-    {topSubscriptions.length > 0 ? (
-      <ul>
-        {topSubscriptions.map((subscription, index) => (
-          <li key={index}>
-            <strong style={{color:"#5f249f",marginRight:"5px"}}>{subscription.Subscription}</strong>: 
-            <span style={{color:"orange",fontWeight:"bold",marginLeft:"5px"}}>  
-            {subscription.totalcost.toFixed(2)}
-            {currencySymbol}
-            </span>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p>No Subscriptions available.</p>
-    )}
-  </DialogContent>
-</Dialog>
-
-
+          <Dialog
+            open={showSubscriptionDetails}
+            onClose={() => setSubscriptionDetails(false)}
+            maxWidth="sm"
+            fullWidth
+          >
+            <DialogTitle>
+              <span style={{ color: "#5f249f" }}>
+                {" "}
+                Top 3 Subscriptions & Costs
+              </span>
+              <IconButton
+                style={{ float: "right" }}
+                onClick={() => setSubscriptionDetails(false)}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent>
+              {topSubscriptions.length > 0 ? (
+                <ul>
+                  {topSubscriptions.map((subscription, index) => (
+                    <li key={index}>
+                      <strong style={{ color: "#5f249f", marginRight: "5px" }}>
+                        {subscription.Subscription}
+                      </strong>
+                      :
+                      <span
+                        style={{
+                          color: "orange",
+                          fontWeight: "bold",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        {subscription.totalcost.toFixed(2)}
+                        {currencySymbol}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No Subscriptions available.</p>
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       )}
     </div>

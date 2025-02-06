@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -14,6 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import "../css/components/ServiceCategory.css";
 import { CircularProgress } from "@mui/material";
+import ShareButton from "./ShareButton";
 
 const TableRowComponent = ({
   data,
@@ -158,6 +159,7 @@ const TotalBillAllocationTable = ({
 }) => {
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [formattedMonths, setFormattedMonths] = useState([]);
+  const tableRef = useRef(null);
 
   useEffect(() => {
     if (dummyData?.length) {
@@ -229,9 +231,16 @@ const TotalBillAllocationTable = ({
             >
               Customize Report
             </Button>
-            <IconButton className="cmpInvTv_shareButton">
+            <ShareButton
+              tableData={dummyData}
+              tableRef={tableRef}
+              isHierarchical={true}
+              className="cmpInvTv_shareButton"
+              dataType="TotalBillAllocation"
+            />
+            {/* <IconButton className="cmpInvTv_shareButton">
               <ShareIcon />
-            </IconButton>
+            </IconButton> */}
             <IconButton
               onClick={handleOverlayOpen}
               className="cmpInvTv_fullscreenButton"
@@ -245,7 +254,7 @@ const TotalBillAllocationTable = ({
             <CircularProgress />
           </div>
         ) : (
-          <TableContainer className="cmpSvcCat_tableContainer">
+          <TableContainer ref={tableRef} className="cmpSvcCat_tableContainer">
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
