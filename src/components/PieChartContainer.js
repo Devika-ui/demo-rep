@@ -24,8 +24,6 @@ const PieChartContainer = ({
   pieChartHeight2 = 250,
   titleStyle1 = {},
   titleStyle2 = {},
-  legendWrapperStyle1 = {},
-  legendWrapperStyle2 = {},
   currencySymbol,
   currencyPreference,
   loading = false,
@@ -35,34 +33,32 @@ const PieChartContainer = ({
 
   const onPieEnter1 = (_, index) => setActiveIndex1(index);
   const onPieLeave1 = () => setActiveIndex1(null);
-
   const onPieEnter2 = (_, index) => setActiveIndex2(index);
   const onPieLeave2 = () => setActiveIndex2(null);
 
+  // Highlight max value in Pie Chart
+  const getMaxValueData = (data) => {
+    const maxValue = Math.max(...data.map((d) => d.value));
+    return data.map((d) => ({ ...d, displayValue: d.value === maxValue ? d.value : "" }));
+  };
+
+  const processedData1 = getMaxValueData(data1);
+  const processedData2 = getMaxValueData(data2);
+
+  // Adjust legend font size based on screen width
   const getLegendFontSize = () => {
     const width = window.innerWidth;
-    if (width <= 600) {
-      return "8px";
-    } else if (width < 990) {
-      return "6px";
-    }
+    if (width <= 600) return "8px";
+    if (width < 990) return "6px";
     return "10px";
   };
 
   const legendFontSize1 = getLegendFontSize();
   const legendFontSize2 = getLegendFontSize();
 
+  // Active Pie Slice Animation
   const renderActiveShape = (props) => {
-    const {
-      cx,
-      cy,
-      midAngle,
-      innerRadius,
-      outerRadius,
-      startAngle,
-      endAngle,
-      fill,
-    } = props;
+    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
     return (
       <Sector
         cx={cx}
@@ -76,32 +72,27 @@ const PieChartContainer = ({
     );
   };
 
+  // Format large numbers
   const formatValue = (value) => {
-    if (value >= 1000) {
-      return `${(value / 1000).toFixed(1)}k`;
-    }
-    return value;
+    return value >= 1000 ? `${(value / 1000).toFixed(1)}k` : value;
   };
 
+  // Adjust font size based on screen width
   const getResponsiveFontSize = () => {
     const width = window.innerWidth;
-    if (width <= 600) {
-      return "10px"; // Smaller screens
-    } else if (width < 990) {
-      return "8px"; // Medium screens
-    }
-    return "12px"; // Larger screens
+    if (width <= 600) return "10px";
+    if (width < 990) return "8px";
+    return "12px";
   };
 
+  // Custom Pie Chart Label
   const renderLabel = (entry) => {
-    const { cx, cy, midAngle, outerRadius, value } = entry;
+    const { cx, cy, midAngle, outerRadius, displayValue } = entry;
+    if (!displayValue) return null;
 
-    // Adjust radius and move labels towards the outer part of the chart
-    const radius = outerRadius * 0.47; // Move the label a bit further outwards
+    const radius = outerRadius * 0.47;
     const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
     const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
-
-    // Get responsive font size
     const fontSize = getResponsiveFontSize();
 
     return (
@@ -109,18 +100,19 @@ const PieChartContainer = ({
         x={x}
         y={y}
         fill="white"
-        textAnchor={x > cx ? "start" : "end"} // Align labels to prevent overflow
+        textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
-        style={{ fontSize }} // Apply the responsive font size
+        style={{ fontSize }}
       >
         {currencyPreference === "start"
-          ? `${currencySymbol}${formatValue(value)}` // Currency symbol at the start
-          : `${formatValue(value)}${currencySymbol}`}
+          ? `${currencySymbol}${formatValue(displayValue)}`
+          : `${formatValue(displayValue)}${currencySymbol}`}
       </text>
     );
   };
 
-  const CustomTooltip = ({ active, payload, currencySymbol }) => {
+  // Custom Tooltip
+  const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
         <div
@@ -132,7 +124,8 @@ const PieChartContainer = ({
           }}
         >
           <p style={{ margin: 0 }}>
-            {payload[0].name} : {`${currencySymbol}${payload[0].value}`}
+            {payload[0].name} : {currencySymbol}
+            {payload[0].value}
           </p>
         </div>
       );
@@ -148,6 +141,7 @@ const PieChartContainer = ({
         </div>
       ) : (
         <>
+          {/* First Pie Chart */}
           <div className="cmpPieChart_chartContainer" style={chartStyle}>
             <Typography
               variant="subtitle1"
@@ -163,7 +157,7 @@ const PieChartContainer = ({
                   <Pie
                     activeIndex={activeIndex1}
                     activeShape={renderActiveShape}
-                    data={data1}
+                    data={processedData1}
                     dataKey="value"
                     nameKey="name"
                     onMouseEnter={onPieEnter1}
@@ -171,13 +165,11 @@ const PieChartContainer = ({
                     label={renderLabel}
                     labelLine={false}
                   >
-                    {data1.map((entry, index) => (
+                    {processedData1.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip
-                    content={<CustomTooltip currencySymbol={currencySymbol} />}
-                  />
+                  <Tooltip content={<CustomTooltip currencySymbol={currencySymbol} />} />
                   <Legend
                     align="center"
                     verticalAlign="bottom"
@@ -188,6 +180,8 @@ const PieChartContainer = ({
               </ResponsiveContainer>
             </div>
           </div>
+
+          {/* Second Pie Chart */}
           <div className="cmpPieChart_chartContainer" style={chartStyle}>
             <Typography
               variant="subtitle1"
@@ -203,7 +197,7 @@ const PieChartContainer = ({
                   <Pie
                     activeIndex={activeIndex2}
                     activeShape={renderActiveShape}
-                    data={data2}
+                    data={processedData2}
                     dataKey="value"
                     nameKey="name"
                     onMouseEnter={onPieEnter2}
@@ -211,13 +205,11 @@ const PieChartContainer = ({
                     label={renderLabel}
                     labelLine={false}
                   >
-                    {data2.map((entry, index) => (
+                    {processedData2.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip
-                    content={<CustomTooltip currencySymbol={currencySymbol} />}
-                  />
+                  <Tooltip content={<CustomTooltip currencySymbol={currencySymbol} />} />
                   <Legend
                     align="center"
                     verticalAlign="bottom"
@@ -233,8 +225,11 @@ const PieChartContainer = ({
     </Paper>
   );
 };
+
+// Default Props
 PieChartContainer.defaultProps = {
   legendWrapperStyle1: { bottom: 5, fontSize: "12px" },
-  legendWrapperStyle2: { bottom: 5, fontSize: "12px" }, // Default style for legend 2
+  legendWrapperStyle2: { bottom: 5, fontSize: "12px" },
 };
+
 export default PieChartContainer;

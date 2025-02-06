@@ -29,7 +29,7 @@ const BarChartContainer = ({
 
   const updateLegendFontSize = () => {
     const screenWidth = window.innerWidth;
-    setLegendFontSize(screenWidth < 600 ? 8 : screenWidth < 900 ? 10 : 16);
+    setLegendFontSize(screenWidth < 600 ? 8 : screenWidth < 900 ? 10 : 14);
   };
 
   useEffect(() => {
@@ -55,6 +55,12 @@ const BarChartContainer = ({
     }));
 
     setData(formattedData);
+
+    const sortedData = formattedData.sort((a, b) => {
+      return new Date(a.modifieddate) - new Date(b.modifieddate); 
+    });
+ 
+    setData(sortedData);
 
     // Call the function initially and add an event listener for window resize
     updateLegendFontSize();

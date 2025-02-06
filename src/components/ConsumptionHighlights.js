@@ -241,8 +241,8 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                   options={radialBarOptions}
                   series={radialBarOptions.series}
                   type="radialBar"
-                  height="200px"
-                  width="200px"
+                  height="170px"
+                  width="170px"
                 />
               </div>
             </Tooltip>
