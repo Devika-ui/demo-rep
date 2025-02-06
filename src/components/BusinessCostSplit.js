@@ -573,6 +573,7 @@ const BusinessCostSplit = () => {
             selectedFilters={selectedFilters}
             currencySymbol={currencySymbol}
             currencyPreference={currencyPreference}
+            billingMonth={billingMonth}
           />
         </div>
         <div style={{ flex: 1 }}>

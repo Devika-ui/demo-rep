@@ -39,7 +39,7 @@ const BillOverview = () => {
     useState([]);
   const [uniqueBillAllocationData, setUniqueBillAllocationData] = useState([]);
   const [legendData, setLegendData] = useState([]);
-  const colorPalette = ["#5F249F","#330072","#A98BD3","#969696","#D9D9D6"];
+  const colorPalette = ["#5F249F", "#330072", "#A98BD3", "#969696", "#D9D9D6"];
   const [subscriptions, setSubscriptions] = useState({});
   const [applicationData, setApplicationData] = useState({});
   const [currencySymbol, setCurrencySymbol] = useState(null);
@@ -81,6 +81,9 @@ const BillOverview = () => {
 
   useEffect(() => {
     const fetchBillAllocationData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
         if (!inputData) {
@@ -482,10 +485,10 @@ const BillOverview = () => {
           savingsData.percentageSavingsOverPayGo !== null
             ? savingsData.percentageSavingsOverPayGo
             : "0.00";
-            const normalizedVariation =
-            normalizedVariationData.Normalized_Variation_MoM !== null
-              ? normalizedVariationData.Normalized_Variation_MoM.toFixed(2)
-              : "0.00";
+        const normalizedVariation =
+          normalizedVariationData.Normalized_Variation_MoM !== null
+            ? normalizedVariationData.Normalized_Variation_MoM.toFixed(2)
+            : "0.00";
         const formatCurrency = (value) => {
           return currencyPreference === "start"
             ? `${currencySymbol}${value}` // Symbol at the start

@@ -8,6 +8,7 @@ const Ondemand = ({
   selectedFilters,
   currencySymbol,
   currencyPreference,
+  billingMonth,
 }) => {
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
@@ -17,8 +18,11 @@ const Ondemand = ({
   useEffect(() => {
     const loadData = async () => {
       try {
+        if (billingMonth.length == 0) {
+          return;
+        }
         setLoading(true);
-        const data = await api.getDataForAnomaly(selectedFilters);
+        const data = await api.getDataForAnomaly(selectedFilters, billingMonth);
 
         // Parse the date and sort the data by month
         const sortedData = data.sort(
