@@ -175,6 +175,12 @@ const PieChartContainer = ({
                     verticalAlign="bottom"
                     layout="horizontal"
                     wrapperStyle={{ fontSize: legendFontSize1 }}
+                    formatter={(value) => (
+                      <span
+                        title={value} style={{ cursor: "pointer"}}
+                        onClick={() => alert(value)} > {value.length > 20 ? `${value.substring(0, 20)}...` : value}
+                      </span>
+                    )}
                   />
                 </PieChart>
               </ResponsiveContainer>
