@@ -5,9 +5,7 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import ShareIcon from "@mui/icons-material/Share";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -15,6 +13,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import "../css/components/ServiceCategory.css";
 import { CircularProgress } from "@mui/material";
 import ShareButton from "./ShareButton";
+import CustomizedReportButton from "./CustomizedReportButton";
 
 const TableRowComponent = ({
   data,
@@ -156,10 +155,13 @@ const TotalBillAllocationTable = ({
   width,
   headerClass,
   loading = false,
+  sortOptions,
 }) => {
   const [uniqueMonths, setUniqueMonths] = useState([]);
   const [formattedMonths, setFormattedMonths] = useState([]);
   const tableRef = useRef(null);
+  const [sortedData, setSortedData] = useState(...dummyData);
+  const [currentSort, setCurrentSort] = useState({ field: "", direction: "" });
 
   useEffect(() => {
     if (dummyData?.length) {
@@ -217,6 +219,64 @@ const TotalBillAllocationTable = ({
   const handleOverlayOpen = () => setOverlayOpen(true);
   const handleOverlayClose = () => setOverlayOpen(false);
 
+  useEffect(() => {
+    setSortedData(dummyData);
+  }, [dummyData]);
+
+  const handleSortData = (field, direction) => {
+    const aggregateData = (node) => {
+      if (!node.children || node.children.length === 0) {
+        return {
+          ...node,
+          aggregatedData: {
+            totalBill: node.totalBill || 0,
+            onDemandCost: node.onDemandCost || 0,
+            reservedInstanceCost: node.reservedInstanceCost || 0,
+            savings: node.savings || 0,
+          },
+        };
+      }
+
+      const aggregated = node.children.reduce(
+        (acc, child) => {
+          const childData = aggregateData(child);
+          acc.totalBill += childData.aggregatedData?.totalBill || 0;
+          acc.onDemandCost += childData.aggregatedData?.onDemandCost || 0;
+          acc.reservedInstanceCost +=
+            childData.aggregatedData?.reservedInstanceCost || 0;
+          acc.savings += childData.aggregatedData?.savings || 0;
+          return acc;
+        },
+        {
+          totalBill: 0,
+          onDemandCost: 0,
+          reservedInstanceCost: 0,
+          savings: 0,
+        }
+      );
+
+      return {
+        ...node,
+        aggregatedData: aggregated,
+      };
+    };
+    const aggregatedData = dummyData.map(aggregateData);
+
+    const sorted = [...aggregatedData].sort((a, b) => {
+      const valueA = a.aggregatedData?.[field] || 0;
+      const valueB = b.aggregatedData?.[field] || 0;
+
+      if (direction === "asc") {
+        return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+      } else {
+        return valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
+      }
+    });
+
+    setSortedData(sorted);
+    setCurrentSort({ field, direction });
+  };
+
   return (
     <>
       <div className="cmpInvTv_container" style={{ height, width }}>
@@ -224,13 +284,12 @@ const TotalBillAllocationTable = ({
           <h2 className="cmpInvTv_title">{tableData[0].tableTitle}</h2>
           <div>
             {dropdown}
-            <Button
-              variant="contained"
-              className="cmpInvTv_customizeButton"
-              color="inherit"
-            >
-              Customize Report
-            </Button>
+
+            <CustomizedReportButton
+              handleSortData={handleSortData}
+              sortOptions={sortOptions}
+              currentSort={currentSort}
+            />
             <ShareButton
               tableData={dummyData}
               tableRef={tableRef}
@@ -238,9 +297,7 @@ const TotalBillAllocationTable = ({
               className="cmpInvTv_shareButton"
               dataType="TotalBillAllocation"
             />
-            {/* <IconButton className="cmpInvTv_shareButton">
-              <ShareIcon />
-            </IconButton> */}
+
             <IconButton
               onClick={handleOverlayOpen}
               className="cmpInvTv_fullscreenButton"
@@ -296,7 +353,7 @@ const TotalBillAllocationTable = ({
 
               <TableBody>
                 <TableRowComponent
-                  data={dummyData || []}
+                  data={sortedData || []}
                   level={0}
                   toggleRow={toggleRow}
                   expandedRows={expandedRows}
@@ -360,7 +417,7 @@ const TotalBillAllocationTable = ({
 
                 <TableBody>
                   <TableRowComponent
-                    data={dummyData || []}
+                    data={sortedData || []}
                     level={0}
                     toggleRow={toggleRow}
                     expandedRows={expandedRows}

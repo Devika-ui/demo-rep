@@ -613,24 +613,53 @@ const ShareButton = ({
             "CommitmentsCost",
             "Savings",
           ];
-
-          // Add header cells
           headers.forEach((header) => {
             const th = document.createElement("th");
             th.textContent = header;
             headerRow.appendChild(th);
           });
 
-          // Create the table body and populate it with csvContent
           const tableBody = tableElement.createTBody();
-          // Ensure csvContent is not empty or undefined
           if (csvContent && csvContent.length > 1) {
             csvContent.slice(1).forEach((row) => {
               const tr = tableBody.insertRow();
               const rowValues = row.split(",");
               rowValues.forEach((val) => {
                 const td = tr.insertCell();
-                td.textContent = val.replace(/"/g, ""); // Remove quotes from CSV content
+                td.textContent = val.replace(/"/g, "");
+              });
+            });
+          }
+        } else if (dataType === "TotalBillAllocation") {
+          csvContent = generateCsvCurrentLayoutTBA(tableData, isHierarchical);
+
+          const tableElement = document.createElement("table");
+          const tableHeader = tableElement.createTHead();
+          const headerRow = tableHeader.insertRow();
+          const headers = [
+            "Name",
+            "TotalBill",
+            "OnDemandCost",
+            "ReservationCost",
+            "Savings",
+            "%Normalized Variation",
+            "%Raw Variation",
+          ];
+
+          headers.forEach((header) => {
+            const th = document.createElement("th");
+            th.textContent = header;
+            headerRow.appendChild(th);
+          });
+
+          const tableBody = tableElement.createTBody();
+          if (csvContent && csvContent.length > 1) {
+            csvContent.slice(1).forEach((row) => {
+              const tr = tableBody.insertRow();
+              const rowValues = row.split(",");
+              rowValues.forEach((val) => {
+                const td = tr.insertCell();
+                td.textContent = val.replace(/"/g, "");
               });
             });
           }
@@ -649,23 +678,20 @@ const ShareButton = ({
             "MarketPurchaseCost",
           ];
 
-          // Add header cells
           headers.forEach((header) => {
             const th = document.createElement("th");
             th.textContent = header;
             headerRow.appendChild(th);
           });
 
-          // Create the table body and populate it with csvContent
           const tableBody = tableElement.createTBody();
-          // Ensure csvContent is not empty or undefined
           if (csvContent && csvContent.length > 1) {
             csvContent.slice(1).forEach((row) => {
               const tr = tableBody.insertRow();
               const rowValues = row.split(",");
               rowValues.forEach((val) => {
                 const td = tr.insertCell();
-                td.textContent = val.replace(/"/g, ""); // Remove quotes from CSV content
+                td.textContent = val.replace(/"/g, "");
               });
             });
           }
@@ -689,9 +715,9 @@ const ShareButton = ({
       );
     } else if (format === "CSV") {
       if (isHierarchical) {
-        setCsvMenuAnchorEl(exportAnchorEl); // Open CSV submenu using export menu's anchor
+        setCsvMenuAnchorEl(exportAnchorEl);
       } else {
-        handleExportCsv("currentLayout"); // Direct export as CSV when not hierarchical
+        handleExportCsv("currentLayout");
       }
       handleExportMenuClose();
     }

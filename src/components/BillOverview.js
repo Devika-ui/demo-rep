@@ -608,6 +608,16 @@ const BillOverview = () => {
     position: "absolute",
   };
 
+  const sortOptions = [
+    { value: "totalBill", label: `Total Bill (${currencySymbol})` },
+    { value: "onDemandCost", label: `On-Demand Cost (${currencySymbol})` },
+    {
+      value: "reservedInstanceCost",
+      label: `ReservedInstances Cost (${currencySymbol})`,
+    },
+    { value: "savings", label: `Savings (${currencySymbol})` },
+  ];
+
   return (
     <div>
       <Box
@@ -781,6 +791,7 @@ const BillOverview = () => {
           uniqueMonths={uniqueMonths}
           headerClass="headerClass-1"
           loading={loading}
+          sortOptions={sortOptions}
         />
       </div>
     </div>

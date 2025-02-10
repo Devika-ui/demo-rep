@@ -461,17 +461,6 @@ const BusinessCostSplit = () => {
       columnHead6: { key: "savings", title: `Savings (${currencySymbol})` },
     },
   ];
-  // const columns1 = [
-  //   {
-  //     tableTitle: "Total Bill Allocation across Application",
-  //     columnHead1: "Application Name",
-  //     columnHead2: "Owner Name",
-  //     columnHead3: `Total Bill (${currencySymbol})`,
-  //     columnHead4: `%Normalized Variation (${currencySymbol})`,
-  //     columnHead5: `%Raw Variation (${currencySymbol})`,
-  //     columnHead6: `Savings (${currencySymbol})`,
-  //   },
-  // ];
 
   const tableData = [
     {
@@ -484,25 +473,10 @@ const BusinessCostSplit = () => {
     },
   ];
 
-  // const tableData = [
-  //   {
-  //     tableTitle: "Service Category Cost Allocation",
-  //     columnHead1: { key: "serviceCategory", title: "Service Category" },
-  //     columnHead2: {
-  //       key: "TotalBill",
-  //       title: `Total Bill (${currencySymbol})`,
-  //     },
-  //     columnHead3: {
-  //       key: "OnDemandCost",
-  //       title: `On Demand Cost (${currencySymbol})`,
-  //     },
-  //     columnHead4: {
-  //       key: "CommitmentsCost",
-  //       title: `Commitments Cost (${currencySymbol})`,
-  //     },
-  //     columnHead5: { key: "Savings", title: `Savings (${currencySymbol})` },
-  //   },
-  // ];
+  const sortOptions = [
+    { value: "totalBill", label: `Total Bill (${currencySymbol})` },
+    { value: "savings", label: `Savings (${currencySymbol})` },
+  ];
 
   return (
     <div>
@@ -634,6 +608,7 @@ const BusinessCostSplit = () => {
           uniqueMonths={uniqueMonths}
           headerClass="headerClass-1"
           loading={loading}
+          sortOptions={sortOptions}
         />
       </div>
       <div

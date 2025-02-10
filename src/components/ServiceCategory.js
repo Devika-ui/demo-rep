@@ -195,9 +195,8 @@ const ServiceCategory = ({
   }, [dummyData]);
 
   useEffect(() => {
-    // Reset sortedData to the original dummyData when the component mounts or is refreshed
     setSortedData(dummyData);
-  }, [dummyData]); // This will run whenever dummyData changes
+  }, [dummyData]);
 
   const sortOptions = [
     { value: "TotalBill", label: "Total Bill" },
@@ -207,10 +206,8 @@ const ServiceCategory = ({
   ];
 
   const handleSortParentData = (field, direction) => {
-    // Helper function to aggregate data recursively for a node
     const aggregateData = (node) => {
       if (!node.children || node.children.length === 0) {
-        // Base case: no children, return node's own value, ensuring it has the expected properties
         return {
           ...node,
           aggregatedData: {
@@ -222,7 +219,6 @@ const ServiceCategory = ({
         };
       }
 
-      // Aggregate data for the current node
       const aggregated = node.children.reduce(
         (acc, child) => {
           const childData = aggregateData(child);
@@ -242,14 +238,12 @@ const ServiceCategory = ({
 
       return {
         ...node,
-        aggregatedData: aggregated, // Store aggregated data for sorting
+        aggregatedData: aggregated,
       };
     };
 
-    // Aggregate data for all parent nodes and their children
     const aggregatedData = dummyData.map(aggregateData);
 
-    // Sort parents based on the aggregated data
     const sorted = [...aggregatedData].sort((a, b) => {
       const valueA = a.aggregatedData?.[field] || 0;
       const valueB = b.aggregatedData?.[field] || 0;
@@ -261,9 +255,7 @@ const ServiceCategory = ({
       }
     });
 
-    console.log("Sorted data", sorted);
-
-    setSortedData(sorted); // Update state with sorted parent nodes
+    setSortedData(sorted);
     setCurrentSort({ field, direction });
   };
 
