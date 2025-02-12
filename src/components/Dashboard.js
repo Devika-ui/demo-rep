@@ -19,20 +19,19 @@ import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 
 const Dashboard = () => {
-  //sessionStorage.setItem("overviewPage", true);
+  // console.log("seession", sessionStorage["cspId"]);
+  if (sessionStorage["cspId"] == undefined)
+    sessionStorage.setItem("overviewPage", true);
   const [showStackBars, setShowStackBars] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState(componentUtil.getSelectedCSP());
+  const [selectedProvider, setSelectedProvider] = useState(
+    componentUtil.getSelectedCSP()
+  );
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [billingMonth, setBillingMonth] = useState([]);
   const [dates, setDates] = useState(null);
 
   /*Filter Changes*/
   let inputData = selectedFilters;
-  const handleButtonClick = (value) => {
-    componentUtil.setSelectedCSP(value);
-    setSelectedProvider(value);
-    setShowStackBars(value !== 100);
-  };
 
   // Function to update filters
   const handleFiltersChange = async (newFilters) => {
@@ -73,6 +72,14 @@ const Dashboard = () => {
 
   const startDate = dates?.startDate;
   const endDate = dates?.endDate;
+
+  //console.log("billingmonth", billingMonth);
+
+  const handleButtonClick = async (value) => {
+    setSelectedProvider(value);
+    setShowStackBars(value !== 100);
+    await componentUtil.setSelectedCSP(value);
+  };
 
   return (
     <Box
@@ -162,19 +169,31 @@ const Dashboard = () => {
                   }}
                 >
                   <strong>
-                    {showStackBars
+                    {selectedProvider === 0
+                      ? "Total Bill Cost by Providers"
+                      : selectedProvider === 110
                       ? "AWS Total Bill Cost"
                       : "Azure Total Bill Cost"}
                   </strong>
                 </Box>
                 <Box sx={{ flexGrow: 1 }}>
-                  <DetailedCSPBars
-                    inputData={inputData}
-                    selectedCSP={selectedProvider}
-                    billingMonth={billingMonth}
-                    startDate={startDate}
-                    endDate={endDate}
-                  />
+                  {selectedProvider === 0 ? (
+                    <StackBars
+                      inputData={inputData}
+                      selectedCSP={selectedProvider}
+                      billingMonth={billingMonth}
+                      startDate={startDate}
+                      endDate={endDate}
+                    />
+                  ) : (
+                    <DetailedCSPBars
+                      inputData={inputData}
+                      selectedCSP={selectedProvider}
+                      billingMonth={billingMonth}
+                      startDate={startDate}
+                      endDate={endDate}
+                    />
+                  )}
                 </Box>
               </Paper>
             </Grid>
@@ -190,7 +209,10 @@ const Dashboard = () => {
                   boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
                 }}
               >
-                <RecommendationsComponent selectedCSP={selectedProvider} />
+                <RecommendationsComponent
+                  selectedCSP={selectedProvider}
+                  billingMonth={billingMonth}
+                />
               </Paper>
             </Grid>
 

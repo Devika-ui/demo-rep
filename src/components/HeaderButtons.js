@@ -10,7 +10,6 @@ const HeaderButtons = ({ onButtonClick }) => {
   const [cloudProviders, setCloudProviders] = useState([]);
 
   const handleClick = (value) => {
-    console.log("clickoncspp", value);
     setCurrentCSP(value);
     onButtonClick(value);
   };

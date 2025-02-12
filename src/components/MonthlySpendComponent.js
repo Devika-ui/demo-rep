@@ -99,11 +99,20 @@ const MonthlySpendComponent = ({
         const data = await api.getMonthlyActualSpend(inputData, billingMonth);
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
+        const selectedCSP = componentUtil.getSelectedCSP();
         setCurrencySymbol(currencySymbol);
         setCurrencyPreference(currencyPreference);
-        if (data.length > 0) {
-          setTotalCost(data[0].totalCost);
-          setGrowthPercentage(data[0].growthPercentage);
+        if (selectedCSP === 0) {
+          setTotalCost(data.reduce((sum, item) => sum + item.totalCost, 0));
+
+          setGrowthPercentage(
+            data.reduce((sum, item) => sum + item.growthPercentage, 0)
+          );
+        } else {
+          if (data.length > 0) {
+            setTotalCost(data[0].totalCost);
+            setGrowthPercentage(data[0].growthPercentage);
+          }
         }
       } finally {
         setLoading(false);

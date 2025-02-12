@@ -57,19 +57,40 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
           );
         const currencyPreference = await componentUtil.getCurrencyPreference();
         const currencySymbol = await componentUtil.getCurrencySymbol();
-        setTopSubscriptions(subscriptionsData1.topsubscriptions || []);
+        const selectedCSP = componentUtil.getSelectedCSP();
+
+        if (selectedCSP === 0) {
+          setTopSubscriptions(
+            Object.values(subscriptionsData1).flatMap(
+              (provider) => provider.topsubscriptions || []
+            )
+          );
+        } else setTopSubscriptions(subscriptionsData1.topsubscriptions || []);
 
         const applicationsData = await api.getOverallConsumptionForApplication(
           inputData,
           billingMonth
         );
-        setTopApplications(applicationsData.topApplications || []);
+
+        if (selectedCSP === 0) {
+          setTopApplications(
+            Object.values(applicationsData).flatMap(
+              (provider) => provider.topApplications || []
+            )
+          );
+        } else setTopApplications(applicationsData.topApplications || []);
 
         const servicesData = await api.getOverallConsumptionForServies(
           inputData,
           billingMonth
         );
-        setTopServices(servicesData.topServices || []);
+        if (selectedCSP === 0) {
+          setTopServices(
+            Object.values(servicesData).flatMap(
+              (provider) => provider.topServices || []
+            )
+          );
+        } else setTopServices(servicesData.topServices || []);
 
         const tagComplianceData =
           await api.getOverallConsumptionForTagCompliance(
@@ -77,17 +98,75 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
             billingMonth
           );
         const csp = componentUtil.getSelectedCSP();
-        if (tagComplianceData && tagComplianceData.length > 0) {
-          const latestData = tagComplianceData[tagComplianceData.length - 1];
-          setTagCompliance({
-            applicationpercentage: latestData.applicationpercentage || 0,
-            ownerpercentage: latestData.ownerpercentage || 0,
-            projectpercentage: latestData.projectpercentage || 0,
-            bupercentage: latestData.bupercentage || 0,
-            environmentpercentage: latestData.environmentpercentage || 0,
-            NSSRpercentage: latestData.NSSRpercentage || 0,
-          });
-          setMonthlyData(tagComplianceData);
+        if (csp === 0) {
+          if (tagComplianceData) {
+            // Extract latest Azure data
+            const azureData = tagComplianceData.Azure || [];
+            const latestAzure =
+              azureData.length > 0 ? azureData[azureData.length - 1] : {};
+
+            // Extract latest AWS data
+            const awsData = tagComplianceData.AWS || [];
+            const latestAWS =
+              awsData.length > 0 ? awsData[awsData.length - 1] : {};
+
+            // Combine latest data from Azure and AWS
+            const combinedLatestData = {
+              applicationpercentage:
+                (latestAzure.applicationpercentage || 0) +
+                (latestAWS.applicationpercentage || 0),
+              ownerpercentage:
+                (latestAzure.ownerpercentage || 0) +
+                (latestAWS.ownerpercentage || 0),
+              projectpercentage:
+                (latestAzure.projectpercentage || 0) +
+                (latestAWS.projectpercentage || 0),
+              bupercentage:
+                latestAzure.bupercentage ||
+                latestAWS.businessunitpercentage ||
+                0, // AWS uses 'businessunitpercentage'
+              environmentpercentage:
+                (latestAzure.environmentpercentage || 0) +
+                (latestAWS.environmentpercentage || 0),
+              NSSRpercentage: latestAWS.NSSRpercentage || 0, // Only exists in AWS data
+            };
+
+            setTagCompliance(combinedLatestData);
+
+            const combinedArray = Object.values(tagComplianceData).flat();
+            const aggregatedData = combinedArray.reduce((acc, item) => {
+              const { month, ...values } = item;
+
+              // Find existing entry for the same month
+              let existing = acc.find((entry) => entry.month === month);
+
+              if (!existing) {
+                acc.push({ month, ...values });
+              } else {
+                // Aggregate values for the same month
+                Object.keys(values).forEach((key) => {
+                  existing[key] = (existing[key] || 0) + values[key];
+                });
+              }
+
+              return acc;
+            }, []);
+
+            setMonthlyData(aggregatedData);
+          }
+        } else {
+          if (tagComplianceData && tagComplianceData.length > 0) {
+            const latestData = tagComplianceData[tagComplianceData.length - 1];
+            setTagCompliance({
+              applicationpercentage: latestData.applicationpercentage || 0,
+              ownerpercentage: latestData.ownerpercentage || 0,
+              projectpercentage: latestData.projectpercentage || 0,
+              bupercentage: latestData.bupercentage || 0,
+              environmentpercentage: latestData.environmentpercentage || 0,
+              NSSRpercentage: latestData.NSSRpercentage || 0,
+            });
+            setMonthlyData(tagComplianceData);
+          }
         }
         setCurrencySymbol(currencySymbol);
         setCurrencyPreference(currencyPreference);
@@ -107,12 +186,14 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
           .reduce((sum, sub) => sum + (sub.totalcost || 0), 0)
           .toFixed(2)
       : "0.00";
+
   const topServiceCost =
     topServices.length > 0
       ? topServices
           .reduce((sum, sub) => sum + (sub.totalcost || 0), 0)
           .toFixed(2)
       : "0.00";
+
   const topApplicationCost =
     topApplications.length > 0
       ? topApplications
@@ -205,7 +286,11 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
           <div className="tiles">
             <div className="tile" onClick={() => setSubscriptionDetails(true)}>
               <div className="tilename">
-                {selectedCSP === 100 ? "Top Subscriptions" : "Top Accounts"}
+                {selectedCSP === 0
+                  ? "Top Subscriptions/Accounts"
+                  : selectedCSP === 100
+                  ? "Top Subscriptions"
+                  : "Top Accounts"}
               </div>
               <div className="price">
                 {currencyPreference === "start"
@@ -241,8 +326,8 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                   options={radialBarOptions}
                   series={radialBarOptions.series}
                   type="radialBar"
-                  height="170px"
-                  width="170px"
+                  height="200px"
+                  width="200px"
                 />
               </div>
             </Tooltip>
@@ -332,7 +417,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                       ]}
                       type="bar"
                       height="200"
-                      width="80%"
+                      width="100%"
                     />
                   </div>
                 ))}
@@ -358,18 +443,23 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
             <DialogContent>
               {topServices.length > 0 ? (
                 <ul>
-                  {topServices.map((service, index) => (
-                    <li key={index}>
-                      <strong style={{ color: "#5f249f", marginRight: "5px" }}>
-                        {service.Service}
-                      </strong>
-                      :{" "}
-                      <span style={{ color: "orange", fontWeight: "bold" }}>
-                        {service.totalcost.toFixed(2)}
-                        {currencySymbol}
-                      </span>
-                    </li>
-                  ))}
+                  {topServices
+                    .sort((a, b) => b.totalcost - a.totalcost)
+                    .slice(0, 3)
+                    .map((service, index) => (
+                      <li key={index}>
+                        <strong
+                          style={{ color: "#5f249f", marginRight: "5px" }}
+                        >
+                          {service.Service}
+                        </strong>
+                        :{" "}
+                        <span style={{ color: "orange", fontWeight: "bold" }}>
+                          {service.totalcost.toFixed(2)}
+                          {currencySymbol}
+                        </span>
+                      </li>
+                    ))}
                 </ul>
               ) : (
                 <p>No services available.</p>
@@ -397,23 +487,28 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
             <DialogContent>
               {topApplications.length > 0 ? (
                 <ul>
-                  {topApplications.slice(0, 3).map((application, index) => (
-                    <li key={index}>
-                      <strong style={{ color: "#5f249f", marginRight: "5px" }}>
-                        {application.Application
-                          ? application.Application
-                          : "Null"}
-                      </strong>
-                      :{" "}
-                      <span style={{ color: "orange", fontWeight: "bold" }}>
-                        {application.totalcost !== null &&
-                        application.totalcost !== undefined
-                          ? application.totalcost.toFixed(2)
-                          : "N/A"}
-                        {currencySymbol}
-                      </span>
-                    </li>
-                  ))}
+                  {topApplications
+                    .sort((a, b) => b.totalcost - a.totalcost)
+                    .slice(0, 3)
+                    .map((application, index) => (
+                      <li key={index}>
+                        <strong
+                          style={{ color: "#5f249f", marginRight: "5px" }}
+                        >
+                          {application.Application
+                            ? application.Application
+                            : "Null"}
+                        </strong>
+                        :{" "}
+                        <span style={{ color: "orange", fontWeight: "bold" }}>
+                          {application.totalcost !== null &&
+                          application.totalcost !== undefined
+                            ? application.totalcost.toFixed(2)
+                            : "N/A"}
+                          {currencySymbol}
+                        </span>
+                      </li>
+                    ))}
                 </ul>
               ) : (
                 <p>No applications available.</p>
@@ -442,24 +537,29 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
             <DialogContent>
               {topSubscriptions.length > 0 ? (
                 <ul>
-                  {topSubscriptions.map((subscription, index) => (
-                    <li key={index}>
-                      <strong style={{ color: "#5f249f", marginRight: "5px" }}>
-                        {subscription.Subscription}
-                      </strong>
-                      :
-                      <span
-                        style={{
-                          color: "orange",
-                          fontWeight: "bold",
-                          marginLeft: "5px",
-                        }}
-                      >
-                        {subscription.totalcost.toFixed(2)}
-                        {currencySymbol}
-                      </span>
-                    </li>
-                  ))}
+                  {topSubscriptions
+                    .sort((a, b) => b.totalcost - a.totalcost)
+                    .slice(0, 3)
+                    .map((subscription, index) => (
+                      <li key={index}>
+                        <strong
+                          style={{ color: "#5f249f", marginRight: "5px" }}
+                        >
+                          {subscription.Subscription}
+                        </strong>
+                        :
+                        <span
+                          style={{
+                            color: "orange",
+                            fontWeight: "bold",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          {subscription.totalcost.toFixed(2)}
+                          {currencySymbol}
+                        </span>
+                      </li>
+                    ))}
                 </ul>
               ) : (
                 <p>No Subscriptions available.</p>

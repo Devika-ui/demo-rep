@@ -15,12 +15,24 @@ const DateRangeDropdown = ({ selectedCSP, onBillingMonthsChange }) => {
         const data1 = await api.getAssignedCustomerIds();
         const cspid = componentUtil.getSelectedCSP();
 
-        const billingPeriods = data1[0].dataMonths
-          .filter((item) => item.csp_id === cspid)
-          .map((item) => {
+        let billingPeriods; // Declare variable once
+
+        if (cspid === 0) {
+          billingPeriods = data1[0].dataMonths.map((item) => {
             const date = new Date(item.billingPeriod);
             return date.toISOString().split("T")[0];
           });
+        } else {
+          billingPeriods = data1[0].dataMonths
+            .filter((item) => item.csp_id === cspid)
+            .map((item) => {
+              const date = new Date(item.billingPeriod);
+              return date.toISOString().split("T")[0];
+            });
+        }
+        billingPeriods = [...new Set(billingPeriods)].sort(
+          (a, b) => new Date(a) - new Date(b)
+        );
 
         const formattedBillingPeriods = billingPeriods.map((date) => {
           const options = { year: "numeric", month: "long" };
@@ -28,7 +40,6 @@ const DateRangeDropdown = ({ selectedCSP, onBillingMonthsChange }) => {
         });
 
         setBillingPeriod(formattedBillingPeriods);
-
         // Set selectedMonths by default to all billing periods
         setSelectedMonths(formattedBillingPeriods);
       } catch (error) {

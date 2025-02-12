@@ -3,6 +3,7 @@ import CustomProgressBar from "./CustomProgressBar";
 import "../css/kpiSection.scss";
 import api from "../api.js";
 import { CircularProgress } from "@mui/material";
+import componentUtil from "../componentUtil.js";
 
 const KPISection = ({
   selectedCSP,
@@ -27,9 +28,24 @@ const KPISection = ({
           inputData,
           billingMonth
         );
-        setPercentCoverage(coverageData.coverage ?? 0);
+        const selectedCSP = componentUtil.getSelectedCSP();
+        // Assuming the API returns an array with a single object containing the count
+        if (selectedCSP === 0) {
+          setPercentCoverage(
+            Object.values(coverageData).reduce(
+              (sum, item) => sum + item.coverage,
+              0
+            )
+          );
+        } else {
+          setPercentCoverage(coverageData.coverage ?? 0);
+        }
         const usageData = await api.getDiscountKPIUsage(startDate, endDate);
-        setPercentUsage(usageData.usage ?? 0);
+        if (selectedCSP === 0) {
+          setPercentUsage(
+            Object.values(usageData).reduce((sum, item) => sum + item.usage, 0)
+          );
+        } else setPercentUsage(usageData.usage ?? 0);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

@@ -48,15 +48,34 @@ const OverallTotalRealizedSavings = ({
         );
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
-        setReservations(reservationsData.map((entry) => entry.savings));
-        setLabels(
-          reservationsData.map((entry) =>
-            new Date(entry.modifieddate).toLocaleDateString("en-US", {
-              month: "long",
-              year: "numeric",
-            })
-          )
-        );
+        const selectedCSP = componentUtil.getSelectedCSP();
+
+        if (selectedCSP === 0) {
+          const combinedData = [
+            ...reservationsData.Azure,
+            ...reservationsData.AWS,
+          ];
+
+          setReservations(combinedData.map((entry) => entry.savings));
+          setLabels(
+            combinedData.map((entry) =>
+              new Date(entry.modifieddate).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })
+            )
+          );
+        } else {
+          setReservations(reservationsData.map((entry) => entry.savings));
+          setLabels(
+            reservationsData.map((entry) =>
+              new Date(entry.modifieddate).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })
+            )
+          );
+        }
         setCurrencySymbol(currencySymbol);
         setCurrencyPreference(currencyPreference);
       } catch (error) {
@@ -79,17 +98,36 @@ const OverallTotalRealizedSavings = ({
           inputData,
           billingMonth
         );
-        setSimulatedSavings(
-          simulatedSavingsData.map((entry) => entry.simulated)
-        );
-        setLabels(
-          simulatedSavingsData.map((entry) =>
-            new Date(entry.Date).toLocaleDateString("en-US", {
-              month: "long",
-              year: "numeric",
-            })
-          )
-        );
+        const selectedCSP = componentUtil.getSelectedCSP();
+
+        if (selectedCSP === 0) {
+          const combinedData = [
+            ...simulatedSavingsData.Azure,
+            ...simulatedSavingsData.AWS,
+          ];
+
+          setSimulatedSavings(combinedData.map((entry) => entry.simulated));
+          setLabels(
+            combinedData.map((entry) =>
+              new Date(entry.Date).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })
+            )
+          );
+        } else {
+          setSimulatedSavings(
+            simulatedSavingsData.map((entry) => entry.simulated)
+          );
+          setLabels(
+            simulatedSavingsData.map((entry) =>
+              new Date(entry.Date).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })
+            )
+          );
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

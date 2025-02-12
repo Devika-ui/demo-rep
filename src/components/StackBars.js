@@ -4,31 +4,40 @@ import Chart from "chart.js/auto";
 import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 
-const StackBars = ({ inputData, selectedCSP, startDate, endDate }) => {
-  const [subscriptions, setSubscriptions] = useState([]);
+const StackBars = ({
+  inputData,
+  selectedCSP,
+  billingMonth,
+  startDate,
+  endDate,
+}) => {
+  const [subscriptions, setSubscriptions] = useState({ Azure: [], AWS: [] });
   const [showAWS, setShowAWS] = useState(true);
   const [showAzure, setShowAzure] = useState(true);
   const chartContainer = useRef(null);
   const chartInstance = useRef(null);
+  const [loading, setLoading] = useState(true);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (billingMonth.length == 0) {
+        return;
+      }
       setLoading(true);
       try {
-        const subscriptionsData1 = await api.getBillingCostEachDay(
+        const subscriptionsData = await api.getBillingCostEachDay(
           inputData,
           startDate,
           endDate
         );
-        console.log("API response:", subscriptionsData1);
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
         setCurrencySymbol(currencySymbol);
         setCurrencyPreference(currencyPreference);
-        setSubscriptions(subscriptionsData1);
+
+        setSubscriptions(subscriptionsData);
       } catch (error) {
         console.error("Failed to fetch data", error);
       } finally {
@@ -40,9 +49,9 @@ const StackBars = ({ inputData, selectedCSP, startDate, endDate }) => {
   }, [selectedCSP, inputData, startDate, endDate]);
 
   useEffect(() => {
-    if (subscriptions.length === 0) return;
+    if (!subscriptions.Azure.length && !subscriptions.AWS.length) return;
 
-    if (chartInstance.current !== null) {
+    if (chartInstance.current) {
       chartInstance.current.destroy();
     }
 
@@ -50,22 +59,20 @@ const StackBars = ({ inputData, selectedCSP, startDate, endDate }) => {
     const awsData = {};
     const azureData = {};
 
-    subscriptions.forEach(({ dailydate, totalcost }) => {
-      const date = new Date(dailydate).toISOString().split("T")[0];
+    // Helper function to aggregate costs by date
+    const aggregateCosts = (data, targetObj) => {
+      data.forEach(({ dailydate, totalcost }) => {
+        const date = new Date(dailydate).toISOString().split("T")[0];
+        targetObj[date] = (targetObj[date] || 0) + totalcost;
+      });
+    };
 
-      if (!awsData[date]) {
-        if (selectedCSP == 110) {
-          awsData[date] += totalcost;
-        }
-        awsData[date] = Math.random() * 10000; // Random data for AWS
-      }
-      if (!azureData[date]) {
-        azureData[date] = 0;
-      }
-      azureData[date] += totalcost;
-    });
+    aggregateCosts(subscriptions.AWS, awsData);
+    aggregateCosts(subscriptions.Azure, azureData);
 
-    const sortedDates = Object.keys(azureData).sort();
+    const sortedDates = Array.from(
+      new Set([...Object.keys(awsData), ...Object.keys(azureData)])
+    ).sort();
 
     chartInstance.current = new Chart(ctx, {
       type: "bar",
@@ -73,21 +80,37 @@ const StackBars = ({ inputData, selectedCSP, startDate, endDate }) => {
         labels: sortedDates,
         datasets: [
           {
-            label: 2,
-            data: sortedDates.map((date) => awsData[date].toFixed(2)),
+            label: "AWS",
+            data: sortedDates.map((date) => awsData[date] || 0),
             backgroundColor: "rgba(255, 153, 10, 0.7)",
             stack: "01",
-            hidden: !showAWS, // Hide AWS data if showAWS is false
+            hidden: !showAWS,
           },
           {
-            label: 1,
-            data: sortedDates.map((date) => azureData[date].toFixed(2)),
+            label: "Azure",
+            data: sortedDates.map((date) => azureData[date] || 0),
             backgroundColor: "rgba(10, 163, 225, 0.7)",
             stack: "01",
-            hidden: !showAzure, // Hide Azure data if showAzure is false
+            hidden: !showAzure,
           },
         ],
       },
+      // options: {
+      //   scales: {
+      //     x: {
+      //       stacked: true,
+      //     },
+      //     y: {
+      //       stacked: true,
+      //     },
+      //   },
+      //   plugins: {
+      //     legend: {
+      //       display: false,
+      //     },
+      //   },
+      // },
+
       options: {
         scales: {
           x: {
@@ -147,7 +170,7 @@ const StackBars = ({ inputData, selectedCSP, startDate, endDate }) => {
     });
 
     return () => {
-      if (chartInstance.current !== null) {
+      if (chartInstance.current) {
         chartInstance.current.destroy();
       }
     };
@@ -156,8 +179,8 @@ const StackBars = ({ inputData, selectedCSP, startDate, endDate }) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       {/* <Typography variant="h6" align="center" sx={{ color: "#5f249f", mb: 2 }}>
-      Total Bill Cost by Providers
-    </Typography> */}
+        Total Bill Cost by Providers
+      </Typography> */}
       <Box
         sx={{
           display: "flex",

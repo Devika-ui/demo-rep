@@ -5,6 +5,7 @@ import fallbackMarkerIcon from "../images/location.png";
 import "../css/MapContainer.scss";
 import api from "../api.js";
 import { CircularProgress } from "@mui/material";
+import componentUtil from "../componentUtil.js";
 
 const MapContainer = ({ selectedCSP, inputData, billingMonth }) => {
   const mapRef = useRef(null);
@@ -19,7 +20,10 @@ const MapContainer = ({ selectedCSP, inputData, billingMonth }) => {
       setLoading(true);
       try {
         const data = await api.getMapData(inputData, billingMonth);
-        setMapData(data);
+        const selectedCSP = componentUtil.getSelectedCSP();
+        if (selectedCSP === 0) {
+          setMapData(Object.values(data).flat());
+        } else setMapData(data);
       } catch (error) {
         console.error("Error fetching map data:", error);
       } finally {

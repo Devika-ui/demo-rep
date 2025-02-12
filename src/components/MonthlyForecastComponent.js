@@ -29,10 +29,31 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData, billingMonth }) => {
         );
         const currencyPreference = await componentUtil.getCurrencyPreference();
         const currencySymbol = await componentUtil.getCurrencySymbol();
+        const selectedCSP = componentUtil.getSelectedCSP();
 
-        if (forecastData.length > 0) {
-          const lastMonth = forecastData[0].lastMonthCost;
-          const latestFutureCostData = forecastData[0].futureCosts.at(-1); // Get the latest month data
+        if (selectedCSP === 0) {
+          const lastMonth = Object.values(forecastData)
+            .flat()
+            .reduce((sum, provider) => sum + provider.lastMonthCost, 0);
+          const latestFutureCostData = Object.values(forecastData)
+            .flat()
+            .reduce(
+              (acc, provider) => {
+                if (provider.futureCosts.length > 0) {
+                  const latestFutureCost = provider.futureCosts.at(-1); // Get the latest month data
+
+                  acc.futureCost += latestFutureCost.futureCost;
+                  acc.percentageIncrease += latestFutureCost.percentageIncrease;
+                  acc.latestMonth = latestFutureCost.month; // Store the latest month
+                }
+                return acc;
+              },
+              {
+                futureCost: 0,
+                percentageIncrease: 0,
+                latestMonth: null,
+              }
+            );
 
           setLastMonthCost(lastMonth);
           setFutureCost(latestFutureCostData.futureCost);
@@ -41,10 +62,21 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData, billingMonth }) => {
           setCurrencySymbol(currencySymbol);
           setCurrencyPreference(currencyPreference);
         } else {
-          setLastMonthCost(0);
-          setFutureCost(0);
-          setTotalCost1(0);
-          setPercentageIncrease(0);
+          if (forecastData.length > 0) {
+            const lastMonth = forecastData[0].lastMonthCost;
+            const latestFutureCostData = forecastData[0].futureCosts.at(-1); // Get the latest month data
+            setLastMonthCost(lastMonth);
+            setFutureCost(latestFutureCostData.futureCost);
+            setPercentageIncrease(latestFutureCostData.percentageIncrease);
+            setTotalCost1(lastMonth + latestFutureCostData.futureCost);
+            setCurrencySymbol(currencySymbol);
+            setCurrencyPreference(currencyPreference);
+          } else {
+            setLastMonthCost(0);
+            setFutureCost(0);
+            setTotalCost1(0);
+            setPercentageIncrease(0);
+          }
         }
       } catch (error) {
         console.error("Error fetching forecast data:", error);

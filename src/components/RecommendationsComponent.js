@@ -9,6 +9,7 @@ const RecommendationsComponent = ({ selectedCSP }) => {
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const totalSavings = recommendations
     .reduce((total, rec) => total + rec.value, 0)
     .toFixed(2);
@@ -20,7 +21,13 @@ const RecommendationsComponent = ({ selectedCSP }) => {
         const response = await api.getRecommendations();
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
-        setRecommendations(response);
+        const selectedCSP = componentUtil.getSelectedCSP();
+        if (selectedCSP === 0) {
+          const data = Object.values(response).flat();
+          setRecommendations(
+            data.sort((a, b) => b.value - a.value).slice(0, 3)
+          );
+        } else setRecommendations(response);
         setCurrencySymbol(currencySymbol);
         setCurrencyPreference(currencyPreference);
       } catch (error) {
