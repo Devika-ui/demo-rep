@@ -14,7 +14,6 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
 import { MultiSelect } from "react-multi-select-component";
-import CostsAmortized from "./CostsAmortized";
 import "../css/components/CostInventory.css";
 import api from "../api";
 import ShareButton from "./ShareButton";
@@ -33,7 +32,7 @@ const TableRowComponent = ({
   let transformedData = [];
   const indentLevel = level * indentIncrement;
   const heirarchyLevel = selectedCSP == 100 ? 4 : 3;
-  const dateLevel = selectedCSP == 100 ? 3 : 2;
+  const dateLevel = 4;
 
   const hasNestedData = (item) =>
     Array.isArray(item?.children) && item.children.length > 0;

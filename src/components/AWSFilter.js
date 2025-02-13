@@ -91,10 +91,7 @@ const AWSFilter = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
         }
       }
     }
-    /*setFilterData((prevFilterData)=>{
-      prevFilterData[selectedCSP]= data;
-      return prevFilterData;
-    });*/
+
     setFilterData({ [selectedCSP]: data });
   };
 
@@ -182,82 +179,6 @@ const AWSFilter = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
   const toggleFiltersVisibility = () => {
     setIsFiltersVisible(!isFiltersVisible);
   };
-
-  const customStyles = {
-    content: {
-      top: "70px",
-      left: "50%",
-      transform: "translate(-50%, 0)",
-      width: "100%",
-      maxWidth: "800px",
-      maxHeight: "calc(100% - 150px)",
-      overflow: "auto",
-      padding: "20px",
-      margin: "0",
-      zIndex: "1050",
-    },
-    overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      zIndex: "1040",
-    },
-  };
-
-  // return (
-  //   <div className="Filter-Container">
-  //     <span onClick={toggleFiltersVisibility} className="Filter-Text">
-  //       Options
-  //     </span>
-  //     <Modal
-  //       isOpen={isFiltersVisible}
-  //       onRequestClose={toggleFiltersVisibility}
-  //       style={customStyles}
-  //       contentLabel="Filter Dialog"
-  //     >
-  //       <div className="Subheader-Boxes">
-  //         {loading ? (
-  //           <div className="loading-guage">
-  //             <CircularProgress />
-  //           </div>
-  //         ) : (
-  //           <div className="filter-options-container">
-  //             {filterData[selectedCSP] &&
-  //               filterData[selectedCSP].map((filterObj) => {
-  //                 const selVal =
-  //                   filterSelectedData[selectedCSP][filterObj["key"]] !==
-  //                   undefined
-  //                     ? filterSelectedData[selectedCSP][filterObj["key"]]
-  //                     : [];
-  //                 return (
-  //                   <div className="filter-option">
-  //                     <label>{filterObj.displayName}(s)</label>
-  //                     <MultiSelect
-  //                       options={filterObj.data}
-  //                       value={selVal}
-  //                       onChange={(values) =>
-  //                         handleFilterChange(filterObj["key"], values)
-  //                       }
-  //                       labelledBy="Select"
-  //                       disableSelectAll={false}
-  //                       hasSelectAll={false}
-  //                     />
-  //                   </div>
-  //                 );
-  //               })}
-  //           </div>
-  //         )}
-
-  //         <div className="Subheader-Buttons">
-  //           <button className="apply-button" onClick={handleApplyFilters}>
-  //             Apply
-  //           </button>
-  //           <button className="reset-button" onClick={handleResetFilters}>
-  //             Reset
-  //           </button>
-  //         </div>
-  //       </div>
-  //     </Modal>
-  //   </div>
-  // );
 
   return (
     <div className="Filter-Container">

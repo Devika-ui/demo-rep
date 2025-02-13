@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { MultiSelect } from "react-multi-select-component";
 import HeaderButtons from "./HeaderButtons";
 import DateRangeDropdown from "./DateRangeDropdown";
 import "../css/Subheader.scss";
@@ -8,12 +7,7 @@ import api from "../api";
 import componentUtil from "../componentUtil";
 import { CircularProgress } from "@mui/material";
 import AWSFilter from "./AWSFilter.js";
-import AzureFilter from "./AzureFilter.js";
-import AzureBox from "../images/Azure box.png";
-import AWSBox from "../images/AWS box.png";
 import FilterIcon from "../images/filter.png";
-import LIcon from "../images/Iicon.png";
-import { Tooltip } from "@mui/material";
 
 const SubHeader = ({
   onButtonClick,
@@ -113,10 +107,7 @@ const SubHeader = ({
         }
       }
     }
-    /*setFilterData((prevFilterData)=>{
-      prevFilterData[selectedCSP]= data;
-      return prevFilterData;
-    });*/
+
     setFilterData({ [selectedCSP]: data });
   };
 
@@ -228,11 +219,6 @@ const SubHeader = ({
                   marginLeft: "350px",
                 }}
               >
-                {/* <img
-                  src={AzureBox}
-                  alt="Azure"
-                  style={{ width: "30px", height: "34px", marginRight: "5px" }}
-                /> */}
                 <div
                   style={{
                     fontWeight: "bold",
@@ -269,11 +255,6 @@ const SubHeader = ({
                   marginLeft: "350px",
                 }}
               >
-                {/* <img
-                  src={AWSBox}
-                  alt="AWS"
-                  style={{ width: "30px", height: "34px", marginRight: "5px" }}
-                /> */}
                 <div
                   style={{
                     fontWeight: "bold",
