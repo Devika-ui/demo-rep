@@ -143,8 +143,8 @@ const MonthlySpendComponent = ({
               {totalCost !== null && totalCost !== undefined ? (
                 <strong>
                   {currencyPreference === "start"
-                    ? `${currencySymbol}${totalCost.toFixed(2)}`
-                    : `${totalCost.toFixed(2)}${currencySymbol}`}
+                     ? `${currencySymbol}${totalCost.toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                     : `${totalCost.toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
                 </strong>
               ) : (
                 <strong>Loading...</strong>

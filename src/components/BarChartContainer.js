@@ -97,21 +97,21 @@ const BarChartContainer = ({
             {" "}
             {`Pay as you go: ${
               currencyPreference === "start"
-                ? `${currencySymbol}${costsPAYGO}`
-                : `${costsPAYGO}${currencySymbol}`
+                ? `${currencySymbol}${Number(costsPAYGO).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : `${Number(costsPAYGO).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`
             }`}
           </p>
           <p style={{ color: colorMap.savingsRI }}>{`Reservations: ${
             currencyPreference === "start"
-              ? `${currencySymbol}${savingsRI}`
-              : `${savingsRI}${currencySymbol}`
+                 ? `${currencySymbol}${Number(savingsRI).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : `${Number(savingsRI).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`
           }`}</p>
           <p style={{ color: colorMap.simulated }}>
             {" "}
             {`Simulated PAYGO: ${
               currencyPreference === "start"
-                ? `${currencySymbol}${simulated}`
-                : `${simulated}${currencySymbol}`
+                ? `${currencySymbol}${Number(simulated).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : `${Number(simulated).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`
             }`}
           </p>
         </div>

@@ -217,13 +217,14 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
         },
       },
     },
-    labels: ["Application", "Owner", "Project", "Business Unit", "Environment"],
+    labels: ["Application", "Owner", "Project", "Business Unit", "Environment",...(selectedCSP === 110 ? ["NSSR"] : []),],
     series: [
       (tagCompliance.applicationpercentage * 100).toFixed(2),
       (tagCompliance.ownerpercentage * 100).toFixed(2),
       (tagCompliance.projectpercentage * 100).toFixed(2),
       (tagCompliance.bupercentage * 100).toFixed(2),
       (tagCompliance.environmentpercentage * 100).toFixed(2),
+      ...(selectedCSP === 110 ? [(tagCompliance.NSSRpercentage * 100).toFixed(2)] : [])
     ],
   };
 
@@ -236,6 +237,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
     { name: "% Resource Tagging Project", data: "projectpercentage" },
     { name: "% Resource Tagging Business Unit", data: "bupercentage" },
     { name: "% Resource Tagging Environment", data: "environmentpercentage" },
+    ...(selectedCSP === 110 ? [{ name: "% Resource Tagging NSSR", data: "NSSRpercentage" }] : [])
   ];
 
   const handleMenuOpen = (event) => {
@@ -267,6 +269,7 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
       "Project %": (item.projectpercentage * 100).toFixed(2),
       "Business Unit %": (item.bupercentage * 100).toFixed(2),
       "Environment %": (item.environmentpercentage * 100).toFixed(2),
+      "NSSR %": (item.NSSRpercentage * 100).toFixed(2),
     }));
 
     return data;
@@ -294,24 +297,24 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
               </div>
               <div className="price">
                 {currencyPreference === "start"
-                  ? `${currencySymbol}${topSubscriptionCost}`
-                  : `${topSubscriptionCost}${currencySymbol}`}
+                  ? `${currencySymbol}${(Number(topSubscriptionCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                  : `${(Number(topSubscriptionCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
               </div>
             </div>
             <div className="tile" onClick={() => setShowServiceDetails(true)}>
               <div className="tilename">Top Service</div>
               <div className="price">
                 {currencyPreference === "start"
-                  ? `${currencySymbol}${topServiceCost}`
-                  : `${topServiceCost}${currencySymbol}`}
+                    ? `${currencySymbol}${(Number(topServiceCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                    : `${(Number(topServiceCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
               </div>
             </div>
             <div className="tile" onClick={() => setApplicationDetails(true)}>
               <div className="tilename">Top Application</div>
               <div className="price">
                 {currencyPreference === "start"
-                  ? `${currencySymbol}${topApplicationCost}`
-                  : `${topApplicationCost}${currencySymbol}`}
+                   ? `${currencySymbol}${(Number(topApplicationCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                   : `${(Number(topApplicationCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
               </div>
             </div>
           </div>
@@ -326,8 +329,8 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                   options={radialBarOptions}
                   series={radialBarOptions.series}
                   type="radialBar"
-                  height="200px"
-                  width="200px"
+                  height="170px"
+                  width="170px"
                 />
               </div>
             </Tooltip>
@@ -455,8 +458,8 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                         </strong>
                         :{" "}
                         <span style={{ color: "orange", fontWeight: "bold" }}>
-                          {service.totalcost.toFixed(2)}
-                          {currencySymbol}
+                        {currencySymbol}
+                        {service.totalcost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </li>
                     ))}
@@ -501,11 +504,11 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                         </strong>
                         :{" "}
                         <span style={{ color: "orange", fontWeight: "bold" }}>
+                          {currencySymbol}
                           {application.totalcost !== null &&
                           application.totalcost !== undefined
-                            ? application.totalcost.toFixed(2)
-                            : "N/A"}
-                          {currencySymbol}
+                          ? application.totalcost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                          : "N/A"}
                         </span>
                       </li>
                     ))}
@@ -555,8 +558,8 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                             marginLeft: "5px",
                           }}
                         >
-                          {subscription.totalcost.toFixed(2)}
-                          {currencySymbol}
+                           {currencySymbol}
+                           {subscription.totalcost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </li>
                     ))}

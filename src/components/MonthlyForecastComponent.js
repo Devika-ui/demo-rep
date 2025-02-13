@@ -147,8 +147,8 @@ const MonthlyForecastComponent = ({ selectedCSP, inputData, billingMonth }) => {
               {totalCost1 !== null ? (
                 <strong>
                   {currencyPreference === "start"
-                    ? `${currencySymbol}${totalCost1.toFixed(2)}`
-                    : `${totalCost1.toFixed(2)}${currencySymbol}`}
+                    ? `${currencySymbol}${totalCost1.toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                    : `${totalCost1.toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
                 </strong>
               ) : (
                 <strong>Loading...</strong>

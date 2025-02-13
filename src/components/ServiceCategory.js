@@ -33,8 +33,13 @@ const TableRowComponent = ({
 
   // Helper function to format values to 2 decimal points
   const formatValueToTwoDecimals = (value) => {
-    return parseFloat(value || 0).toFixed(2);
+    const number = parseFloat(value || 0);
+    if (isNaN(number)) {
+      return "0.00";
+    }
+    return number.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
+  
 
   const aggregateMonthData = (month, item) => {
     const initialData = {

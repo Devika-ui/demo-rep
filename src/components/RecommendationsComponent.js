@@ -63,8 +63,8 @@ const RecommendationsComponent = ({ selectedCSP }) => {
                   <div className="content">
                     <div className="price1">
                       {currencyPreference === "start"
-                        ? `${currencySymbol}${rec.value.toFixed(2)}`
-                        : `${rec.value.toFixed(2)}${currencySymbol}`}
+                         ? `${currencySymbol}${rec.value.toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                         : `${rec.value.toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
                     </div>
                     <div className="savings">Savings Potential</div>
                   </div>
@@ -75,8 +75,8 @@ const RecommendationsComponent = ({ selectedCSP }) => {
               <div className="total-savings-text">Total Savings Potential</div>
               <div className="total-savings-amount">
                 {currencyPreference === "start"
-                  ? `${currencySymbol}${totalSavings}`
-                  : `${totalSavings}${currencySymbol}`}
+                   ? `${currencySymbol}${Number(totalSavings).toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                   : `${Number(totalSavings).toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
               </div>
             </div>
           </>

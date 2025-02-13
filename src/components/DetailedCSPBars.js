@@ -54,13 +54,13 @@ const options = (currencySymbol, currencyPreference) => ({
           if (label) {
             label += ": ";
           }
-          let formattedValue = context.raw.toFixed(2);
+          let formattedValue = Number(context.raw).toFixed(2);
           if (currencyPreference === "start") {
-            label += `${currencySymbol}${formattedValue}`;
+          label += `${currencySymbol}${Number(formattedValue).toLocaleString("en-US", {minimumFractionDigits: 2,maximumFractionDigits: 2})}`;
           } else {
-            label += `${formattedValue}${currencySymbol}`;
-          }
-          return label;
+          label += `${Number(formattedValue).toLocaleString("en-US", {minimumFractionDigits: 2,maximumFractionDigits: 2 })}${currencySymbol}`;
+        }
+         return label;
         },
       },
     },

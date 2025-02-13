@@ -140,12 +140,11 @@ const MonthlyCostTrends = ({
             if (value === undefined || value === null) return "NA";
 
             return currencyPreference === "start"
-              ? `${currencySymbol}${value.toFixed(2)}`
-              : `${value.toFixed(2)}${currencySymbol}`;
+              ? `${currencySymbol}${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+              : `${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
           },
         },
       },
-    },
     layout: {
       padding: {
         bottom: -8,

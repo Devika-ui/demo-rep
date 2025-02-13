@@ -224,8 +224,8 @@ const BusinessCostSplit = () => {
             return "NA";
           }
           return currencyPreference === "start"
-            ? `${currencySymbol}${value}`
-            : `${value}${currencySymbol}`;
+            ? `${currencySymbol}${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            : `${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`
         };
         const formattedBoxData = [
           {

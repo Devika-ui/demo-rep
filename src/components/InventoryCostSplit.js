@@ -89,14 +89,16 @@ const InventoryCostSplit = () => {
         const currencyPreference = await componentUtil.getCurrencyPreference();
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const formatCurrency = (value, currencySymbol, currencyPreference) => {
-          if (value === undefined || value === null) {
+          if (value === undefined || value === null || isNaN(parseFloat(value))) {
             return "NA";
           }
-          return currencyPreference === "start"
-            ? `${currencySymbol}${value}`
-            : `${value}${currencySymbol}`;
-        };
+          const numericValue = parseFloat(value);
 
+          return currencyPreference === "start"
+            ? `${currencySymbol}${numericValue.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            : `${numericValue.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`;
+        };
+        
         const formattedData = [
           {
             number: formatCurrency(

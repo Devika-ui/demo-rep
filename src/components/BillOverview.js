@@ -59,7 +59,8 @@ const BillOverview = () => {
   const handleFiltersChange = (newFilters) => {
     setSelectedFilters(newFilters);
   };
-
+  
+  
   useEffect(() => {
     const uniqueApplications = billAllocationData.map((app) => app.name);
     setApplicationNames(uniqueApplications);
@@ -278,14 +279,13 @@ const BillOverview = () => {
               // Add data for each subscription and formatted date
               acc[formattedDate].push({
                 subscriptionName: subscriptionName,
-                onDemandCost: `${item.onDemandCost.toFixed(2)}`,
-                // reservedInstanceCost: `${item.reservedInstanceCost.toFixed(2)}`,
+                onDemandCost: (item.onDemandCost || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                 reservedInstanceCost: item.reservedInstanceCost
-                  ? `${item.reservedInstanceCost.toFixed(2)}`
+                  ? item.reservedInstanceCost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                   : " ",
-                simulatedPayGoCost: `${item.simulatedPayGoCost.toFixed(2)}`,
-                savings: `${item.savings.toFixed(2)}`,
-                totalBill: `${item.totalBill.toFixed(2)}`,
+                simulatedPayGoCost: (item.simulatedPayGoCost || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                savings: (item.savings || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                totalBill: (item.totalBill || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
               });
             });
 
@@ -489,11 +489,11 @@ const BillOverview = () => {
           normalizedVariationData.Normalized_Variation_MoM !== null
             ? normalizedVariationData.Normalized_Variation_MoM.toFixed(2)
             : "0.00";
-        const formatCurrency = (value) => {
-          return currencyPreference === "start"
-            ? `${currencySymbol}${value}` // Symbol at the start
-            : `${value}${currencySymbol}`; // Symbol at the end
-        };
+            const formatCurrency = (value) => {
+              return currencyPreference === "start"
+                ? `${currencySymbol}${Number(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : `${Number(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`;
+            };            
 
         const dataSet1 = [
           { number: formatCurrency(totalSavings), text: "Total Bill" },
@@ -547,15 +547,6 @@ const BillOverview = () => {
   ];
 
   const columns1 = [
-    // { key: "name", label: "Application Name" },
-    // { key: "ownerName", label: "Owner Name" },
-    // { key: "onDemandCost", label: `On Demand Cost(${currencySymbol})` },
-    // {
-    //   key: "reservedInstanceCost",
-    //   label: `Reserved Instances Cost (${currencySymbol})`,
-    // },
-    // { key: "savings", label: `Savings (${currencySymbol})` },
-    // { key: "totalBill", label: `Total Bill (${currencySymbol})` },
     {
       tableTitle: "Total Bill Allocation across Application",
       columnHead1: { key: "applicationName", title: "Application Name" },

@@ -191,10 +191,9 @@ const OverallTotalRealizedSavings = ({
         callbacks: {
           label: function (tooltipItem) {
             const formattedCost =
-              currencyPreference === "start"
-                ? `${currencySymbol}${tooltipItem.raw}`
-                : `${tooltipItem.raw}${currencySymbol}`;
-
+            currencyPreference === "start" 			  
+				   ? `${currencySymbol}${tooltipItem.raw.toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+           : `${tooltipItem.raw.toLocaleString("en-us", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`
             if (tooltipItem.datasetIndex === 1) {
               return `Simulated PAYGO: ${formattedCost}`;
             } else if (tooltipItem.datasetIndex === 0) {
