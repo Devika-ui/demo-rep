@@ -33,7 +33,7 @@ const TableRowComponent = ({
   let transformedData = [];
   const indentLevel = level * indentIncrement;
   const heirarchyLevel = selectedCSP == 100 ? 4 : 3;
-  const dateLevel = selectedCSP == 100 ? 3 : 2;
+  const dateLevel = 4;
 
   const hasNestedData = (item) =>
     Array.isArray(item?.children) && item.children.length > 0;
@@ -603,6 +603,7 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
             />
           </div>
           <div className="cmpCostInv_buttons">
+            <CostsAmortized dialogPaperClass="cmpCostInv_dialogPaper" />
             <Button
               variant="contained"
               className="cmpCostInv_button"
