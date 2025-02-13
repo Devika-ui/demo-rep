@@ -13,8 +13,6 @@ import api from "../api";
 import ShareIcon from "@mui/icons-material/Share";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CloseIcon from "@mui/icons-material/Close";
-import CostsAmortized from "./CostsAmortized";
-
 
 const MAX_NODE_LEVEL = 3;
 
@@ -38,7 +36,11 @@ const RightsizingRecommendationsTableRow = ({
           <React.Fragment key={`${rowKey}-${index}`}>
             <TableRow>
               <TableCell
-                style={{ paddingLeft: indentLevel, color: "5f249f",fontWeight:"bold" }}
+                style={{
+                  paddingLeft: indentLevel,
+                  color: "5f249f",
+                  fontWeight: "bold",
+                }}
                 className="cmpSvcCat_first_cell"
               >
                 {isExpandable && (
@@ -57,12 +59,24 @@ const RightsizingRecommendationsTableRow = ({
               </TableCell>
               {level === MAX_NODE_LEVEL ? (
                 <>
-                  <TableCell style={{color: "#5f249f"}}>{value.number_of_days_low_utilization || "-"}</TableCell>
-                  <TableCell style={{color: "#5f249f"}}>{value["14_day_avg_network_io"] || "-"}</TableCell>
-                  <TableCell style={{color: "#5f249f"}}>{value.Region || "-"}</TableCell>
-                  <TableCell style={{color: "#5f249f"}}>{value.instance_type || "-"}</TableCell>
-                  <TableCell style={{color: "#5f249f"}}>{value["14_day_avg_cpu_utilization"] || "-"}</TableCell>
-                  <TableCell style={{color: "#5f249f"}}>{value.total_estimated_monthly_savings || "-"}</TableCell>
+                  <TableCell style={{ color: "#5f249f" }}>
+                    {value.number_of_days_low_utilization || "-"}
+                  </TableCell>
+                  <TableCell style={{ color: "#5f249f" }}>
+                    {value["14_day_avg_network_io"] || "-"}
+                  </TableCell>
+                  <TableCell style={{ color: "#5f249f" }}>
+                    {value.Region || "-"}
+                  </TableCell>
+                  <TableCell style={{ color: "#5f249f" }}>
+                    {value.instance_type || "-"}
+                  </TableCell>
+                  <TableCell style={{ color: "#5f249f" }}>
+                    {value["14_day_avg_cpu_utilization"] || "-"}
+                  </TableCell>
+                  <TableCell style={{ color: "#5f249f" }}>
+                    {value.total_estimated_monthly_savings || "-"}
+                  </TableCell>
                 </>
               ) : (
                 <>
@@ -87,7 +101,11 @@ const RightsizingRecommendationsTableRow = ({
   );
 };
 
-const RightsizingRecommendationsTable = ({ loading = false, height, width }) => {
+const RightsizingRecommendationsTable = ({
+  loading = false,
+  height,
+  width,
+}) => {
   const [expandedRows, setExpandedRows] = useState({});
   const [formattedData, setFormattedData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -120,12 +138,19 @@ const RightsizingRecommendationsTable = ({ loading = false, height, width }) => 
 
   return (
     <>
-      <Paper className="savings-container5" style={{  padding: "20px",width: "90.5%",marginLeft:"4rem",marginTop:"-1rem" }}>
-        <Typography variant="h6" className="savings-title" >
+      <Paper
+        className="savings-container5"
+        style={{
+          padding: "20px",
+          width: "90.5%",
+          marginLeft: "4rem",
+          marginTop: "-1rem",
+        }}
+      >
+        <Typography variant="h6" className="savings-title">
           Estimated Savings for Right-sizing Recommendations
         </Typography>
         <div className="cmpSR_buttons">
-          <CostsAmortized dialogPaperClass="cmpCostInv_dialogPaper" />
           <Button
             variant="contained"
             className="cmpSRCustomize_button"
@@ -152,8 +177,8 @@ const RightsizingRecommendationsTable = ({ loading = false, height, width }) => 
           ) : (
             <TableContainer style={{ maxHeight: "400px", overflowY: "auto" }}>
               <Table stickyHeader>
-                <TableHead >
-                  <TableRow >
+                <TableHead>
+                  <TableRow>
                     <TableCell>Resource Name</TableCell>
                     <TableCell>Low Utilization Days</TableCell>
                     <TableCell>Avg Network IO</TableCell>
@@ -186,7 +211,10 @@ const RightsizingRecommendationsTable = ({ loading = false, height, width }) => 
             <IconButton className="close-overlay" onClick={handleOverlayClose}>
               <CloseIcon />
             </IconButton>
-            <TableContainer className="CmpSrtable_container2" style={{maxHeight:"440px"}}>
+            <TableContainer
+              className="CmpSrtable_container2"
+              style={{ maxHeight: "440px" }}
+            >
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>

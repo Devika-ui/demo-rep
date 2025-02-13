@@ -18,7 +18,6 @@ import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CloseIcon from "@mui/icons-material/Close";
 import api from "../api";
 import "../css/components/SavingsRecommendations.css";
-import CostsAmortized from "./CostsAmortized";
 
 const SavingsRecommendations = () => {
   const [data, setData] = useState({});
@@ -55,14 +54,20 @@ const SavingsRecommendations = () => {
 
         {/* Buttons Section */}
         <div className="cmpSR_buttons">
-          <CostsAmortized dialogPaperClass="cmpCostInv_dialogPaper" />
-          <Button variant="contained" className="cmpSRCustomize_button" color="inherit">
+          <Button
+            variant="contained"
+            className="cmpSRCustomize_button"
+            color="inherit"
+          >
             Customize Report
           </Button>
           <IconButton className="cmpSR_Sharebutton">
             <ShareIcon />
           </IconButton>
-          <IconButton onClick={() => setOverlayOpen(true)} className="cmpSR_fullscreenButton">
+          <IconButton
+            onClick={() => setOverlayOpen(true)}
+            className="cmpSR_fullscreenButton"
+          >
             <FullscreenIcon />
           </IconButton>
         </div>
@@ -73,7 +78,9 @@ const SavingsRecommendations = () => {
             <TableHead>
               <TableRow className="table-header">
                 <TableCell className="table-header-cell">Account</TableCell>
-                <TableCell className="table-header-cell">Estimated Savings ($)</TableCell>
+                <TableCell className="table-header-cell">
+                  Estimated Savings ($)
+                </TableCell>
                 <TableCell className="table-header-cell">Name</TableCell>
                 <TableCell className="table-header-cell">Solution</TableCell>
               </TableRow>
@@ -81,19 +88,33 @@ const SavingsRecommendations = () => {
             <TableBody>
               {Object.keys(data).map((account) => {
                 const services = data[account] || {};
-                const totalSavings = Object.values(services).reduce((sum, service) => sum + (service.Estimatedsavings || 0), 0);
+                const totalSavings = Object.values(services).reduce(
+                  (sum, service) => sum + (service.Estimatedsavings || 0),
+                  0
+                );
 
                 return (
                   <React.Fragment key={account}>
                     {/* Account Row */}
                     <TableRow className="account-row">
                       <TableCell>
-                        <IconButton size="small" onClick={() => toggleExpand(account)}>
-                          {expandedAccounts[account] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        <IconButton
+                          size="small"
+                          onClick={() => toggleExpand(account)}
+                        >
+                          {expandedAccounts[account] ? (
+                            <ExpandLessIcon />
+                          ) : (
+                            <ExpandMoreIcon />
+                          )}
                         </IconButton>
                         <b className="account-name">{account}</b>
                       </TableCell>
-                      <TableCell><b style={{ color: "#5F249F" }}>${totalSavings.toFixed(2)}</b></TableCell>
+                      <TableCell>
+                        <b style={{ color: "#5F249F" }}>
+                          ${totalSavings.toFixed(2)}
+                        </b>
+                      </TableCell>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
                     </TableRow>
@@ -104,10 +125,18 @@ const SavingsRecommendations = () => {
                         const serviceData = services[service] || {};
                         return (
                           <TableRow key={service} className="service-row">
-                            <TableCell className="service-cell">{service}</TableCell>
-                            <TableCell className="service-cell">${(serviceData.Estimatedsavings || 0).toFixed(2)}</TableCell>
-                            <TableCell className="service-cell">{serviceData.name || "N/A"}</TableCell>
-                            <TableCell className="service-cell">{serviceData.description || "N/A"}</TableCell>
+                            <TableCell className="service-cell">
+                              {service}
+                            </TableCell>
+                            <TableCell className="service-cell">
+                              ${(serviceData.Estimatedsavings || 0).toFixed(2)}
+                            </TableCell>
+                            <TableCell className="service-cell">
+                              {serviceData.name || "N/A"}
+                            </TableCell>
+                            <TableCell className="service-cell">
+                              {serviceData.description || "N/A"}
+                            </TableCell>
                           </TableRow>
                         );
                       })}
@@ -123,7 +152,10 @@ const SavingsRecommendations = () => {
       {isOverlayOpen && (
         <div className="overlay overlay-mode">
           <div className="service_overlay_content">
-            <IconButton className="close-overlay" onClick={() => setOverlayOpen(false)}>
+            <IconButton
+              className="close-overlay"
+              onClick={() => setOverlayOpen(false)}
+            >
               <CloseIcon />
             </IconButton>
             <TableContainer className="CmpSrtable_container2">
@@ -131,26 +163,44 @@ const SavingsRecommendations = () => {
                 <TableHead>
                   <TableRow className="table-header">
                     <TableCell className="table-header-cell">Account</TableCell>
-                    <TableCell className="table-header-cell">Estimated Savings ($)</TableCell>
+                    <TableCell className="table-header-cell">
+                      Estimated Savings ($)
+                    </TableCell>
                     <TableCell className="table-header-cell">Name</TableCell>
-                    <TableCell className="table-header-cell">Solution</TableCell>
+                    <TableCell className="table-header-cell">
+                      Solution
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {Object.keys(data).map((account) => {
                     const services = data[account] || {};
-                    const totalSavings = Object.values(services).reduce((sum, service) => sum + (service.Estimatedsavings || 0), 0);
+                    const totalSavings = Object.values(services).reduce(
+                      (sum, service) => sum + (service.Estimatedsavings || 0),
+                      0
+                    );
 
                     return (
                       <React.Fragment key={account}>
                         <TableRow className="account-row">
                           <TableCell>
-                            <IconButton size="small" onClick={() => toggleExpand(account)}>
-                              {expandedAccounts[account] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                            <IconButton
+                              size="small"
+                              onClick={() => toggleExpand(account)}
+                            >
+                              {expandedAccounts[account] ? (
+                                <ExpandLessIcon />
+                              ) : (
+                                <ExpandMoreIcon />
+                              )}
                             </IconButton>
                             <b className="account-name">{account}</b>
                           </TableCell>
-                          <TableCell><b style={{ color: "#5F249F" }}>${totalSavings.toFixed(2)}</b></TableCell>
+                          <TableCell>
+                            <b style={{ color: "#5F249F" }}>
+                              ${totalSavings.toFixed(2)}
+                            </b>
+                          </TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                         </TableRow>
@@ -159,10 +209,21 @@ const SavingsRecommendations = () => {
                             const serviceData = services[service] || {};
                             return (
                               <TableRow key={service} className="service-row">
-                                <TableCell className="service-cell">{service}</TableCell>
-                                <TableCell className="service-cell">${(serviceData.Estimatedsavings || 0).toFixed(2)}</TableCell>
-                                <TableCell className="service-cell">{serviceData.name || "N/A"}</TableCell>
-                                <TableCell className="service-cell">{serviceData.description || "N/A"}</TableCell>
+                                <TableCell className="service-cell">
+                                  {service}
+                                </TableCell>
+                                <TableCell className="service-cell">
+                                  $
+                                  {(serviceData.Estimatedsavings || 0).toFixed(
+                                    2
+                                  )}
+                                </TableCell>
+                                <TableCell className="service-cell">
+                                  {serviceData.name || "N/A"}
+                                </TableCell>
+                                <TableCell className="service-cell">
+                                  {serviceData.description || "N/A"}
+                                </TableCell>
                               </TableRow>
                             );
                           })}

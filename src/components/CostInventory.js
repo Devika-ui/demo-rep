@@ -603,7 +603,6 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
             />
           </div>
           <div className="cmpCostInv_buttons">
-            <CostsAmortized dialogPaperClass="cmpCostInv_dialogPaper" />
             <Button
               variant="contained"
               className="cmpCostInv_button"
