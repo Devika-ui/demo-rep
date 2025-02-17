@@ -20,6 +20,7 @@
 .filter-options-container {
   display: flex;
   flex-wrap: wrap; /* Allow items to wrap to the next line */
+  overflow: auto;
 }
 
 .modal-content {
@@ -30,7 +31,7 @@
   width: 100%;
   max-width: 800px;
   max-height: calc(100% - 150px);
-  overflow: auto;
+  overflow: hidden;
   padding: 20px;
   margin: 0;
   z-index: 1050;

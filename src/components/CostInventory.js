@@ -5,7 +5,6 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { CircularProgress } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -17,6 +16,7 @@ import { MultiSelect } from "react-multi-select-component";
 import "../css/components/CostInventory.css";
 import api from "../api";
 import ShareButton from "./ShareButton";
+import CustomizedReportButton from "./CustomizedReportButton";
 
 const TableRowComponent = ({
   data,
@@ -333,8 +333,9 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
                         monthData[uniqueMonth] = {
                           TotalBill: 0,
                           OnDemandCost: 0,
-                          CommitmentsCost: 0,
-                          Savings: 0,
+                          ReservationCost: 0,
+                          SavingsPlanCost: 0,
+                          MarketPurchaseCostCost: 0,
                         };
                       }
 
@@ -342,15 +343,17 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
                         Date: date,
                         TotalBill,
                         OnDemandCost,
-                        CommitmentsCost,
-                        Savings,
+                        ReservationCost,
+                        SavingsPlanCost,
+                        MarketPurchaseCostCost,
                       } = resourceDetails;
                       const month = new Date(date).toISOString().slice(0, 7);
                       monthData[month] = {
                         TotalBill,
                         OnDemandCost,
-                        CommitmentsCost,
-                        Savings,
+                        ReservationCost,
+                        SavingsPlanCost,
+                        MarketPurchaseCostCost,
                       };
 
                       // Convert month data into an array for the resource
@@ -378,8 +381,9 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
                       monthData[uniqueMonth] = {
                         TotalBill: 0,
                         OnDemandCost: 0,
-                        CommitmentsCost: 0,
-                        Savings: 0,
+                        ReservationCost: 0,
+                        SavingsPlanCost: 0,
+                        MarketPurchaseCostCost: 0,
                       };
                     }
 
@@ -387,15 +391,17 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
                       Date: date,
                       TotalBill,
                       OnDemandCost,
-                      CommitmentsCost,
-                      Savings,
+                      ReservationCost,
+                      SavingsPlanCost,
+                      MarketPurchaseCostCost,
                     } = resources;
                     const month = new Date(date).toISOString().slice(0, 7);
                     monthData[month] = {
                       TotalBill,
                       OnDemandCost,
-                      CommitmentsCost,
-                      Savings,
+                      ReservationCost,
+                      SavingsPlanCost,
+                      MarketPurchaseCostCost,
                     };
 
                     // Convert month data into an array for the resource
@@ -572,6 +578,66 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
     fetchData();
   }, [selectedCSP, billingMonth]);
 
+  const [sortedTableData, setSortedTableData] = useState(tableData);
+  const [currentSort, setCurrentSort] = useState({ field: "", direction: "" });
+
+  const handleSortData = (field, direction) => {
+    const aggregatedData = Object.entries(tableData).map(
+      ([subscriptionName, data]) => {
+        let TotalBill = 0;
+        let OnDemandCost = 0;
+        let ReservationCost = 0;
+        let SavingsPlanCost = 0;
+        let MarketPurchaseCost = 0;
+
+        const calculateAggregation = (nodes) => {
+          nodes.forEach((node) => {
+            if (node.children && node.children.length > 0) {
+              calculateAggregation(node.children);
+            } else {
+              TotalBill += node.TotalBill || 0;
+              OnDemandCost += node.OnDemandCost || 0;
+              SavingsPlanCost += node.SavingsPlanCost || 0;
+              ReservationCost += node.ReservationCost || 0;
+              MarketPurchaseCost += node.MarketPurchaseCostCost | 0;
+            }
+          });
+        };
+
+        calculateAggregation(data);
+
+        return {
+          subscriptionName,
+          data,
+          aggregatedData: {
+            TotalBill,
+            OnDemandCost,
+            SavingsPlanCost,
+            ReservationCost,
+            MarketPurchaseCost,
+          },
+        };
+      }
+    );
+
+    const sortedData = [...aggregatedData].sort((a, b) => {
+      const valueA = a.aggregatedData?.[field] || 0;
+      const valueB = b.aggregatedData?.[field] || 0;
+
+      return direction === "asc" ? valueA - valueB : valueB - valueA;
+    });
+
+    const newSortedTableData = Object.fromEntries(
+      sortedData.map(({ subscriptionName, data }) => [subscriptionName, data])
+    );
+    setSortedTableData(newSortedTableData);
+    setCurrentSort({ field, direction });
+  };
+
+  useEffect(() => {
+    setSortedTableData(null);
+  }, [tableData]);
+
   return (
     <Box className="cmpCostInv_container">
       <div className="cmpCostInv_header">
@@ -602,13 +668,13 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
             />
           </div>
           <div className="cmpCostInv_buttons">
-            <Button
-              variant="contained"
+            <CustomizedReportButton
+              handleSortData={handleSortData}
+              sortOptions={columnOptions}
+              currentSort={currentSort}
               className="cmpCostInv_button"
-              color="inherit"
-            >
-              Customize Report
-            </Button>
+            />
+
             <ShareButton
               tableData={flattenedData}
               tableRef={tableRef}
@@ -657,19 +723,21 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
             </TableHead>
             <TableBody>
               {/* Render nested levels */}
-              {Object.entries(tableData).map(([subscriptionName, data]) => (
-                <TableRowComponent
-                  data={data || []}
-                  level={0}
-                  toggleRow={toggleRow}
-                  expandedRows={expandedRows}
-                  rowKey={subscriptionName}
-                  indentIncrement={20}
-                  selectedColumns={columns}
-                  uniqueMonths={uniqueMonths}
-                  selectedCSP={selectedCSP}
-                />
-              ))}
+              {Object.entries(sortedTableData ?? tableData).map(
+                ([subscriptionName, data]) => (
+                  <TableRowComponent
+                    data={data || []}
+                    level={0}
+                    toggleRow={toggleRow}
+                    expandedRows={expandedRows}
+                    rowKey={subscriptionName}
+                    indentIncrement={20}
+                    selectedColumns={columns}
+                    uniqueMonths={uniqueMonths}
+                    selectedCSP={selectedCSP}
+                  />
+                )
+              )}
             </TableBody>
           </Table>
         </TableContainer>

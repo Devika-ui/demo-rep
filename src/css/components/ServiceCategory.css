@@ -69,7 +69,7 @@
   width: 200px;
   padding: 4px 8px !important;
   overflow: hidden;
-  text-align: center !important;
+  text-align: left !important;
   color: rgb(82, 32, 134) !important;
   border-right: 1px solid #ddd;
   position: sticky !important;
