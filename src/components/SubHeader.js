@@ -219,26 +219,28 @@ const SubHeader = ({
                   marginLeft: "350px",
                 }}
               >
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: "18px",
-                    paddingRight: "5px",
-                    marginTop: "5px",
-                  }}
-                >
+              <div style={{ display: "flex", alignItems: "center",marginLeft: "4rem" }}>
+               <div
+                   style={{
+                   fontWeight: "bold",
+                  fontSize: "18px",
+                  paddingRight: "5px",
+                  marginTop: "5px",
+                   }}
+                  >
                   Azure
-                </div>
-                <img
-                  src={FilterIcon}
-                  alt="Filter"
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    marginRight: "3px",
-                    marginTop: "5px",
-                  }}
+                  </div>
+                 <img
+                    src={FilterIcon}
+                    alt="Filter"
+                   style={{
+                      width: "20px",
+                      height: "20px",
+                      marginLeft: "auto",
+                      marginTop: "5px",
+                   }}
                 />
+               </div>
                 <AWSFilter
                   onButtonClick={onButtonClick}
                   onFiltersChange={onFiltersChange}
@@ -255,26 +257,28 @@ const SubHeader = ({
                   marginLeft: "350px",
                 }}
               >
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: "18px",
-                    paddingRight: "5px",
-                    marginTop: "5px",
-                  }}
-                >
-                  AWS
-                </div>
-                <img
-                  src={FilterIcon}
-                  alt="Filter"
-                  style={{
+                 <div style={{ display: "flex", alignItems: "center",marginLeft: "4.5rem" }}>
+                  <div
+                       style={{
+                       fontWeight: "bold",
+                       fontSize: "18px",
+                       paddingRight: "5px",
+                       marginTop: "5px",
+                      }}
+                   >
+                    AWS
+                  </div>
+                  <img
+                    src={FilterIcon}
+                    alt="Filter"
+                    style={{
                     width: "20px",
                     height: "20px",
-                    marginRight: "5px",
-                    marginTop: "5px",
-                  }}
-                />
+                    marginLeft: "auto",
+                     marginTop: "5px",
+                    }}
+                   />
+                </div>
                 <AWSFilter
                   onButtonClick={onButtonClick}
                   onFiltersChange={onFiltersChange}
