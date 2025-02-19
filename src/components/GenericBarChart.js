@@ -1,3 +1,4 @@
+
 import React from "react";
 import Paper from "@mui/material/Paper";
 import {
@@ -10,10 +11,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Typography from "@mui/material/Typography";
-
 import "../css/components/GenericBarChart.css";
 
-// Custom legend component
 const CustomLegend = ({ payload }) => {
   return (
     <div className="cmpGBChart_legendContainer">
@@ -32,51 +31,33 @@ const CustomLegend = ({ payload }) => {
 
 const GenericBarChart = ({
   title,
-  data,
+  data = [],
   yAxisLabel,
   yAxisTicks = [0, 1000, 2000, 3000],
   yAxisDomain = [0, 1000],
-  bars,
-  children,
+  bars = [],
+  chartStyle = {},
+  containerStyle = {},
 }) => {
-  // Custom tick formatter for YAxis
-
   const formatYAxis = (tickItem) => {
-    if (yAxisTicks.some((tick) => tick >= 1000)) {
-      return `${tickItem / 1000}k`;
-    }
-    return tickItem.toString();
+    return yAxisTicks.some((tick) => tick >= 1000) ? `${tickItem / 1000}k` : tickItem.toString();
   };
 
   return (
-    <Paper className="cmpGBChart_container">
-      <div className="cmpGBChart_dropdownContainer">{children}</div>
+    <Paper className="cmpGBChart_container" style={containerStyle}>
       <Typography className="cmpGBChart_heading">{title}</Typography>
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width={chartStyle.width || "100%"} height={chartStyle.height || 350}>
         <BarChart
           data={data}
           margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-          barGap={8} // Adjust the value to increase or decrease the gap between bars
+          barGap={chartStyle.barGap || 8}
         >
-          <XAxis dataKey="subscriptionName" tick={{ fontSize: 8 }} />
-          <YAxis
-            tick={{ fontSize: 12 }}
-            domain={yAxisDomain}
-            ticks={yAxisTicks}
-            tickFormatter={formatYAxis}
-            label={{
-              value: yAxisLabel,
-              angle: -90,
-              position: "insideLeft",
-              fontSize: 12,
-            }}
-            axisLine={false}
-            tickLine={false}
-          />
+          <XAxis dataKey="name" />
+          <YAxis label={{ value: yAxisLabel, angle: -90, position: "insideLeft" }} tickFormatter={formatYAxis} />
           <Tooltip />
           <Legend content={<CustomLegend />} />
           {bars.map((bar, index) => (
-            <Bar key={index} {...bar} />
+            <Bar key={index} dataKey={bar.key} fill={bar.color} stackId={bar.stackId} />
           ))}
         </BarChart>
       </ResponsiveContainer>

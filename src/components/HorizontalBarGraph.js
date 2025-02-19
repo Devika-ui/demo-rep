@@ -14,11 +14,7 @@ import {
 import Typography from "@mui/material/Typography";
 import "../css/components/HorizontalBarGraph.css";
 
-// Custom Legend Component
-const CustomLegend = (props) => {
-  const { payload } = props;
-
-  return (
+const CustomLegend = ({ payload }) => (
     <div className="cmpHBgraph_legend">
       {payload.map((entry, index) => (
         <div key={`item-${index}`} className="cmpHBgraph_legendItem">
@@ -31,24 +27,21 @@ const CustomLegend = (props) => {
       ))}
     </div>
   );
-};
 
 const HorizontalBarGraph = ({
   data,
   title,
-  width,
-  height,
+  barchartStyle,
   xAxisLabel,
   yAxisLabel,
   barName,
 }) => {
   return (
     <Paper
-      className="cmpHBgraph_container"
-      style={{ width: width, height: height }}
-    >
+      className="cmpHBgraph_container" style={barchartStyle}>
       <Typography className="cmpHBgraph_heading">{title}</Typography>
-      <ResponsiveContainer width="100%" height={height - 50}>
+      <ResponsiveContainer width="100%"  height={barchartStyle.height - 50}>
+      {data && data.length > 0 ? (
         <BarChart
           layout="vertical"
           data={data}
@@ -90,6 +83,9 @@ const HorizontalBarGraph = ({
           />
           <Bar dataKey="count" fill="#330072" name={barName} barSize={15} />
         </BarChart>
+        ) : (
+         <div className="cmpHBgraph_noData">No data available</div>
+        )}
       </ResponsiveContainer>
     </Paper>
   );
@@ -112,8 +108,7 @@ HorizontalBarGraph.propTypes = {
 
 HorizontalBarGraph.defaultProps = {
   title: "Orphaned Snapshots across locations",
-  width: "50%",
-  height: 373,
+  barchartStyle: { width: "50%", height: 373 },
   xAxisLabel: "Count of Snapshots",
   yAxisLabel: "Location",
   barName: "Disk Count",
