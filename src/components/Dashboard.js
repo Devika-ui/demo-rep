@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Grid, Box, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
@@ -19,16 +19,23 @@ import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 
 const Dashboard = () => {
-  // console.log("seession", sessionStorage["cspId"]);
-  if (sessionStorage["cspId"] == undefined)
-    sessionStorage.setItem("overviewPage", true);
   const [showStackBars, setShowStackBars] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState(
-    componentUtil.getSelectedCSP()
-  );
+  const [selectedProvider, setSelectedProvider] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [billingMonth, setBillingMonth] = useState([]);
   const [dates, setDates] = useState(null);
+  const isButtonClicked = useRef(false);
+  // Run only if button click hasn't occurred
+  useEffect(() => {
+    if (!isButtonClicked.current) {
+      sessionStorage.removeItem("cspId");
+
+      if (!sessionStorage.getItem("cspId")) {
+        sessionStorage.setItem("overviewPage", true);
+      }
+      setSelectedProvider(componentUtil.getSelectedCSP());
+    }
+  }, []);
 
   /*Filter Changes*/
   let inputData = selectedFilters;
@@ -39,8 +46,6 @@ const Dashboard = () => {
   };
 
   const navigate = useNavigate();
-
-  // console.log("selectedpp", selectedProvider);
 
   const handleMonthChange = (months) => {
     setBillingMonth(months);

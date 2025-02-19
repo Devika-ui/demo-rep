@@ -791,7 +791,7 @@ const api = {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
       },
-      customerId: window.selectedCustomerId,
+      customerId: await componentUtil.getSelectedCustomerID(),
     };
 
     try {
@@ -823,7 +823,7 @@ const api = {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
       },
-      customerId: window.selectedCustomerId,
+      customerId: await componentUtil.getSelectedCustomerID(),
     };
 
     try {
@@ -855,7 +855,7 @@ const api = {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
       },
-      customerId: window.selectedCustomerId,
+      customerId: await componentUtil.getSelectedCustomerID(),
     };
 
     try {
@@ -887,7 +887,7 @@ const api = {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
       },
-      customerId: window.selectedCustomerId,
+      customerId: await componentUtil.getSelectedCustomerID(),
     };
 
     try {
@@ -981,7 +981,7 @@ const api = {
         BillingMonthStartDate: billingMonth,
         ...selectedFilters,
       },
-      customerId: window.selectedCustomerId,
+      customerId: await componentUtil.getSelectedCustomerID(),
     };
 
     try {
@@ -1305,7 +1305,7 @@ const api = {
     }
   },
 
-  getCountUnattachedDisk1: async () => {
+  getCountUnattachedDisk1: async (selectedFilters) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/manageddisk/totalcount`,
@@ -1318,8 +1318,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              Subscription: ["Subscription1"],
-              BusinessUnit: [],
+              ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1348,7 +1347,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              Subscription: ["Subscription2"],
+              tags_AppID_AppName: ["Demo-Application103"],
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1376,7 +1375,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              Subscription: ["Subscription1"],
+              tags_AppID_AppName: ["Demo-Application103"],
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1405,7 +1404,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              Subscription: ["Subscription2", "Subscription1"],
+              tags_AppID_AppName: ["Demo-Application103"],
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1433,7 +1432,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              Subscription: ["Subscription2"],
+              tags_AppID_AppName: ["Demo-Application103"],
               // BusinessUnit: ["BU574862", "BU425929"],
               // Application: ["Demo-Application199", "Demo-Application212"],
               // Owner: [
@@ -1468,7 +1467,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              Subscription: ["Subscription2"],
+              tags_AppID_AppName: ["Demo-Application103"],
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1496,7 +1495,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              Subscription: ["Subscription2"],
+              tags_AppID_AppName: ["Demo-Application103"],
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1524,7 +1523,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              Subscription: ["Subscription2", "Subscription1"],
+              tags_AppID_AppName: ["Demo-Application103"],
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
