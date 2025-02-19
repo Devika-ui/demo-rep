@@ -1006,7 +1006,7 @@ const api = {
     }
   },
 
-  getMonthBillAndIncreasedPercentage: async (billingMonth) => {
+  getMonthBillAndIncreasedPercentage: async (selectedFilters, billingMonth) => {
     try {
       const response = await fetch(`${apiUrl}/overview/monthly/spend/actual`, {
         method: "POST",
@@ -1018,6 +1018,7 @@ const api = {
           CloudServiceProvider: componentUtil.getSelectedCSP(),
           filters: {
             BillingMonthStartDate: billingMonth,
+            ...selectedFilters,
           },
           customerId: await componentUtil.getSelectedCustomerID(),
         }),
@@ -1032,7 +1033,7 @@ const api = {
     }
   },
 
-  getTotalResouces: async (billingMonth) => {
+  getTotalResouces: async (selectedFilters, billingMonth) => {
     try {
       const response = await fetch(
         `${apiUrl}/inventorycostsplit/header/totalresources`,
@@ -1046,6 +1047,7 @@ const api = {
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
               BillingMonthStartDate: billingMonth,
+              ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1088,7 +1090,13 @@ const api = {
     }
   },
 
-  getCloudInventory: async (subscription, page, selectedCSP, billingMonth) => {
+  getCloudInventory: async (
+    subscription,
+    page,
+    selectedCSP,
+    billingMonth,
+    selectedFilters
+  ) => {
     try {
       let keyName = "SubscriptionName";
       if (selectedCSP == 110) {
@@ -1106,6 +1114,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
+              ...selectedFilters,
               BillingMonthStartDate: billingMonth,
               [keyName]: [subscription],
             },

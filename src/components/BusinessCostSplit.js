@@ -196,7 +196,7 @@ const BusinessCostSplit = () => {
     };
 
     fetchData();
-  }, [selectedProvider, billingMonth]);
+  }, [selectedProvider, billingMonth, inputData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -224,8 +224,14 @@ const BusinessCostSplit = () => {
             return "NA";
           }
           return currencyPreference === "start"
-            ? `${currencySymbol}${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-            : `${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`
+            ? `${currencySymbol}${value.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`
+            : `${value.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}${currencySymbol}`;
         };
         const formattedBoxData = [
           {
@@ -272,7 +278,7 @@ const BusinessCostSplit = () => {
       }
     };
     fetchData();
-  }, [selectedProvider, billingMonth]);
+  }, [selectedProvider, billingMonth, inputData]);
 
   useEffect(() => {
     const fetchBillAllocationData = async () => {
@@ -432,7 +438,7 @@ const BusinessCostSplit = () => {
       }
     };
     fetchBillAllocationData();
-  }, [selectedProvider, billingMonth]);
+  }, [selectedProvider, billingMonth, inputData]);
 
   // const columns1 = [
   //   { key: "ownerName", label: "Owner Name" },

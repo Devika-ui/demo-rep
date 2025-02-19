@@ -143,7 +143,7 @@ const TableRowComponent = ({
   );
 };
 
-const CostInventory = ({ selectedCSP, billingMonth }) => {
+const CostInventory = ({ selectedCSP, billingMonth, inputData }) => {
   const [expandedRows, setExpandedRows] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [groupBy, setGroupBy] = useState([
@@ -486,7 +486,8 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
         subscriptionName,
         page,
         selectedCSP,
-        billingMonth
+        billingMonth,
+        inputData
       );
       window.apiData[subscriptionName] = appendData(
         window.apiData[subscriptionName] || {},
@@ -576,7 +577,7 @@ const CostInventory = ({ selectedCSP, billingMonth }) => {
     };
 
     fetchData();
-  }, [selectedCSP, billingMonth]);
+  }, [selectedCSP, billingMonth, inputData]);
 
   const [sortedTableData, setSortedTableData] = useState(tableData);
   const [currentSort, setCurrentSort] = useState({ field: "", direction: "" });

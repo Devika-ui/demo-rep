@@ -59,8 +59,7 @@ const BillOverview = () => {
   const handleFiltersChange = (newFilters) => {
     setSelectedFilters(newFilters);
   };
-  
-  
+
   useEffect(() => {
     const uniqueApplications = billAllocationData.map((app) => app.name);
     setApplicationNames(uniqueApplications);
@@ -239,7 +238,7 @@ const BillOverview = () => {
       }
     };
     fetchBillAllocationData();
-  }, [selectedProvider, billingMonth]);
+  }, [selectedProvider, billingMonth, inputData]);
 
   useEffect(() => {
     const fetchInvoiceViewData = async () => {
@@ -279,13 +278,30 @@ const BillOverview = () => {
               // Add data for each subscription and formatted date
               acc[formattedDate].push({
                 subscriptionName: subscriptionName,
-                onDemandCost: (item.onDemandCost || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                onDemandCost: (item.onDemandCost || 0).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }),
                 reservedInstanceCost: item.reservedInstanceCost
-                  ? item.reservedInstanceCost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                  ? item.reservedInstanceCost.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
                   : " ",
-                simulatedPayGoCost: (item.simulatedPayGoCost || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                savings: (item.savings || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                totalBill: (item.totalBill || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                simulatedPayGoCost: (
+                  item.simulatedPayGoCost || 0
+                ).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }),
+                savings: (item.savings || 0).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }),
+                totalBill: (item.totalBill || 0).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }),
               });
             });
 
@@ -339,7 +355,7 @@ const BillOverview = () => {
       }
     };
     fetchInvoiceViewData();
-  }, [selectedProvider, billingMonth]);
+  }, [selectedProvider, inputData, billingMonth]);
 
   useEffect(() => {
     const fetchTotalBillVsSimulatedPaygoData = async () => {
@@ -411,7 +427,7 @@ const BillOverview = () => {
     };
 
     fetchTotalBillVsSimulatedPaygoData();
-  }, [selectedProvider, billingMonth]);
+  }, [selectedProvider, inputData, billingMonth]);
 
   useEffect(() => {
     const fetchTopServiesApplicationsData = async () => {
@@ -457,7 +473,7 @@ const BillOverview = () => {
     };
 
     fetchTopServiesApplicationsData();
-  }, [selectedProvider, billingMonth]);
+  }, [selectedProvider, billingMonth, inputData]);
 
   useEffect(() => {
     const fetchSavingsNormalizedVariationData = async () => {
@@ -489,11 +505,17 @@ const BillOverview = () => {
           normalizedVariationData.Normalized_Variation_MoM !== null
             ? normalizedVariationData.Normalized_Variation_MoM.toFixed(2)
             : "0.00";
-            const formatCurrency = (value) => {
-              return currencyPreference === "start"
-                ? `${currencySymbol}${Number(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                : `${Number(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`;
-            };            
+        const formatCurrency = (value) => {
+          return currencyPreference === "start"
+            ? `${currencySymbol}${Number(value).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`
+            : `${Number(value).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}${currencySymbol}`;
+        };
 
         const dataSet1 = [
           { number: formatCurrency(totalSavings), text: "Total Bill" },
@@ -523,7 +545,7 @@ const BillOverview = () => {
     };
 
     fetchSavingsNormalizedVariationData();
-  }, [selectedProvider, billingMonth]);
+  }, [selectedProvider, inputData, billingMonth]);
 
   // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {

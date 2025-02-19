@@ -19,6 +19,7 @@ const InventoryCostSplit = () => {
   const [loading, setLoading] = useState(true);
   const [billingMonth, setBillingMonth] = useState([]);
 
+  let inputData = selectedFilters;
   const handleButtonClick = (value) => {
     componentUtil.setSelectedCSP(value);
     setSelectedProvider(value);
@@ -80,8 +81,9 @@ const InventoryCostSplit = () => {
         setLoading(true);
         setDataSet1([]);
         const [monthBillData, totalResourcesData] = await Promise.all([
-          api.getMonthBillAndIncreasedPercentage(billingMonth),
-          api.getTotalResouces(billingMonth),
+          api.getMonthBillAndIncreasedPercentage(inputData, billingMonth),
+          api.getTotalResouces(inputData, billingMonth),
+          inputData,
         ]);
 
         const { firstMonthCost, growthPercentage } = monthBillData[0];
@@ -89,16 +91,26 @@ const InventoryCostSplit = () => {
         const currencyPreference = await componentUtil.getCurrencyPreference();
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const formatCurrency = (value, currencySymbol, currencyPreference) => {
-          if (value === undefined || value === null || isNaN(parseFloat(value))) {
+          if (
+            value === undefined ||
+            value === null ||
+            isNaN(parseFloat(value))
+          ) {
             return "NA";
           }
           const numericValue = parseFloat(value);
 
           return currencyPreference === "start"
-            ? `${currencySymbol}${numericValue.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-            : `${numericValue.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`;
+            ? `${currencySymbol}${numericValue.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`
+            : `${numericValue.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}${currencySymbol}`;
         };
-        
+
         const formattedData = [
           {
             number: formatCurrency(
@@ -122,7 +134,7 @@ const InventoryCostSplit = () => {
     };
 
     fetchDataAndFormat();
-  }, [selectedProvider, billingMonth]);
+  }, [selectedProvider, billingMonth, inputData]);
 
   return (
     <div>
@@ -178,6 +190,7 @@ const InventoryCostSplit = () => {
         <CostInventory
           selectedCSP={selectedProvider}
           billingMonth={billingMonth}
+          inputData={inputData}
         />
       </div>
     </div>
