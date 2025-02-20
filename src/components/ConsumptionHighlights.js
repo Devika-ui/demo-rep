@@ -215,16 +215,29 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
           name: { fontSize: "12px" },
           value: { fontSize: "10px" },
         },
+
+        hollow: {
+          size: "40%",
+        },
       },
     },
-    labels: ["Application", "Owner", "Project", "Business Unit", "Environment",...(selectedCSP === 110 ? ["NSSR"] : []),],
+    labels: [
+      "Application",
+      "Owner",
+      "Project",
+      "Business Unit",
+      "Environment",
+      ...(selectedCSP === 110 ? ["NSSR"] : []),
+    ],
     series: [
       (tagCompliance.applicationpercentage * 100).toFixed(2),
       (tagCompliance.ownerpercentage * 100).toFixed(2),
       (tagCompliance.projectpercentage * 100).toFixed(2),
       (tagCompliance.bupercentage * 100).toFixed(2),
       (tagCompliance.environmentpercentage * 100).toFixed(2),
-      ...(selectedCSP === 110 ? [(tagCompliance.NSSRpercentage * 100).toFixed(2)] : [])
+      ...(selectedCSP === 110
+        ? [(tagCompliance.NSSRpercentage * 100).toFixed(2)]
+        : []),
     ],
   };
 
@@ -237,7 +250,9 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
     { name: "% Resource Tagging Project", data: "projectpercentage" },
     { name: "% Resource Tagging Business Unit", data: "bupercentage" },
     { name: "% Resource Tagging Environment", data: "environmentpercentage" },
-    ...(selectedCSP === 110 ? [{ name: "% Resource Tagging NSSR", data: "NSSRpercentage" }] : [])
+    ...(selectedCSP === 110
+      ? [{ name: "% Resource Tagging NSSR", data: "NSSRpercentage" }]
+      : []),
   ];
 
   const handleMenuOpen = (event) => {
@@ -297,24 +312,48 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
               </div>
               <div className="price">
                 {currencyPreference === "start"
-                  ? `${currencySymbol}${(Number(topSubscriptionCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                  : `${(Number(topSubscriptionCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
+                  ? `${currencySymbol}${(
+                      Number(topSubscriptionCost) || 0
+                    ).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}`
+                  : `${(Number(topSubscriptionCost) || 0).toLocaleString(
+                      "en-US",
+                      { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                    )}${currencySymbol}`}
               </div>
             </div>
             <div className="tile" onClick={() => setShowServiceDetails(true)}>
               <div className="tilename">Top Service</div>
               <div className="price">
                 {currencyPreference === "start"
-                    ? `${currencySymbol}${(Number(topServiceCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                    : `${(Number(topServiceCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
+                  ? `${currencySymbol}${(
+                      Number(topServiceCost) || 0
+                    ).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}`
+                  : `${(Number(topServiceCost) || 0).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}${currencySymbol}`}
               </div>
             </div>
             <div className="tile" onClick={() => setApplicationDetails(true)}>
               <div className="tilename">Top Application</div>
               <div className="price">
                 {currencyPreference === "start"
-                   ? `${currencySymbol}${(Number(topApplicationCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                   : `${(Number(topApplicationCost) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${currencySymbol}`}
+                  ? `${currencySymbol}${(
+                      Number(topApplicationCost) || 0
+                    ).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}`
+                  : `${(Number(topApplicationCost) || 0).toLocaleString(
+                      "en-US",
+                      { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+                    )}${currencySymbol}`}
               </div>
             </div>
           </div>
@@ -329,8 +368,8 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                   options={radialBarOptions}
                   series={radialBarOptions.series}
                   type="radialBar"
-                  height="170px"
-                  width="170px"
+                  height="220px"
+                  width="220px"
                 />
               </div>
             </Tooltip>
@@ -458,8 +497,11 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                         </strong>
                         :{" "}
                         <span style={{ color: "orange", fontWeight: "bold" }}>
-                        {currencySymbol}
-                        {service.totalcost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          {currencySymbol}
+                          {service.totalcost.toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
                         </span>
                       </li>
                     ))}
@@ -507,8 +549,11 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                           {currencySymbol}
                           {application.totalcost !== null &&
                           application.totalcost !== undefined
-                          ? application.totalcost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                          : "N/A"}
+                            ? application.totalcost.toLocaleString("en-US", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })
+                            : "N/A"}
                         </span>
                       </li>
                     ))}
@@ -558,8 +603,11 @@ const ConsumptionHighlights = ({ selectedCSP, inputData, billingMonth }) => {
                             marginLeft: "5px",
                           }}
                         >
-                           {currencySymbol}
-                           {subscription.totalcost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          {currencySymbol}
+                          {subscription.totalcost.toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
                         </span>
                       </li>
                     ))}
