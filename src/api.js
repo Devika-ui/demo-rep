@@ -36,15 +36,19 @@ console.log("Moment JS Date", previousMonthStart, currentMonthStart);
 const selectedCSP = componentUtil.getSelectedCSP();
 const api = {
   getCloudProviderList: async () => {
+    const requestBody = {
+      customerId: await componentUtil.getSelectedCustomerID(),
+    };
     try {
       const response = await fetch(
         `${apiUrl}/csp_customers/cloudproviderslist`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
+          body: JSON.stringify(requestBody),
         }
       );
       if (!response.ok) {
@@ -1557,6 +1561,7 @@ const api = {
         },
         body: JSON.stringify({
           flag: flag,
+          customerId: await componentUtil.getSelectedCustomerID(),
         }),
       });
       if (!response.ok) {
