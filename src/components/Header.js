@@ -29,9 +29,9 @@ const Header = ({ onButtonClick }) => {
   };
 
   const logoImageStyle = {
-    imageRendering: "auto", // Prevent image from appearing blurry
+    imageRendering: "auto", 
     width: "13vh",
-    height: "auto",
+    height: "5vh",
   };
 
   const toggleNav = () => {
