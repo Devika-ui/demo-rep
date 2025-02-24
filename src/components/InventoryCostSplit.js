@@ -113,11 +113,11 @@ const InventoryCostSplit = () => {
 
         const formattedData = [
           {
-            number: formatCurrency(
-              `${(firstMonthCost / 1000).toFixed(1)}K`,
+            number: `${formatCurrency(
+              (firstMonthCost / 1000).toFixed(1),
               currencySymbol,
               currencyPreference
-            ),
+            )}K`,            
             text: "Previous Month Total Bill",
           },
           { number: `${growthPercentage.toFixed(2)}%`, text: "Increase Rate" },
