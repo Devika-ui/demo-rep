@@ -1,4 +1,3 @@
-
 import React from "react";
 import Paper from "@mui/material/Paper";
 import {
@@ -12,6 +11,7 @@ import {
 } from "recharts";
 import Typography from "@mui/material/Typography";
 import "../css/components/GenericBarChart.css";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const CustomLegend = ({ payload }) => {
   return (
@@ -31,36 +31,70 @@ const CustomLegend = ({ payload }) => {
 
 const GenericBarChart = ({
   title,
-  data = [],
+  data,
   yAxisLabel,
   yAxisTicks = [0, 1000, 2000, 3000],
   yAxisDomain = [0, 1000],
-  bars = [],
+  bars,
+  children,
   chartStyle = {},
   containerStyle = {},
+  loading = false,
 }) => {
   const formatYAxis = (tickItem) => {
-    return yAxisTicks.some((tick) => tick >= 1000) ? `${tickItem / 1000}k` : tickItem.toString();
+    if (yAxisTicks.some((tick) => tick >= 1000)) {
+      return `${tickItem / 1000}k`;
+    }
+    return tickItem.toString();
   };
 
   return (
     <Paper className="cmpGBChart_container" style={containerStyle}>
-      <Typography className="cmpGBChart_heading">{title}</Typography>
-      <ResponsiveContainer width={chartStyle.width || "100%"} height={chartStyle.height || 350}>
-        <BarChart
-          data={data}
-          margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-          barGap={chartStyle.barGap || 8}
-        >
-          <XAxis dataKey="name" />
-          <YAxis label={{ value: yAxisLabel, angle: -90, position: "insideLeft" }} tickFormatter={formatYAxis} />
-          <Tooltip />
-          <Legend content={<CustomLegend />} />
-          {bars.map((bar, index) => (
-            <Bar key={index} dataKey={bar.key} fill={bar.color} stackId={bar.stackId} />
-          ))}
-        </BarChart>
-      </ResponsiveContainer>
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <>
+          <Typography
+            className="cmpPieChart_title"
+            style={{ marginTop: "-15px" }}
+          >
+            {title}
+          </Typography>
+          <ResponsiveContainer
+            width={chartStyle.width || "100%"}
+            height={chartStyle.height || "350"}
+          >
+            <BarChart
+              data={data}
+              margin={{ top: 40, right: 30, left: 20, bottom: -40 }}
+              barGap={8} // Adjust the value to increase or decrease the gap between bars
+            >
+              <XAxis dataKey="subscriptionName" tick={{ fontSize: 8 }} />
+              <YAxis
+                tick={{ fontSize: 12 }}
+                domain={yAxisDomain}
+                ticks={yAxisTicks}
+                tickFormatter={formatYAxis}
+                label={{
+                  value: yAxisLabel,
+                  angle: -90,
+                  position: "insideLeft",
+                  fontSize: 12,
+                }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip />
+              <Legend content={<CustomLegend />} />
+              {bars.map((bar, index) => (
+                <Bar key={index} {...bar} />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        </>
+      )}
     </Paper>
   );
 };

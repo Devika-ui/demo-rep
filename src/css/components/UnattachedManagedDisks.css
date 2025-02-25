@@ -2,44 +2,44 @@ body {
   overflow-x: hidden;
 }
 .cmpUAMD_heading {
-    color: #63666A;
-    font-size: 14px;
-    margin-bottom: 16px;
-  }
+  color: #63666a;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
 .cmpUAMD_buttonContainer {
-    position: absolute;
-    top: 235px;
-    left: 880px;
-    z-index: 100;
-    margin: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  position: absolute;
+  top: 235px;
+  left: 880px;
+  z-index: 100;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .cmpUAMD_button {
-    font-size: 0.7rem !important;
-    padding: 4px 8px !important;
-    color: #63666A !important;
-    border-color: #63666A !important;
-  }
+  font-size: 0.7rem !important;
+  padding: 4px 8px !important;
+  color: #63666a !important;
+  border-color: #63666a !important;
+}
 .cmpUAMD_dialogPaper {
-    background-color: #D9D9D9 !important;
-    max-width: 280px !important; 
-    top: 140px !important;
-    left: 280px !important;
-    margin-bottom: 200px !important;
-    padding: 20px !important; 
-  }
+  background-color: #d9d9d9 !important;
+  max-width: 280px !important;
+  top: 140px !important;
+  left: 280px !important;
+  margin-bottom: 200px !important;
+  padding: 20px !important;
+}
 .cmpUAMD_select {
-    font-size: 0.7rem;
-    padding: 2px 4px;
-    color: #63666A;
-    border-color: #63666A;
-    min-width: auto;
+  font-size: 0.7rem;
+  padding: 2px 4px;
+  color: #63666a;
+  border-color: #63666a;
+  min-width: auto;
 }
 .cmpUAMD_select .MuiSelect-select {
-    padding: 2px 4px; 
+  padding: 2px 4px;
 }
 .cmpUAMD_select .MuiOutlinedInput-input {
-    padding: 2px 4px; 
+  padding: 2px 4px;
 }

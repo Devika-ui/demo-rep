@@ -7,6 +7,7 @@ import HyperScalarAdvisor from "./HyperScalarAdvisor";
 import SqlVmLicenses from "./SqlVmLicenses";
 import OrphanedRSVBackups from "./OrphanedRSVBackups";
 import api from "../api.js";
+import componentUtil from "../componentUtil.js";
 
 const RecommendationSPA = () => {
   sessionStorage.removeItem("overviewPage");
@@ -16,13 +17,22 @@ const RecommendationSPA = () => {
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
   const [containerData, setContainerData] = useState([]);
-  const [diskLocations, setDiskLocations] = useState([]);
+  const [diskAcrossLocations, setDiskAcrossLocations] = useState([]);
   const [onDemandConsumed, setOnDemandConsumed] = useState([]);
   const [mangedDiskCost, setDiskCost] = useState([]);
   const [unattachedDiskConsumed, setUnattachedDiskCOnsumed] = useState([]);
   const [costAllocation, setCostAllocation] = useState([]);
   const [serviceCategoryData, setServiceCategoryData] = useState([]);
-  const colorPalette = ["#0099C6", "#BA741A", "#FFCD00", "#00968F", "#5F249F"];
+  const colorPalette = ["#5F249F", "#330072", "#A98BD3", "#969696", "#D9D9D6"];
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [selectedProvider, setSelectedProvider] = useState(
+    componentUtil.getSelectedCSP()
+  );
+  const [loading, setLoading] = useState(true);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
+  let inputData = selectedFilters;
+  const [billingMonth, setBillingMonth] = useState([]);
 
   useEffect(() => {
     const hash = location.hash.substring(1); // Removes the "#" from the hash
@@ -30,6 +40,23 @@ const RecommendationSPA = () => {
     setActiveSection(hash);
   }, [location]);
 
+  const handleButtonClick = (value) => {
+    componentUtil.setSelectedCSP(value);
+    setSelectedProvider(value);
+    setShowStackBars(value !== 1);
+  };
+
+  // Handle filters change
+  const handleFiltersChange = (newFilters) => {
+    setSelectedFilters(newFilters);
+  };
+
+  // Handle billing month change
+  const handleMonthChange = (months) => {
+    setBillingMonth(months);
+  };
+
+  console.log("in", inputData);
   const additionalFilters_UnattachedManagedDisks = [
     {
       label: "Service Category(s)",
@@ -69,34 +96,25 @@ const RecommendationSPA = () => {
     },
   ];
 
-  const tableData_UnattachedManagedDisks = [
-    {
-      tableTitle: "On-Demand Cost Allocation for Unattached Managed Disks",
-      columnHead1: "Application/Project Name",
-      columnHead2: "Owner Name ",
-      columnHead3: "Total Cost",
-      columnHead4: "Count of Disks",
-      columnHead5: "Environment",
-    },
-  ];
-
   const bars_UnattachedManagedDisks = [
     {
       dataKey: "OnDemand",
-      fill: "#2CAFFE",
+      fill: "#5F249F",
       name: "On Demand Cost",
       barSize: 20,
     },
     {
       dataKey: "ConsumedMeter",
-      fill: "#330072",
+      fill: "rgba(0, 150, 143, 0.8)",
       name: "Consumed Meter",
       barSize: 20,
     },
   ];
   //unattachedManagedDisks ends
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const [
           onDemand,
@@ -105,18 +123,23 @@ const RecommendationSPA = () => {
           onDemandConsumedSubscription,
           diskCost,
           diskCosumed,
-          diskLocations,
+          diskLocation,
           onDemandCostAllocations,
         ] = await Promise.all([
-          api.getTotalOnDemandCost(),
-          api.getCountUnattachedDisk1(),
-          api.getImpactedApplications(),
-          api.getSubscriptionOnDemandConsumedMeter(),
-          api.getDisktypevsCost(),
-          api.getDisktypevsConsumedMeter(),
-          api.getDiskAcrossLocations(),
-          api.getCostAllocations(),
+          api.getTotalOnDemandCost(inputData),
+          api.getCountUnattachedDisk1(inputData),
+          api.getImpactedApplications(inputData),
+          api.getSubscriptionOnDemandConsumedMeter(inputData),
+          api.getDisktypevsCost(inputData),
+          api.getDisktypevsConsumedMeter(inputData),
+          api.getDiskAcrossLocations(inputData),
+          api.getCostAllocations(inputData),
         ]);
+        const currencySymbol = await componentUtil.getCurrencySymbol();
+        setCurrencySymbol(currencySymbol);
+        const currencyPreference = await componentUtil.getCurrencyPreference();
+
+        setCurrencyPreference(currencyPreference);
         const onDemandCost = onDemand.cost.toFixed(2);
         const diskCount = countUnattachedDisk.diskcount;
         const impactedCount = impactedApplications.ImpcatedApplications;
@@ -125,134 +148,122 @@ const RecommendationSPA = () => {
           {
             number:
               onDemandCost > 1000
-                ? `$${(onDemandCost / 1000).toFixed(2)}K`
-                : `$${onDemandCost.toFixed(2)}`,
+                ? `${(onDemandCost / 1000).toFixed(2)}K`
+                : onDemandCost,
             text: "Total On Demand Cost",
           },
-          { number: `${diskCount}`, text: "Count Of Snapshots" },
-          { number: `${impactedCount}`, text: "Impacted Applications" },
+          {
+            number: diskCount,
+            text:
+              selectedProvider === 100
+                ? "Count Disks Unattached"
+                : "Count Volumes Unattached",
+          },
+          { number: impactedCount, text: "Impacted Applications" },
         ];
 
+        setDiskAcrossLocations(diskLocation);
+        setOnDemandConsumed(onDemandConsumedSubscription);
         setContainerData(dataSet1);
-        setDiskLocations(diskLocations);
+
         setUnattachedDiskCOnsumed(diskCosumed);
         setDiskCost(diskCost);
-        setOnDemandConsumed(onDemandConsumedSubscription);
 
         const aggregateData = (data) => {
-          return Object.entries(data).map(([subscription, storages]) => {
-            const formattedStorages = Object.entries(storages).flatMap(
-              ([storage, storageTypes]) => {
-                const formattedStorageTypes = Object.entries(storageTypes).map(
-                  ([storageType, resourceGroups]) => {
-                    const formattedResourceGroups = Object.entries(
-                      resourceGroups
-                    ).map(([resourceGroup, resources]) => {
-                      const formattedResources = Object.entries(resources).map(
-                        ([resource, resourceData]) => ({
-                          name: resource,
-                          ownername: resourceData.ownername || null,
-                          totalCost: resourceData.totalCost || 0,
-                          diskCount: resourceData.diskcount || 0,
-                          environment:
-                            resourceData.environment !== null
-                              ? resourceData.environment
-                              : "null",
-                        })
-                      );
+          const processLevel = (obj) => {
+            if (typeof obj !== "object" || obj === null) return obj;
 
-                      const groupTotalCost = formattedResources.reduce(
-                        (sum, resource) => sum + resource.totalCost,
-                        0
-                      );
-                      const groupDiskCount = formattedResources.reduce(
-                        (sum, resource) => sum + resource.diskCount,
-                        0
-                      );
-
-                      return {
-                        name: resourceGroup,
-                        ownername: null,
-                        totalCost: groupTotalCost,
-                        diskCount: groupDiskCount,
-                        environment: null,
-                        resources: formattedResources,
-                      };
-                    });
-
-                    const storageTypeTotalCost = formattedResourceGroups.reduce(
-                      (sum, resourceGroup) => sum + resourceGroup.totalCost,
-                      0
-                    );
-                    const storageTypeDiskCount = formattedResourceGroups.reduce(
-                      (sum, resourceGroup) => sum + resourceGroup.diskCount,
-                      0
-                    );
-
-                    return {
-                      name: storageType,
-                      ownername: null,
-                      totalCost: storageTypeTotalCost,
-                      diskCount: storageTypeDiskCount,
-                      environment: null,
-                      resourceGroups: formattedResourceGroups,
-                    };
-                  }
-                );
-
-                const storageTotalCost = formattedStorageTypes.reduce(
-                  (sum, storageType) => sum + storageType.totalCost,
+            const entries = Object.entries(obj);
+            if (
+              entries.length > 0 &&
+              typeof entries[0][1] === "object" &&
+              !("totalCost" in entries[0][1])
+            ) {
+              return entries.map(([key, value]) => {
+                const processedValue = processLevel(value);
+                const totalCost = processedValue.reduce(
+                  (sum, item) => sum + (item.totalCost || 0),
                   0
                 );
-                const storageDiskCount = formattedStorageTypes.reduce(
-                  (sum, storageType) => sum + storageType.diskCount,
+                const diskCount = processedValue.reduce(
+                  (sum, item) => sum + (item.diskCount || 0),
                   0
                 );
 
                 return {
-                  name: storage,
+                  name: key,
                   ownername: null,
-                  totalCost: storageTotalCost,
-                  diskCount: storageDiskCount,
+                  totalCost: totalCost,
+                  diskCount: diskCount,
                   environment: null,
-                  storageTypes: formattedStorageTypes,
+                  children: processedValue,
                 };
-              }
-            );
+              });
+            }
 
-            const subscriptionTotalCost = formattedStorages.reduce(
-              (sum, storage) => sum + storage.totalCost,
-              0
-            );
-            const subscriptionDiskCount = formattedStorages.reduce(
-              (sum, storage) => sum + storage.diskCount,
-              0
-            );
+            return entries.map(([key, value]) => ({
+              name: key,
+              ownername: value.ownername || null,
+              totalCost: value.totalCost || 0,
+              diskCount: value.diskcount || 0,
+              environment:
+                value.environment !== null ? value.environment : "null",
+            }));
+          };
 
-            return {
-              name: subscription,
-              ownername: null,
-              totalCost: subscriptionTotalCost,
-              diskCount: subscriptionDiskCount,
-              environment: null,
-              storages: formattedStorages,
-            };
-          });
+          return Object.entries(data).map(([subscription, value]) => ({
+            name: subscription,
+            ownername: null,
+            totalCost: 0,
+            diskCount: 0,
+            environment: null,
+            children: processLevel(value),
+          }));
         };
 
         const formattedData = aggregateData(onDemandCostAllocations);
-        console.log("Formatted Table Data:", formattedData);
-        console.log(
-          "Formatted Table Data JSON:",
-          JSON.stringify(formattedData, null, 2)
-        );
+
+        // console.log("formatted data", formattedData);
         setServiceCategoryData(formattedData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [inputData, selectedProvider]);
+
+  const tableData_UnattachedManagedDisks = [
+    {
+      tableTitle:
+        selectedProvider === 100
+          ? "On-Demand Cost Allocation for Unattached Managed Disks"
+          : "On-Demand Cost Allocation for Unattached Managed Volumes",
+
+      columnHead1: {
+        key: "applicationName",
+        title: selectedProvider === 100 ? "Subscription Name" : "Account Name",
+      },
+      columnHead2: { key: "ownername", title: "Owner Name" },
+      columnHead3: {
+        key: "totalCost",
+        title: `Total Cost (${currencySymbol})`,
+      },
+      columnHead4: {
+        key: "diskcount",
+        title:
+          selectedProvider === 100
+            ? `Count of Disks (${currencySymbol})`
+            : `Count of Volumes (${currencySymbol})`,
+      },
+
+      columnHead5: {
+        key: "environment",
+        title: `Environment(${currencySymbol})`,
+      },
+    },
+  ];
 
   const pieChartData1 = mangedDiskCost.map((entry, index) => ({
     name: entry.DiskType,
@@ -1695,8 +1706,15 @@ const RecommendationSPA = () => {
           data={onDemandConsumed}
           data1={pieChartData1}
           data2={pieChartData2}
-          horizontaldata={diskLocations}
+          horizontaldata={diskAcrossLocations}
           bars={bars_UnattachedManagedDisks}
+          onButtonClick={handleButtonClick}
+          onFiltersChange={handleFiltersChange}
+          selectedCSP={selectedProvider}
+          onMonthChange={handleMonthChange}
+          currencySymbol={currencySymbol}
+          currencyPreference={currencyPreference}
+          loading={loading}
         />
       )}
       {activeSection === "orphanedSnapshots" && (

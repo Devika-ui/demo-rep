@@ -13,8 +13,12 @@ import {
 } from "recharts";
 import Typography from "@mui/material/Typography";
 import "../css/components/HorizontalBarGraph.css";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const CustomLegend = ({ payload }) => (
+// Custom Legend Component
+const CustomLegend = (props) => {
+  const { payload } = props;
+  return (
     <div className="cmpHBgraph_legend">
       {payload.map((entry, index) => (
         <div key={`item-${index}`} className="cmpHBgraph_legendItem">
@@ -27,66 +31,73 @@ const CustomLegend = ({ payload }) => (
       ))}
     </div>
   );
+};
 
 const HorizontalBarGraph = ({
   data,
   title,
-  barchartStyle,
+  width,
+  height,
   xAxisLabel,
   yAxisLabel,
   barName,
+  barchartStyle,
+  loading = false,
 }) => {
   return (
-    <Paper
-      className="cmpHBgraph_container" style={barchartStyle}>
-      <Typography className="cmpHBgraph_heading">{title}</Typography>
-      <ResponsiveContainer width="100%"  height={barchartStyle.height - 50}>
-      {data && data.length > 0 ? (
-        <BarChart
-          layout="vertical"
-          data={data}
-          margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-          barGap={15}
-        >
-          <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-          <XAxis
-            type="number"
-            tick={{ fontSize: 12 }}
-            domain={[0, Math.max(...data.map((item) => item.count))]}
-            ticks={[0, 50, 100, 150, 200]}
-            label={{
-              value: xAxisLabel,
-              position: "insideBottomRight",
-              offset: -10,
-              fontSize: 12,
-            }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            type="category"
-            dataKey="location"
-            tick={{ fontSize: 12 }}
-            label={{
-              value: yAxisLabel,
-              angle: -90,
-              position: "insideLeft",
-              dx: -20, // Adjust this value to move the label further to the left
-              fontSize: 12,
-            }}
-          />
-          <Tooltip />
-          <Legend
-            content={<CustomLegend />}
-            verticalAlign="top"
-            align="right"
-          />
-          <Bar dataKey="count" fill="#330072" name={barName} barSize={15} />
-        </BarChart>
-        ) : (
-         <div className="cmpHBgraph_noData">No data available</div>
-        )}
-      </ResponsiveContainer>
+    <Paper style={barchartStyle}>
+      {loading ? (
+        <div className="loading-container">
+          <CircularProgress />
+        </div>
+      ) : (
+        <>
+          <Typography className="cmpPieChart_title">{title}</Typography>
+          <ResponsiveContainer>
+            <BarChart
+              layout="vertical"
+              data={data}
+              margin={{ top: 20, right: 30, left: 40, bottom: 40 }}
+              barGap={15}
+            >
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 12 }}
+                domain={[0, Math.max(...data.map((item) => item.count))]}
+                ticks={[0, 50, 100, 150, 200]}
+                label={{
+                  value: xAxisLabel,
+                  position: "insideBottomRight",
+                  offset: -10,
+                  fontSize: 12,
+                }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                type="category"
+                dataKey="location"
+                tick={{ fontSize: 12 }}
+                label={{
+                  value: yAxisLabel,
+                  angle: -90,
+                  position: "insideLeft",
+                  dx: -20, // Adjust this value to move the label further to the left
+                  fontSize: 12,
+                }}
+              />
+              <Tooltip />
+              <Legend
+                content={<CustomLegend />}
+                verticalAlign="top"
+                align="right"
+              />
+              <Bar dataKey="count" fill="#330072" name={barName} barSize={15} />
+            </BarChart>
+          </ResponsiveContainer>
+        </>
+      )}
     </Paper>
   );
 };
@@ -107,11 +118,8 @@ HorizontalBarGraph.propTypes = {
 };
 
 HorizontalBarGraph.defaultProps = {
-  title: "Orphaned Snapshots across locations",
-  barchartStyle: { width: "50%", height: 373 },
-  xAxisLabel: "Count of Snapshots",
-  yAxisLabel: "Location",
-  barName: "Disk Count",
+  width: "50%",
+  height: 373,
 };
 
 export default HorizontalBarGraph;

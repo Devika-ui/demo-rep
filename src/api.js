@@ -1347,7 +1347,7 @@ const api = {
     }
   },
 
-  getTotalOnDemandCost: async () => {
+  getTotalOnDemandCost: async (selectedFilters) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/manageddisk/cost`,
@@ -1360,7 +1360,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              tags_AppID_AppName: ["Demo-Application103"],
+              ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1375,7 +1375,7 @@ const api = {
       throw error;
     }
   },
-  getImpactedApplications: async () => {
+  getImpactedApplications: async (selectedFilters) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/manageddisk/impcatedapplications`,
@@ -1388,7 +1388,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              tags_AppID_AppName: ["Demo-Application103"],
+              ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1404,7 +1404,7 @@ const api = {
     }
   },
 
-  getSubscriptionOnDemandConsumedMeter: async () => {
+  getSubscriptionOnDemandConsumedMeter: async (selectedFilters) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/manageddisk/ondemandvsconsumed`,
@@ -1417,7 +1417,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              tags_AppID_AppName: ["Demo-Application103"],
+              ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1432,7 +1432,7 @@ const api = {
       throw error;
     }
   },
-  getDisktypevsCost: async () => {
+  getDisktypevsCost: async (selectedFilters) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/manageddisk/disktypevscost`,
@@ -1445,14 +1445,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              tags_AppID_AppName: ["Demo-Application103"],
-              // BusinessUnit: ["BU574862", "BU425929"],
-              // Application: ["Demo-Application199", "Demo-Application212"],
-              // Owner: [
-              //   "business.owner132@test.com",
-              //   "business.owner128@test.com",
-              // ],
-              // Service: ["Storage"],
+              ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1467,7 +1460,7 @@ const api = {
       throw error;
     }
   },
-  getDisktypevsConsumedMeter: async () => {
+  getDisktypevsConsumedMeter: async (selectedFilters) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/manageddisk/diskvscosumedmeter`,
@@ -1480,7 +1473,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              tags_AppID_AppName: ["Demo-Application103"],
+              ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1495,7 +1488,7 @@ const api = {
       throw error;
     }
   },
-  getDiskAcrossLocations: async () => {
+  getDiskAcrossLocations: async (selectedFilters) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/manageddisk/locations`,
@@ -1508,7 +1501,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              tags_AppID_AppName: ["Demo-Application103"],
+              ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
@@ -1523,7 +1516,7 @@ const api = {
       throw error;
     }
   },
-  getCostAllocations: async () => {
+  getCostAllocations: async (selectedFilters) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/manageddisk/costallocation`,
@@ -1536,7 +1529,7 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              tags_AppID_AppName: ["Demo-Application103"],
+              ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),

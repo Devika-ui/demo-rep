@@ -12,8 +12,10 @@ import ShareIcon from "@mui/icons-material/Share";
 import CostsAmortized from "./CostsAmortized.js";
 import Button from "@mui/material/Button";
 import ContainerBox from "./ContainerBox.js";
-import ServiceCategory from "./ServiceCategory.js";
+import CostAllocationTable from "./CostAllocationTable.js";
 import "../css/components/UnattachedManagedDisks.css";
+import componentUtil from "../componentUtil.js";
+import { Box, Typography } from "@mui/material";
 
 const UnattachedManagedDisks = ({
   additionalFilters,
@@ -25,20 +27,29 @@ const UnattachedManagedDisks = ({
   data2,
   horizontaldata,
   bars,
+  onButtonClick,
+  onFiltersChange,
+  selectedCSP,
+  onMonthChange,
+  currencySymbol,
+  currencyPreference,
+  loading,
 }) => {
   sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
-  const navigate = useNavigate();
+  const [selectedProvider, setSelectedProvider] = useState(
+    componentUtil.getSelectedCSP()
+  );
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  let inputData = selectedFilters;
+  const [billingMonth, setBillingMonth] = useState([]);
 
-  // Callback function to receive value from HeaderButton
-  const handleButtonClick = (value) => {
-    if (value === 1) {
-      setShowStackBars(false); // Hide StackBars and show AzureBars
-    } else {
-      setShowStackBars(true); // Show StackBars
-    }
+  const handleMonthChange = (months) => {
+    setBillingMonth(months);
   };
+
+  const navigate = useNavigate();
 
   const handleGroupByChange = (event) => {
     const value = event.target.value;
@@ -58,142 +69,205 @@ const UnattachedManagedDisks = ({
     }
   };
 
-  // Define styles for the PieChartContainer
+  const containerStyle = {
+    marginLeft: "1rem",
+    marginTop: "1.98rem",
+    height: "41.9vh",
+    width: "88%",
+  };
+  const barchartStyle = {
+    width: "50%",
+    height: "56vh",
+    marginTop: "20px",
+    marginRight: "10px",
+  };
   const pieChartContainerStyle = {
     display: "flex",
     justifyContent: "space-around",
-    margin: "-270px 680px -260px",
+    width: "100%",
+    flexGrow: "1",
+    flexBasis: "100%",
+    height: "49.7vh",
+    marginleft: "2rem",
+    marginTop: "3rem",
   };
 
   const pieChartStyle = {
-    width: "55%",
-    paddingTop: "45px",
-    marginBottom: "110px", // Adjust individual chart width
+    width: "100%",
+    paddingTop: "25px",
+    marginTop: "-1rem",
   };
 
   const formatYAxisSimple = (tickItem) => tickItem.toString();
   return (
     <div>
-      <Header onButtonClick={handleButtonClick} />
-      <div style={{ marginLeft: "-12px", width: "200%" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          paddingX: 9.5,
+          paddingRight: "10px",
+          maxWidth: "100%",
+        }}
+      >
+        <Header />
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{
+            color: "#5f249f",
+            marginTop: "-1rem", // Adjust this as needed
+            fontWeight: "bold",
+          }}
+        >
+          {selectedCSP === 100
+            ? "Unattached Managed Disks"
+            : "Unattached Volumes"}
+        </Typography>
         <Subheader
-          title={
-            <div>
-              <span style={{ fontSize: "15px" }}>Recommendations/</span>
-              <span style={{ color: "#0070C0", fontSize: "15px" }}>
-                Unattached Managed Disks
-              </span>
-            </div>
-          }
-          additionalFilters={additionalFilters}
+          onButtonClick={onButtonClick}
+          onFiltersChange={onFiltersChange}
+          selectedCSP={selectedCSP}
+          onMonthChange={handleMonthChange}
         />
-      </div>
+        <NavigationBar />
+      </Box>
 
-      <NavigationBar />
       {/* ContainerBoxForInventory */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          marginRight: "14px",
+          marginLeft: "-33px",
+          marginRight: "2px",
+          marginTop: "-1px",
         }}
       >
-        <ContainerBox data={dataSet1} />
+        <ContainerBox data={dataSet1} loading={loading} />
       </div>
-      <div
+
+      <Select
+        value={groupBy}
+        onChange={handleGroupByChange}
+        displayEmpty
+        className="cmpUAMD_select"
         style={{
-          display: "flex",
-          marginBottom: 20,
-          paddingLeft: "68px",
-          height: "300px", // Adjust the height as desired
-          width: "100%",
+          marginTop: "10px",
+          marginLeft: "90px",
         }}
       >
-        <div style={{ marginTop: "-20px", width: "50%" }}>
-          <Select
-            value={groupBy}
-            onChange={handleGroupByChange}
-            displayEmpty
-            className="cmpUAMD_select"
-            style={{
-              marginTop: "30px",
-              marginBottom: "-30px",
-            }}
-          >
-            <MenuItem value="">UnattachedManagedDisks</MenuItem>
-            <MenuItem value="resourceGroup">OrphanedSnapshots</MenuItem>
+        <MenuItem value="">UnattachedManagedDisks</MenuItem>
+        <MenuItem value="resourceGroup">OrphanedSnapshots</MenuItem>
 
-            <MenuItem value="region">
-              Orphaned Attached Disks for deallocated VMs
-            </MenuItem>
-          </Select>
-          <div className="cmpUAMD_buttonContainer">
-            <CostsAmortized dialogPaperClass="cmpUAMD_dialogPaper" />
-            <Button
-              variant="contained"
-              className="cmpUAMD_button"
-              color="inherit"
-            >
-              Customize Report
-            </Button>
-            <IconButton className="cmpUAMD_button">
-              <ShareIcon />
-            </IconButton>
-          </div>
-          <div style={{ marginTop: "10px", paddingRight: "18px" }}>
-            <GenericBarChart
-              title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
-              data={data}
-              yAxisLabel="Cost (in thousands)"
-              bars={bars}
-              yAxisTickFormatter={formatYAxisSimple}
-            ></GenericBarChart>
-          </div>
-        </div>
-      </div>
+        <MenuItem value="region">
+          Orphaned Attached Disks for deallocated VMs
+        </MenuItem>
+      </Select>
 
-      {/* Include PieChartContainer */}
-      <div>
-        {/* Separate container for buttons */}
-
-        {/* Container for the PieChartContainer */}
-        <div>
-          <PieChartContainer
-            title1="Disk Type Vs Consumed Meter"
-            data1={data1}
-            title2="Disk Type Vs Cost"
-            data2={data2}
-            containerStyle={pieChartContainerStyle}
-            chartStyle={pieChartStyle}
-          />
-        </div>
+      <div className="cmpUAMD_buttonContainer" style={{ marginTop: "30px" }}>
+        <Button variant="contained" className="cmpUAMD_button" color="inherit">
+          Customize Report
+        </Button>
+        <IconButton className="cmpUAMD_button">
+          <ShareIcon />
+        </IconButton>
       </div>
 
       <div
         style={{
-          marginLeft: -510,
-          marginTop: 12,
-          padding: 10,
           display: "flex",
-          justifyContent: "center",
-          paddingLeft: "-10px",
-          paddingTop: "270px",
+          justifyContent: "space-between",
+          padding: "10px",
+          marginTop: "-37px",
+          flexWrap: "wrap",
+          gap: "5px",
+          // flexDirection: "row", // Default for larger screens
+        }}
+        className="chart-container"
+      >
+        <div
+          style={{
+            flex: 1,
+            marginLeft: "2rem",
+            maxWidth: "50%",
+            boxSizing: "border-box",
+          }}
+        >
+          <GenericBarChart
+            title={
+              selectedCSP === 100
+                ? "Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
+                : "Comparison of Account Vs On-Demand Cost & Consumed Meter"
+            }
+            data={data}
+            yAxisLabel="Cost (in thousands)"
+            bars={bars}
+            yAxisTickFormatter={formatYAxisSimple}
+            containerStyle={containerStyle}
+            chartStyle={{ width: "100%", height: "100%" }}
+            loading={loading}
+          ></GenericBarChart>
+        </div>
+
+        <div style={{ flex: 1, marginRight: "0rem", marginTop: "-1rem" }}>
+          <div>
+            <PieChartContainer
+              title1={
+                selectedCSP === 100
+                  ? "Disk Type Vs Consumed Meter"
+                  : "Volume Type Vs Consumed Meter"
+              }
+              data1={data1}
+              title2={
+                selectedCSP === 100
+                  ? "Disk Type Vs Cost"
+                  : "Volume Type Vs Cost"
+              }
+              data2={data2}
+              containerStyle={pieChartContainerStyle}
+              chartStyle={pieChartStyle}
+              currencySymbol={currencySymbol}
+              currencyPreference={currencyPreference}
+              loading={loading}
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        style={{
+          marginLeft: 52,
+          marginTop: -50,
+          display: "flex",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "px",
         }}
       >
-        <ServiceCategory
+        <CostAllocationTable
           dummyData={dummyData}
-          height="400px"
-          width="560px"
+          height="300px"
+          width="45%"
           tableData={tableData}
+          headerClass="headerClass-1"
+          loading={loading}
+        />
+
+        <HorizontalBarGraph
+          data={horizontaldata}
+          title={
+            selectedCSP === 100
+              ? "Unattached Managed Disks across locations"
+              : "Unattached Managed Volumes across Regions"
+          }
+          xAxisLabel={
+            selectedCSP === 100 ? "Count of Disks" : "Count of Volumes"
+          }
+          yAxisLabel={selectedCSP === 100 ? "Location" : "Regions"}
+          barName={selectedCSP === 100 ? "Disk Count" : "Volumes Count"}
+          barchartStyle={barchartStyle}
+          loading={loading}
         />
       </div>
-
-      <HorizontalBarGraph
-        data={horizontaldata}
-        title="Unattached Managed Disks across locations"
-        width="60%"
-        height={373}
-      />
     </div>
   );
 };

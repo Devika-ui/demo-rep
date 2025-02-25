@@ -39,7 +39,10 @@ const PieChartContainer = ({
   // Highlight max value in Pie Chart
   const getMaxValueData = (data) => {
     const maxValue = Math.max(...data.map((d) => d.value));
-    return data.map((d) => ({ ...d, displayValue: d.value === maxValue ? d.value : "" }));
+    return data.map((d) => ({
+      ...d,
+      displayValue: d.value === maxValue ? d.value : "",
+    }));
   };
 
   const processedData1 = getMaxValueData(data1);
@@ -58,7 +61,8 @@ const PieChartContainer = ({
 
   // Active Pie Slice Animation
   const renderActiveShape = (props) => {
-    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
+      props;
     return (
       <Sector
         cx={cx}
@@ -169,7 +173,9 @@ const PieChartContainer = ({
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip content={<CustomTooltip currencySymbol={currencySymbol} />} />
+                  <Tooltip
+                    content={<CustomTooltip currencySymbol={currencySymbol} />}
+                  />
                   <Legend
                     align="center"
                     verticalAlign="bottom"
@@ -177,8 +183,14 @@ const PieChartContainer = ({
                     wrapperStyle={{ fontSize: legendFontSize1 }}
                     formatter={(value) => (
                       <span
-                        title={value} style={{ cursor: "pointer"}}
-                        onClick={() => alert(value)} > {value.length > 20 ? `${value.substring(0, 20)}...` : value}
+                        title={value}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => alert(value)}
+                      >
+                        {" "}
+                        {value.length > 20
+                          ? `${value.substring(0, 20)}...`
+                          : value}
                       </span>
                     )}
                   />
@@ -215,7 +227,9 @@ const PieChartContainer = ({
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip content={<CustomTooltip currencySymbol={currencySymbol} />} />
+                  <Tooltip
+                    content={<CustomTooltip currencySymbol={currencySymbol} />}
+                  />
                   <Legend
                     align="center"
                     verticalAlign="bottom"
