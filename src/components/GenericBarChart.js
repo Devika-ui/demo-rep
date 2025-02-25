@@ -40,6 +40,7 @@ const GenericBarChart = ({
   chartStyle = {},
   containerStyle = {},
   loading = false,
+  marginTop = 0,
 }) => {
   const formatYAxis = (tickItem) => {
     if (yAxisTicks.some((tick) => tick >= 1000)) {
@@ -65,6 +66,7 @@ const GenericBarChart = ({
           <ResponsiveContainer
             width={chartStyle.width || "100%"}
             height={chartStyle.height || "350"}
+            style={{ marginTop }}
           >
             <BarChart
               data={data}

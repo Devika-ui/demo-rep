@@ -21,6 +21,8 @@ const TrustedAdvisor = () => {
   const [pieChartData, setPieChartData] = useState([]);
   const [costTrendData, setCostTrendData] = useState(null);
   const [billingMonth, setBillingMonth] = useState([]);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [currencyPreference, setCurrencyPreference] = useState(null);
 
   const titleStyle1 = {
     fontSize: "1rem",
@@ -84,13 +86,17 @@ const TrustedAdvisor = () => {
     const fetchPieChartData = async () => {
       try {
         const response = await api.getServicemonthlysavings();
+        const currencySymbol = await componentUtil.getCurrencySymbol();
+        const currencyPreference = await componentUtil.getCurrencyPreference();
         setPieChartData(
           response.topServices.map((service, index) => ({
             name: service.ServiceCategory,
-            value: service.TotalCost,
+            value: parseFloat(service.TotalCost.toFixed(2)),
             color: colorPalette[index % colorPalette.length],
           }))
         );
+        setCurrencySymbol(currencySymbol);
+        setCurrencyPreference(currencyPreference);
       } catch (error) {
         console.error("Error fetching pie chart data:", error);
       }
@@ -209,8 +215,8 @@ const TrustedAdvisor = () => {
             }}
             pieChartHeight1={220}
             titleStyle1={titleStyle1}
-            currencySymbol="$"
-            currencyPreference="start"
+            currencySymbol={currencySymbol}
+            currencyPreference={currencyPreference}
             loading={loading}
           />
 

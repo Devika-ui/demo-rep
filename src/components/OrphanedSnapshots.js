@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
 import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
@@ -9,35 +10,43 @@ import HorizontalBarGraph from "./HorizontalBarGraph.js";
 import { Select, MenuItem } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ShareIcon from "@mui/icons-material/Share";
-import CostsAmortized from "./CostsAmortized.js";
+import componentUtil from "../componentUtil.js";
 import Button from "@mui/material/Button";
 import ContainerBox from "./ContainerBox.js";
-import ServiceCategory from "./ServiceCategory.js";
+import CostAllocationTable from "./CostAllocationTable.js";
+import api from "../api.js";
 import "../css/components/OrphanedSnapshots.css";
 
 const OrphanedSnapshots = ({
-  additionalFilters,
   tableData,
   dummyData,
-  dataSet1,
+  dataSet2,
   data,
   data1,
   data2,
   horizontaldata,
   bars,
+  onButtonClick,
+  onFiltersChange,
+  selectedCSP,
+  onMonthChange,
+  currencySymbol,
+  currencyPreference,
+  loading,
 }) => {
   sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
   const navigate = useNavigate();
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  let inputData = selectedFilters;
+  const [billingMonth, setBillingMonth] = useState([]);
+  const [selectedProvider, setSelectedProvider] = useState([]);
 
-  // Callback function to receive value from HeaderButton
   const handleButtonClick = (value) => {
-    if (value === 1) {
-      setShowStackBars(false); // Hide StackBars and show AzureBars
-    } else {
-      setShowStackBars(true); // Show StackBars
-    }
+    componentUtil.setSelectedCSP(value);
+    setSelectedProvider(value);
+    setShowStackBars(value !== 1);
   };
 
   // Handle change for the dropdown
@@ -59,102 +68,144 @@ const OrphanedSnapshots = ({
     }
   };
 
-  // Sample data for PieChartContainer
-
-  const formatData = (data) => {
-    return data.map((item) => ({
-      name: item.name,
-      ownerName: item.ownerName,
-      totalCost: item.totalCost,
-      countOfDisks: item.countOfDisks,
-      environment: item.environment,
-      services: item.children ? formatData(item.children) : null,
-    }));
+  const handleFiltersChange = (newFilters) => {
+    setSelectedFilters(newFilters);
   };
 
-  const formattedData = formatData(dummyData);
+  const handleMonthChange = (months) => {
+    setBillingMonth(months);
+  };
 
-  // Define styles for the PieChartContainer
   const pieChartContainerStyle = {
     display: "flex",
     justifyContent: "space-around",
-    margin: "-308px 680px -260px",
+    width: "48%",
+    flexGrow: "1",
+    flexBasis: "100%",
+    height: "47.3vh",
+    marginRight:"0.7rem",
+    marginTop:"-18rem"
   };
 
   const pieChartStyle = {
-    width: "55%",
-    paddingTop: "45px",
-    marginBottom: "110px", // Adjust individual chart width
+    // width: "100%",
+    paddingTop: "25px",
+    marginTop: "-1rem",
   };
+
+  const titleStyle1 = {
+    fontSize: "1rem",
+    marginLeft: "2.5rem",
+    position: "relative", 
+    marginTop: "-0.4rem",
+    whiteSpace: "nowrap",
+  };
+
+  const titleStyle2 = {
+    fontSize: "1rem",
+    marginTop: "-0.4rem",
+    marginLeft: "4rem",
+    position: "relative",
+  };
+
+  const containerStyle = {
+    marginLeft: "-12.5rem",
+    marginTop: "1.98rem",
+    height: "38.7vh",
+    width: "41.5%"
+  }
+
+  const barchartStyle ={
+  height:"51.2vh",
+  marginTop:"-18.94rem",
+  maxWidth: "598px",
+  marginLeft:"39.82rem",
+  }
 
   return (
     <div>
-      <Header onButtonClick={handleButtonClick} />
-      <div style={{ marginLeft: "-12px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          paddingX: 9.5,
+          paddingRight: "10px",
+          maxWidth: "100%",
+        }}
+      >
+        <Header />
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{
+            color: "#5f249f",
+            marginTop: "-1rem", 
+            fontWeight: "bold",
+          }}
+        >
+          Orphaned Snapshots
+        </Typography>
         <Subheader
-          title={
-            <div>
-              <span style={{ fontSize: "15px" }}>Recommendations/</span>
-              <span style={{ color: "#0070C0", fontSize: "15px" }}>
-                Orphaned Snapshots
-              </span>
-            </div>
-          }
-          additionalFilters={additionalFilters}
+           onButtonClick={onButtonClick}
+           onFiltersChange={onFiltersChange}
+           selectedCSP={selectedCSP}
+           onMonthChange={handleMonthChange}
         />
-      </div>
-
+        <NavigationBar />
+      </Box>
       <NavigationBar />
-      {/* ContainerBoxForInventory */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          marginRight: "14px",
+          marginLeft: "-33px",
+          marginRight: "2px",
+          marginTop: "-5px",
         }}
       >
-        <ContainerBox data={dataSet1} />
+       <ContainerBox data={dataSet2} loading={loading} />
       </div>
       <div
         style={{
           display: "flex",
           marginBottom: 20,
           paddingLeft: "68px",
-          height: "300px", // Adjust the height as desired
+          height: "300px",
           width: "100%",
         }}
       >
-        <div style={{ marginTop: "-20px", width: "50%" }}>
           <Select
             value={groupBy}
             onChange={handleGroupByChange}
             displayEmpty
-            className="cmpUAMD_select"
-            style={{ marginTop: "30px", marginBottom: "-30px" }}
+            className="cmpUAMD_select1"
+            style={{ marginTop: "-3px",height:"5.5vh",background:"white" }}
           >
             <MenuItem value="">OrphanedSnapshots</MenuItem>
             <MenuItem value="subscription">UnattachedManagedDisks</MenuItem>
-
             <MenuItem value="region">
               Orphaned Attached Disks for deallocated VMs
             </MenuItem>
           </Select>
-          <div style={{ marginTop: "20px", paddingRight: "18px" }}>
+          {/* <div style={{ marginTop: "20px", paddingRight: "18px" }}> */}
             <GenericBarChart
               title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
+              titleStyle={{ fontSize: "1rem", fontWeight: "bold", color: "#5F249F", textAlign: "center",marginTop:"-1.2rem" }}
               data={data}
-              yAxisLabel="Cost (in thousands)"
-              bars={bars}
+              yAxisTicks={[0, 50,100, 500]}
+              bars={bars}              
+              containerStyle={containerStyle}
+              chartStyle={{ width: "70%", height: 250 }}
+              barSize = {50}
+              marginTop={-40}
+              loading={loading}
             ></GenericBarChart>
-          </div>
+          {/* </div> */}
         </div>
-      </div>
 
-      {/* Include PieChartContainer */}
       <div>
-        {/* Separate container for buttons */}
         <div className="cmpOrphanSnap_buttonContainer">
-          <CostsAmortized dialogPaperClass="cmpOrphanSnap_dialogPaper" />
+          {/* <CostsAmortized dialogPaperClass="cmpOrphanSnap_dialogPaper" /> */}
           <Button
             variant="contained"
             className="cmpOrphanSnap_button"
@@ -162,7 +213,7 @@ const OrphanedSnapshots = ({
           >
             Customize Report
           </Button>
-          <IconButton className="cmpOrphanSnap_button">
+          <IconButton className="cmpOrphanSnap_button1">
             <ShareIcon />
           </IconButton>
         </div>
@@ -173,37 +224,41 @@ const OrphanedSnapshots = ({
             data1={data1}
             title2="Snapshot Type Vs Cost"
             data2={data2}
+            // loading={loading}
             containerStyle={pieChartContainerStyle}
             chartStyle={pieChartStyle}
+            pieChartHeight1={"90%"}
+            pieChartHeight2={"90%"}
+            titleStyle1={titleStyle1}
+            titleStyle2={titleStyle2}
+            legendWrapperStyle1={{ bottom: 5, fontSize: "10px" }}
+            legendWrapperStyle2={{ bottom: 5, fontSize: "10px" }}
+            currencySymbol={currencySymbol}
+            currencyPreference={currencyPreference}
+            loading={loading}
           />
         </div>
       </div>
 
-      <div
-        style={{
-          marginLeft: -510,
-          marginTop: 12,
-          padding: 10,
-          display: "flex",
-          justifyContent: "center",
-          paddingLeft: "-10px",
-          paddingTop: "270px",
-        }}
-      >
-        <ServiceCategory
-          dummyData={formattedData}
-          height="400px"
-          width="560px"
+      <div style={{ marginLeft: "-34.9rem",marginTop:"-1rem" }}>
+         <CostAllocationTable
+          dummyData={dummyData}
+          height="250px"
+          width="29.5%"
           tableData={tableData}
-        />
-      </div>
-
+          headerClass="headerClass-1"
+          loading={loading}
+        /> 
+       </div>
       <HorizontalBarGraph
-        data={horizontaldata}
-        title="Orphaned Snapshots across locations"
-        width="60%"
-        height={373}
-      />
+         data={horizontaldata}
+        title={<div style={{textAlign: 'center'}}>
+         Orphaned Snapshots across locations
+          </div>
+        }
+          barchartStyle={barchartStyle}
+          loading={loading}
+       />
     </div>
   );
 };

@@ -23,6 +23,12 @@ const RecommendationSPA = () => {
   const [unattachedDiskConsumed, setUnattachedDiskCOnsumed] = useState([]);
   const [costAllocation, setCostAllocation] = useState([]);
   const [serviceCategoryData, setServiceCategoryData] = useState([]);
+  const [boxdata, setBoxData] = useState([]);
+  const [SnapshotTypeData,setSnapshotTypeData] = useState([]);
+  const [ConsumedMeterData,setConsumedMeterData] = useState([]);
+  const [snapLocations, setSnapLocations] = useState([]);
+  const [onDemandData, setOnDemandData] = useState([]);
+   const [costData, setCostData] = useState([]);
   const colorPalette = ["#5F249F", "#330072", "#A98BD3", "#969696", "#D9D9D6"];
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(
@@ -55,46 +61,6 @@ const RecommendationSPA = () => {
   const handleMonthChange = (months) => {
     setBillingMonth(months);
   };
-
-  console.log("in", inputData);
-  const additionalFilters_UnattachedManagedDisks = [
-    {
-      label: "Service Category(s)",
-      name: "Select Service Category",
-      options: [
-        { value: "Service Category 1", label: "Service Category 1" },
-        { value: "Service Category 2", label: "Service Category 2" },
-        { value: "Service Category 3", label: "Service Category 3" },
-      ],
-    },
-    {
-      label: "Owner(s)",
-      name: "Select Owner",
-      options: [
-        { value: "Owner 1", label: "Owner 1" },
-        { value: "Owner 2", label: "Owner 2" },
-        { value: "Owner 3", label: "Owner 3" },
-      ],
-    },
-    {
-      label: "Environment(s)",
-      name: "environments",
-      options: [
-        { value: "Production", label: "Production" },
-        { value: "Staging", label: "Staging" },
-        { value: "Development", label: "Development" },
-      ],
-    },
-    {
-      label: "Cost Center(s)",
-      name: "Select Cost Center",
-      options: [
-        { value: "Cost Center1", label: "Cost Center1" },
-        { value: "Cost Center2", label: "Cost Center2" },
-        { value: "Cost Center3", label: "Cost Center3" },
-      ],
-    },
-  ];
 
   const bars_UnattachedManagedDisks = [
     {
@@ -277,296 +243,183 @@ const RecommendationSPA = () => {
     color: colorPalette[index % colorPalette.length],
   }));
 
-  const additionalFilters_OrphanedSnapshots = [
-    {
-      label: "Service Category(s)",
-      name: "Select Service Category",
-      options: [
-        { value: "Service Category 1", label: "Service Category 1" },
-        { value: "Service Category 2", label: "Service Category 2" },
-        { value: "Service Category 3", label: "Service Category 3" },
-      ],
-    },
-    {
-      label: "Owner(s)",
-      name: "Select Owner",
-      options: [
-        { value: "Owner 1", label: "Owner 1" },
-        { value: "Owner 2", label: "Owner 2" },
-        { value: "Owner 3", label: "Owner 3" },
-      ],
-    },
-    {
-      label: "Environment(s)",
-      name: "environments",
-      options: [
-        { value: "Production", label: "Production" },
-        { value: "Staging", label: "Staging" },
-        { value: "Development", label: "Development" },
-      ],
-    },
-    {
-      label: "Cost Center(s)",
-      name: "Select Cost Center",
-      options: [
-        { value: "Cost Center1", label: "Cost Center1" },
-        { value: "Cost Center2", label: "Cost Center2" },
-        { value: "Cost Center3", label: "Cost Center3" },
-      ],
-    },
-  ];
 
-  const dummyData_OrphanedSnapshots = [
-    {
-      name: "Subscription 1",
-      ownerName: "A",
-      totalCost: "$1000",
-      countOfDisks: 50,
-      environment: "Production",
-      children: [
-        {
-          name: "Storage",
-          ownerName: "B",
-          totalCost: "$500",
-          countOfDisks: 30,
-          environment: "Production",
-          children: [
-            {
-              name: "Premium LRS",
-              ownerName: "C",
-              totalCost: "$300",
-              countOfDisks: 20,
-              environment: "Production",
-              children: [
-                {
-                  name: "Resource Group 1",
-                  ownerName: "D",
-                  totalCost: "$200",
-                  countOfDisks: 10,
-                  environment: "Production",
-                  children: [
-                    {
-                      name: "Resource 1",
-                      ownerName: "E",
-                      totalCost: "$100",
-                      countOfDisks: 5,
-                      environment: "Production",
-                    },
-                    {
-                      name: "Resource 2",
-                      totalCost: "$100",
-                      ownerName: "F",
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [snapshotResponse, 
+          costResponse, 
+          applicationsResponse,
+          snapshotTypeData, 
+          consumedMeterData,
+          location,
+          ondemandsnapshot,
+          costallocationresponse] = await Promise.all([
+          api.getSnapshotCount(inputData),
+          api.getSnapshotCost(inputData),
+          api.getApplications(inputData),
+          api.gettypevscost(inputData),
+          api.getConsumedMeter(inputData),
+          api.getsnapLocations(inputData),
+          api.getOndemandCost(inputData),
+          api.getSnapCostallocation(inputData),
+        ]);
+        const currencySymbol = await componentUtil.getCurrencySymbol();
+        setCurrencySymbol(currencySymbol);
+        const currencyPreference = await componentUtil.getCurrencyPreference();
+        setCurrencyPreference(currencyPreference);
 
-                      countOfDisks: 5,
-                      environment: "Production",
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    // Add more data here as needed
-    {
-      name: "Subscription 2",
-      ownerName: "A1",
-      totalCost: "$1500",
-      countOfDisks: 70,
-      environment: "Development",
-      children: [
-        {
-          name: "Storage",
-          ownerName: "A2",
-          totalCost: "$800",
-          countOfDisks: 40,
-          environment: "Development",
-          children: [
-            {
-              name: "Standard LRS",
-              ownerName: "A3",
-              totalCost: "$400",
-              countOfDisks: 25,
-              environment: "Development",
-              children: [
-                {
-                  name: "Resource Group 2",
-                  ownerName: "A4",
-                  totalCost: "$250",
-                  countOfDisks: 15,
-                  environment: "Development",
-                  children: [
-                    {
-                      name: "Resource 3",
-                      ownerName: "A5",
-                      totalCost: "$150",
-                      countOfDisks: 8,
-                      environment: "Development",
-                    },
-                    {
-                      name: "Resource 4",
-                      ownerName: "A6",
-                      totalCost: "$100",
-                      countOfDisks: 7,
-                      environment: "Development",
-                    },
-                  ],
-                },
-                {
-                  name: "Resource Group 3",
-                  ownerName: "A7",
-                  totalCost: "$150",
-                  countOfDisks: 10,
-                  environment: "Development",
-                  children: [
-                    {
-                      name: "Resource 5",
-                      ownerName: "B1",
-                      totalCost: "$80",
-                      countOfDisks: 5,
-                      environment: "Development",
-                    },
-                    {
-                      name: "Resource 6",
-                      ownerName: "B2",
-                      totalCost: "$70",
-                      countOfDisks: 5,
-                      environment: "Development",
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ];
+        const orphanedSnapshotCount = snapshotResponse.snapshostCount || 0;
+        const snapshotCost = (parseFloat(costResponse.cost || 0).toFixed(2));
+        const applicationsCount = applicationsResponse.impactedApplication || 0; 
+        
+        const dataSet2 = [
+          { number: orphanedSnapshotCount, text: "Orphaned Snapshots" },
+          { number: snapshotCost, text: "Snapshot Cost" },
+          { number: applicationsCount, text: "Impacted Applications" }
+        ];
+        setBoxData(dataSet2);
+        setSnapshotTypeData(snapshotTypeData);
+        setConsumedMeterData(consumedMeterData);
+        setSnapLocations(location);
+        setOnDemandData(ondemandsnapshot);
 
-  const dataSet1_OrphanedSnapshots = [
-    { number: "$75.4K", text: "Total On Demand Cost" },
-    { number: "12", text: "Count Of Snapshots" },
-    { number: "10", text: "Impacted Applications" },
-  ];
+        const aggregateData = (data) => {
+          return Object.entries(data).map(([subscription, storageData]) => {
+            if (!storageData || typeof storageData !== "object") return null;
+  
+            const formattedStorages = Object.entries(storageData).map(([storage, storageTypes]) => {
+              if (!storageTypes || typeof storageTypes !== "object") return null;
+  
+              const formattedStorageTypes = Object.entries(storageTypes).map(([storageType, resourceGroups]) => {
+                if (!resourceGroups || typeof resourceGroups !== "object") return null;
+  
+                const formattedResourceGroups = Object.entries(resourceGroups).map(([resourceGroup, resources]) => {
+                  if (!resources || typeof resources !== "object") return null;
+  
+                  const formattedResources = Object.entries(resources).map(([resource, resourceData]) => ({
+                    name: resource,
+                    ownername: resourceData?.ownername || null,
+                    totalCost: resourceData?.totalCost || 0,
+                    snapshotCount: resourceData?.snapshotCount || 0,
+                    environment: resourceData?.environment !== null ? resourceData?.environment : "null",
+                  }));
+  
+                  // Aggregate totals for the resource group
+                  const groupTotalCost = formattedResources.reduce((sum, resource) => sum + resource.totalCost, 0);
+                  const groupsnapshotCount = formattedResources.reduce((sum, resource) => sum + resource.snapshotCount, 0);
+  
+                  return {
+                    name: resourceGroup,
+                    ownername: null,
+                    totalCost: groupTotalCost,
+                    snapshotCount: groupsnapshotCount,
+                    environment: null,
+                    resources: formattedResources,
+                  };
+                }).filter(Boolean);
+  
+                // Aggregate totals for the storage type
+                const storageTypeTotalCost = formattedResourceGroups.reduce((sum, group) => sum + group.totalCost, 0);
+                const storageTypesnapshotCount = formattedResourceGroups.reduce((sum, group) => sum + group.snapshotCount, 0);
+  
+                return {
+                  name: storageType,
+                  ownername: null,
+                  totalCost: storageTypeTotalCost,
+                  snapshotCount: storageTypesnapshotCount,
+                  environment: null,
+                  resourceGroups: formattedResourceGroups,
+                };
+              }).filter(Boolean);
+  
+              // Aggregate totals for storage
+              const storageTotalCost = formattedStorageTypes.reduce((sum, type) => sum + type.totalCost, 0);
+              const storagesnapshotCount = formattedStorageTypes.reduce((sum, type) => sum + type.snapshotCount, 0);
+  
+              return {
+                name: storage,
+                ownername: null,
+                totalCost: storageTotalCost,
+                snapshotCount: storagesnapshotCount,
+                environment: null,
+                storageTypes: formattedStorageTypes,
+              };
+            }).filter(Boolean);
+  
+            // Aggregate totals for subscription
+            const subscriptionTotalCost = formattedStorages.reduce((sum, storage) => sum + storage.totalCost, 0);
+            const subscriptionsnapshotCount = formattedStorages.reduce((sum, storage) => sum + storage.snapshotCount, 0);
+  
+            return {
+              name: subscription,
+              ownername: null,
+              totalCost: subscriptionTotalCost,
+              snapshotCount: subscriptionsnapshotCount,
+              environment: null,
+              storages: formattedStorages,
+            };
+          }).filter(Boolean);
+        };
+  
+        const formattedData = aggregateData(costallocationresponse); 
+        console.log("data",formattedData);
+        setCostData(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, [selectedProvider,inputData]); 
 
-  const data_OrphanedSnapshots = [
-    {
-      name: "Subscription 1",
-      "On Demand Cost": 400000,
-      "Consumed Meter": 50000,
-    },
-    {
-      name: "Subscription 2",
-      "On Demand Cost": 250000,
-      "Consumed Meter": 80000,
-    },
-    {
-      name: "Subscription 3",
-      "On Demand Cost": 90000,
-      "Consumed Meter": 10000,
-    },
-    {
-      name: "Subscription 4",
-      "On Demand Cost": 50000,
-      "Consumed Meter": 115000,
-    },
-    {
-      name: "Subscription 5",
-      "On Demand Cost": 25000,
-      "Consumed Meter": 100000,
-    },
-    {
-      name: "Subscription 6",
-      "On Demand Cost": 15000,
-      "Consumed Meter": 75000,
-    },
-  ];
+  const piechart2 = SnapshotTypeData.map((item, index) => ({
+    name: item.SnapshotType,
+    value: parseFloat(item.totalcost.toFixed(2)),
+    color: colorPalette[index % colorPalette.length],
+}));
+
+const piechart1 = ConsumedMeterData.map((item, index) => ({
+    name: item.SnapshotType,
+    value: parseFloat(item.Count.toFixed(2)),
+    color: colorPalette[index % colorPalette.length],
+}));
+
   const tableData_OrphanedSnapshots = [
     {
       tableTitle: "On-Demand Cost Allocation for Orphaned Snapshots",
-      columnHead1: "Application/Project Name",
-      columnHead2: "Owner Name ",
-      columnHead3: "Total Cost",
-      columnHead4: "Count of Disks",
-      columnHead5: "Environment",
+      columnHead1: {
+        key: "applicationName",
+        title: "Application/Project Name",
+      },
+      columnHead2: { key: "ownername", title: "Owner Name" },
+      columnHead3: {
+        key: "totalCost",
+        title: `Total Cost (${currencySymbol})`,
+      },
+      columnHead4: {
+        key: "snapshotCount",
+        title: `Count of Snapshots (${currencySymbol})`,
+      },
+      columnHead5: {
+        key: "environment",
+        title: `Environment(${currencySymbol})`,
+      },
     },
-  ];
-
-  const data1_OrphanedSnapshots = [
-    {
-      name: "Disk 1",
-      value: Math.floor(Math.random() * 100),
-      color: "#0099C6",
-    },
-    {
-      name: "Disk 2",
-      value: Math.floor(Math.random() * 100),
-      color: "#BA741A",
-    },
-    {
-      name: "Disk 3",
-      value: Math.floor(Math.random() * 100),
-      color: "#FFCD00",
-    },
-    {
-      name: "Disk 4",
-      value: Math.floor(Math.random() * 100),
-      color: "#00968F",
-    },
-    {
-      name: "Disk 5",
-      value: Math.floor(Math.random() * 100),
-      color: "#5F249F",
-    },
-  ];
-
-  const data2_OrphanedSnapshots = [
-    {
-      name: "Disk 1",
-      value: Math.floor(Math.random() * 100),
-      color: "#0099C6",
-    },
-    {
-      name: "Disk 2",
-      value: Math.floor(Math.random() * 100),
-      color: "#BA741A",
-    },
-    {
-      name: "Disk 3",
-      value: Math.floor(Math.random() * 100),
-      color: "#FFCD00",
-    },
-    {
-      name: "Disk 4",
-      value: Math.floor(Math.random() * 100),
-      color: "#00968F",
-    },
-    {
-      name: "Disk 5",
-      value: Math.floor(Math.random() * 100),
-      color: "#5F249F",
-    },
-  ];
-
-  const horizontaldata_OrphanedSnapshots = [
-    { name: "North Europe", count: 100 },
-    { name: "East US 2", count: 150 },
-    { name: "South East Asia", count: 200 },
-    { name: "West Europe", count: 75 },
-    { name: "West US 2", count: 125 },
   ];
 
   const bars_OrphanedSnapshots = [
     {
-      dataKey: "On Demand Cost",
-      fill: "#2CAFFE",
+      dataKey: "totalCost",
+      fill: "#5F249F",
       name: "On Demand Cost",
       barSize: 20,
     },
     {
-      dataKey: "Consumed Meter",
-      fill: "#330072",
+      dataKey: "consumedMeter",
+      fill: "rgba(0, 150, 143, 0.8)",
       name: "Consumed Meter",
       barSize: 20,
     },
@@ -1699,7 +1552,6 @@ const RecommendationSPA = () => {
     <div>
       {activeSection === "unattachedManagedDisks" && (
         <UnattachedManagedDisks
-          additionalFilters={additionalFilters_UnattachedManagedDisks}
           tableData={tableData_UnattachedManagedDisks}
           dummyData={serviceCategoryData}
           dataSet1={containerData}
@@ -1719,15 +1571,21 @@ const RecommendationSPA = () => {
       )}
       {activeSection === "orphanedSnapshots" && (
         <OrphanedSnapshots
-          additionalFilters={additionalFilters_OrphanedSnapshots}
           tableData={tableData_OrphanedSnapshots}
-          dummyData={dummyData_OrphanedSnapshots}
-          dataSet1={dataSet1_OrphanedSnapshots}
-          data={data_OrphanedSnapshots}
-          data1={data1_OrphanedSnapshots}
-          data2={data2_OrphanedSnapshots}
-          horizontaldata={horizontaldata_OrphanedSnapshots}
+          dummyData={costData}
+          dataSet2={boxdata}
+          data={onDemandData}
+          data1={piechart1}
+          data2={piechart2}
+          horizontaldata={snapLocations}
           bars={bars_OrphanedSnapshots}
+          onButtonClick={handleButtonClick}
+          onFiltersChange={handleFiltersChange}
+          selectedCSP={selectedProvider}
+          onMonthChange={handleMonthChange}
+          currencySymbol={currencySymbol}
+          currencyPreference={currencyPreference}
+          loading={loading}
         />
       )}
       {activeSection === "hyperScalarAdvisor" && (

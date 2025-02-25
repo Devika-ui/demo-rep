@@ -8,15 +8,16 @@ body {
   }
   .cmpOrphanSnap_buttonContainer {
     position: absolute;
-    top: 235px;
+    margin-top: -2.5rem;
     left: 880px;
     z-index: 100;
-    margin: 20px;
+    /* margin: 20px; */
     display: flex;
     align-items: center;
     gap: 10px;
   }
   .cmpOrphanSnap_button {
+    position: sticky;
     font-size: 0.7rem !important;
     padding: 4px 8px !important;
     color: #63666A !important;
