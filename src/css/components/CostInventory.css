@@ -178,6 +178,12 @@
   height: 100%;
 }
 
+/* Override height only in overlay mode */
+.overlay-mode .cmpCostInv_tableContainer {
+  max-height: 80vh !important;
+  height: 80vh !important;
+}
+
 @media (max-width: 768px) {
   .cmpCostInv_header {
     flex-direction: column;

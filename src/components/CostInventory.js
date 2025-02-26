@@ -17,6 +17,8 @@ import "../css/components/CostInventory.css";
 import api from "../api";
 import ShareButton from "./ShareButton";
 import CustomizedReportButton from "./CustomizedReportButton";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import CloseIcon from "@mui/icons-material/Close";
 
 const TableRowComponent = ({
   data,
@@ -162,6 +164,9 @@ const CostInventory = ({ selectedCSP, billingMonth, inputData }) => {
   const [fetchingPage, setFetchingPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
+  const [isOverlayOpen, setOverlayOpen] = useState(false);
+  const handleOverlayOpen = () => setOverlayOpen(true);
+  const handleOverlayClose = () => setOverlayOpen(false);
 
   const columnOptions = [
     { label: "On-Demand", value: "OnDemandCost" },
@@ -683,6 +688,13 @@ const CostInventory = ({ selectedCSP, billingMonth, inputData }) => {
               className="cmpCostInv_Sharebutton"
               dataType="CostInventory"
             />
+            <IconButton
+              onClick={handleOverlayOpen}
+              className="cmpInvTv_fullscreenButton"
+              style={{ marginLeft: "-24px" }}
+            >
+              <FullscreenIcon />
+            </IconButton>
           </div>
         </div>
       </div>
@@ -762,6 +774,68 @@ const CostInventory = ({ selectedCSP, billingMonth, inputData }) => {
           </>
         )}
       </div>
+
+      {isOverlayOpen && (
+        <div className="overlay overlay-mode">
+          <div className="service_overlay_content">
+            <IconButton className="close-overlay" onClick={handleOverlayClose}>
+              <CloseIcon />
+            </IconButton>
+            <TableContainer className="cmpCostInv_tableContainer">
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      rowSpan={2}
+                      className="cmpCostInv_columnHeader_first_header"
+                    >
+                      SubscriptionName
+                    </TableCell>
+                    {formattedMonths.map((month, index) => (
+                      <TableCell
+                        key={index}
+                        colSpan={columns.length}
+                        className="cmpCostInv_tableHeader"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {month}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  <TableRow>
+                    {formattedMonths.map((month, index) =>
+                      columns.map((col) => (
+                        <TableCell
+                          key={col}
+                          className="cmpCostInv_columnHeader"
+                        >
+                          {col}
+                        </TableCell>
+                      ))
+                    )}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/* Render nested levels */}
+                  {Object.entries(tableData).map(([subscriptionName, data]) => (
+                    <TableRowComponent
+                      data={data || []}
+                      level={0}
+                      toggleRow={toggleRow}
+                      expandedRows={expandedRows}
+                      rowKey={subscriptionName}
+                      indentIncrement={20}
+                      selectedColumns={columns}
+                      uniqueMonths={uniqueMonths}
+                      selectedCSP={selectedCSP}
+                    />
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </div>
+      )}
     </Box>
   );
 };
