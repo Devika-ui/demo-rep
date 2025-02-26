@@ -24,11 +24,11 @@ const RecommendationSPA = () => {
   const [costAllocation, setCostAllocation] = useState([]);
   const [serviceCategoryData, setServiceCategoryData] = useState([]);
   const [boxdata, setBoxData] = useState([]);
-  const [SnapshotTypeData,setSnapshotTypeData] = useState([]);
-  const [ConsumedMeterData,setConsumedMeterData] = useState([]);
+  const [SnapshotTypeData, setSnapshotTypeData] = useState([]);
+  const [ConsumedMeterData, setConsumedMeterData] = useState([]);
   const [snapLocations, setSnapLocations] = useState([]);
   const [onDemandData, setOnDemandData] = useState([]);
-   const [costData, setCostData] = useState([]);
+  const [costData, setCostData] = useState([]);
   const colorPalette = ["#5F249F", "#330072", "#A98BD3", "#969696", "#D9D9D6"];
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(
@@ -57,7 +57,6 @@ const RecommendationSPA = () => {
     setSelectedFilters(newFilters);
   };
 
-  // Handle billing month change
   const handleMonthChange = (months) => {
     setBillingMonth(months);
   };
@@ -106,24 +105,29 @@ const RecommendationSPA = () => {
         const currencyPreference = await componentUtil.getCurrencyPreference();
 
         setCurrencyPreference(currencyPreference);
-        const onDemandCost = onDemand.cost.toFixed(2);
-        const diskCount = countUnattachedDisk.diskcount;
-        const impactedCount = impactedApplications.ImpcatedApplications;
+
+        const onDemandCost = onDemand?.cost ? onDemand.cost.toFixed(2) : "0.00";
+        const diskCount = countUnattachedDisk?.diskcount ?? 0;
+        const impactedCount = impactedApplications?.ImpcatedApplications ?? 0;
 
         const dataSet1 = [
           {
             number:
               onDemandCost > 1000
-                ? `${(onDemandCost / 1000).toFixed(2)}K`
-                : onDemandCost,
+                ? currencyPreference === "start"
+                  ? `${currencySymbol}${(onDemandCost / 1000).toFixed(2)}K`
+                  : `${(onDemandCost / 1000).toFixed(2)}K${currencySymbol}`
+                : currencyPreference === "start"
+                ? `${currencySymbol}${onDemandCost}`
+                : `${onDemandCost}${currencySymbol}`,
             text: "Total On Demand Cost",
           },
           {
             number: diskCount,
             text:
               selectedProvider === 100
-                ? "Count Disks Unattached"
-                : "Count Volumes Unattached",
+                ? "Count of Disks Unattached"
+                : "Count of Volumes Unattached",
           },
           { number: impactedCount, text: "Impacted Applications" },
         ];
@@ -204,8 +208,8 @@ const RecommendationSPA = () => {
     {
       tableTitle:
         selectedProvider === 100
-          ? "On-Demand Cost Allocation for Unattached Managed Disks"
-          : "On-Demand Cost Allocation for Unattached Managed Volumes",
+          ? "On-Demand Cost Allocation"
+          : "On-Demand Cost Allocation",
 
       columnHead1: {
         key: "applicationName",
@@ -218,15 +222,12 @@ const RecommendationSPA = () => {
       },
       columnHead4: {
         key: "diskcount",
-        title:
-          selectedProvider === 100
-            ? `Count of Disks (${currencySymbol})`
-            : `Count of Volumes (${currencySymbol})`,
+        title: selectedProvider === 100 ? "Count of Disks" : "Count of Volumes",
       },
 
       columnHead5: {
         key: "environment",
-        title: `Environment(${currencySymbol})`,
+        title: "Environment",
       },
     },
   ];
@@ -243,18 +244,19 @@ const RecommendationSPA = () => {
     color: colorPalette[index % colorPalette.length],
   }));
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [snapshotResponse, 
-          costResponse, 
+        const [
+          snapshotResponse,
+          costResponse,
           applicationsResponse,
-          snapshotTypeData, 
+          snapshotTypeData,
           consumedMeterData,
           location,
           ondemandsnapshot,
-          costallocationresponse] = await Promise.all([
+          costallocationresponse,
+        ] = await Promise.all([
           api.getSnapshotCount(inputData),
           api.getSnapshotCost(inputData),
           api.getApplications(inputData),
@@ -270,13 +272,13 @@ const RecommendationSPA = () => {
         setCurrencyPreference(currencyPreference);
 
         const orphanedSnapshotCount = snapshotResponse.snapshostCount || 0;
-        const snapshotCost = (parseFloat(costResponse.cost || 0).toFixed(2));
-        const applicationsCount = applicationsResponse.impactedApplication || 0; 
-        
+        const snapshotCost = parseFloat(costResponse.cost || 0).toFixed(2);
+        const applicationsCount = applicationsResponse.impactedApplication || 0;
+
         const dataSet2 = [
           { number: orphanedSnapshotCount, text: "Orphaned Snapshots" },
           { number: snapshotCost, text: "Snapshot Cost" },
-          { number: applicationsCount, text: "Impacted Applications" }
+          { number: applicationsCount, text: "Impacted Applications" },
         ];
         setBoxData(dataSet2);
         setSnapshotTypeData(snapshotTypeData);
@@ -285,85 +287,129 @@ const RecommendationSPA = () => {
         setOnDemandData(ondemandsnapshot);
 
         const aggregateData = (data) => {
-          return Object.entries(data).map(([subscription, storageData]) => {
-            if (!storageData || typeof storageData !== "object") return null;
-  
-            const formattedStorages = Object.entries(storageData).map(([storage, storageTypes]) => {
-              if (!storageTypes || typeof storageTypes !== "object") return null;
-  
-              const formattedStorageTypes = Object.entries(storageTypes).map(([storageType, resourceGroups]) => {
-                if (!resourceGroups || typeof resourceGroups !== "object") return null;
-  
-                const formattedResourceGroups = Object.entries(resourceGroups).map(([resourceGroup, resources]) => {
-                  if (!resources || typeof resources !== "object") return null;
-  
-                  const formattedResources = Object.entries(resources).map(([resource, resourceData]) => ({
-                    name: resource,
-                    ownername: resourceData?.ownername || null,
-                    totalCost: resourceData?.totalCost || 0,
-                    snapshotCount: resourceData?.snapshotCount || 0,
-                    environment: resourceData?.environment !== null ? resourceData?.environment : "null",
-                  }));
-  
-                  // Aggregate totals for the resource group
-                  const groupTotalCost = formattedResources.reduce((sum, resource) => sum + resource.totalCost, 0);
-                  const groupsnapshotCount = formattedResources.reduce((sum, resource) => sum + resource.snapshotCount, 0);
-  
+          return Object.entries(data)
+            .map(([subscription, storageData]) => {
+              if (!storageData || typeof storageData !== "object") return null;
+
+              const formattedStorages = Object.entries(storageData)
+                .map(([storage, storageTypes]) => {
+                  if (!storageTypes || typeof storageTypes !== "object")
+                    return null;
+
+                  const formattedStorageTypes = Object.entries(storageTypes)
+                    .map(([storageType, resourceGroups]) => {
+                      if (!resourceGroups || typeof resourceGroups !== "object")
+                        return null;
+
+                      const formattedResourceGroups = Object.entries(
+                        resourceGroups
+                      )
+                        .map(([resourceGroup, resources]) => {
+                          if (!resources || typeof resources !== "object")
+                            return null;
+
+                          const formattedResources = Object.entries(
+                            resources
+                          ).map(([resource, resourceData]) => ({
+                            name: resource,
+                            ownername: resourceData?.ownername || null,
+                            totalCost: resourceData?.totalCost || 0,
+                            snapshotCount: resourceData?.snapshotCount || 0,
+                            environment:
+                              resourceData?.environment !== null
+                                ? resourceData?.environment
+                                : "null",
+                          }));
+
+                          // Aggregate totals for the resource group
+                          const groupTotalCost = formattedResources.reduce(
+                            (sum, resource) => sum + resource.totalCost,
+                            0
+                          );
+                          const groupsnapshotCount = formattedResources.reduce(
+                            (sum, resource) => sum + resource.snapshotCount,
+                            0
+                          );
+
+                          return {
+                            name: resourceGroup,
+                            ownername: null,
+                            totalCost: groupTotalCost,
+                            snapshotCount: groupsnapshotCount,
+                            environment: null,
+                            resources: formattedResources,
+                          };
+                        })
+                        .filter(Boolean);
+
+                      // Aggregate totals for the storage type
+                      const storageTypeTotalCost =
+                        formattedResourceGroups.reduce(
+                          (sum, group) => sum + group.totalCost,
+                          0
+                        );
+                      const storageTypesnapshotCount =
+                        formattedResourceGroups.reduce(
+                          (sum, group) => sum + group.snapshotCount,
+                          0
+                        );
+
+                      return {
+                        name: storageType,
+                        ownername: null,
+                        totalCost: storageTypeTotalCost,
+                        snapshotCount: storageTypesnapshotCount,
+                        environment: null,
+                        resourceGroups: formattedResourceGroups,
+                      };
+                    })
+                    .filter(Boolean);
+
+                  // Aggregate totals for storage
+                  const storageTotalCost = formattedStorageTypes.reduce(
+                    (sum, type) => sum + type.totalCost,
+                    0
+                  );
+                  const storagesnapshotCount = formattedStorageTypes.reduce(
+                    (sum, type) => sum + type.snapshotCount,
+                    0
+                  );
+
                   return {
-                    name: resourceGroup,
+                    name: storage,
                     ownername: null,
-                    totalCost: groupTotalCost,
-                    snapshotCount: groupsnapshotCount,
+                    totalCost: storageTotalCost,
+                    snapshotCount: storagesnapshotCount,
                     environment: null,
-                    resources: formattedResources,
+                    storageTypes: formattedStorageTypes,
                   };
-                }).filter(Boolean);
-  
-                // Aggregate totals for the storage type
-                const storageTypeTotalCost = formattedResourceGroups.reduce((sum, group) => sum + group.totalCost, 0);
-                const storageTypesnapshotCount = formattedResourceGroups.reduce((sum, group) => sum + group.snapshotCount, 0);
-  
-                return {
-                  name: storageType,
-                  ownername: null,
-                  totalCost: storageTypeTotalCost,
-                  snapshotCount: storageTypesnapshotCount,
-                  environment: null,
-                  resourceGroups: formattedResourceGroups,
-                };
-              }).filter(Boolean);
-  
-              // Aggregate totals for storage
-              const storageTotalCost = formattedStorageTypes.reduce((sum, type) => sum + type.totalCost, 0);
-              const storagesnapshotCount = formattedStorageTypes.reduce((sum, type) => sum + type.snapshotCount, 0);
-  
+                })
+                .filter(Boolean);
+
+              // Aggregate totals for subscription
+              const subscriptionTotalCost = formattedStorages.reduce(
+                (sum, storage) => sum + storage.totalCost,
+                0
+              );
+              const subscriptionsnapshotCount = formattedStorages.reduce(
+                (sum, storage) => sum + storage.snapshotCount,
+                0
+              );
+
               return {
-                name: storage,
+                name: subscription,
                 ownername: null,
-                totalCost: storageTotalCost,
-                snapshotCount: storagesnapshotCount,
+                totalCost: subscriptionTotalCost,
+                snapshotCount: subscriptionsnapshotCount,
                 environment: null,
-                storageTypes: formattedStorageTypes,
+                storages: formattedStorages,
               };
-            }).filter(Boolean);
-  
-            // Aggregate totals for subscription
-            const subscriptionTotalCost = formattedStorages.reduce((sum, storage) => sum + storage.totalCost, 0);
-            const subscriptionsnapshotCount = formattedStorages.reduce((sum, storage) => sum + storage.snapshotCount, 0);
-  
-            return {
-              name: subscription,
-              ownername: null,
-              totalCost: subscriptionTotalCost,
-              snapshotCount: subscriptionsnapshotCount,
-              environment: null,
-              storages: formattedStorages,
-            };
-          }).filter(Boolean);
+            })
+            .filter(Boolean);
         };
-  
-        const formattedData = aggregateData(costallocationresponse); 
-        console.log("data",formattedData);
+
+        const formattedData = aggregateData(costallocationresponse);
+        console.log("data", formattedData);
         setCostData(formattedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -371,21 +417,21 @@ const RecommendationSPA = () => {
         setLoading(false);
       }
     };
-  
+
     fetchData();
-  }, [selectedProvider,inputData]); 
+  }, [selectedProvider, inputData]);
 
   const piechart2 = SnapshotTypeData.map((item, index) => ({
     name: item.SnapshotType,
     value: parseFloat(item.totalcost.toFixed(2)),
     color: colorPalette[index % colorPalette.length],
-}));
+  }));
 
-const piechart1 = ConsumedMeterData.map((item, index) => ({
+  const piechart1 = ConsumedMeterData.map((item, index) => ({
     name: item.SnapshotType,
     value: parseFloat(item.Count.toFixed(2)),
     color: colorPalette[index % colorPalette.length],
-}));
+  }));
 
   const tableData_OrphanedSnapshots = [
     {
@@ -1563,7 +1609,6 @@ const piechart1 = ConsumedMeterData.map((item, index) => ({
           onButtonClick={handleButtonClick}
           onFiltersChange={handleFiltersChange}
           selectedCSP={selectedProvider}
-          onMonthChange={handleMonthChange}
           currencySymbol={currencySymbol}
           currencyPreference={currencyPreference}
           loading={loading}

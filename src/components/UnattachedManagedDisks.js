@@ -45,10 +45,6 @@ const UnattachedManagedDisks = ({
   let inputData = selectedFilters;
   const [billingMonth, setBillingMonth] = useState([]);
 
-  const handleMonthChange = (months) => {
-    setBillingMonth(months);
-  };
-
   const navigate = useNavigate();
 
   const handleGroupByChange = (event) => {
@@ -76,7 +72,7 @@ const UnattachedManagedDisks = ({
     width: "88%",
   };
   const barchartStyle = {
-    width: "50%",
+    width: "49.5%",
     height: "56vh",
     marginTop: "20px",
     marginRight: "10px",
@@ -96,6 +92,16 @@ const UnattachedManagedDisks = ({
     width: "100%",
     paddingTop: "25px",
     marginTop: "-1rem",
+    marginLeft: "10px",
+  };
+  const titleStyle1 = {
+    marginLeft: "2.5rem",
+    marginTop: "rem",
+  };
+
+  const titleStyle2 = {
+    marginTop: "0.rem",
+    marginLeft: "4rem",
   };
 
   const formatYAxisSimple = (tickItem) => tickItem.toString();
@@ -128,7 +134,7 @@ const UnattachedManagedDisks = ({
           onButtonClick={onButtonClick}
           onFiltersChange={onFiltersChange}
           selectedCSP={selectedCSP}
-          onMonthChange={handleMonthChange}
+          monthComponent={true}
         />
         <NavigationBar />
       </Box>
@@ -152,8 +158,20 @@ const UnattachedManagedDisks = ({
         displayEmpty
         className="cmpUAMD_select"
         style={{
-          marginTop: "10px",
-          marginLeft: "90px",
+          marginBottom: "5px",
+          marginLeft: "58px",
+          backgroundColor: "white",
+        }}
+        renderValue={(selected) =>
+          selected === "" ? "Choose Recommendation" : selected
+        }
+        MenuProps={{
+          PaperProps: {
+            style: {
+              marginTop: "10px",
+              marginLeft: "50px",
+            },
+          },
         }}
       >
         <MenuItem value="">UnattachedManagedDisks</MenuItem>
@@ -164,7 +182,7 @@ const UnattachedManagedDisks = ({
         </MenuItem>
       </Select>
 
-      <div className="cmpUAMD_buttonContainer" style={{ marginTop: "30px" }}>
+      <div className="cmpUAMD_buttonContainer" style={{ marginTop: "20px" }}>
         <Button variant="contained" className="cmpUAMD_button" color="inherit">
           Customize Report
         </Button>
@@ -206,6 +224,8 @@ const UnattachedManagedDisks = ({
             containerStyle={containerStyle}
             chartStyle={{ width: "100%", height: "100%" }}
             loading={loading}
+            currencySymbol={currencySymbol}
+            currencyPreference={currencyPreference}
           ></GenericBarChart>
         </div>
 
@@ -229,6 +249,8 @@ const UnattachedManagedDisks = ({
               currencySymbol={currencySymbol}
               currencyPreference={currencyPreference}
               loading={loading}
+              titleStyle1={titleStyle1}
+              titleStyle2={titleStyle2}
             />
           </div>
         </div>
@@ -250,6 +272,7 @@ const UnattachedManagedDisks = ({
           tableData={tableData}
           headerClass="headerClass-1"
           loading={loading}
+          marginTop="50px"
         />
 
         <HorizontalBarGraph

@@ -41,6 +41,8 @@ const GenericBarChart = ({
   containerStyle = {},
   loading = false,
   marginTop = 0,
+  currencySymbol,
+  currencyPreference,
 }) => {
   const formatYAxis = (tickItem) => {
     if (yAxisTicks.some((tick) => tick >= 1000)) {
@@ -70,10 +72,10 @@ const GenericBarChart = ({
           >
             <BarChart
               data={data}
-              margin={{ top: 40, right: 30, left: 20, bottom: -40 }}
+              margin={{ top: 40, right: 30, left: 20, bottom: -30 }}
               barGap={8} // Adjust the value to increase or decrease the gap between bars
             >
-              <XAxis dataKey="subscriptionName" tick={{ fontSize: 8 }} />
+              <XAxis dataKey="subscriptionName" tick={{ fontSize: 12 }} />
               <YAxis
                 tick={{ fontSize: 12 }}
                 domain={yAxisDomain}
@@ -83,10 +85,26 @@ const GenericBarChart = ({
                   value: yAxisLabel,
                   angle: -90,
                   position: "insideLeft",
+                  dy: 30,
                   fontSize: 12,
                 }}
                 axisLine={false}
                 tickLine={false}
+              />{" "}
+              <Tooltip
+                formatter={(value, name) => {
+                  const formattedValue = Number(value).toFixed(2);
+
+                  // Remove currency preference logic for "Consumed Meter"
+                  if (name === "Consumed Meter") {
+                    return formattedValue;
+                  }
+
+                  return currencyPreference === "start"
+                    ? `${currencySymbol}${formattedValue}`
+                    : `${formattedValue}${currencySymbol}`;
+                }}
+                itemStyle={{ fontSize: 14 }}
               />
               <Tooltip />
               <Legend content={<CustomLegend />} />

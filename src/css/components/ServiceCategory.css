@@ -7,6 +7,7 @@
   margin-top: -4px !important;
   border-radius: 5px;
 }
+
 .cmpSvcCat_header {
   display: flex;
   flex-direction: column;
@@ -83,6 +84,16 @@
   position: sticky !important;
   top: 40px !important;
   z-index: 0;
+  text-align: center !important;
+  padding: 20px 10px !important;
+  border: 1px solid #ddd !important;
+  color: black;
+  background-color: #f0f0f0 !important;
+  width: 150px;
+}
+
+.cmpSvcCat_columnHeader1 {
+  position: sticky !important;
   text-align: center !important;
   padding: 20px 10px !important;
   border: 1px solid #ddd !important;

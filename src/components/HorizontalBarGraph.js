@@ -52,12 +52,17 @@ const HorizontalBarGraph = ({
         </div>
       ) : (
         <>
-          <Typography className="cmpPieChart_title">{title}</Typography>
+          <Typography
+            className="cmpPieChart_title"
+            style={{ marginTop: "5px", marginLeft: "25px" }}
+          >
+            {title}
+          </Typography>
           <ResponsiveContainer>
             <BarChart
               layout="vertical"
               data={data}
-              margin={{ top: 20, right: 30, left: 40, bottom: 40 }}
+              margin={{ top: 30, right: 40, left: 60, bottom: 60 }}
               barGap={15}
             >
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -68,7 +73,7 @@ const HorizontalBarGraph = ({
                 ticks={[0, 50, 100, 150, 200]}
                 label={{
                   value: xAxisLabel,
-                  position: "insideBottomRight",
+                  position: "insideBottom",
                   offset: -10,
                   fontSize: 12,
                 }}
@@ -83,11 +88,11 @@ const HorizontalBarGraph = ({
                   value: yAxisLabel,
                   angle: -90,
                   position: "insideLeft",
-                  dx: -20, // Adjust this value to move the label further to the left
+                  dx: -35, // Adjust this value to move the label further to the left
                   fontSize: 12,
                 }}
               />
-              <Tooltip />
+              <Tooltip itemStyle={{ fontSize: 14 }} />
               <Legend
                 content={<CustomLegend />}
                 verticalAlign="top"

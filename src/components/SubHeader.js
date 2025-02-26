@@ -14,6 +14,7 @@ const SubHeader = ({
   onFiltersChange,
   selectedCSP,
   onMonthChange,
+  monthComponent,
 }) => {
   //100-Azure,110-AWS,120-Next new CSP add further whenever new CSP we supporting
   const [filterData, setFilterData] = useState({
@@ -55,11 +56,18 @@ const SubHeader = ({
 
   const [billingMonth, setBillingMonth] = useState([]);
 
+  // const handleBillingMonthsChange = (month) => {
+  //   setBillingMonth(month);
+  //   onMonthChange(month);
+  // };
+
   const handleBillingMonthsChange = (month) => {
     setBillingMonth(month);
-    onMonthChange(month);
+    // Only call onMonthChange if it's a valid function
+    if (typeof onMonthChange === "function") {
+      onMonthChange(month);
+    }
   };
-
   const [csp, setCSP] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -219,28 +227,34 @@ const SubHeader = ({
                   marginLeft: "350px",
                 }}
               >
-              <div style={{ display: "flex", alignItems: "center",marginLeft: "4rem" }}>
-               <div
-                   style={{
-                   fontWeight: "bold",
-                  fontSize: "18px",
-                  paddingRight: "5px",
-                  marginTop: "5px",
-                   }}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: "4rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      paddingRight: "5px",
+                      marginTop: "5px",
+                    }}
                   >
-                  Azure
+                    Azure
                   </div>
-                 <img
+                  <img
                     src={FilterIcon}
                     alt="Filter"
-                   style={{
+                    style={{
                       width: "20px",
                       height: "20px",
                       marginLeft: "auto",
                       marginTop: "5px",
-                   }}
-                />
-               </div>
+                    }}
+                  />
+                </div>
                 <AWSFilter
                   onButtonClick={onButtonClick}
                   onFiltersChange={onFiltersChange}
@@ -257,27 +271,33 @@ const SubHeader = ({
                   marginLeft: "350px",
                 }}
               >
-                 <div style={{ display: "flex", alignItems: "center",marginLeft: "4.5rem" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: "4.5rem",
+                  }}
+                >
                   <div
-                       style={{
-                       fontWeight: "bold",
-                       fontSize: "18px",
-                       paddingRight: "5px",
-                       marginTop: "5px",
-                      }}
-                   >
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      paddingRight: "5px",
+                      marginTop: "5px",
+                    }}
+                  >
                     AWS
                   </div>
                   <img
                     src={FilterIcon}
                     alt="Filter"
                     style={{
-                    width: "20px",
-                    height: "20px",
-                    marginLeft: "auto",
-                     marginTop: "5px",
+                      width: "20px",
+                      height: "20px",
+                      marginLeft: "auto",
+                      marginTop: "5px",
                     }}
-                   />
+                  />
                 </div>
                 <AWSFilter
                   onButtonClick={onButtonClick}
@@ -289,10 +309,16 @@ const SubHeader = ({
           </div>
         </div>
       )}
-      <DateRangeDropdown
+      {/* <DateRangeDropdown
         selectedCSP={selectedCSP}
         onBillingMonthsChange={handleBillingMonthsChange}
-      />
+      /> */}
+      {monthComponent !== true && (
+        <DateRangeDropdown
+          selectedCSP={selectedCSP}
+          onBillingMonthsChange={handleBillingMonthsChange}
+        />
+      )}
     </div>
   );
 };

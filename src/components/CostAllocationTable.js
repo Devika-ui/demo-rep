@@ -12,6 +12,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import "../css/components/ServiceCategory.css";
 import ShareButton from "./ShareButton";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 import CircularProgress from "@mui/material/CircularProgress";
@@ -110,6 +111,7 @@ const CostAllocationTable = ({
   height,
   width,
   headerClass,
+  marginTop,
   loading = false,
 }) => {
   const tableRef = useRef(null);
@@ -142,24 +144,32 @@ const CostAllocationTable = ({
               </Typography>
 
               <div>
-                {dropdown}
+                <Button
+                  variant="contained"
+                  className="cmpUAMD_button"
+                  color="inherit"
+                >
+                  Customize Report
+                </Button>
                 <ShareButton
                   tableData={dummyData}
                   tableRef={tableRef}
                   isHierarchical={true}
-                  className="cmpInvTv_shareButton"
-                  dataType="TotalBillAllocation"
                 />
                 <IconButton
-                  onClick={handleOverlayOpen}
                   className="cmpInvTv_fullscreenButton"
+                  onClick={handleOverlayOpen}
                 >
                   <FullscreenIcon />
                 </IconButton>
               </div>
             </div>
 
-            <TableContainer ref={tableRef} className="cmpSvcCat_tableContainer">
+            <TableContainer
+              ref={tableRef}
+              style={{ marginTop }}
+              className="cmpSvcCat_tableContainer"
+            >
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
@@ -172,7 +182,10 @@ const CostAllocationTable = ({
                           key.startsWith("columnHead") && key !== "columnHead1"
                       )
                       .map((key) => (
-                        <TableCell key={key}>
+                        <TableCell
+                          className="cmpSvcCat_columnHeader1"
+                          key={key}
+                        >
                           {tableData[0][key].title}
                         </TableCell>
                       ))}
@@ -214,7 +227,10 @@ const CostAllocationTable = ({
                           key.startsWith("columnHead") && key !== "columnHead1"
                       )
                       .map((key) => (
-                        <TableCell key={key}>
+                        <TableCell
+                          className="cmpSvcCat_columnHeader1"
+                          key={key}
+                        >
                           {tableData[0][key].title}
                         </TableCell>
                       ))}
