@@ -18,12 +18,13 @@
   font-size: 12px;
   color: #63666a;
   display: flex;
+  margin-top: -2rem;
   justify-content: flex-end;
 }
 .cmpHBgraph_legendItem {
   display: flex;
   align-items: center;
-  margin-right: -16px;
+  margin-right: 10px;
 }
 .cmpHBgraph_legendColorBox {
   width: 10px;

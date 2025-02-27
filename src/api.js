@@ -1358,8 +1358,7 @@ const api = {
           customerId: await componentUtil.getSelectedCustomerID(),
           CloudServiceProvider: componentUtil.getSelectedCSP(),
           filters: {
-            // ...selectedFilters,
-            tags_owner : ["business.owner98@test.com"]
+            ...selectedFilters,
           },
         }),
       });
@@ -1385,8 +1384,7 @@ const api = {
           customerId: await componentUtil.getSelectedCustomerID(),
           CloudServiceProvider: componentUtil.getSelectedCSP(),
           filters: {
-            // ...selectedFilters,
-            tags_owner : ["business.owner98@test.com"]
+            ...selectedFilters,
           },
         }),
       });

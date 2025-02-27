@@ -109,7 +109,7 @@ const OrphanedSnapshots = ({
   };
 
   const containerStyle = {
-    marginLeft: "-12.5rem",
+    marginLeft: "-14.4rem",
     marginTop: "1.98rem",
     height: "38.7vh",
     width: "41.5%"
@@ -149,7 +149,7 @@ const OrphanedSnapshots = ({
            onButtonClick={onButtonClick}
            onFiltersChange={onFiltersChange}
            selectedCSP={selectedCSP}
-           onMonthChange={handleMonthChange}
+           monthComponent={true}
         />
         <NavigationBar />
       </Box>
@@ -179,8 +179,20 @@ const OrphanedSnapshots = ({
             onChange={handleGroupByChange}
             displayEmpty
             className="cmpUAMD_select1"
-            style={{ marginTop: "-3px",height:"5.5vh",background:"white" }}
+            style={{ marginTop: "-3px",height:"5.5vh",background:"white",marginLeft:"-10px"}}
+            renderValue={(selected) =>
+              selected === "" ? "Choose Recommendation" : selected
+            }
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  marginTop: "10px",
+                  marginLeft: "50px",
+                },
+              },
+            }}
           >
+            
             <MenuItem value="">OrphanedSnapshots</MenuItem>
             <MenuItem value="subscription">UnattachedManagedDisks</MenuItem>
             <MenuItem value="region">
@@ -192,12 +204,15 @@ const OrphanedSnapshots = ({
               title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
               titleStyle={{ fontSize: "1rem", fontWeight: "bold", color: "#5F249F", textAlign: "center",marginTop:"-1.2rem" }}
               data={data}
-              yAxisTicks={[0, 50,100, 500]}
+              yAxisTicks={[0, 500, 1000, 1500]}
               bars={bars}              
               containerStyle={containerStyle}
-              chartStyle={{ width: "70%", height: 250 }}
+               yAxisLabel="Cost (in thousands)"
+              chartStyle={{ width: "100%", height: "100%" }}
               barSize = {50}
-              marginTop={-40}
+              // marginTop={-40}
+              currencySymbol={currencySymbol}
+              currencyPreference={currencyPreference}
               loading={loading}
             ></GenericBarChart>
           {/* </div> */}
@@ -252,11 +267,13 @@ const OrphanedSnapshots = ({
        </div>
       <HorizontalBarGraph
          data={horizontaldata}
-        title={<div style={{textAlign: 'center'}}>
+        title={<div style={{ textAlign: "center", paddingTop: "10px",marginLeft: "-15rem" }}>
          Orphaned Snapshots across locations
           </div>
         }
           barchartStyle={barchartStyle}
+          xAxisLabel= "Count of Snapshots"
+          yAxisLabel="Location"
           loading={loading}
        />
     </div>

@@ -29,6 +29,7 @@ const RecommendationSPA = () => {
   const [snapLocations, setSnapLocations] = useState([]);
   const [onDemandData, setOnDemandData] = useState([]);
   const [costData, setCostData] = useState([]);
+  const [containerboxData, setContainerboxData] =useState([]);
   const colorPalette = ["#5F249F", "#330072", "#A98BD3", "#969696", "#D9D9D6"];
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(
@@ -276,8 +277,15 @@ const RecommendationSPA = () => {
         const applicationsCount = applicationsResponse.impactedApplication || 0;
 
         const dataSet2 = [
-          { number: orphanedSnapshotCount, text: "Orphaned Snapshots" },
-          { number: snapshotCost, text: "Snapshot Cost" },
+          { number: orphanedSnapshotCount, text: "Count of Snapshots" },
+          { number:  
+               snapshotCost > 1000
+              ? currencyPreference === "start"
+                ? `${currencySymbol}${(snapshotCost / 1000).toFixed(2)}K`
+                : `${(snapshotCost / 1000).toFixed(2)}K${currencySymbol}`
+              : currencyPreference === "start"
+              ? `${currencySymbol}${snapshotCost}`
+              : `${snapshotCost}${currencySymbol}`, text: "Snapshot Cost" },
           { number: applicationsCount, text: "Impacted Applications" },
         ];
         setBoxData(dataSet2);
@@ -435,7 +443,7 @@ const RecommendationSPA = () => {
 
   const tableData_OrphanedSnapshots = [
     {
-      tableTitle: "On-Demand Cost Allocation for Orphaned Snapshots",
+      tableTitle: "On-Demand Cost Allocation",
       columnHead1: {
         key: "applicationName",
         title: "Application/Project Name",
@@ -447,11 +455,11 @@ const RecommendationSPA = () => {
       },
       columnHead4: {
         key: "snapshotCount",
-        title: `Count of Snapshots (${currencySymbol})`,
+        title: "Count of Snapshots",
       },
       columnHead5: {
         key: "environment",
-        title: `Environment(${currencySymbol})`,
+        title: "Environment",
       },
     },
   ];
@@ -474,7 +482,7 @@ const RecommendationSPA = () => {
   //orphanedSnapshots ends
 
   //HyperScalarAdvisor
-
+  
   const bars_HyperScalarAdvisor = [
     {
       dataKey: "High",
