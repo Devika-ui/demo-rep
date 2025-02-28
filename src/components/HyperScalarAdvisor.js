@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
+import { Box, Typography } from "@mui/material";
 import ContainerBox from "./ContainerBox";
 import PieChartContainer from "./PieChartContainer";
-import ServiceCategory from "./ServiceCategory";
-//import HyperScalarBarChart from './HyperScalarBarChart';
+import CostAllocationTable from "./CostAllocationTable.js";
 import { Select, MenuItem } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ShareIcon from "@mui/icons-material/Share";
-import CostsAmortized from "./CostsAmortized.js";
 import Button from "@mui/material/Button";
 import GenericBarChart from "./GenericBarChart.js";
 import "../css/components/HyperScalarAdvisor.css";
 
 const HyperScalarAdvisor = ({
-  additionalFilters,
   tableData,
   dummyData,
   dataSet1,
@@ -23,18 +21,15 @@ const HyperScalarAdvisor = ({
   data1,
   data2,
   bars,
+  selectedCSP,
+  onButtonClick,
+  onFiltersChange,
+  currencySymbol,
+  currencyPreference,
+  loading,
 }) => {
   sessionStorage.removeItem("overviewPage");
-  const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
-
-  const handleButtonClick = (value) => {
-    if (value === 1) {
-      setShowStackBars(false);
-    } else {
-      setShowStackBars(true);
-    }
-  };
 
   const handleGroupByChange = (event) => {
     setGroupBy(event.target.value);
@@ -43,66 +38,118 @@ const HyperScalarAdvisor = ({
   const pieChartContainerStyle = {
     display: "flex",
     justifyContent: "space-around",
-    margin: "-308px 680px -260px",
+    width: "48%",
+    flexGrow: "1",
+    flexBasis: "100%",
+    height: "47.4vh",
+    marginRight:"0.7rem",
+    marginTop:"-17.86rem"
   };
 
   const pieChartStyle = {
-    width: "55%",
-    paddingTop: "45px",
-    marginBottom: "85px", // Adjust individual chart width
+    paddingTop: "25px",
+    marginTop: "-2rem",
+  };
+
+  const containerStyle = {
+    marginLeft: "-0.6rem",
+    marginTop: "-0.8rem",
+    height: "38.7vh",
+    width: "86.3%"
+  }
+
+  const titleStyle1 = {
+    fontSize: "0.8rem",
+    marginLeft: "0.8rem",
+    position: "relative", 
+    marginTop: "0.35rem",
+    whiteSpace: "nowrap",
+  };
+
+  const titleStyle2 = {
+    fontSize: "0.7rem",
+    marginTop: "0.2rem",
+    marginLeft: "4rem",
+    position: "relative",
+    // whiteSpace: "nowrap",
   };
 
   return (
     <div>
-      <Header onButtonClick={handleButtonClick} />
-      <Subheader
-        title={
-          <div>
-            <span style={{ fontSize: "15px" }}>Recommendations/</span>
-            <span style={{ color: "#0070C0", fontSize: "15px" }}>
-              Hyper-ScalarAdvisor
-            </span>
-          </div>
-        }
-        additionalFilters={additionalFilters}
-      />
-      <NavigationBar />
-      {/* ContainerBoxForInventory */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginRight: "14px",
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        paddingX: 9.5,
+        paddingRight: "10px",
+        maxWidth: "100%",
+      }}
+    >
+      <Header />
+      <Typography
+        variant="h6"
+        align="center"
+        sx={{
+          color: "#5f249f",
+          marginTop: "-1rem",
+          fontWeight: "bold",
         }}
       >
-        <ContainerBox data={dataSet1} />
-      </div>
+        Hyper Scalar Advisor
+      </Typography>
+      <Subheader
+           onButtonClick={onButtonClick}
+           onFiltersChange={onFiltersChange}
+           selectedCSP={selectedCSP}
+           monthComponent={true}
+      />
+      <NavigationBar />
+    </Box>
+
+    {/* Boxes */}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        marginLeft: "-33px",
+        marginRight: "2px",
+        marginTop: "-5px",
+      }}
+    >
+     <ContainerBox data={dataSet1} />
+    </div>
       <div
         style={{
           display: "flex",
           marginBottom: 20,
           paddingLeft: "68px",
-          height: "300px", // Adjust the height as desired
+          height: "300px",
           width: "100%",
         }}
       >
         <div style={{ marginTop: "-20px", width: "50%" }}>
-          <div style={{ marginTop: "20px", paddingRight: "18px" }}>
-            <GenericBarChart
-              title="Comparison of Subscriptions Vs Impact"
-              data={data}
-              bars={bars}
-            >
-              <Select
+        <Select
                 value={groupBy}
                 onChange={handleGroupByChange}
                 displayEmpty
                 className="cmpHSA_select"
+                style={{ marginTop: "17px",height:"5.5vh",background:"white",marginLeft:"-10px",width: "295px"}}
               >
                 <MenuItem value="">Choose Recommendation Category</MenuItem>
                 <MenuItem value="auto-scale">Auto-Scale</MenuItem>
                 <MenuItem value="rightsize">Right size</MenuItem>
               </Select>
+          <div style={{ marginTop: "20px", paddingRight: "18px" }}>
+            <GenericBarChart
+              title="Comparison of Subscriptions Vs Impact"
+              data={data}
+              bars={bars}
+              containerStyle={containerStyle}
+              chartStyle={{ width: "100%", height: "100%" }}
+              currencySymbol={currencySymbol}
+              currencyPreference={currencyPreference}
+              loading={loading}
+            >
             </GenericBarChart>
           </div>
         </div>
@@ -112,7 +159,6 @@ const HyperScalarAdvisor = ({
       <div>
         {/* Separate container for buttons */}
         <div className="cmpHSA_buttonContainer">
-          <CostsAmortized dialogPaperClass="cmpHSA_dialogPaper" />
           <Button variant="contained" className="cmpHSA_button" color="inherit">
             Customize Report
           </Button>
@@ -120,7 +166,7 @@ const HyperScalarAdvisor = ({
             <ShareIcon />
           </IconButton>
         </div>
-        {/* Container for the PieChartContainer */}
+
         <div>
           <PieChartContainer
             title1="Applications with High Impact Recommendations"
@@ -129,6 +175,15 @@ const HyperScalarAdvisor = ({
             data2={data2}
             containerStyle={pieChartContainerStyle}
             chartStyle={pieChartStyle}
+            pieChartHeight1={"90%"}
+            pieChartHeight2={"85%"}
+            titleStyle1={titleStyle1}
+            titleStyle2={titleStyle2}
+            legendWrapperStyle1={{ bottom: 5, fontSize: "10px" }}
+            legendWrapperStyle2={{ bottom: 5, fontSize: "10px" }}
+            currencySymbol={currencySymbol}
+            currencyPreference={currencyPreference}
+            loading={loading}
           />
         </div>
       </div>
@@ -141,15 +196,19 @@ const HyperScalarAdvisor = ({
           display: "flex",
           justifyContent: "center",
           paddingLeft: "125px",
-          paddingTop: "270px",
+          paddingTop: "0px",
         }}
       >
-        <ServiceCategory
+      <Box sx={{ marginTop: "-2.5rem", width: "97.3%",marginLeft: "-2.2rem" }}>
+        <CostAllocationTable
           dummyData={dummyData}
-          height="400px"
-          width="1125px"
+          height="240px"
+          width="100%"
           tableData={tableData}
-        />
+          headerClass="headerClass-1"
+          loading={loading}
+        /> 
+      </Box>
       </div>
     </div>
   );

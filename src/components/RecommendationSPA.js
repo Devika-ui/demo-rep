@@ -21,7 +21,6 @@ const RecommendationSPA = () => {
   const [onDemandConsumed, setOnDemandConsumed] = useState([]);
   const [mangedDiskCost, setDiskCost] = useState([]);
   const [unattachedDiskConsumed, setUnattachedDiskCOnsumed] = useState([]);
-  const [costAllocation, setCostAllocation] = useState([]);
   const [serviceCategoryData, setServiceCategoryData] = useState([]);
   const [boxdata, setBoxData] = useState([]);
   const [SnapshotTypeData, setSnapshotTypeData] = useState([]);
@@ -29,7 +28,11 @@ const RecommendationSPA = () => {
   const [snapLocations, setSnapLocations] = useState([]);
   const [onDemandData, setOnDemandData] = useState([]);
   const [costData, setCostData] = useState([]);
-  const [containerboxData, setContainerboxData] =useState([]);
+  const [containerboxData, setContainerboxData] = useState([]);
+  const [applicationimpact, setApplicationImpact] = useState([]);
+  const [serviceimpact, setServiceImpact] = useState([]);
+  const [CostvsSub, setCostvsSub] = useState([]);
+  const [advisorCost, setadvisorCost] =useState([]);
   const colorPalette = ["#5F249F", "#330072", "#A98BD3", "#969696", "#D9D9D6"];
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(
@@ -417,7 +420,6 @@ const RecommendationSPA = () => {
         };
 
         const formattedData = aggregateData(costallocationresponse);
-        console.log("data", formattedData);
         setCostData(formattedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -482,37 +484,211 @@ const RecommendationSPA = () => {
   //orphanedSnapshots ends
 
   //HyperScalarAdvisor
-  
-  const bars_HyperScalarAdvisor = [
-    {
-      dataKey: "High",
-      fill: "#2CAFFE",
-      name: "High",
-      barSize: 20,
-    },
-    {
-      dataKey: "Medium",
-      fill: "#006975",
-      name: "Medium",
-      barSize: 20,
-    },
-    {
-      dataKey: "Low",
-      fill: "#330072",
-      name: "Low",
-      barSize: 20,
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [recommendationsData,
+               highImpactData,
+               applications,
+               services,
+               subImpact,
+               advisorcostresponse
+            ] = await Promise.all([
+              api.getadvisorrecommendations(),
+              api.getadvisorhighimpact(),
+              api.getadvisorApplications(),
+              api.getadvisorServices(),
+              api.getadvisorcostvsimpact(),
+              api.getadvisorCost()
+            ]);
+            console.log("Fetched cost vs impact data:",subImpact);
+            const currencySymbol = await componentUtil.getCurrencySymbol();
+            setCurrencySymbol(currencySymbol);
+            const currencyPreference = await componentUtil.getCurrencyPreference();
+            setCurrencyPreference(currencyPreference);
+            const recommendations = recommendationsData?.recommendationcount || 0;
+            const impact = highImpactData?.highimpactcount || 0;
+
+            const dataSet1 = [
+              {number:recommendations ,text: "Number of Recommendations"},
+              {number:impact , text :"High Impact Recommendations"}
+            ]
+
+            setContainerboxData(dataSet1);
+            setApplicationImpact(applications);
+            setServiceImpact(services);
+            setCostvsSub(subImpact)
+
+            const aggregateData = (data) => {
+              return Object.entries(data)
+                .map(([subscription, categories]) => {
+                  if (!categories || typeof categories !== "object") return null;
+            
+                  const formattedCategories = Object.entries(categories)
+                    .map(([category, plans]) => {
+                      if (!plans || typeof plans !== "object") return null;
+            
+                      const formattedPlans = Object.entries(plans)
+                        .map(([plan, resourceGroups]) => {
+                          if (!resourceGroups || typeof resourceGroups !== "object") return null;
+            
+                          const formattedResourceGroups = Object.entries(resourceGroups)
+                            .map(([resourceGroup, resources]) => {
+                              if (!resources || typeof resources !== "object") return null;
+            
+                              const formattedResources = Object.entries(resources).map(
+                                ([resource, resourceData]) => ({
+                                  name: resource,
+                                  ownername: resourceData?.ownername || null,
+                                  totalCost: resourceData?.totalCost || 0,
+                                  impact: resourceData?.impact || "Unknown",
+                                  solution: resourceData?.solution || "No solution provided",
+                                  applicationname: resourceData?.applicationname || null,
+                                  environment: resourceData?.environment !== null
+                                    ? resourceData?.environment
+                                    : "null",
+                                })
+                              );
+            
+                              // Aggregate totals for the resource group
+                              const groupTotalCost = formattedResources.reduce(
+                                (sum, resource) => sum + resource.totalCost,
+                                0
+                              );
+            
+                              return {
+                                name: resourceGroup,
+                                totalCost: groupTotalCost,
+                                impact: null,
+                                solution: null,
+                                ownername: null,
+                                applicationname: null,
+                                environment: null,
+                                resources: formattedResources,
+                              };
+                            })
+                            .filter(Boolean);
+            
+                          // Aggregate totals for the plan
+                          const planTotalCost = formattedResourceGroups.reduce(
+                            (sum, group) => sum + group.totalCost,
+                            0
+                          );
+            
+                          return {
+                            name: plan,
+                            totalCost: planTotalCost,
+                            impact: null,
+                            solution: null,
+                            ownername: null,
+                            applicationname: null,
+                            environment: null,
+                            resourceGroups: formattedResourceGroups,
+                          };
+                        })
+                        .filter(Boolean);
+            
+                      // Aggregate totals for the category
+                      const categoryTotalCost = formattedPlans.reduce(
+                        (sum, plan) => sum + plan.totalCost,
+                        0
+                      );
+            
+                      return {
+                        name: category,
+                        totalCost: categoryTotalCost,
+                        impact: null,
+                        solution: null,
+                        ownername: null,
+                        applicationname: null,
+                        environment: null,
+                        plans: formattedPlans,
+                      };
+                    })
+                    .filter(Boolean);
+            
+                  // Aggregate totals for the subscription
+                  const subscriptionTotalCost = formattedCategories.reduce(
+                    (sum, category) => sum + category.totalCost,
+                    0
+                  );
+            
+                  return {
+                    name: subscription,
+                    totalCost: subscriptionTotalCost,
+                    impact: null,
+                    solution: null,
+                    ownername: null,
+                    applicationname: null,
+                    environment: null,
+                    categories: formattedCategories,
+                  };
+                })
+                .filter(Boolean);
+            };
+            
+            const formattedData = aggregateData(advisorcostresponse);
+            setadvisorCost(formattedData);
+            
+            console.log("Updated state:",CostvsSub);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+            fetchData();
+          }, [inputData, selectedProvider]);
+
+          const formattedCostvsSub = CostvsSub.map((item) => ({
+            subscriptionName: item.Subscription,
+            [item.Impact]: item.Totalcost,
+          }));
+          
+          const Piechart1 = applicationimpact?.map((item, index) => ({
+            name: item.Application,
+            value: item.Totalcost ? parseFloat(item.Totalcost.toFixed(2)) : 0,
+            color: colorPalette[index % colorPalette.length],
+          })) || [];
+
+          const Piechart2 = serviceimpact?.map((item, index) => ({
+            name: item.ServiceCategory,
+            value: item.Totalcost ? parseFloat(item.Totalcost.toFixed(2)) : 0,
+            color: colorPalette[index % colorPalette.length],
+          })) || [];   
+          
+
+          const bars_HyperScalarAdvisor = [
+            {
+              dataKey: "High",
+              fill: "#2CAFFE",
+              name: "High",
+              barSize: 20,
+            },
+            {
+              dataKey: "Medium",
+              fill: "#006975",
+              name: "Medium",
+              barSize: 20,
+            },
+            {
+              dataKey: "Low",
+              fill: "#330072",
+              name: "Low",
+              barSize: 20,
+            },
+          ];          
 
   const tableData_HyperScalarAdvisor = [
     {
-      tableTitle: "On Demand Cost Allocation for licenses",
-      columnHead1: "Item Name",
-      columnHead2: " SQL Server License Type ",
-      columnHead3: " Total Cost",
-      columnHead4: " Owner name",
-      columnHead5: "Application ",
-      columnHead6: "Environment",
+      tableTitle: "On Demand Cost Allocation",
+      columnHead1: { key: "name", title: "Name",},
+      columnHead2: { key: "totalCost",
+        title: `Total Cost (${currencySymbol})`,
+       },
+      columnHead3: {key: "impact",title: "Impact"},
+      columnHead4: {key: "solution",title: "Solution"},
+      columnHead5: {key: "ownername",title: "Owner Name"},
+      columnHead6: {key: "applicationname",title: "Application Name"},
+      columnHead7: {key: "environment",title: "Environment"},
     },
   ];
 
@@ -1643,14 +1819,18 @@ const RecommendationSPA = () => {
       )}
       {activeSection === "hyperScalarAdvisor" && (
         <HyperScalarAdvisor
-          additionalFilters={additionalFilters_HyperScalarAdvisor}
           tableData={tableData_HyperScalarAdvisor}
-          dummyData={dummyData_HyperScalarAdvisor}
-          dataSet1={dataSet1_HyperScalarAdvisor}
-          data={data_HyperScalarAdvisor}
-          data1={data1_HyperScalarAdvisor}
-          data2={data2_HyperScalarAdvisor}
+          dummyData={advisorCost}
+          dataSet1={containerboxData}
+          data={formattedCostvsSub}
+          data1={Piechart1}
+          data2={Piechart2}
           bars={bars_HyperScalarAdvisor}
+          selectedCSP={selectedProvider}
+          onMonthChange={handleMonthChange}
+          currencySymbol={currencySymbol}
+          currencyPreference={currencyPreference}
+          loading={loading}
         />
       )}
       {activeSection === "sqlVmLicenses" && (

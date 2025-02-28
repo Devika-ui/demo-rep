@@ -1,11 +1,11 @@
 .cmpHSA_heading {
-  color: #63666a;
+  color: #63666A;
   font-size: 14px;
   margin-bottom: 16px;
 }
 .cmpHSA_buttonContainer {
   position: absolute;
-  top: 235px;
+  top: 227px;
   left: 880px;
   z-index: 1000;
   margin: 20px;
@@ -16,7 +16,7 @@
 .cmpHSA_button {
   font-size: 0.7rem !important;
   padding: 4px 8px !important;
-  color: #63666a;
+  color: #63666A !important;
   border-color: #63666a;
 }
 .cmpHSA_dialogPaper {
@@ -27,13 +27,7 @@
   margin-bottom: 200px !important;
   padding: 20px !important;
 }
-.cmpHSA_select {
-  font-size: 0.7rem;
-  padding: 2px 4px;
-  color: #63666a;
-  border-color: #63666a;
-  min-width: auto;
-}
+
 .cmpHSA_select .MuiSelect-select {
   padding: 2px 4px;
 }

@@ -29,26 +29,14 @@ const OrphanedSnapshots = ({
   onButtonClick,
   onFiltersChange,
   selectedCSP,
-  onMonthChange,
   currencySymbol,
   currencyPreference,
   loading,
 }) => {
   sessionStorage.removeItem("overviewPage");
-  const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
   const navigate = useNavigate();
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  let inputData = selectedFilters;
-  const [billingMonth, setBillingMonth] = useState([]);
-  const [selectedProvider, setSelectedProvider] = useState([]);
-
-  const handleButtonClick = (value) => {
-    componentUtil.setSelectedCSP(value);
-    setSelectedProvider(value);
-    setShowStackBars(value !== 1);
-  };
-
+  
   // Handle change for the dropdown
   const handleGroupByChange = (event) => {
     const value = event.target.value;
@@ -66,14 +54,6 @@ const OrphanedSnapshots = ({
       default:
         break;
     }
-  };
-
-  const handleFiltersChange = (newFilters) => {
-    setSelectedFilters(newFilters);
-  };
-
-  const handleMonthChange = (months) => {
-    setBillingMonth(months);
   };
 
   const pieChartContainerStyle = {
@@ -239,7 +219,6 @@ const OrphanedSnapshots = ({
             data1={data1}
             title2="Snapshot Type Vs Cost"
             data2={data2}
-            // loading={loading}
             containerStyle={pieChartContainerStyle}
             chartStyle={pieChartStyle}
             pieChartHeight1={"90%"}
