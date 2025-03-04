@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
-import PieChartContainer from "./PieChartContainer";
-import ContainerBox from "./ContainerBox";
-import GenericBarChart from "./GenericBarChart";
-import ServiceCategory from "./ServiceCategory";
+import PieChartContainer from "./PieChartContainer.js";
+import GenericBarChart from "./GenericBarChart.js";
+import HorizontalBarGraph from "./HorizontalBarGraph.js";
 import { Select, MenuItem } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ShareIcon from "@mui/icons-material/Share";
 import CostsAmortized from "./CostsAmortized.js";
 import Button from "@mui/material/Button";
-import "../css/components/SqlVmLicenses.css";
+import ContainerBox from "./ContainerBox.js";
+import CostAllocationTable from "./CostAllocationTable.js";
+import "../css/components/UnattachedManagedDisks.css";
+import componentUtil from "../componentUtil.js";
+import { Box, Typography } from "@mui/material";
 
 const SqlVmLicenses = ({
-  additionalFilters,
   tableData,
   dummyData,
   dataSet1,
@@ -22,138 +25,238 @@ const SqlVmLicenses = ({
   data1,
   data2,
   bars,
+  onButtonClick,
+  onFiltersChange,
+  selectedCSP,
+  currencySymbol,
+  currencyPreference,
+  loading,
 }) => {
   sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
   const [groupBy, setGroupBy] = useState("");
+  const [selectedProvider, setSelectedProvider] = useState(
+    componentUtil.getSelectedCSP()
+  );
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  let inputData = selectedFilters;
+  const [billingMonth, setBillingMonth] = useState([]);
 
-  // Callback function to receive value from HeaderButton
-  const handleButtonClick = (value) => {
-    if (value === 1) {
-      setShowStackBars(false); // Hide StackBars and show AzureBars
-    } else {
-      setShowStackBars(true); // Show StackBars
+  const navigate = useNavigate();
+
+  const handleGroupByChange = (event) => {
+    const value = event.target.value;
+    setGroupBy(value);
+    switch (value) {
+      case "subscription":
+        navigate("/recommendations#unattachedManagedDisks");
+        break;
+      case "resourceGroup":
+        navigate("/recommendations#orphanedSnapshots");
+        break;
+      case "region":
+        navigate("/orphaned-attached-disks");
+        break;
+      default:
+        break;
     }
   };
 
-  const handleGroupByChange = (event) => {
-    setGroupBy(event.target.value);
+  const containerStyle = {
+    marginLeft: "1rem",
+    marginTop: "1.98rem",
+    height: "41.9vh",
+    width: "88%",
   };
-
+  const barchartStyle = {
+    width: "49.5%",
+    height: "56vh",
+    marginTop: "20px",
+    marginRight: "10px",
+  };
   const pieChartContainerStyle = {
     display: "flex",
     justifyContent: "space-around",
-    margin: "-308px 680px -260px",
+    width: "100%",
+    flexGrow: "1",
+    flexBasis: "100%",
+    height: "49.7vh",
+    marginleft: "2rem",
+    marginTop: "3rem",
   };
 
   const pieChartStyle = {
-    width: "55%",
-    paddingTop: "45px",
-    marginBottom: "110px", // Adjust individual chart width
+    width: "100%",
+    paddingTop: "25px",
+    marginTop: "-1rem",
+    marginLeft: "10px",
+  };
+  const titleStyle1 = {
+    marginLeft: "1rem",
+    marginTop: "0rem",
+    marginBottom: "-0.5rem",
   };
 
+  const titleStyle2 = {
+    marginTop: "0.rem",
+    marginLeft: "1rem",
+    marginBottom: "-0.5rem",
+  };
+
+  const formatYAxisSimple = (tickItem) => tickItem.toString();
   return (
     <div>
-      <Header onButtonClick={handleButtonClick} />
-      <Subheader
-        title={
-          <div>
-            <span style={{ fontSize: "15px" }}>Recommendations/</span>
-            <span style={{ color: "#0070C0", fontSize: "15px" }}>
-              SQL VML Licenses
-            </span>
-          </div>
-        }
-        additionalFilters={additionalFilters}
-      />
-      <NavigationBar />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          paddingX: 9.5,
+          paddingRight: "10px",
+          maxWidth: "100%",
+        }}
+      >
+        <Header />
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{
+            color: "#5f249f",
+            marginTop: "-1rem", // Adjust this as needed
+            fontWeight: "bold",
+          }}
+        >
+          SQL VM Licenses
+        </Typography>
+        <Subheader
+          onButtonClick={onButtonClick}
+          onFiltersChange={onFiltersChange}
+          selectedCSP={selectedCSP}
+          monthComponent={true}
+        />
+        <NavigationBar />
+      </Box>
+
       {/* ContainerBoxForInventory */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          marginRight: "14px",
+          marginLeft: "-33px",
+          marginRight: "2px",
+          marginTop: "-1px",
         }}
       >
-        <ContainerBox data={dataSet1} />
+        <ContainerBox data={dataSet1} loading={loading} />
       </div>
+
+      <Select
+        value={groupBy}
+        onChange={handleGroupByChange}
+        displayEmpty
+        className="cmpUAMD_select"
+        style={{
+          marginBottom: "5px",
+          marginLeft: "58px",
+          backgroundColor: "white",
+          textAlign: "center",
+          width: "250px",
+        }}
+        renderValue={(selected) =>
+          selected === "" ? "Choose an Option" : selected
+        }
+        MenuProps={{
+          PaperProps: {
+            style: {
+              marginTop: "10px",
+              marginLeft: "0px",
+            },
+          },
+        }}
+      >
+        <MenuItem value="">SqlVmLicenses</MenuItem>
+        <MenuItem value="resourceGroup">VM Licenses</MenuItem>
+      </Select>
+
+      <div className="cmpUAMD_buttonContainer" style={{ marginTop: "20px" }}>
+        <Button variant="contained" className="cmpUAMD_button" color="inherit">
+          Customize Report
+        </Button>
+        <IconButton className="cmpUAMD_button">
+          <ShareIcon />
+        </IconButton>
+      </div>
+
       <div
         style={{
           display: "flex",
-          marginBottom: 20,
-          paddingLeft: "68px",
-          height: "300px", // Adjust the height as desired
-          width: "100%",
+          justifyContent: "space-between",
+          padding: "10px",
+          marginTop: "-37px",
+          flexWrap: "wrap",
+          gap: "5px",
+          // flexDirection: "row", // Default for larger screens
         }}
+        className="chart-container"
       >
-        <div style={{ marginTop: "-20px", width: "50%" }}>
-          <div style={{ marginTop: "20px", paddingRight: "18px" }}>
-            <GenericBarChart
-              title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
-              data={data}
-              yAxisLabel="Cost (in thousands)"
-              bars={bars}
-            >
-              <Select
-                value={groupBy}
-                onChange={handleGroupByChange}
-                displayEmpty
-                className="cmpSqlVM_select"
-              >
-                <MenuItem value="">Choose an option</MenuItem>
-                <MenuItem value="sqlvmlicenses">SQL VM Licenses</MenuItem>
-                <MenuItem value="vmlicenses">VM Licenses</MenuItem>
-              </Select>
-            </GenericBarChart>
+        <div
+          style={{
+            flex: 1,
+            marginLeft: "2rem",
+            maxWidth: "50%",
+            boxSizing: "border-box",
+          }}
+        >
+          <GenericBarChart
+            title={
+              "Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
+            }
+            data={data}
+            yAxisLabel="Cost (in thousands)"
+            bars={bars}
+            yAxisTickFormatter={formatYAxisSimple}
+            containerStyle={containerStyle}
+            chartStyle={{ width: "100%", height: "100%" }}
+            loading={loading}
+            currencySymbol={currencySymbol}
+            currencyPreference={currencyPreference}
+          ></GenericBarChart>
+        </div>
+
+        <div style={{ flex: 1, marginRight: "0rem", marginTop: "-1rem" }}>
+          <div>
+            <PieChartContainer
+              title1={"License Type Vs Consumed Meter"}
+              data1={data1}
+              title2={"License  Type Vs On Demand Cost"}
+              data2={data2}
+              containerStyle={pieChartContainerStyle}
+              chartStyle={pieChartStyle}
+              currencySymbol={currencySymbol}
+              currencyPreference={currencyPreference}
+              loading={loading}
+              titleStyle1={titleStyle1}
+              titleStyle2={titleStyle2}
+            />
           </div>
         </div>
       </div>
-
-      {/* Include PieChartContainer */}
-      <div>
-        {/* Separate container for buttons */}
-        <div className="cmpSqlVM_buttonContainer">
-          <CostsAmortized dialogPaperClass="cmpSqlVM_dialogPaper" />
-          <Button
-            variant="contained"
-            className="cmpSqlVM_button"
-            color="inherit"
-          >
-            Customize Report
-          </Button>
-          <IconButton className="cmpSqlVM_button">
-            <ShareIcon />
-          </IconButton>
-        </div>
-        {/* Container for the PieChartContainer */}
-        <div>
-          <PieChartContainer
-            title1="License type Vs Consumed Meter"
-            data1={data1}
-            title2="License type Vs Cost"
-            data2={data2}
-            containerStyle={pieChartContainerStyle}
-            chartStyle={pieChartStyle}
-          />
-        </div>
-      </div>
-
       <div
         style={{
-          marginLeft: -65,
-          marginTop: 10,
-          padding: 10,
+          marginLeft: 50,
+          marginTop: -50,
           display: "flex",
-          justifyContent: "center",
-          paddingLeft: "125px",
-          paddingTop: "270px",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
         }}
       >
-        <ServiceCategory
+        <CostAllocationTable
           dummyData={dummyData}
-          height="400px"
-          width="1125px"
+          height="230px"
+          width="95.8%"
           tableData={tableData}
+          headerClass="headerClass-1"
+          loading={loading}
+          marginTop="30px"
         />
       </div>
     </div>

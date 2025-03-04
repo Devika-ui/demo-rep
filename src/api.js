@@ -1140,20 +1140,23 @@ const api = {
 
   getSnapshotCount: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/orphanedsnapshots/totalcount`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/orphanedsnapshots/totalcount`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1166,20 +1169,23 @@ const api = {
 
   getSnapshotCost: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/orphanedsnapshots/cost`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/orphanedsnapshots/cost`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1192,20 +1198,23 @@ const api = {
 
   getApplications: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/orphanedsnapshots/impactedapplication`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/orphanedsnapshots/impactedapplication`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1218,20 +1227,23 @@ const api = {
 
   gettypevscost: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/orphanedsnapshots/snapshottypevscost`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/orphanedsnapshots/snapshottypevscost`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1241,23 +1253,26 @@ const api = {
       throw error;
     }
   },
- 
+
   getConsumedMeter: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/orphanedsnapshots/snapshottypevsconsumedmeter`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/orphanedsnapshots/snapshottypevsconsumedmeter`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1270,20 +1285,23 @@ const api = {
 
   getsnapLocations: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/orphanedsnapshots/locations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/orphanedsnapshots/locations`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1296,20 +1314,23 @@ const api = {
 
   getOndemandCost: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/orphanedsnapshots/ondemandvsconsumed`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/orphanedsnapshots/ondemandvsconsumed`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1322,20 +1343,23 @@ const api = {
 
   getSnapCostallocation: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/orphanedsnapshots/costallocation`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/orphanedsnapshots/costallocation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1348,20 +1372,23 @@ const api = {
 
   getadvisorrecommendations: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/advisor/totalrecommendations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/advisor/totalrecommendations`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1374,20 +1401,23 @@ const api = {
 
   getadvisorhighimpact: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/advisor/highimpactrecommendations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/advisor/highimpactrecommendations`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1400,20 +1430,23 @@ const api = {
 
   getadvisorApplications: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/advisor/applicationswithhighimpact`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/advisor/applicationswithhighimpact`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1426,20 +1459,23 @@ const api = {
 
   getadvisorServices: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/advisor/servicecatwithhighimpact`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/advisor/servicecatwithhighimpact`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1452,20 +1488,23 @@ const api = {
 
   getadvisorcostvsimpact: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/advisor/costvssubandimpact`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/advisor/costvssubandimpact`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1478,20 +1517,23 @@ const api = {
 
   getadvisorCost: async (selectedFilters) => {
     try {
-      const response = await fetch(`${apiUrl}/costoptimization/advisor/costallocation`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (await componentUtil.getAccessToken()),
-        },
-        body: JSON.stringify({
-          customerId: await componentUtil.getSelectedCustomerID(),
-          CloudServiceProvider: componentUtil.getSelectedCSP(),
-          filters: {
-            ...selectedFilters,
+      const response = await fetch(
+        `${apiUrl}/costoptimization/advisor/costallocation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
           },
-        }),
-      });
+          body: JSON.stringify({
+            customerId: await componentUtil.getSelectedCustomerID(),
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch subscription for customer `);
       }
@@ -1908,6 +1950,181 @@ const api = {
       throw error;
     }
   },
+
+  getAhubCount: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/sqlvm/ahubcount`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getPayGoCount: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/sqlvm/paygocount`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getTotalConsumed: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/sqlvm/subvstotalandconsumed`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getLicenseTypevsConsumedMeter: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/sqlvm/licensetypevscosumedmeter`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getLicenseTypevsCost: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/sqlvm/licensetypevscost`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getSqlCostAllocation: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/sqlvm/costallocation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
   getAssignedCustomerIds: async (flag) => {
     try {
       const response = await fetch(`${apiUrl}/csp_customers/customerIdList`, {

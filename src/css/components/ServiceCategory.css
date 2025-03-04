@@ -44,6 +44,14 @@
   max-height: 210px !important;
 }
 
+.cmpSvcCat_tableContainer1 {
+  border: 1px solid #ddd;
+  border-radius: 0;
+  overflow: auto;
+  overflow-x: auto;
+  max-height: 170px !important;
+}
+
 .cmpSvcCat_tableHeader {
   padding: 8px 8px !important;
   text-align: center !important;

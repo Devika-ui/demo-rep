@@ -33,8 +33,7 @@ const GenericBarChart = ({
   title,
   data,
   yAxisLabel,
-  yAxisTicks = [0, 1000, 2000, 3000],
-  yAxisDomain = [0, 1000],
+
   bars,
   children,
   chartStyle = {},
@@ -44,6 +43,18 @@ const GenericBarChart = ({
   currencySymbol,
   currencyPreference,
 }) => {
+  const maxValue = Math.max(
+    ...data.map((d) =>
+      Math.max(...Object.values(d).filter((v) => typeof v === "number"))
+    ),
+    1000
+  );
+
+  // Determine step size based on max value
+  const stepSize = Math.ceil(maxValue / 5 / 1000) * 1000; // Round to nearest 1000
+  const yAxisTicks = Array.from({ length: 6 }, (_, i) => i * stepSize);
+  const yAxisDomain = [0, yAxisTicks[yAxisTicks.length - 1] || 1000];
+
   const formatYAxis = (tickItem) => {
     if (yAxisTicks.some((tick) => tick >= 1000)) {
       return `${tickItem / 1000}k`;
