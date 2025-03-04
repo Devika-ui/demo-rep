@@ -210,8 +210,8 @@ const api = {
           body: JSON.stringify({
             CloudServiceProvider: componentUtil.getSelectedCSP(),
             filters: {
-              Startdate: startDate,
-              Enddate: endDate,
+              Startdate: new Date(startDate).toISOString().split("T")[0],
+              Enddate: new Date(endDate).toISOString().split("T")[0],
             },
             customerId: await componentUtil.getSelectedCustomerID(),
           }),

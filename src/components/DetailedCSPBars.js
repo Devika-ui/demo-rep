@@ -56,11 +56,17 @@ const options = (currencySymbol, currencyPreference) => ({
           }
           let formattedValue = Number(context.raw).toFixed(2);
           if (currencyPreference === "start") {
-          label += `${currencySymbol}${Number(formattedValue).toLocaleString("en-US", {minimumFractionDigits: 2,maximumFractionDigits: 2})}`;
+            label += `${currencySymbol}${Number(formattedValue).toLocaleString(
+              "en-US",
+              { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+            )}`;
           } else {
-          label += `${Number(formattedValue).toLocaleString("en-US", {minimumFractionDigits: 2,maximumFractionDigits: 2 })}${currencySymbol}`;
-        }
-         return label;
+            label += `${Number(formattedValue).toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}${currencySymbol}`;
+          }
+          return label;
         },
       },
     },
@@ -201,19 +207,37 @@ const DetailedCSPBars = ({
           billingMonth
         );
 
-        const pastMonths = forecastResponse[0].pastCosts.map(
-          (item) => item.month
-        );
-        const pastCosts = forecastResponse[0].pastCosts.map(
-          (item) => item.pastCost
-        );
+        // const pastMonths = forecastResponse[0].pastCosts.map(
+        //   (item) => item.month
+        // );
+        // const pastCosts = forecastResponse[0].pastCosts.map(
+        //   (item) => item.pastCost
+        // );
 
-        const futureMonths = forecastResponse[0].futureCosts.map(
-          (item) => item.month
-        );
-        const futureCosts = forecastResponse[0].futureCosts.map(
-          (item) => item.futureCost
-        );
+        // const futureMonths = forecastResponse[0].futureCosts.map(
+        //   (item) => item.month
+        // );
+        // const futureCosts = forecastResponse[0].futureCosts.map(
+        //   (item) => item.futureCost
+        // );
+
+        let pastMonths = [],
+          pastCosts = [],
+          futureMonths = [],
+          futureCosts = [];
+
+        if (forecastResponse?.length > 0) {
+          pastMonths =
+            forecastResponse[0]?.pastCosts?.map((item) => item.month) || [];
+          pastCosts =
+            forecastResponse[0]?.pastCosts?.map((item) => item.pastCost) || [];
+
+          futureMonths =
+            forecastResponse[0]?.futureCosts?.map((item) => item.month) || [];
+          futureCosts =
+            forecastResponse[0]?.futureCosts?.map((item) => item.futureCost) ||
+            [];
+        }
 
         const combinedLabels = [...pastMonths, ...futureMonths];
 
