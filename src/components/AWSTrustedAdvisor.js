@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header.js";
 import SubHeader from "./SubHeader.js";
 import NavigationBar from "./NavigationBar.js";
@@ -12,7 +13,9 @@ import componentUtil from "../componentUtil.js";
 import api from "../api.js";
 
 const TrustedAdvisor = () => {
-  const [selectedProvider, setSelectedProvider] = useState(110);
+  const [selectedProvider, setSelectedProvider] = useState(
+    componentUtil.getSelectedCSP()
+  );
   const [recommendationCount, setRecommendationCount] = useState([]);
   const [estimatedMonthlySavings, setEstimatedMonthlySavings] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,6 +26,7 @@ const TrustedAdvisor = () => {
   const [billingMonth, setBillingMonth] = useState([]);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
+  
 
   const titleStyle1 = {
     fontSize: "1rem",
@@ -41,6 +45,14 @@ const TrustedAdvisor = () => {
     setShowStackBars(value !== 1);
   };
 
+   const navigate = useNavigate();
+  
+    useEffect(() => {
+      if (selectedProvider === 100) {
+        navigate("/recommendations#hyperScalarAdvisor");
+      }
+    }, [selectedProvider, navigate]);
+
   const handleFiltersChange = (newFilters) => {
     setSelectedFilters(newFilters);
   };
@@ -53,7 +65,7 @@ const TrustedAdvisor = () => {
     const fetchRecommendations = async () => {
       setLoading(true);
       try {
-        const response = await api.getTotalRecommendations();
+        const response = await api.getadvisorrecommendations();
         const recommendations = [
           { number: response.recommendationcount, text: "No of recommendations" },
         ];
@@ -71,7 +83,7 @@ const TrustedAdvisor = () => {
 
     const fetchMonthlySavings = async () => {
       try {
-        const response = await api.getMonthlySavings();
+        const response = await api.getadvisorhighimpact();
         setEstimatedMonthlySavings(parseFloat(response.estimatedmonthlysavings).toFixed(2));
       } catch (error) {
         console.error("Error fetching Monthly Savings:", error);
@@ -85,7 +97,7 @@ const TrustedAdvisor = () => {
   useEffect(() => {
     const fetchPieChartData = async () => {
       try {
-        const response = await api.getServicemonthlysavings();
+        const response = await api.getadvisorServices();
         const currencySymbol = await componentUtil.getCurrencySymbol();
         const currencyPreference = await componentUtil.getCurrencyPreference();
         setPieChartData(
@@ -108,7 +120,7 @@ const TrustedAdvisor = () => {
     const fetchCostTrendData = async () => {
       setLoading(true);
       try {
-        const response = await api.getCosttrend();
+        const response = await api.getadvisorcostvsimpact();
         const mappedData = {
           labels: response.map((item) => item.instance_type),
           datasets: [
@@ -227,9 +239,9 @@ const TrustedAdvisor = () => {
          </div>
 
         </Box>
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem"}}>
-  <SavingsRecommendations />
-  <RightsizingRecommendationsTable />
+        <div style={{ display: "flex", flexDirection: "column", gap: "2rem",marginBottom:"1rem"}}>
+  <SavingsRecommendations loading={loading} />
+  <RightsizingRecommendationsTable loading={loading} />
 </div>     
     </div>
   );

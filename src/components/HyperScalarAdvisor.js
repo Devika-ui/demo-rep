@@ -1,4 +1,5 @@
-import React, {useState } from "react";
+import React, {useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Subheader from "./SubHeader";
 import NavigationBar from "./NavigationBar";
@@ -22,6 +23,7 @@ const HyperScalarAdvisor = ({
   data2,
   bars,
   selectedCSP,
+  setSelectedCSP,
   onButtonClick,
   onFiltersChange,
   currencySymbol,
@@ -30,6 +32,14 @@ const HyperScalarAdvisor = ({
 }) => {
   sessionStorage.removeItem("overviewPage");
   const [groupBy, setGroupBy] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("selectedCSP:", selectedCSP);
+    if (selectedCSP === 110) {
+      navigate("/TrustedAdvisor");
+    }
+  }, [selectedCSP, navigate]);
 
   const handleGroupByChange = (event) => {
     setGroupBy(event.target.value);
@@ -59,16 +69,16 @@ const HyperScalarAdvisor = ({
   }
 
   const titleStyle1 = {
-    fontSize: "0.8rem",
+    fontSize: "1rem",
     marginLeft: "0.8rem",
     position: "relative", 
-    marginTop: "0.35rem",
+    marginTop: "0.7rem",
     whiteSpace: "nowrap",
   };
 
   const titleStyle2 = {
-    fontSize: "0.7rem",
-    marginTop: "0.2rem",
+    fontSize: "1rem",
+    marginTop: "0.7rem",
     marginLeft: "4rem",
     position: "relative",
     // whiteSpace: "nowrap",
@@ -169,13 +179,13 @@ const HyperScalarAdvisor = ({
 
         <div>
           <PieChartContainer
-            title1="Applications with High Impact Recommendations"
+            title1="Applications with High Impact"
             data1={data1}
-            title2="Service Category with High Impact Recommendations"
+            title2="Services with High Impact"
             data2={data2}
             containerStyle={pieChartContainerStyle}
             chartStyle={pieChartStyle}
-            pieChartHeight1={"90%"}
+            pieChartHeight1={"85%"}
             pieChartHeight2={"85%"}
             titleStyle1={titleStyle1}
             titleStyle2={titleStyle2}

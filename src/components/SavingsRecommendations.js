@@ -27,7 +27,7 @@ const SavingsRecommendations = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.getapplicationswithhighimpact();
+        const response = await api.getadvisorApplications();
         setData(response || {});
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -72,7 +72,6 @@ const SavingsRecommendations = () => {
           </IconButton>
         </div>
 
-        {/* Data Table */}
         <TableContainer className="CmpSrtable_container">
           <Table stickyHeader sx={{ tableLayout: "fixed" }}>
             <TableHead>

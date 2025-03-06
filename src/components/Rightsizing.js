@@ -13,6 +13,7 @@ import api from "../api";
 import ShareIcon from "@mui/icons-material/Share";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import CloseIcon from "@mui/icons-material/Close";
+import "../css/components/SavingsRecommendations.css";
 
 const MAX_NODE_LEVEL = 3;
 
@@ -121,7 +122,7 @@ const RightsizingRecommendationsTable = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.getRightsizingRecommendations();
+        const response = await api.getadvisorCost();
         setFormattedData(response);
         setLoadingData(false);
       } catch (error) {
@@ -138,8 +139,7 @@ const RightsizingRecommendationsTable = ({
 
   return (
     <>
-      <Paper
-        className="savings-container5"
+         <Paper className="savings-container5"
         style={{
           padding: "20px",
           width: "90.5%",
@@ -162,30 +162,30 @@ const RightsizingRecommendationsTable = ({
             <ShareIcon />
           </IconButton>
           <IconButton
-            onClick={handleOverlayOpen}
+            onClick={() => setOverlayOpen(true)}
             className="cmpSR_fullscreenButton"
           >
             <FullscreenIcon />
           </IconButton>
         </div>
 
-        <div style={{ height, width }}>
+        {/* <div style={{ height, width }}>
           {loadingData || loading ? (
             <div className="loading-container">
               <CircularProgress />
             </div>
-          ) : (
-            <TableContainer style={{ maxHeight: "400px", overflowY: "auto" }}>
-              <Table stickyHeader>
+          ) : ( */}
+            <TableContainer className="CmpSrtable_container">
+              <Table stickyHeader sx={{ tableLayout: "fixed" }}>
                 <TableHead>
-                  <TableRow>
-                    <TableCell>Resource Name</TableCell>
-                    <TableCell>Low Utilization Days</TableCell>
-                    <TableCell>Avg Network IO</TableCell>
-                    <TableCell>Region</TableCell>
-                    <TableCell>Instance Type</TableCell>
-                    <TableCell>Avg CPU Utilization</TableCell>
-                    <TableCell>Estimated Monthly Savings ($)</TableCell>
+                <TableRow className="table-header">
+                    <TableCell className="table-header-cell">Resource Name</TableCell>
+                    <TableCell className="table-header-cell">Low Utilization Days</TableCell>
+                    <TableCell className="table-header-cell">Avg Network IO</TableCell>
+                    <TableCell className="table-header-cell">Region</TableCell>
+                    <TableCell className="table-header-cell">Instance Type</TableCell>
+                    <TableCell className="table-header-cell">Avg CPU Utilization</TableCell>
+                    <TableCell className="table-header-cell">Estimated Monthly Savings ($)</TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -201,30 +201,28 @@ const RightsizingRecommendationsTable = ({
                 </TableBody>
               </Table>
             </TableContainer>
-          )}
-        </div>
+          {/* )}
+        </div> */}
       </Paper>
 
       {isOverlayOpen && (
-        <div className="overlay">
+        <div className="overlay overlay-mode">
           <div className="service_overlay_content">
             <IconButton className="close-overlay" onClick={handleOverlayClose}>
               <CloseIcon />
             </IconButton>
             <TableContainer
-              className="CmpSrtable_container2"
-              style={{ maxHeight: "440px" }}
-            >
-              <Table stickyHeader>
+              className="CmpSrtable_container2">
+              <Table stickyHeader sx={{ tableLayout: "fixed" }}>
                 <TableHead>
-                  <TableRow>
-                    <TableCell>Resource Name</TableCell>
-                    <TableCell>Low Utilization Days</TableCell>
-                    <TableCell>Avg Network IO</TableCell>
-                    <TableCell>Region</TableCell>
-                    <TableCell>Instance Type</TableCell>
-                    <TableCell>Avg CPU Utilization</TableCell>
-                    <TableCell>Estimated Monthly Savings ($)</TableCell>
+                  <TableRow className="table-header">
+                    <TableCell className="table-header-cell">Resource Name</TableCell>
+                    <TableCell className="table-header-cell">Low Utilization Days</TableCell>
+                    <TableCell className="table-header-cell">Avg Network IO</TableCell>
+                    <TableCell className="table-header-cell">Region</TableCell>
+                    <TableCell className="table-header-cell">Instance Type</TableCell>
+                    <TableCell className="table-header-cell">Avg CPU Utilization</TableCell>
+                    <TableCell className="table-header-cell" >Estimated Monthly Savings ($)</TableCell>
                   </TableRow>
                 </TableHead>
 

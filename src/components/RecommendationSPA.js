@@ -308,127 +308,56 @@ const RecommendationSPA = () => {
         setConsumedMeterData(consumedMeterData);
         setSnapLocations(location);
         setOnDemandData(ondemandsnapshot);
-
+         
         const aggregateData = (data) => {
-          return Object.entries(data)
-            .map(([subscription, storageData]) => {
-              if (!storageData || typeof storageData !== "object") return null;
-
-              const formattedStorages = Object.entries(storageData)
-                .map(([storage, storageTypes]) => {
-                  if (!storageTypes || typeof storageTypes !== "object")
-                    return null;
-
-                  const formattedStorageTypes = Object.entries(storageTypes)
-                    .map(([storageType, resourceGroups]) => {
-                      if (!resourceGroups || typeof resourceGroups !== "object")
-                        return null;
-
-                      const formattedResourceGroups = Object.entries(
-                        resourceGroups
-                      )
-                        .map(([resourceGroup, resources]) => {
-                          if (!resources || typeof resources !== "object")
-                            return null;
-
-                          const formattedResources = Object.entries(
-                            resources
-                          ).map(([resource, resourceData]) => ({
-                            name: resource,
-                            ownername: resourceData?.ownername || null,
-                            totalCost: resourceData?.totalCost || 0,
-                            snapshotCount: resourceData?.snapshotCount || 0,
-                            environment:
-                              resourceData?.environment !== null
-                                ? resourceData?.environment
-                                : "null",
-                          }));
-
-                          // Aggregate totals for the resource group
-                          const groupTotalCost = formattedResources.reduce(
-                            (sum, resource) => sum + resource.totalCost,
-                            0
-                          );
-                          const groupsnapshotCount = formattedResources.reduce(
-                            (sum, resource) => sum + resource.snapshotCount,
-                            0
-                          );
-
-                          return {
-                            name: resourceGroup,
-                            ownername: null,
-                            totalCost: groupTotalCost,
-                            snapshotCount: groupsnapshotCount,
-                            environment: null,
-                            resources: formattedResources,
-                          };
-                        })
-                        .filter(Boolean);
-
-                      // Aggregate totals for the storage type
-                      const storageTypeTotalCost =
-                        formattedResourceGroups.reduce(
-                          (sum, group) => sum + group.totalCost,
-                          0
-                        );
-                      const storageTypesnapshotCount =
-                        formattedResourceGroups.reduce(
-                          (sum, group) => sum + group.snapshotCount,
-                          0
-                        );
-
-                      return {
-                        name: storageType,
-                        ownername: null,
-                        totalCost: storageTypeTotalCost,
-                        snapshotCount: storageTypesnapshotCount,
-                        environment: null,
-                        resourceGroups: formattedResourceGroups,
-                      };
-                    })
-                    .filter(Boolean);
-
-                  // Aggregate totals for storage
-                  const storageTotalCost = formattedStorageTypes.reduce(
-                    (sum, type) => sum + type.totalCost,
-                    0
-                  );
-                  const storagesnapshotCount = formattedStorageTypes.reduce(
-                    (sum, type) => sum + type.snapshotCount,
-                    0
-                  );
-
-                  return {
-                    name: storage,
-                    ownername: null,
-                    totalCost: storageTotalCost,
-                    snapshotCount: storagesnapshotCount,
-                    environment: null,
-                    storageTypes: formattedStorageTypes,
-                  };
-                })
-                .filter(Boolean);
-
-              // Aggregate totals for subscription
-              const subscriptionTotalCost = formattedStorages.reduce(
-                (sum, storage) => sum + storage.totalCost,
-                0
-              );
-              const subscriptionsnapshotCount = formattedStorages.reduce(
-                (sum, storage) => sum + storage.snapshotCount,
-                0
-              );
-
-              return {
-                name: subscription,
-                ownername: null,
-                totalCost: subscriptionTotalCost,
-                snapshotCount: subscriptionsnapshotCount,
-                environment: null,
-                storages: formattedStorages,
-              };
-            })
-            .filter(Boolean);
+          const processLevel = (obj) => {
+            if (typeof obj !== "object" || obj === null) return obj;
+        
+            const entries = Object.entries(obj);
+            if (
+              entries.length > 0 &&
+              typeof entries[0][1] === "object" &&
+              !("totalCost" in entries[0][1])
+            ) {
+              return entries.map(([key, value]) => {
+                const processedValue = processLevel(value);
+                const totalCost = processedValue.reduce(
+                  (sum, item) => sum + (item.totalCost || 0),
+                  0
+                );
+                const snapshotCount = processedValue.reduce(
+                  (sum, item) => sum + (item.snapshotCount || 0),
+                  0
+                );
+        
+                return {
+                  name: key,
+                  ownername: null,
+                  totalCost: totalCost,
+                  snapshotCount: snapshotCount,
+                  environment: null,
+                  children: processedValue,
+                };
+              });
+            }
+        
+            return entries.map(([key, value]) => ({
+              name: key,
+              ownername: value.ownername || null,
+              totalCost: value.totalCost || 0,
+              snapshotCount: value.snapshotCount || 0,
+              environment: value.environment !== null ? value.environment : "null",
+            }));
+          };
+        
+          return Object.entries(data).map(([subscription, value]) => ({
+            name: subscription,
+            ownername: null,
+            totalCost: 0,
+            snapshotCount: 0,
+            environment: null,
+            children: processLevel(value),
+          }));
         };
 
         const formattedData = aggregateData(costallocationresponse);
@@ -533,118 +462,44 @@ const RecommendationSPA = () => {
         setCostvsSub(subImpact);
 
         const aggregateData = (data) => {
-          return Object.entries(data)
-            .map(([subscription, categories]) => {
-              if (!categories || typeof categories !== "object") return null;
+          const processLevel = (obj) => {
+            if (!obj || typeof obj !== "object") return null;
 
-              const formattedCategories = Object.entries(categories)
-                .map(([category, plans]) => {
-                  if (!plans || typeof plans !== "object") return null;
+            return Object.entries(obj)
+              .map(([key, value]) => {
+                if (typeof value !== "object" || value === null) return null;
 
-                  const formattedPlans = Object.entries(plans)
-                    .map(([plan, resourceGroups]) => {
-                      if (!resourceGroups || typeof resourceGroups !== "object")
-                        return null;
+                // If `value` contains objects, recursively process the next level
+                const nested = processLevel(value);
 
-                      const formattedResourceGroups = Object.entries(
-                        resourceGroups
-                      )
-                        .map(([resourceGroup, resources]) => {
-                          if (!resources || typeof resources !== "object")
-                            return null;
+                // Identify if it's a leaf node (contains actual data fields instead of more objects)
+                const isLeafNode = Object.values(value).some(
+                  (v) => typeof v !== "object" || v === null
+                );
 
-                          const formattedResources = Object.entries(
-                            resources
-                          ).map(([resource, resourceData]) => ({
-                            name: resource,
-                            ownername: resourceData?.ownername || null,
-                            totalCost: resourceData?.totalCost || 0,
-                            impact: resourceData?.impact || "Unknown",
-                            solution:
-                              resourceData?.solution || "No solution provided",
-                            applicationname:
-                              resourceData?.applicationname || null,
-                            environment:
-                              resourceData?.environment !== null
-                                ? resourceData?.environment
-                                : "null",
-                          }));
-
-                          // Aggregate totals for the resource group
-                          const groupTotalCost = formattedResources.reduce(
-                            (sum, resource) => sum + resource.totalCost,
-                            0
-                          );
-
-                          return {
-                            name: resourceGroup,
-                            totalCost: groupTotalCost,
-                            impact: null,
-                            solution: null,
-                            ownername: null,
-                            applicationname: null,
-                            environment: null,
-                            resources: formattedResources,
-                          };
-                        })
-                        .filter(Boolean);
-
-                      // Aggregate totals for the plan
-                      const planTotalCost = formattedResourceGroups.reduce(
-                        (sum, group) => sum + group.totalCost,
-                        0
-                      );
-
-                      return {
-                        name: plan,
-                        totalCost: planTotalCost,
-                        impact: null,
-                        solution: null,
-                        ownername: null,
-                        applicationname: null,
-                        environment: null,
-                        resourceGroups: formattedResourceGroups,
-                      };
-                    })
-                    .filter(Boolean);
-
-                  // Aggregate totals for the category
-                  const categoryTotalCost = formattedPlans.reduce(
-                    (sum, plan) => sum + plan.totalCost,
-                    0
-                  );
-
+                if (isLeafNode) {
                   return {
-                    name: category,
-                    totalCost: categoryTotalCost,
-                    impact: null,
-                    solution: null,
-                    ownername: null,
-                    applicationname: null,
-                    environment: null,
-                    plans: formattedPlans,
+                    name: key,
+                    ...value, // Spread all properties (e.g., ownername, totalCost, sqlServerLicenseType, etc.)
                   };
-                })
-                .filter(Boolean);
+                }
 
-              // Aggregate totals for the subscription
-              const subscriptionTotalCost = formattedCategories.reduce(
-                (sum, category) => sum + category.totalCost,
-                0
-              );
+                // Aggregate `totalCost` dynamically
+                const totalCost = nested.reduce(
+                  (sum, item) => sum + (item.totalCost || 0),
+                  0
+                );
 
-              return {
-                name: subscription,
-                totalCost: subscriptionTotalCost,
-                impact: null,
-                solution: null,
-                ownername: null,
-                applicationname: null,
-                environment: null,
-                categories: formattedCategories,
-              };
-            })
-            .filter(Boolean);
+                return {
+                  name: key,
+                  totalCost,
+                  children: nested, // Store next-level processed data
+                };
+              })
+              .filter(Boolean);
+          };
+
+          return processLevel(data);
         };
 
         const formattedData = aggregateData(advisorcostresponse);
@@ -656,24 +511,27 @@ const RecommendationSPA = () => {
     fetchData();
   }, [selectedProvider, inputData]);
 
-  const formattedCostvsSub = CostvsSub.map((item) => ({
-    subscriptionName: item.Subscription,
-    [item.Impact]: item.Totalcost,
-  }));
+  const formattedCostvsSub = Object.entries(CostvsSub).map(([subscriptionName, impacts]) => {
+    let impactData = Object.fromEntries(
+      Object.entries(impacts).map(([impactLevel, costObj]) => [impactLevel, costObj.TotalCost])
+    );
+    return { subscriptionName, ...impactData };
+  });
 
-  const Piechart1 =
-    applicationimpact?.map((item, index) => ({
-      name: item.Application,
-      value: item.Totalcost ? parseFloat(item.Totalcost.toFixed(2)) : 0,
-      color: colorPalette[index % colorPalette.length],
-    })) || [];
+  const Piechart1 = Array.isArray(applicationimpact)? applicationimpact.map((item, index) => ({
+        name: item.Application,
+        value: item.Totalcost ? parseFloat(item.Totalcost.toFixed(2)) : 0,
+        color: colorPalette[index % colorPalette.length],
+      }))
+    : [];
 
-  const Piechart2 =
-    serviceimpact?.map((item, index) => ({
-      name: item.ServiceCategory,
-      value: item.Totalcost ? parseFloat(item.Totalcost.toFixed(2)) : 0,
-      color: colorPalette[index % colorPalette.length],
-    })) || [];
+    const Piechart2 =Array.isArray(serviceimpact)? serviceimpact.map((item, index) => ({
+          name: item.ServiceCategory,
+          value: item.Totalcost ? parseFloat(item.Totalcost.toFixed(2)) : 0,
+          color: colorPalette[index % colorPalette.length],
+        }))
+      : [];
+  
 
   const bars_HyperScalarAdvisor = [
     {
