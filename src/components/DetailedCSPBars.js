@@ -32,85 +32,156 @@ ChartJS.register(
   Legend
 );
 
-const options = (currencySymbol, currencyPreference) => ({
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: true,
-      labels: {
-        color: "#000",
-        font: {
-          family: "Roboto",
-          size: 12,
+const options = (currencySymbol, currencyPreference, maxCost, isExpanded) => {
+  const expandedCallback = function (value) {
+    const label = this.getLabelForValue(value);
+    const date = new Date(label);
+
+    const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+    const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const midDate = new Date(date.getFullYear(), date.getMonth(), 15);
+    const year = date.getFullYear().toString().slice(-2);
+    if (
+      date.getDate() === monthStart.getDate() &&
+      date.getMonth() === monthStart.getMonth() &&
+      date.getFullYear() === monthStart.getFullYear()
+    ) {
+      const month = date.toLocaleString("default", { month: "short" });
+
+      if (month === "Sep") month = "Sept";
+
+      return `${monthStart.getDate()} ${month} '${year}`;
+    }
+
+    if (
+      date.getDate() === monthEnd.getDate() &&
+      date.getMonth() === monthEnd.getMonth() &&
+      date.getFullYear() === monthEnd.getFullYear()
+    ) {
+      return `${monthEnd.getDate()}${monthStart.toLocaleString("default", {
+        month: "short",
+      })} '${year}`;
+    }
+
+    if (date.getDate() === midDate.getDate()) {
+      return `${midDate.getDate()}${midDate.toLocaleString("default", {
+        month: "short",
+      })} '${year}`;
+    }
+
+    return "";
+  };
+
+  const defaultCallback = function (value) {
+    const label = this.getLabelForValue(value);
+    const date = new Date(label);
+
+    if (date.getDate() === 1) {
+      let month = date.toLocaleString("default", { month: "short" });
+      if (month === "Sep") month = "Sept";
+      const year = date.getFullYear().toString().slice(-2);
+      return `${month}'${year}`;
+    }
+    return "";
+  };
+
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          color: "#000",
+          font: {
+            family: "Roboto",
+            size: 12,
+          },
+        },
+      },
+      tooltip: {
+        enabled: true,
+        callbacks: {
+          label: function (context) {
+            let label = context.dataset.label || "";
+            if (label) {
+              label += ": ";
+            }
+            let formattedValue = Number(context.raw).toFixed(2);
+            if (currencyPreference === "start") {
+              label += `${currencySymbol}${Number(
+                formattedValue
+              ).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`;
+            } else {
+              label += `${Number(formattedValue).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}${currencySymbol}`;
+            }
+            return label;
+          },
         },
       },
     },
-    tooltip: {
-      enabled: true,
-      callbacks: {
-        label: function (context) {
-          let label = context.dataset.label || "";
-          if (label) {
-            label += ": ";
-          }
-          let formattedValue = Number(context.raw).toFixed(2);
-          if (currencyPreference === "start") {
-            label += `${currencySymbol}${Number(formattedValue).toLocaleString(
-              "en-US",
-              { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-            )}`;
-          } else {
-            label += `${Number(formattedValue).toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}${currencySymbol}`;
-          }
-          return label;
+    scales: {
+      x: {
+        stacked: true,
+        // grid: {
+        //   display: false,
+        // },
+        grid: {
+          drawTicks: true,
+          color: (context) => {
+            if (context.tick && context.tick.label) {
+              return context.tick.label.includes("'")
+                ? "rgba(0, 0, 0, 0.3)"
+                : "transparent";
+            }
+            return "transparent";
+          },
+        },
+        ticks: {
+          autoSkip: false,
+          maxRotation: isExpanded ? 90 : 0,
+
+          align: "start",
+
+          callback: isExpanded ? expandedCallback : defaultCallback,
+
+          padding: -2,
+          font: {
+            size: 12,
+            family: "Roboto",
+          },
         },
       },
-    },
-  },
-  scales: {
-    x: {
-      stacked: true,
-      grid: {
-        display: false,
-      },
-      ticks: {
-        autoSkip: false,
-        maxRotation: 0,
-        callback: function (value) {
-          const label = this.getLabelForValue(value);
-          const date = new Date(label);
-          if (date.getDate() === 1) {
-            let month = date.toLocaleString("default", { month: "short" });
-            if (month === "Sep") month = "Sept";
-            const year = date.getFullYear().toString().slice(-2);
-            return `${month}'${year}`;
-          }
-          return "";
+
+      y: {
+        type: "logarithmic",
+        beginAtZero: false,
+        grid: {
+          display: false,
         },
-        padding: 6,
-        font: {
-          size: 12,
-          family: "Roboto",
+        ticks: {
+          callback: function (value) {
+            // Show only specific values
+            if ([10, 100, 1000, 10000, 100000].includes(value)) {
+              return value.toLocaleString();
+            }
+            return null;
+          },
+          min: 10,
+          max: maxCost,
         },
+        suggestedMin: 10, // Force it to always start from 10
+        suggestedMax: maxCost,
       },
     },
-    y: {
-      stacked: true,
-      beginAtZero: true,
-      grid: {
-        display: false,
-      },
-      ticks: {
-        stepSize: 4000,
-        max: 6000,
-      },
-    },
-  },
-});
+  };
+};
 
 const DetailedCSPBars = ({
   inputData,
@@ -126,6 +197,7 @@ const DetailedCSPBars = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [currencyPreference, setCurrencyPreference] = useState(null);
+  const [maxCost, setMaxCost] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -185,6 +257,9 @@ const DetailedCSPBars = ({
           stack: "total",
         }));
 
+        const maxCost = Math.max(...datasets.flatMap((d) => d.data));
+        setMaxCost(maxCost);
+
         setData({ labels, datasets });
 
         setCurrencySymbol(currencySymbol);
@@ -206,20 +281,6 @@ const DetailedCSPBars = ({
           inputData,
           billingMonth
         );
-
-        // const pastMonths = forecastResponse[0].pastCosts.map(
-        //   (item) => item.month
-        // );
-        // const pastCosts = forecastResponse[0].pastCosts.map(
-        //   (item) => item.pastCost
-        // );
-
-        // const futureMonths = forecastResponse[0].futureCosts.map(
-        //   (item) => item.month
-        // );
-        // const futureCosts = forecastResponse[0].futureCosts.map(
-        //   (item) => item.futureCost
-        // );
 
         let pastMonths = [],
           pastCosts = [],
@@ -318,7 +379,12 @@ const DetailedCSPBars = ({
           </IconButton>
           <Bar
             style={{ paddingTop: "5px" }}
-            options={options(currencySymbol, currencyPreference)}
+            options={options(
+              currencySymbol,
+              currencyPreference,
+              maxCost,
+              isExpanded
+            )}
             data={showForecast && forecastData ? forecastData : data}
           />
         </div>
@@ -333,7 +399,7 @@ const DetailedCSPBars = ({
         >
           <Bar
             style={{ paddingTop: "5px" }}
-            options={options(currencySymbol, currencyPreference)}
+            options={options(currencySymbol, currencyPreference, maxCost)}
             data={showForecast && forecastData ? forecastData : data}
           />
         </div>
