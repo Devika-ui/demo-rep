@@ -289,6 +289,7 @@ const UnattachedManagedDisks = ({
           barName={selectedCSP === 100 ? "Disk Count" : "Volumes Count"}
           barchartStyle={barchartStyle}
           loading={loading}
+          yAxisKey="location"
         />
       </div>
     </div>

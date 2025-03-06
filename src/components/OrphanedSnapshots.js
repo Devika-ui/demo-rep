@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import Header from "./Header";
@@ -36,7 +36,7 @@ const OrphanedSnapshots = ({
   sessionStorage.removeItem("overviewPage");
   const [groupBy, setGroupBy] = useState("");
   const navigate = useNavigate();
-  
+
   // Handle change for the dropdown
   const handleGroupByChange = (event) => {
     const value = event.target.value;
@@ -63,8 +63,8 @@ const OrphanedSnapshots = ({
     flexGrow: "1",
     flexBasis: "100%",
     height: "47.3vh",
-    marginRight:"0.7rem",
-    marginTop:"-18rem"
+    marginRight: "0.7rem",
+    marginTop: "-18rem",
   };
 
   const pieChartStyle = {
@@ -76,7 +76,7 @@ const OrphanedSnapshots = ({
   const titleStyle1 = {
     fontSize: "1rem",
     marginLeft: "2.5rem",
-    position: "relative", 
+    position: "relative",
     marginTop: "-0.4rem",
     whiteSpace: "nowrap",
   };
@@ -92,15 +92,15 @@ const OrphanedSnapshots = ({
     marginLeft: "-14.4rem",
     marginTop: "1.98rem",
     height: "38.7vh",
-    width: "41.5%"
-  }
+    width: "41.5%",
+  };
 
-  const barchartStyle ={
-  height:"51.2vh",
-  marginTop:"-18.94rem",
-  maxWidth: "598px",
-  marginLeft:"39.82rem",
-  }
+  const barchartStyle = {
+    height: "51.2vh",
+    marginTop: "-18.94rem",
+    maxWidth: "598px",
+    marginLeft: "39.82rem",
+  };
 
   return (
     <div>
@@ -119,17 +119,17 @@ const OrphanedSnapshots = ({
           align="center"
           sx={{
             color: "#5f249f",
-            marginTop: "-1rem", 
+            marginTop: "-1rem",
             fontWeight: "bold",
           }}
         >
           Orphaned Snapshots
         </Typography>
         <Subheader
-           onButtonClick={onButtonClick}
-           onFiltersChange={onFiltersChange}
-           selectedCSP={selectedCSP}
-           monthComponent={true}
+          onButtonClick={onButtonClick}
+          onFiltersChange={onFiltersChange}
+          selectedCSP={selectedCSP}
+          monthComponent={true}
         />
         <NavigationBar />
       </Box>
@@ -143,7 +143,7 @@ const OrphanedSnapshots = ({
           marginTop: "-5px",
         }}
       >
-       <ContainerBox data={dataSet2} loading={loading} />
+        <ContainerBox data={dataSet2} loading={loading} />
       </div>
       <div
         style={{
@@ -154,49 +154,59 @@ const OrphanedSnapshots = ({
           width: "100%",
         }}
       >
-          <Select
-            value={groupBy}
-            onChange={handleGroupByChange}
-            displayEmpty
-            className="cmpUAMD_select1"
-            style={{ marginTop: "-3px",height:"5.5vh",background:"white",marginLeft:"-10px"}}
-            renderValue={(selected) =>
-              selected === "" ? "Choose Recommendation" : selected
-            }
-            MenuProps={{
-              PaperProps: {
-                style: {
-                  marginTop: "10px",
-                  marginLeft: "50px",
-                },
+        <Select
+          value={groupBy}
+          onChange={handleGroupByChange}
+          displayEmpty
+          className="cmpUAMD_select1"
+          style={{
+            marginTop: "-3px",
+            height: "5.5vh",
+            background: "white",
+            marginLeft: "-10px",
+          }}
+          renderValue={(selected) =>
+            selected === "" ? "Choose Recommendation" : selected
+          }
+          MenuProps={{
+            PaperProps: {
+              style: {
+                marginTop: "10px",
+                marginLeft: "50px",
               },
-            }}
-          >
-            
-            <MenuItem value="">OrphanedSnapshots</MenuItem>
-            <MenuItem value="subscription">UnattachedManagedDisks</MenuItem>
-            <MenuItem value="region">
-              Orphaned Attached Disks for deallocated VMs
-            </MenuItem>
-          </Select>
-          {/* <div style={{ marginTop: "20px", paddingRight: "18px" }}> */}
-            <GenericBarChart
-              title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
-              titleStyle={{ fontSize: "1rem", fontWeight: "bold", color: "#5F249F", textAlign: "center",marginTop:"-1.2rem" }}
-              data={data}
-              yAxisTicks={[0, 500, 1000, 1500]}
-              bars={bars}              
-              containerStyle={containerStyle}
-               yAxisLabel="Cost (in thousands)"
-              chartStyle={{ width: "100%", height: "100%" }}
-              barSize = {50}
-              // marginTop={-40}
-              currencySymbol={currencySymbol}
-              currencyPreference={currencyPreference}
-              loading={loading}
-            ></GenericBarChart>
-          {/* </div> */}
-        </div>
+            },
+          }}
+        >
+          <MenuItem value="">OrphanedSnapshots</MenuItem>
+          <MenuItem value="subscription">UnattachedManagedDisks</MenuItem>
+          <MenuItem value="region">
+            Orphaned Attached Disks for deallocated VMs
+          </MenuItem>
+        </Select>
+        {/* <div style={{ marginTop: "20px", paddingRight: "18px" }}> */}
+        <GenericBarChart
+          title="Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter"
+          titleStyle={{
+            fontSize: "1rem",
+            fontWeight: "bold",
+            color: "#5F249F",
+            textAlign: "center",
+            marginTop: "-1.2rem",
+          }}
+          data={data}
+          yAxisTicks={[0, 500, 1000, 1500]}
+          bars={bars}
+          containerStyle={containerStyle}
+          yAxisLabel="Cost (in thousands)"
+          chartStyle={{ width: "100%", height: "100%" }}
+          barSize={50}
+          // marginTop={-40}
+          currencySymbol={currencySymbol}
+          currencyPreference={currencyPreference}
+          loading={loading}
+        ></GenericBarChart>
+        {/* </div> */}
+      </div>
 
       <div>
         <div className="cmpOrphanSnap_buttonContainer">
@@ -234,27 +244,35 @@ const OrphanedSnapshots = ({
         </div>
       </div>
 
-      <div style={{ marginLeft: "-34.9rem",marginTop:"-1rem" }}>
-         <CostAllocationTable
+      <div style={{ marginLeft: "-34.9rem", marginTop: "-1rem" }}>
+        <CostAllocationTable
           dummyData={dummyData}
           height="250px"
           width="29.5%"
           tableData={tableData}
           headerClass="headerClass-1"
           loading={loading}
-        /> 
-       </div>
+        />
+      </div>
       <HorizontalBarGraph
-         data={horizontaldata}
-        title={<div style={{ textAlign: "center", paddingTop: "10px",marginLeft: "-15rem" }}>
-         Orphaned Snapshots across locations
+        data={horizontaldata}
+        title={
+          <div
+            style={{
+              textAlign: "center",
+              paddingTop: "10px",
+              marginLeft: "-15rem",
+            }}
+          >
+            Orphaned Snapshots across locations
           </div>
         }
-          barchartStyle={barchartStyle}
-          xAxisLabel= "Count of Snapshots"
-          yAxisLabel="Location"
-          loading={loading}
-       />
+        barchartStyle={barchartStyle}
+        xAxisLabel="Count of Snapshots"
+        yAxisLabel="Location"
+        loading={loading}
+        yAxisKey="location"
+      />
     </div>
   );
 };

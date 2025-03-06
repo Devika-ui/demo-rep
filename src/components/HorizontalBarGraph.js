@@ -41,6 +41,7 @@ const HorizontalBarGraph = ({
   xAxisLabel,
   yAxisLabel,
   barName,
+  yAxisKey,
   barchartStyle,
   loading = false,
 }) => {
@@ -82,7 +83,7 @@ const HorizontalBarGraph = ({
               />
               <YAxis
                 type="category"
-                dataKey="location"
+                dataKey={yAxisKey}
                 tick={{ fontSize: 12 }}
                 label={{
                   value: yAxisLabel,
