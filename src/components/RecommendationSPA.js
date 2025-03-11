@@ -194,14 +194,26 @@ const RecommendationSPA = () => {
             }));
           };
 
-          return Object.entries(data).map(([subscription, value]) => ({
-            name: subscription,
-            ownername: null,
-            totalCost: 0,
-            diskCount: 0,
-            environment: null,
-            children: processLevel(value),
-          }));
+          return Object.entries(data).map(([subscription, value]) => {
+            const children = processLevel(value);
+            const totalCost = children.reduce(
+              (sum, item) => sum + (item.totalCost || 0),
+              0
+            );
+            const diskCount = children.reduce(
+              (sum, item) => sum + (item.diskCount || 0),
+              0
+            );
+
+            return {
+              name: subscription,
+              ownername: null,
+              totalCost: totalCost,
+              diskCount: diskCount,
+              environment: null,
+              children: children,
+            };
+          });
         };
 
         const formattedData = aggregateData(onDemandCostAllocations);
@@ -308,11 +320,11 @@ const RecommendationSPA = () => {
         setConsumedMeterData(consumedMeterData);
         setSnapLocations(location);
         setOnDemandData(ondemandsnapshot);
-         
+
         const aggregateData = (data) => {
           const processLevel = (obj) => {
             if (typeof obj !== "object" || obj === null) return obj;
-        
+
             const entries = Object.entries(obj);
             if (
               entries.length > 0 &&
@@ -329,7 +341,7 @@ const RecommendationSPA = () => {
                   (sum, item) => sum + (item.snapshotCount || 0),
                   0
                 );
-        
+
                 return {
                   name: key,
                   ownername: null,
@@ -340,24 +352,37 @@ const RecommendationSPA = () => {
                 };
               });
             }
-        
+
             return entries.map(([key, value]) => ({
               name: key,
               ownername: value.ownername || null,
               totalCost: value.totalCost || 0,
               snapshotCount: value.snapshotCount || 0,
-              environment: value.environment !== null ? value.environment : "null",
+              environment:
+                value.environment !== null ? value.environment : "null",
             }));
           };
-        
-          return Object.entries(data).map(([subscription, value]) => ({
-            name: subscription,
-            ownername: null,
-            totalCost: 0,
-            snapshotCount: 0,
-            environment: null,
-            children: processLevel(value),
-          }));
+
+          return Object.entries(data).map(([subscription, value]) => {
+            const children = processLevel(value);
+            const totalCost = children.reduce(
+              (sum, item) => sum + (item.totalCost || 0),
+              0
+            );
+            const snapshostCount = children.reduce(
+              (sum, item) => sum + (item.snapshostCount || 0),
+              0
+            );
+
+            return {
+              name: subscription,
+              ownername: null,
+              totalCost: totalCost,
+              snapshotCount: snapshostCount,
+              environment: null,
+              children: processLevel(value),
+            };
+          });
         };
 
         const formattedData = aggregateData(costallocationresponse);
@@ -511,27 +536,33 @@ const RecommendationSPA = () => {
     fetchData();
   }, [selectedProvider, inputData]);
 
-  const formattedCostvsSub = Object.entries(CostvsSub).map(([subscriptionName, impacts]) => {
-    let impactData = Object.fromEntries(
-      Object.entries(impacts).map(([impactLevel, costObj]) => [impactLevel, costObj.TotalCost])
-    );
-    return { subscriptionName, ...impactData };
-  });
+  const formattedCostvsSub = Object.entries(CostvsSub).map(
+    ([subscriptionName, impacts]) => {
+      let impactData = Object.fromEntries(
+        Object.entries(impacts).map(([impactLevel, costObj]) => [
+          impactLevel,
+          costObj.TotalCost,
+        ])
+      );
+      return { subscriptionName, ...impactData };
+    }
+  );
 
-  const Piechart1 = Array.isArray(applicationimpact)? applicationimpact.map((item, index) => ({
+  const Piechart1 = Array.isArray(applicationimpact)
+    ? applicationimpact.map((item, index) => ({
         name: item.Application,
         value: item.Totalcost ? parseFloat(item.Totalcost.toFixed(2)) : 0,
         color: colorPalette[index % colorPalette.length],
       }))
     : [];
 
-    const Piechart2 =Array.isArray(serviceimpact)? serviceimpact.map((item, index) => ({
-          name: item.ServiceCategory,
-          value: item.Totalcost ? parseFloat(item.Totalcost.toFixed(2)) : 0,
-          color: colorPalette[index % colorPalette.length],
-        }))
-      : [];
-  
+  const Piechart2 = Array.isArray(serviceimpact)
+    ? serviceimpact.map((item, index) => ({
+        name: item.ServiceCategory,
+        value: item.Totalcost ? parseFloat(item.Totalcost.toFixed(2)) : 0,
+        color: colorPalette[index % colorPalette.length],
+      }))
+    : [];
 
   const bars_HyperScalarAdvisor = [
     {

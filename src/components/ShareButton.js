@@ -20,7 +20,6 @@ import html2pdf from "html2pdf.js";
 import html2canvas from "html2canvas";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import "../css/components/ShareButton.css";
-import * as XLSX from "xlsx";
 
 const ShareButton = ({
   tableData,
@@ -34,18 +33,15 @@ const ShareButton = ({
   const [csvMenuAnchorEl, setCsvMenuAnchorEl] = React.useState(null);
 
   const aggregateValues = (children) => {
-    // Aggregate values recursively for child nodes
     return children.reduce(
       (totals, child) => {
         if (child.children && child.children.length > 0) {
-          // Recursively aggregate values from descendants
           const childTotals = aggregateValues(child.children);
           totals.TotalBill += childTotals.TotalBill;
           totals.OnDemandCost += childTotals.OnDemandCost;
           totals.CommitmentsCost += childTotals.CommitmentsCost;
           totals.Savings += childTotals.Savings || 0;
         } else {
-          // Leaf node: Add values directly
           totals.TotalBill += child.TotalBill || 0;
           totals.OnDemandCost += child.OnDemandCost || 0;
           totals.CommitmentsCost += child.CommitmentsCost || 0;
@@ -61,7 +57,6 @@ const ShareButton = ({
     return data
       .filter((row) => row.type === "category")
       .map((category) => {
-        // Aggregate values for the category
         const aggregatedValues = aggregateValues(category.children || []);
         return {
           name: category.name,
@@ -538,6 +533,73 @@ const ShareButton = ({
   //   return csvContent;
   // };
 
+  const generateCsvCurrentLayoutCA = (data) => {
+    if (!data || data.length === 0) return [];
+
+    const firstRow = data[0];
+    const headers = Object.keys(firstRow).filter(
+      (key) => key !== "children" && !Array.isArray(firstRow[key])
+    );
+
+    const flattenData = (node, parentValues = []) => {
+      if (!node) return [];
+
+      const currentRow = headers.map((header) => node[header] || "");
+
+      const rows = [parentValues.concat(currentRow)];
+
+      if (node.children && Array.isArray(node.children)) {
+        node.children.forEach((child) => {
+          rows.push(...flattenData(child, parentValues.concat(currentRow)));
+        });
+      }
+
+      return rows;
+    };
+
+    const rows = data.flatMap((root) => flattenData(root));
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.map((val) => `"${val}"`).join(",")),
+    ];
+
+    return csvContent;
+  };
+
+  const generateCsvSummarizedCA = (data) => {
+    if (!data || Object.keys(data).length === 0) return [];
+
+    const rows = [];
+
+    const processEntry = (parentData, key, value) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => processEntry(parentData, key, item));
+      } else if (typeof value === "object" && value !== null) {
+        Object.entries(value).forEach(([subKey, subValue]) => {
+          processEntry({ ...parentData, [key]: subKey }, subKey, subValue);
+        });
+      } else {
+        rows.push({ ...parentData, [key]: value });
+      }
+    };
+
+    Object.entries(data).forEach(([subscription, details]) => {
+      processEntry({ name: subscription }, "data", details);
+    });
+
+    const headers = [...new Set(rows.flatMap((row) => Object.keys(row)))];
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) =>
+        headers.map((header) => `"${row[header] || ""}"`).join(",")
+      ),
+    ];
+
+    return csvContent;
+  };
+
   const handleExportCsv = (type) => {
     const headers = Object.keys(tableData[0]);
     let csvContent = [];
@@ -550,7 +612,8 @@ const ShareButton = ({
           csvContent = generateCurrentLayoutCsvCI(tableData);
         } else if (dataType === "TotalBillAllocation") {
           csvContent = generateCsvCurrentLayoutTBA(tableData);
-        }
+        } else if (dataType === "CostAllocation")
+          csvContent = generateCsvCurrentLayoutCA(tableData);
       } else {
         // Non-hierarchical case (same as current)
         csvContent = [
@@ -569,6 +632,8 @@ const ShareButton = ({
           csvContent = generateSummarizedCsvWithLevels(tableData).split("\n");
         } else if (dataType === "TotalBillAllocation") {
           csvContent = generateCsvSummarizedTBA(tableData);
+        } else if (dataType === "CostAllocation") {
+          csvContent = generateCsvSummarizedCA(tableData);
         }
       } else {
         alert(
@@ -851,11 +916,8 @@ ShareButton.propTypes = {
     "ServiceCategory",
     "CostInventory",
     "TotalBillAllocation",
+    "CostAllocation",
   ]).isRequired,
-};
-
-ShareButton.defaultProps = {
-  className: "", // Default to empty string if no className is provided
 };
 
 export default ShareButton;

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -12,7 +12,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import "../css/components/ServiceCategory.css";
 import ShareButton from "./ShareButton";
-import Button from "@mui/material/Button";
+import CustomizedReportButton from "./CustomizedReportButton";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -133,11 +133,33 @@ const CostAllocationTable = ({
   width,
   headerClass,
   marginTop,
+  sortOptions,
   loading = false,
 }) => {
   const tableRef = useRef(null);
   const [expandedRows, setExpandedRows] = useState({});
   const [isOverlayOpen, setOverlayOpen] = useState(false);
+  const [sortedData, setSortedData] = useState(...dummyData);
+  const [currentSort, setCurrentSort] = useState({ field: "", direction: "" });
+
+  useEffect(() => {
+    setSortedData(dummyData);
+  }, [dummyData]);
+
+  const handleSortData = (field, direction) => {
+    const sortedData = [...dummyData];
+
+    sortedData.sort((a, b) => {
+      const valueA = parseFloat(a[field] ?? 0);
+      const valueB = parseFloat(b[field] ?? 0);
+
+      return direction === "asc" ? valueA - valueB : valueB - valueA;
+    });
+
+    setSortedData(sortedData);
+    console.log("sd", sortedData);
+    setCurrentSort({ field, direction });
+  };
 
   const toggleRow = (rowKey, index) => {
     setExpandedRows((prev) => ({
@@ -165,17 +187,17 @@ const CostAllocationTable = ({
               </Typography>
 
               <div>
-                <Button
-                  variant="contained"
+                <CustomizedReportButton
+                  handleSortData={handleSortData}
+                  sortOptions={sortOptions}
+                  currentSort={currentSort}
                   className="cmpUAMD_button"
-                  color="inherit"
-                >
-                  Customize Report
-                </Button>
+                />
                 <ShareButton
                   tableData={dummyData}
                   tableRef={tableRef}
                   isHierarchical={true}
+                  dataType="CostAllocation"
                 />
                 <IconButton
                   className="cmpInvTv_fullscreenButton"
@@ -214,7 +236,7 @@ const CostAllocationTable = ({
                 </TableHead>
                 <TableBody>
                   <TableRowComponent
-                    data={dummyData}
+                    data={sortedData}
                     level={0}
                     toggleRow={toggleRow}
                     expandedRows={expandedRows}
@@ -260,7 +282,7 @@ const CostAllocationTable = ({
                 </TableHead>
                 <TableBody>
                   <TableRowComponent
-                    data={dummyData}
+                    data={sortedData}
                     level={0}
                     toggleRow={toggleRow}
                     expandedRows={expandedRows}

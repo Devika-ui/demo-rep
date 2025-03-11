@@ -9,7 +9,3 @@
   background-color: #5f249f !important;
   color: white !important;
 }
-.highlighted-range {
-  background-color: rgba(0, 128, 255, 0.3); /* Light blue for the range */
-  border-radius: 50%; /* Optional: makes it visually appealing */
-}
