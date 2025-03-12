@@ -31,6 +31,8 @@ const SqlVmLicenses = ({
   currencySymbol,
   currencyPreference,
   loading,
+  onActiveLicenseType,
+  activeLicenseType,
 }) => {
   sessionStorage.removeItem("overviewPage");
   const [showStackBars, setShowStackBars] = useState(true);
@@ -43,24 +45,6 @@ const SqlVmLicenses = ({
   const [billingMonth, setBillingMonth] = useState([]);
 
   const navigate = useNavigate();
-
-  const handleGroupByChange = (event) => {
-    const value = event.target.value;
-    setGroupBy(value);
-    switch (value) {
-      case "subscription":
-        navigate("/recommendations#unattachedManagedDisks");
-        break;
-      case "resourceGroup":
-        navigate("/recommendations#orphanedSnapshots");
-        break;
-      case "region":
-        navigate("/orphaned-attached-disks");
-        break;
-      default:
-        break;
-    }
-  };
 
   const containerStyle = {
     marginLeft: "1rem",
@@ -102,8 +86,14 @@ const SqlVmLicenses = ({
     marginLeft: "1rem",
     marginBottom: "-0.5rem",
   };
+  const handleGroupByChange = (event) => {
+    const value = event.target.value;
+    setGroupBy(value);
+    onActiveLicenseType(value === "" ? "sqlvmlicense" : "vmlicense");
+  };
 
   const formatYAxisSimple = (tickItem) => tickItem.toString();
+
   return (
     <div>
       <Box
@@ -125,13 +115,16 @@ const SqlVmLicenses = ({
             fontWeight: "bold",
           }}
         >
-          SQL VM Licenses
+          {activeLicenseType === "sqlvmlicense"
+            ? "SQL VM Licenses"
+            : "VM Licenses"}
         </Typography>
         <Subheader
           onButtonClick={onButtonClick}
           onFiltersChange={onFiltersChange}
           selectedCSP={selectedCSP}
           monthComponent={true}
+          removeAwsIcon={true}
         />
         <NavigationBar />
       </Box>
@@ -173,14 +166,11 @@ const SqlVmLicenses = ({
           },
         }}
       >
-        <MenuItem value="">SqlVmLicenses</MenuItem>
-        <MenuItem value="resourceGroup">VM Licenses</MenuItem>
+        <MenuItem value="">SQL VM Licenses</MenuItem>
+        <MenuItem value="VM Licenses">VM Licenses</MenuItem>
       </Select>
 
       <div className="cmpUAMD_buttonContainer" style={{ marginTop: "20px" }}>
-        <Button variant="contained" className="cmpUAMD_button" color="inherit">
-          Customize Report
-        </Button>
         <IconButton className="cmpUAMD_button">
           <ShareIcon />
         </IconButton>
@@ -236,6 +226,7 @@ const SqlVmLicenses = ({
               loading={loading}
               titleStyle1={titleStyle1}
               titleStyle2={titleStyle2}
+              pieChart1Currency={true}
             />
           </div>
         </div>

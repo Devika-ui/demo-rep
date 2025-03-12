@@ -27,6 +27,7 @@ const PieChartContainer = ({
   currencySymbol,
   currencyPreference,
   loading = false,
+  pieChart1Currency,
 }) => {
   const [activeIndex1, setActiveIndex1] = useState(null);
   const [activeIndex2, setActiveIndex2] = useState(null);
@@ -90,7 +91,7 @@ const PieChartContainer = ({
   };
 
   // Custom Pie Chart Label
-  const renderLabel = (entry) => {
+  const renderLabel = (entry, isCurrencyEnabled) => {
     const { cx, cy, midAngle, outerRadius, displayValue } = entry;
     if (!displayValue) return null;
 
@@ -108,7 +109,9 @@ const PieChartContainer = ({
         dominantBaseline="central"
         style={{ fontSize }}
       >
-        {currencyPreference === "start"
+        {isCurrencyEnabled
+          ? formatValue(displayValue)
+          : currencyPreference === "start"
           ? `${currencySymbol}${formatValue(displayValue)}`
           : `${formatValue(displayValue)}${currencySymbol}`}
       </text>
@@ -116,7 +119,7 @@ const PieChartContainer = ({
   };
 
   // Custom Tooltip
-  const CustomTooltip = ({ active, payload }) => {
+  const CustomTooltip = ({ active, payload, isCurrencyEnabled }) => {
     if (active && payload && payload.length) {
       return (
         <div
@@ -128,8 +131,10 @@ const PieChartContainer = ({
           }}
         >
           <p style={{ margin: 0 }}>
-            {payload[0].name} : {currencySymbol}
-            {payload[0].value}
+            {payload[0].name} :{" "}
+            {isCurrencyEnabled
+              ? payload[0].value
+              : `${currencySymbol}${payload[0].value}`}
           </p>
         </div>
       );
@@ -166,13 +171,22 @@ const PieChartContainer = ({
                     nameKey="name"
                     onMouseEnter={onPieEnter1}
                     onMouseLeave={onPieLeave1}
-                    label={renderLabel}
+                    label={(entry) => renderLabel(entry, pieChart1Currency)}
                     labelLine={false}
                   >
                     {processedData1.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
+                  <Tooltip
+                    content={
+                      <CustomTooltip
+                        currencySymbol={currencySymbol}
+                        isCurrencyEnabled={pieChart1Currency}
+                      />
+                    }
+                  />
+
                   <Tooltip
                     content={<CustomTooltip currencySymbol={currencySymbol} />}
                   />

@@ -15,6 +15,7 @@ const SubHeader = ({
   selectedCSP,
   onMonthChange,
   monthComponent,
+  removeAwsIcon,
 }) => {
   //100-Azure,110-AWS,120-Next new CSP add further whenever new CSP we supporting
   const [filterData, setFilterData] = useState({
@@ -202,7 +203,10 @@ const SubHeader = ({
   return (
     <div className="Subheader-Container">
       <div className="Subheader-ButtonsContainer">
-        <HeaderButtons onButtonClick={onButtonClick} />
+        <HeaderButtons
+          onButtonClick={onButtonClick}
+          removeAwsIcon={removeAwsIcon}
+        />
       </div>
 
       {loading ? (
