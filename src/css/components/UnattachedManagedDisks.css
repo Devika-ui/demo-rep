@@ -9,9 +9,9 @@ body {
 .cmpUAMD_buttonContainer {
   position: absolute;
   top: 235px;
-  left: 880px;
+  left: 980px;
   z-index: 100;
-  margin: 20px;
+  margin: 200px;
   display: flex;
   align-items: center;
   gap: 10px;

@@ -63,7 +63,7 @@ const HorizontalBarGraph = ({
             <BarChart
               layout="vertical"
               data={data}
-              margin={{ top: 30, right: 40, left: 60, bottom: 60 }}
+              margin={{ top: 30, right: 40, left: 60, bottom: 50 }}
               barGap={15}
             >
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />

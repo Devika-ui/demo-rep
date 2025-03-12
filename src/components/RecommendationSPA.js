@@ -8,6 +8,7 @@ import SqlVmLicenses from "./SqlVmLicenses";
 import OrphanedRSVBackups from "./OrphanedRSVBackups";
 import api from "../api.js";
 import componentUtil from "../componentUtil.js";
+import { ContinuousColorLegend } from "@mui/x-charts";
 
 const RecommendationSPA = () => {
   sessionStorage.removeItem("overviewPage");
@@ -52,6 +53,11 @@ const RecommendationSPA = () => {
   );
   const [licenseTypevsCost, setLicenseTypevsCost] = useState([]);
   const [sqlVmLicenseTableData, setSqlVmLicenseTableData] = useState([]);
+  const [rsvBoxData, setRsvBoxData] = useState([]);
+  const [genericBar, setGenericBar] = useState([]);
+  const [horizontalBar, setHorizonatalBar] = useState([]);
+  const [rsvTableData, setRsvTableData] = useState([]);
+  const [activeLicenseType, setActiveLicenseType] = useState("sqlvmlicense");
 
   useEffect(() => {
     const hash = location.hash.substring(1); // Removes the "#" from the hash
@@ -218,7 +224,7 @@ const RecommendationSPA = () => {
 
         const formattedData = aggregateData(onDemandCostAllocations);
 
-        // console.log("formatted data", formattedData);
+        console.log("formatted data", formattedData);
         setServiceCategoryData(formattedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -363,26 +369,14 @@ const RecommendationSPA = () => {
             }));
           };
 
-          return Object.entries(data).map(([subscription, value]) => {
-            const children = processLevel(value);
-            const totalCost = children.reduce(
-              (sum, item) => sum + (item.totalCost || 0),
-              0
-            );
-            const snapshostCount = children.reduce(
-              (sum, item) => sum + (item.snapshostCount || 0),
-              0
-            );
-
-            return {
-              name: subscription,
-              ownername: null,
-              totalCost: totalCost,
-              snapshotCount: snapshostCount,
-              environment: null,
-              children: processLevel(value),
-            };
-          });
+          return Object.entries(data).map(([subscription, value]) => ({
+            name: subscription,
+            ownername: null,
+            totalCost: 0,
+            snapshotCount: 0,
+            environment: null,
+            children: processLevel(value),
+          }));
         };
 
         const formattedData = aggregateData(costallocationresponse);
@@ -614,7 +608,17 @@ const RecommendationSPA = () => {
       },
       columnHead2: {
         key: "sqlServerLicenseType",
-        title: "SQL Server License Type",
+        title: (
+          <div
+            style={{
+              paddingTop: "20px",
+            }}
+          >
+            {activeLicenseType === "sqlvmlicense"
+              ? "SQL Server License Type"
+              : "VM License Type"}
+          </div>
+        ),
       },
       columnHead3: {
         key: "totalCost",
@@ -648,18 +652,17 @@ const RecommendationSPA = () => {
           licenseTypevsCost,
           sqlCostAllocation,
         ] = await Promise.all([
-          api.getAhubCount(inputData),
-          api.getPayGoCount(inputData),
-          api.getTotalConsumed(inputData),
-          api.getLicenseTypevsConsumedMeter(inputData),
-          api.getLicenseTypevsCost(inputData),
-          api.getSqlCostAllocation(inputData),
+          api.getAhubCount(inputData, activeLicenseType),
+          api.getPayGoCount(inputData, activeLicenseType),
+          api.getTotalConsumed(inputData, activeLicenseType),
+          api.getLicenseTypevsConsumedMeter(inputData, activeLicenseType),
+          api.getLicenseTypevsCost(inputData, activeLicenseType),
+          api.getSqlCostAllocation(inputData, activeLicenseType),
         ]);
 
-        const aHubCount = ahubCount?.ahubcount ? ahubCount.ahubcount : "0.00";
+        const aHubCount = ahubCount?.ahubcount ? ahubCount.ahubcount : "0";
         const paygoCount = payGoCount?.paygcount ?? 0;
 
-        console.log("12,11", aHubCount, paygoCount);
         const dataSet1 = [
           {
             number: aHubCount,
@@ -727,7 +730,7 @@ const RecommendationSPA = () => {
       }
     };
     fetchData();
-  }, [inputData, selectedProvider]);
+  }, [inputData, selectedProvider, activeLicenseType]);
 
   const pieChartSql = licenseTypevsConsumedMeter.map((entry, index) => ({
     name: entry.licensetype,
@@ -744,10 +747,6 @@ const RecommendationSPA = () => {
   //SqlVmLicenses ends
 
   //OrphanedRSVBackups
-  const dataSet1_OrphanedRSVBackups = [
-    { number: "50", text: "Count of Unhealthy Backups" },
-    { number: "10", text: "Count of Orphan Backups" },
-  ];
 
   const horizontaldata_OrphanedRSVBackups = [
     { name: "Subscription 1", count: 100 },
@@ -767,285 +766,44 @@ const RecommendationSPA = () => {
   const tableData_OrphanedRSVBackups = [
     {
       tableTitle: "On Demand Cost for Recommendations",
-      columnHead1: "Item Name",
-      columnHead2: " Protection Status ",
-      columnHead3: " Protection State",
-      columnHead4: " Application",
-      columnHead5: "Retention Period ",
-      columnHead6: "Last backup Date",
-      columnHead7: "Archive Enabled",
+      columnHead1: { key: "name", title: "Item Name" },
+      columnHead2: {
+        key: "totalCost",
+        title: `Total Cost (${currencySymbol})`,
+      },
+      columnHead3: {
+        key: "protection_status",
+        title: "Protection Status",
+      },
+      // columnHead4: { key: "protection_state", title: "Protection State" },
+      columnHead5: { key: "applicationname", title: "Application Name" },
+      columnHead6: {
+        key: "softDeleteRetentionPeriod",
+        title: "Retention Period",
+      },
+      columnHead7: {
+        key: "lastBackupTime",
+        // title: (
+        //   <>
+        //     Backup Time <br /> (YYYY-MM-DD)
+        //   </>
+        // ),
+        title: (
+          <div
+            style={{
+              paddingTop: "20px",
+            }}
+          >
+            <>
+              Backup Date <br /> (YYYY-MM-DD)
+            </>
+          </div>
+        ),
+      },
+      columnHead8: { key: "isArchiveEnabled", title: "Archive Enabled" },
     },
   ];
-  const dummyData_OrphanedRSVBackups = [
-    {
-      name: "Virtual Machine",
-      totalBill: "$400",
-      onDemandCost: "$100",
-      commitmentsCost: "$200",
-      savings: "$50",
-      budget: "10",
-      services: [
-        {
-          name: "VM1",
-          totalBill: "$200",
-          onDemandCost: "$50",
-          commitmentsCost: "$100",
-          savings: "$25",
-          budget: "10",
-          resourceGroups: [
-            {
-              name: "RG1",
-              totalBill: "$100",
-              onDemandCost: "$25",
-              commitmentsCost: "$50",
-              savings: "$12.5",
-              budget: "10",
-              resources: [
-                {
-                  name: "VM1-Resource1",
-                  totalBill: "$50",
-                  onDemandCost: "$12.5",
-                  commitmentsCost: "$25",
-                  savings: "$6.25",
-                  budget: "10",
-                },
-                {
-                  name: "VM1-Resource2",
-                  totalBill: "$50",
-                  onDemandCost: "$12.5",
-                  commitmentsCost: "$25",
-                  savings: "$6.25",
-                  budget: "10",
-                },
-              ],
-            },
-            {
-              name: "RG2",
-              totalBill: "$100",
-              onDemandCost: "$25",
-              commitmentsCost: "$50",
-              savings: "$12.5",
-              budget: "10",
-              resources: [
-                {
-                  name: "VM2-Resource1",
-                  totalBill: "$50",
-                  onDemandCost: "$12.5",
-                  commitmentsCost: "$25",
-                  savings: "$6.25",
-                  budget: "10",
-                },
-                {
-                  name: "VM2-Resource2",
-                  totalBill: "$50",
-                  onDemandCost: "$12.5",
-                  commitmentsCost: "$25",
-                  savings: "$6.25",
-                  budget: "10",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "VM2",
-          totalBill: "$200",
-          onDemandCost: "$50",
-          commitmentsCost: "$100",
-          savings: "$25",
-          budget: "10",
-          resourceGroups: [
-            {
-              name: "RG3",
-              totalBill: "$100",
-              onDemandCost: "$25",
-              commitmentsCost: "$50",
-              savings: "$12.5",
-              budget: "10",
-              resources: [
-                {
-                  name: "VM3-Resource1",
-                  totalBill: "$50",
-                  onDemandCost: "$12.5",
-                  commitmentsCost: "$25",
-                  savings: "$6.25",
-                  budget: "10",
-                },
-                {
-                  name: "VM3-Resource2",
-                  totalBill: "$50",
-                  onDemandCost: "$12.5",
-                  commitmentsCost: "$25",
-                  savings: "$6.25",
-                  budget: "10",
-                },
-              ],
-            },
-            {
-              name: "RG4",
-              totalBill: "$100",
-              onDemandCost: "$25",
-              commitmentsCost: "$50",
-              savings: "$12.5",
-              budget: "10",
-              resources: [
-                {
-                  name: "VM4-Resource1",
-                  totalBill: "$50",
-                  onDemandCost: "$12.5",
-                  commitmentsCost: "$25",
-                  savings: "$6.25",
-                  budget: "10",
-                },
-                {
-                  name: "VM4-Resource2",
-                  totalBill: "$50",
-                  onDemandCost: "$12.5",
-                  commitmentsCost: "$25",
-                  savings: "$6.25",
-                  budget: "10",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      name: "Storage",
-      totalBill: "$300",
-      onDemandCost: "$120",
-      commitmentsCost: "$180",
-      savings: "$60",
-      budget: "10",
-      services: [
-        {
-          name: "Storage1",
-          totalBill: "$150",
-          onDemandCost: "$60",
-          commitmentsCost: "$90",
-          savings: "$30",
-          budget: "10",
-          resourceGroups: [
-            {
-              name: "RG5",
-              totalBill: "$75",
-              onDemandCost: "$30",
-              commitmentsCost: "$45",
-              savings: "$15",
-              budget: "10",
-              resources: [
-                {
-                  name: "Storage1-Resource1",
-                  totalBill: "$37.5",
-                  onDemandCost: "$15",
-                  commitmentsCost: "$22.5",
-                  savings: "$7.5",
-                  budget: "10",
-                },
-                {
-                  name: "Storage1-Resource2",
-                  totalBill: "$37.5",
-                  onDemandCost: "$15",
-                  commitmentsCost: "$22.5",
-                  savings: "$7.5",
-                  budget: "10",
-                },
-              ],
-            },
-            {
-              name: "RG6",
-              totalBill: "$75",
-              onDemandCost: "$30",
-              commitmentsCost: "$45",
-              savings: "$15",
-              budget: "10",
-              resources: [
-                {
-                  name: "Storage2-Resource1",
-                  totalBill: "$37.5",
-                  onDemandCost: "$15",
-                  commitmentsCost: "$22.5",
-                  savings: "$7.5",
-                  budget: "10",
-                },
-                {
-                  name: "Storage2-Resource2",
-                  totalBill: "$37.5",
-                  onDemandCost: "$15",
-                  commitmentsCost: "$22.5",
-                  savings: "$7.5",
-                  budget: "10",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "Storage2",
-          totalBill: "$150",
-          onDemandCost: "$60",
-          commitmentsCost: "$90",
-          savings: "$30",
-          budget: "10",
-          resourceGroups: [
-            {
-              name: "RG7",
-              totalBill: "$75",
-              onDemandCost: "$30",
-              commitmentsCost: "$45",
-              savings: "$15",
-              budget: "10",
-              resources: [
-                {
-                  name: "Storage3-Resource1",
-                  totalBill: "$37.5",
-                  onDemandCost: "$15",
-                  commitmentsCost: "$22.5",
-                  savings: "$7.5",
-                  budget: "10",
-                },
-                {
-                  name: "Storage3-Resource2",
-                  totalBill: "$37.5",
-                  onDemandCost: "$15",
-                  commitmentsCost: "$22.5",
-                  savings: "$7.5",
-                  budget: "10",
-                },
-              ],
-            },
-            {
-              name: "RG8",
-              totalBill: "$75",
-              onDemandCost: "$30",
-              commitmentsCost: "$45",
-              savings: "$15",
-              budget: "10",
-              resources: [
-                {
-                  name: "Storage4-Resource1",
-                  totalBill: "$37.5",
-                  onDemandCost: "$15",
-                  commitmentsCost: "$22.5",
-                  savings: "$7.5",
-                  budget: "10",
-                },
-                {
-                  name: "Storage4-Resource2",
-                  totalBill: "$37.5",
-                  onDemandCost: "$15",
-                  commitmentsCost: "$22.5",
-                  savings: "$7.5",
-                  budget: "10",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ];
+
   const bars_OrphanedRSVBackups = [
     {
       dataKey: "Unhealthy",
@@ -1054,6 +812,107 @@ const RecommendationSPA = () => {
       barSize: 20,
     },
   ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [
+          backUpCount,
+          unhealthyBackUpCount,
+          subBackUpCount,
+          healthyProtectionStatus,
+          rsvCostallocation,
+        ] = await Promise.all([
+          api.getBackUpCount(inputData),
+          api.getUnhealthyBackUpCount(inputData),
+          api.getSubBackUpCount(inputData),
+          api.getHealthyProtectionStatus(inputData),
+          api.getRsvCostallocation(inputData),
+        ]);
+
+        const currencySymbol = await componentUtil.getCurrencySymbol();
+        setCurrencySymbol(currencySymbol);
+        const currencyPreference = await componentUtil.getCurrencyPreference();
+        setCurrencyPreference(currencyPreference);
+
+        const rsvBackUpCount = backUpCount?.Orphanedbackupcount || 0;
+        const rsvUnhealthyBackUpCount =
+          unhealthyBackUpCount?.Unhealthybackupcount || 0;
+
+        const dataSet1 = [
+          {
+            number: rsvUnhealthyBackUpCount,
+            text: "Count of Unhealthy Backups",
+          },
+          { number: rsvBackUpCount, text: "Count of Orphan Backups" },
+        ];
+        setRsvBoxData(dataSet1);
+        setGenericBar(healthyProtectionStatus);
+        setHorizonatalBar(subBackUpCount);
+
+        const aggregateData = (data) => {
+          const processLevel = (obj) => {
+            if (!obj || typeof obj !== "object") return null;
+
+            return Object.entries(obj)
+              .map(([key, value]) => {
+                if (typeof value !== "object" || value === null) return null;
+
+                // If `value` contains objects, recursively process the next level
+                const nested = processLevel(value);
+
+                // Identify if it's a leaf node (contains actual data fields instead of more objects)
+                const isLeafNode = Object.values(value).some(
+                  (v) => typeof v !== "object" || v === null
+                );
+
+                if (isLeafNode) {
+                  return {
+                    name: key,
+                    totalCost: value.totalCost || 0,
+                    protection_status: value.protection_status || "",
+                    protection_state: value.protection_state || "",
+                    lastBackupTime: value.lastBackupTime
+                      ? new Date(value.lastBackupTime)
+                          .toISOString()
+                          .split("T")[0]
+                      : "",
+                    applicationname: value.applicationname || null,
+                    isArchiveEnabled: value.isArchiveEnabled || "False",
+                    softDeleteRetentionPeriod:
+                      value.softDeleteRetentionPeriod || "0",
+                  };
+                }
+
+                // Aggregate `totalCost` dynamically
+                const totalCost = nested.reduce(
+                  (sum, item) => sum + (item.totalCost || 0),
+                  0
+                );
+
+                return {
+                  name: key,
+                  totalCost,
+                  children: nested, // Store next-level processed data
+                };
+              })
+              .filter(Boolean);
+          };
+
+          return processLevel(data);
+        };
+
+        setRsvTableData(aggregateData(rsvCostallocation));
+        console.log("ddat", aggregateData(rsvCostallocation));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [inputData, selectedProvider]);
 
   //OrphanedRSVBackups ends
 
@@ -1130,16 +989,24 @@ const RecommendationSPA = () => {
           onButtonClick={handleButtonClick}
           onFiltersChange={handleFiltersChange}
           loading={loading}
+          onActiveLicenseType={setActiveLicenseType}
+          activeLicenseType={activeLicenseType}
         />
       )}
-      {activeSection === "orphanedRSVBackups" && (
+      {activeSection === "orphanedrsvbackups" && (
         <OrphanedRSVBackups
           tableData={tableData_OrphanedRSVBackups}
-          dummyData={dummyData_OrphanedRSVBackups}
-          dataSet1={dataSet1_OrphanedRSVBackups}
-          data1={data1_OrphanedRSVBackups}
+          dummyData={rsvTableData}
+          dataSet1={rsvBoxData}
+          data1={genericBar}
           bars={bars_OrphanedRSVBackups}
-          horizontaldata={horizontaldata_OrphanedRSVBackups}
+          horizontaldata={horizontalBar}
+          onButtonClick={handleButtonClick}
+          onFiltersChange={handleFiltersChange}
+          selectedCSP={selectedProvider}
+          currencySymbol={currencySymbol}
+          currencyPreference={currencyPreference}
+          loading={loading}
         />
       )}
     </div>

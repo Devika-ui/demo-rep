@@ -1951,7 +1951,7 @@ const api = {
     }
   },
 
-  getAhubCount: async (selectedFilters) => {
+  getAhubCount: async (selectedFilters, activeLicenseType) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/sqlvm/ahubcount`,
@@ -1967,6 +1967,7 @@ const api = {
               ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
+            license: String(activeLicenseType),
           }),
         }
       );
@@ -1980,7 +1981,7 @@ const api = {
     }
   },
 
-  getPayGoCount: async (selectedFilters) => {
+  getPayGoCount: async (selectedFilters, activeLicenseType) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/sqlvm/paygocount`,
@@ -1996,6 +1997,7 @@ const api = {
               ...selectedFilters,
             },
             customerId: await componentUtil.getSelectedCustomerID(),
+            license: String(activeLicenseType),
           }),
         }
       );
@@ -2009,7 +2011,7 @@ const api = {
     }
   },
 
-  getTotalConsumed: async (selectedFilters) => {
+  getTotalConsumed: async (selectedFilters, activeLicenseType) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/sqlvm/subvstotalandconsumed`,
@@ -2024,6 +2026,7 @@ const api = {
             filters: {
               ...selectedFilters,
             },
+            license: String(activeLicenseType),
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
         }
@@ -2038,7 +2041,7 @@ const api = {
     }
   },
 
-  getLicenseTypevsConsumedMeter: async (selectedFilters) => {
+  getLicenseTypevsConsumedMeter: async (selectedFilters, activeLicenseType) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/sqlvm/licensetypevscosumedmeter`,
@@ -2053,6 +2056,7 @@ const api = {
             filters: {
               ...selectedFilters,
             },
+            license: String(activeLicenseType),
             customerId: await componentUtil.getSelectedCustomerID(),
           }),
         }
@@ -2067,10 +2071,70 @@ const api = {
     }
   },
 
-  getLicenseTypevsCost: async (selectedFilters) => {
+  getLicenseTypevsCost: async (selectedFilters, activeLicenseType) => {
     try {
       const response = await fetch(
         `${apiUrl}/costoptimization/sqlvm/licensetypevscost`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            license: String(activeLicenseType),
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getSqlCostAllocation: async (selectedFilters, activeLicenseType) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/sqlvm/costallocation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            license: String(activeLicenseType),
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getBackUpCount: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/rsv/orphanedbackupcount`,
         {
           method: "POST",
           headers: {
@@ -2096,10 +2160,95 @@ const api = {
     }
   },
 
-  getSqlCostAllocation: async (selectedFilters) => {
+  getUnhealthyBackUpCount: async (selectedFilters) => {
     try {
       const response = await fetch(
-        `${apiUrl}/costoptimization/sqlvm/costallocation`,
+        `${apiUrl}/costoptimization/rsv/unhealthybackupcount`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+
+  getSubBackUpCount: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/rsv/subbackupcount`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getHealthyProtectionStatus: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/rsv/catvsunhealthyprotectionstatus`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (await componentUtil.getAccessToken()),
+          },
+          body: JSON.stringify({
+            CloudServiceProvider: componentUtil.getSelectedCSP(),
+            filters: {
+              ...selectedFilters,
+            },
+            customerId: await componentUtil.getSelectedCustomerID(),
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  },
+  getRsvCostallocation: async (selectedFilters) => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/costoptimization/rsv/costallocation`,
         {
           method: "POST",
           headers: {

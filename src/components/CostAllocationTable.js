@@ -15,6 +15,8 @@ import ShareButton from "./ShareButton";
 import CustomizedReportButton from "./CustomizedReportButton";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 
 const TableRowComponent = ({
   data,
@@ -25,6 +27,8 @@ const TableRowComponent = ({
   indentIncrement,
   tableData,
 }) => {
+  console.log("dummy", data);
+  console.log("table", tableData);
   const indentLevel = level * indentIncrement;
   const columns = Object.values(tableData[0]).filter((col) => col.key);
 
@@ -135,10 +139,16 @@ const CostAllocationTable = ({
   marginTop,
   sortOptions,
   loading = false,
+  showVisibilityIcon, // New prop for conditional rendering
+  text,
 }) => {
   const tableRef = useRef(null);
   const [expandedRows, setExpandedRows] = useState({});
   const [isOverlayOpen, setOverlayOpen] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+
+  const toggleInfo = () => setShowInfo((prev) => !prev);
+
   const [sortedData, setSortedData] = useState(...dummyData);
   const [currentSort, setCurrentSort] = useState({ field: "", direction: "" });
 
@@ -186,6 +196,18 @@ const CostAllocationTable = ({
                 {tableData[0].tableTitle}
               </Typography>
 
+              {showVisibilityIcon && (
+                <div className="info-container" style={{ marginLeft: "20rem" }}>
+                  <Tooltip title="Click to view info">
+                    <IconButton onClick={toggleInfo} className="info-icon">
+                      <InfoIcon className="custom-info-icon" />
+                    </IconButton>
+                  </Tooltip>
+                  {showInfo && (
+                    <Typography className="info-text">{text}</Typography>
+                  )}
+                </div>
+              )}
               <div>
                 <CustomizedReportButton
                   handleSortData={handleSortData}
