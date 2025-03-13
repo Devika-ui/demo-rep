@@ -20,6 +20,7 @@ import TrustedAdvisor from "./components/AWSTrustedAdvisor";
 import api from "./api";
 import componentUtil from "./componentUtil";
 import UserInfo from "./components/UserInfo";
+import StoppedEC2Instance from "./components/StoppedEC2Instance";
 
 const UserWrappedApp = ({ token, userInfo }) => {
   const [dataPreload, setDataPreload] = useState(false);
@@ -62,6 +63,7 @@ const UserWrappedApp = ({ token, userInfo }) => {
                 <Route path="/unattachedManagedDisks" element={<UnattachedManagedDisks />} />
                 <Route path="/hyperScalarAdvisor" element={<HyperScalarAdvisor />} />
                 <Route path="/sqlVmLicenses" element={<SqlVmLicenses />} />
+                <Route path="/stoppede2instances" element={<StoppedEC2Instance />} />
                 <Route path="/orphanedrsvbackups" element={<OrphanedRSVBackups />} />
                 <Route path="/TrustedAdvisor" element={<TrustedAdvisor />} />
                 <Route path="/ondemandCostStudy" element={<OnDemandCostStudy />} />

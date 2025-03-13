@@ -11,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import ShareIcon from "@mui/icons-material/Share";
 import CostsAmortized from "./CostsAmortized.js";
 import Button from "@mui/material/Button";
+import ShareButtonCO from "./ShareButtonCO.js";
 import ContainerBox from "./ContainerBox.js";
 import CostAllocationTable from "./CostAllocationTable.js";
 import "../css/components/UnattachedManagedDisks.css";
@@ -86,6 +87,34 @@ const SqlVmLicenses = ({
     marginLeft: "1rem",
     marginBottom: "-0.5rem",
   };
+
+  const sortOptions = [{ value: "totalCost", label: "Total Cost " }];
+
+  const chartsData = [
+    {
+      title: "Comparison of Subscriptions Vs On-Demand Cost & Consumed Meter",
+      headers: ["Subscription Name", "On Demand Cost", "Consumed Meter"],
+      data: data,
+      mapData: (row) => [
+        row.subscriptionName || "N/A",
+        row.OnDemand || 0,
+        row.ConsumedMeter || 0,
+      ],
+    },
+    {
+      title: "License Type Vs Consumed Meter",
+      headers: ["License Type", "Consumed Meter"],
+      data: data1,
+      mapData: (row) => [row.name || "N/A", row.value || 0],
+    },
+    {
+      title: "License  Type Vs On Demand Cost",
+      headers: ["License Type", "Cost"],
+      data: data2,
+      mapData: (row) => [row.name || "N/A", row.value || 0],
+    },
+  ];
+   
   const handleGroupByChange = (event) => {
     const value = event.target.value;
     setGroupBy(value);
@@ -141,6 +170,7 @@ const SqlVmLicenses = ({
       >
         <ContainerBox data={dataSet1} loading={loading} />
       </div>
+      <div className="export-container">
 
       <Select
         value={groupBy}
@@ -171,9 +201,10 @@ const SqlVmLicenses = ({
       </Select>
 
       <div className="cmpUAMD_buttonContainer" style={{ marginTop: "20px" }}>
-        <IconButton className="cmpUAMD_button">
-          <ShareIcon />
-        </IconButton>
+            <ShareButtonCO
+              className="cmpUAMD_button"
+              charts={chartsData}
+            />
       </div>
 
       <div
@@ -248,8 +279,10 @@ const SqlVmLicenses = ({
           headerClass="headerClass-1"
           loading={loading}
           marginTop="30px"
+          sortOptions={sortOptions}
         />
       </div>
+    </div>
     </div>
   );
 };

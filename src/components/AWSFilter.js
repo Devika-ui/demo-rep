@@ -91,6 +91,27 @@ const AWSFilter = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
         }
       }
     }
+    if (apiData.costType) {
+      const costOptions = transformToOptions(apiData.costType, false, true);
+      data.push({
+        key: "costType",
+        displayName: "Cost Type",
+        data: costOptions,
+      });
+
+      // Preselect "Effective Cost" if available
+      const effectiveCostOption = costOptions.find(opt => opt.value === "EffectiveCost");
+
+      if (effectiveCostOption && !filterSelectedData[selectedCSP]?.costType?.length) {
+        setFilterSelectedData(prevState => ({
+          ...prevState,
+          [selectedCSP]: {
+            ...prevState[selectedCSP],
+            costType: [effectiveCostOption],  // Only preselect if nothing is selected
+          },
+        }));
+      }
+    }
 
     setFilterData({ [selectedCSP]: data });
   };
@@ -142,15 +163,17 @@ const AWSFilter = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
     }
   };
 
-  const transformToOptions = (data, optionsOnly) => {
+  const transformToOptions = (data, optionsOnly, isCostType = false) => {
     if (!data || data.length == 0) return [];
     const options = data.map((item) => ({
       value: item,
-      label: item === null ? "null" : item,
+      label: item 
+      ? item.replace(/([a-z])([A-Z])/g, "$1 $2") // Add space before capital letters
+      : "null",
     }));
 
-    // Add "Select All" as the first option
-    if (optionsOnly) {
+    // Do not include "Select All" for Cost Type filter
+    if (isCostType) {
       return [...options];
     }
     return [{ value: "selectAll", label: "Select All" }, ...options];
@@ -167,14 +190,32 @@ const AWSFilter = ({ onButtonClick, onFiltersChange, selectedCSP }) => {
 
   const handleResetFilters = () => {
     setFilterData(filterDataTemplate); // Reset to initial state
-    setFilterSelectedData(filterSelectedDataTemplate);
-    fetchInitialFilters();
-    onFiltersChange(
-      componentUtil.transformFiltersOptionsToObject(
-        filterSelectedData[selectedCSP]
-      )
-    ); // Notify parent component of the reset filters
+    setFilterSelectedData(filterSelectedDataTemplate); 
+  
+    // Fetch initial filters again
+    fetchInitialFilters().then(() => {
+      // Ensure "Effective Cost" is preselected after reset
+      const effectiveCostOption = filterData[selectedCSP]?.find(f => f.key === "costType")?.data?.find(opt => opt.value === "EffectiveCost");
+  
+      if (effectiveCostOption) {
+        setFilterSelectedData(prevState => ({
+          ...prevState,
+          [selectedCSP]: {
+            ...prevState[selectedCSP],
+            costType: [effectiveCostOption],  // Reapply Effective Cost after reset
+          },
+        }));
+      }
+  
+      // Notify parent component
+      onFiltersChange(
+        componentUtil.transformFiltersOptionsToObject(
+          filterSelectedData[selectedCSP]
+        )
+      );
+    });
   };
+  
 
   const toggleFiltersVisibility = () => {
     setIsFiltersVisible(!isFiltersVisible);

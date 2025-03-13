@@ -6,6 +6,7 @@ import OrphanedSnapshots from "./OrphanedSnapshots";
 import HyperScalarAdvisor from "./HyperScalarAdvisor";
 import SqlVmLicenses from "./SqlVmLicenses";
 import OrphanedRSVBackups from "./OrphanedRSVBackups";
+import StoppedEC2Instance from "./StoppedEC2Instance.js";
 import api from "../api.js";
 import componentUtil from "../componentUtil.js";
 import { ContinuousColorLegend } from "@mui/x-charts";
@@ -913,8 +914,407 @@ const RecommendationSPA = () => {
     };
     fetchData();
   }, [inputData, selectedProvider]);
+ //OrphanedRSVBackups ends
 
-  //OrphanedRSVBackups ends
+   // stopper ec2instances//
+   const dataSet1_stoppedec2 = [
+    { number: "$75.4K", text: "Total On Demand Cost" },
+    { number: "12", text: "Count Of Snapshots" },
+    { number: "10", text: "Impacted Applications" },
+  ];
+
+  const data_stoppedec2 = [
+    {
+      name: "Subscription 1",
+      "On Demand Cost": 400000,
+      "Consumed Meter": 50000,
+    },
+    {
+      name: "Subscription 2",
+      "On Demand Cost": 250000,
+      "Consumed Meter": 80000,
+    },
+    {
+      name: "Subscription 3",
+      "On Demand Cost": 90000,
+      "Consumed Meter": 10000,
+    },
+    {
+      name: "Subscription 4",
+      "On Demand Cost": 50000,
+      "Consumed Meter": 115000,
+    },
+    {
+      name: "Subscription 5",
+      "On Demand Cost": 25000,
+      "Consumed Meter": 100000,
+    },
+    {
+      name: "Subscription 6",
+      "On Demand Cost": 15000,
+      "Consumed Meter": 75000,
+    },
+  ];
+  const tableData_stoppedec2 = [
+    {
+      tableTitle: "On-Demand Cost Allocation for Orphaned Snapshots",
+      columnHead1: "Application/Project Name",
+      columnHead2: "Owner Name ",
+      columnHead3: "Total Cost",
+      columnHead4: "Count of Disks",
+      columnHead5: "Environment",
+    },
+  ];
+
+  const data1_stoppedec2 = [
+    {
+      name: "Disk 1",
+      value: Math.floor(Math.random() * 100),
+      color: "#0099C6",
+    },
+    {
+      name: "Disk 2",
+      value: Math.floor(Math.random() * 100),
+      color: "#BA741A",
+    },
+    {
+      name: "Disk 3",
+      value: Math.floor(Math.random() * 100),
+      color: "#FFCD00",
+    },
+    {
+      name: "Disk 4",
+      value: Math.floor(Math.random() * 100),
+      color: "#00968F",
+    },
+    {
+      name: "Disk 5",
+      value: Math.floor(Math.random() * 100),
+      color: "#5F249F",
+    },
+  ];
+
+  const data2_stoppedec2 = [
+    {
+      name: "Disk 1",
+      value: Math.floor(Math.random() * 100),
+      color: "#0099C6",
+    },
+    {
+      name: "Disk 2",
+      value: Math.floor(Math.random() * 100),
+      color: "#BA741A",
+    },
+    {
+      name: "Disk 3",
+      value: Math.floor(Math.random() * 100),
+      color: "#FFCD00",
+    },
+    {
+      name: "Disk 4",
+      value: Math.floor(Math.random() * 100),
+      color: "#00968F",
+    },
+  ]
+
+  const horizontaldata_stoppedec2 = [
+    { name: "North Europe", count: 100 },
+    { name: "East US 2", count: 150 },
+    { name: "South East Asia", count: 200 },
+    { name: "West Europe", count: 75 },
+    { name: "West US 2", count: 125 },
+  ];
+
+  const bars_stoppedec2 = [
+    {
+      dataKey: "On Demand Cost",
+      fill: "#2CAFFE",
+      dataKey: "totalCost",
+      fill: "#5F249F",
+      name: "On Demand Cost",
+      barSize: 20,
+    },
+    {
+      dataKey: "Consumed Meter",
+      fill: "#330072",
+      dataKey: "consumedMeter",
+      fill: "rgba(0, 150, 143, 0.8)",
+      name: "Consumed Meter",
+      barSize: 20,
+    },
+  ]
+
+  const dummyData_stoppedec2 = [
+    {
+      name: "Virtual Machine",
+      totalBill: "$400",
+      onDemandCost: "$100",
+      commitmentsCost: "$200",
+      savings: "$50",
+      budget: "10",
+      services: [
+        {
+          name: "VM1",
+          totalBill: "$200",
+          onDemandCost: "$50",
+          commitmentsCost: "$100",
+          savings: "$25",
+          budget: "10",
+          resourceGroups: [
+            {
+              name: "RG1",
+              totalBill: "$100",
+              onDemandCost: "$25",
+              commitmentsCost: "$50",
+              savings: "$12.5",
+              budget: "10",
+              resources: [
+                {
+                  name: "VM1-Resource1",
+                  totalBill: "$50",
+                  onDemandCost: "$12.5",
+                  commitmentsCost: "$25",
+                  savings: "$6.25",
+                  budget: "10",
+                },
+                {
+                  name: "VM1-Resource2",
+                  totalBill: "$50",
+                  onDemandCost: "$12.5",
+                  commitmentsCost: "$25",
+                  savings: "$6.25",
+                  budget: "10",
+                },
+              ],
+            },
+            {
+              name: "RG2",
+              totalBill: "$100",
+              onDemandCost: "$25",
+              commitmentsCost: "$50",
+              savings: "$12.5",
+              budget: "10",
+              resources: [
+                {
+                  name: "VM2-Resource1",
+                  totalBill: "$50",
+                  onDemandCost: "$12.5",
+                  commitmentsCost: "$25",
+                  savings: "$6.25",
+                  budget: "10",
+                },
+                {
+                  name: "VM2-Resource2",
+                  totalBill: "$50",
+                  onDemandCost: "$12.5",
+                  commitmentsCost: "$25",
+                  savings: "$6.25",
+                  budget: "10",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "VM2",
+          totalBill: "$200",
+          onDemandCost: "$50",
+          commitmentsCost: "$100",
+          savings: "$25",
+          budget: "10",
+          resourceGroups: [
+            {
+              name: "RG3",
+              totalBill: "$100",
+              onDemandCost: "$25",
+              commitmentsCost: "$50",
+              savings: "$12.5",
+              budget: "10",
+              resources: [
+                {
+                  name: "VM3-Resource1",
+                  totalBill: "$50",
+                  onDemandCost: "$12.5",
+                  commitmentsCost: "$25",
+                  savings: "$6.25",
+                  budget: "10",
+                },
+                {
+                  name: "VM3-Resource2",
+                  totalBill: "$50",
+                  onDemandCost: "$12.5",
+                  commitmentsCost: "$25",
+                  savings: "$6.25",
+                  budget: "10",
+                },
+              ],
+            },
+            {
+              name: "RG4",
+              totalBill: "$100",
+              onDemandCost: "$25",
+              commitmentsCost: "$50",
+              savings: "$12.5",
+              budget: "10",
+              resources: [
+                {
+                  name: "VM4-Resource1",
+                  totalBill: "$50",
+                  onDemandCost: "$12.5",
+                  commitmentsCost: "$25",
+                  savings: "$6.25",
+                  budget: "10",
+                },
+                {
+                  name: "VM4-Resource2",
+                  totalBill: "$50",
+                  onDemandCost: "$12.5",
+                  commitmentsCost: "$25",
+                  savings: "$6.25",
+                  budget: "10",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Storage",
+      totalBill: "$300",
+      onDemandCost: "$120",
+      commitmentsCost: "$180",
+      savings: "$60",
+      budget: "10",
+      services: [
+        {
+          name: "Storage1",
+          totalBill: "$150",
+          onDemandCost: "$60",
+          commitmentsCost: "$90",
+          savings: "$30",
+          budget: "10",
+          resourceGroups: [
+            {
+              name: "RG5",
+              totalBill: "$75",
+              onDemandCost: "$30",
+              commitmentsCost: "$45",
+              savings: "$15",
+              budget: "10",
+              resources: [
+                {
+                  name: "Storage1-Resource1",
+                  totalBill: "$37.5",
+                  onDemandCost: "$15",
+                  commitmentsCost: "$22.5",
+                  savings: "$7.5",
+                  budget: "10",
+                },
+                {
+                  name: "Storage1-Resource2",
+                  totalBill: "$37.5",
+                  onDemandCost: "$15",
+                  commitmentsCost: "$22.5",
+                  savings: "$7.5",
+                  budget: "10",
+                },
+              ],
+            },
+            {
+              name: "RG6",
+              totalBill: "$75",
+              onDemandCost: "$30",
+              commitmentsCost: "$45",
+              savings: "$15",
+              budget: "10",
+              resources: [
+                {
+                  name: "Storage2-Resource1",
+                  totalBill: "$37.5",
+                  onDemandCost: "$15",
+                  commitmentsCost: "$22.5",
+                  savings: "$7.5",
+                  budget: "10",
+                },
+                {
+                  name: "Storage2-Resource2",
+                  totalBill: "$37.5",
+                  onDemandCost: "$15",
+                  commitmentsCost: "$22.5",
+                  savings: "$7.5",
+                  budget: "10",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "Storage2",
+          totalBill: "$150",
+          onDemandCost: "$60",
+          commitmentsCost: "$90",
+          savings: "$30",
+          budget: "10",
+          resourceGroups: [
+            {
+              name: "RG7",
+              totalBill: "$75",
+              onDemandCost: "$30",
+              commitmentsCost: "$45",
+              savings: "$15",
+              budget: "10",
+              resources: [
+                {
+                  name: "Storage3-Resource1",
+                  totalBill: "$37.5",
+                  onDemandCost: "$15",
+                  commitmentsCost: "$22.5",
+                  savings: "$7.5",
+                  budget: "10",
+                },
+                {
+                  name: "Storage3-Resource2",
+                  totalBill: "$37.5",
+                  onDemandCost: "$15",
+                  commitmentsCost: "$22.5",
+                  savings: "$7.5",
+                  budget: "10",
+                },
+              ],
+            },
+            {
+              name: "RG8",
+              totalBill: "$75",
+              onDemandCost: "$30",
+              commitmentsCost: "$45",
+              savings: "$15",
+              budget: "10",
+              resources: [
+                {
+                  name: "Storage4-Resource1",
+                  totalBill: "$37.5",
+                  onDemandCost: "$15",
+                  commitmentsCost: "$22.5",
+                  savings: "$7.5",
+                  budget: "10",
+                },
+                {
+                  name: "Storage4-Resource2",
+                  totalBill: "$37.5",
+                  onDemandCost: "$15",
+                  commitmentsCost: "$22.5",
+                  savings: "$7.5",
+                  budget: "10",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ];
+
 
   console.log("ss", selectedProvider);
   return (
@@ -1001,6 +1401,24 @@ const RecommendationSPA = () => {
           data1={genericBar}
           bars={bars_OrphanedRSVBackups}
           horizontaldata={horizontalBar}
+          onButtonClick={handleButtonClick}
+          onFiltersChange={handleFiltersChange}
+          selectedCSP={selectedProvider}
+          currencySymbol={currencySymbol}
+          currencyPreference={currencyPreference}
+          loading={loading}
+        />
+      )}
+      {activeSection === "stoppede2instances" && (
+        <StoppedEC2Instance
+          tableData={tableData_stoppedec2}
+          dummyData={dummyData_stoppedec2}
+          dataSet1={dataSet1_stoppedec2}
+          data={data_stoppedec2}
+          data1={data1_stoppedec2}
+          data2={data2_stoppedec2}
+          horizontaldata={horizontaldata_stoppedec2}
+          bars={bars_stoppedec2}
           onButtonClick={handleButtonClick}
           onFiltersChange={handleFiltersChange}
           selectedCSP={selectedProvider}
